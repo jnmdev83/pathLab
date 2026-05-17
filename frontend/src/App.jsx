@@ -15,6 +15,7 @@ import { UserBookings } from './components/USERDASHBOARDPAGES';
 import { UserReports } from './components/USERDASHBOARDPAGES';
 import { UserProfile } from './components/USERDASHBOARDPAGES';
 import { PackageCompare } from './components/PACKAGECOMPARE';
+import { API_BASE_URL } from './config';
 
 export default function App() {
   const [page, _setPage] = useState("home");
@@ -119,13 +120,13 @@ export default function App() {
       : "";
     
     // Fetch tests
-    fetch(`http://localhost:5000/api/tests${params}`)
+    fetch(`${API_BASE_URL}/api/tests${params}`)
       .then((res) => res.json())
       .then((data) => setAllTests(data))
       .catch((err) => console.error("Database not running yet:", err));
 
     // Fetch common packages
-    fetch(`http://localhost:5000/api/packages`)
+    fetch(`${API_BASE_URL}/api/packages`)
       .then((res) => res.json())
       .then((data) => setPackages(data))
       .catch((err) => console.error("Could not fetch packages:", err));

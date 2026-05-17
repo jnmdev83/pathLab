@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { S, getDistanceKm, compareNearby, formatDistance } from '../../utils/reusables';
+import { API_BASE_URL } from '../../config';
 
 export function PackageCompare({ selectedPackage, setPage, setTest, user, userLocation }) {
   const [labs, setLabs] = useState([]);
@@ -10,12 +11,12 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
     if (!selectedPackage) return;
 
     // Fetch lab comparisons
-    fetch(`http://localhost:5000/api/packages/${selectedPackage.id}/comparison`)
+    fetch(`${API_BASE_URL}/api/packages/${selectedPackage.id}/comparison`)
       .then(res => res.json())
       .then(data => setLabs(data));
 
     // Fetch included tests
-    fetch(`http://localhost:5000/api/packages/${selectedPackage.id}/tests`)
+    fetch(`${API_BASE_URL}/api/packages/${selectedPackage.id}/tests`)
       .then(res => res.json())
       .then(data => setIncludedTests(data));
   }, [selectedPackage]);

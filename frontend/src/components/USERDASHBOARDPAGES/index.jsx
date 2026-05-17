@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { S } from '../../utils/reusables';
+import { API_BASE_URL } from '../../config';
 
 // USER DASHBOARD PAGES
 export function DashCard({ title, icon, children }) {
@@ -52,7 +53,7 @@ export function UserBookings({ user, setPage }) {
 
   const load = () => {
     if (!user) return;
-    fetch(`http://localhost:5000/api/user/${user.id}/dashboard`)
+    fetch(`${API_BASE_URL}/api/user/${user.id}/dashboard`)
       .then((r) => r.json())
       .then((d) => setData(d));
   };
@@ -64,7 +65,7 @@ export function UserBookings({ user, setPage }) {
       return;
     }
     fetch(
-      `http://localhost:5000/api/bookings/${selectedBooking.id}/reschedule`,
+      `${API_BASE_URL}/api/bookings/${selectedBooking.id}/reschedule`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -348,7 +349,7 @@ export function UserReports({ user, setPage }) {
   const [data, setData] = useState(null);
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:5000/api/user/${user.id}/dashboard`)
+    fetch(`${API_BASE_URL}/api/user/${user.id}/dashboard`)
       .then((r) => r.json())
       .then((d) => setData(d));
   }, [user]);
@@ -497,7 +498,7 @@ export function UserProfile({ user, setPage, setUser }) {
     }
     setSaving(true);
     setErr("");
-    fetch(`http://localhost:5000/api/user/${user.id}`, {
+    fetch(`${API_BASE_URL}/api/user/${user.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: name.trim(), phone: phone.trim() }),

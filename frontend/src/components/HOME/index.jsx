@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { S, MapLink } from '../../utils/reusables';
 import { CATEGORIES } from '../../utils/data';
+import { API_BASE_URL } from '../../config';
 
 // HOME
 export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }) {
@@ -16,7 +17,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   const fetchNearbyLabs = (lat, lng, searchRadius = radius) => {
     setIsLoadingResults(true);
     setGpsError("");
-    fetch(`http://localhost:5000/api/labs/nearby?lat=${lat}&lng=${lng}&radius=${searchRadius}`)
+    fetch(`${API_BASE_URL}/api/labs/nearby?lat=${lat}&lng=${lng}&radius=${searchRadius}`)
       .then((res) => res.json())
       .then((data) => {
         setNearbyLabs(Array.isArray(data) ? data : []);
@@ -40,7 +41,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
       (position) => {
         const { latitude, longitude } = position.coords;
         setGpsLoading(false);
-        fetch("http://localhost:5000/api/dev/seed-nearby-lab", {
+        fetch(`${API_BASE_URL}/api/dev/seed-nearby-lab`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ lat: latitude, lng: longitude }),
@@ -69,7 +70,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
     setSearchMethod("city");
     setIsLoadingResults(true);
     setGpsError("");
-    fetch(`http://localhost:5000/api/labs/city?city=${encodeURIComponent(selectedCity.trim())}`)
+    fetch(`${API_BASE_URL}/api/labs/city?city=${encodeURIComponent(selectedCity.trim())}`)
       .then((res) => res.json())
       .then((data) => {
         setCityLabs(Array.isArray(data) ? data : []);
@@ -81,7 +82,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
 
   const fetchTestsAtBranch = (branch) => {
     setIsLoadingResults(true);
-    fetch(`http://localhost:5000/api/branches/${branch.branch_id}/tests`)
+    fetch(`${API_BASE_URL}/api/branches/${branch.branch_id}/tests`)
       .then((res) => res.json())
       .then((data) => {
         setSelectedBranch(branch);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { S } from '../../utils/reusables';
+import { API_BASE_URL } from '../../config';
 
 // SIGNUP / LOGIN
 export function Signup({ setUser, setPage }) {
@@ -30,7 +31,7 @@ export function Signup({ setUser, setPage }) {
       ? { email, password: pass }
       : { name, email, phone, password: pass };
 
-    fetch(`http://localhost:5000/api/${endpoint}`, {
+    fetch(`${API_BASE_URL}/api/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

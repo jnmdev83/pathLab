@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { S } from '../../utils/reusables';
+import { API_BASE_URL } from '../../config';
 
 // BOOKING PAGE
 export function Booking({ test, user, setPage, userLocation }) {
@@ -27,7 +28,7 @@ export function Booking({ test, user, setPage, userLocation }) {
       return;
     }
 
-    fetch("http://localhost:5000/api/bookings", {
+    fetch(`${API_BASE_URL}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
