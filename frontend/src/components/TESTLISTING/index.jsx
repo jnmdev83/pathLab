@@ -3,7 +3,7 @@ import { S, getDistanceKm, compareNearby } from '../../utils/reusables';
 import { TestTHead, COL_TESTS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // TEST LISTING
-export function Listing({ cat, title, setPage, setTestName, allTests, packages, setSelectedPackage }) {
+export function Listing({ cat, title, setPage, setTestName, allTests, packages, setSelectedPackage, loading }) {
   const [sort, setSort] = useState("loc");
   const [pageIdx, setPageIdx] = useState(1);
   const pageSize = 10;
@@ -58,6 +58,57 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
   const rows = allRows.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);
 
   useEffect(() => setPageIdx(1), [sort, cat]);
+
+  if (loading && rows.length === 0) {
+    return (
+      <div className="fu">
+        {/* Skeleton Page Title */}
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 3 }}>
+            <h1 style={{ ...S.serif, fontSize: 34, letterSpacing: "-.02em" }}>{title}</h1>
+            <span style={{ ...S.mono, ...S.muted, fontSize: 12 }} className="pulse-shimmer">
+              Loading available tests...
+            </span>
+          </div>
+        </div>
+
+        {/* Shimmer Table */}
+        <div style={{ border: "1px solid var(--border)", borderRadius: 12, overflow: "hidden", background: "var(--card)" }}>
+          <div style={{ padding: "15px 20px", background: "var(--surface)", borderBottom: "1px solid var(--border)", display: "flex", gap: 20 }}>
+            <div style={{ width: 120, height: 12, borderRadius: 4, background: "var(--border)" }} />
+            <div style={{ width: 100, height: 12, borderRadius: 4, background: "var(--border)" }} />
+          </div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="pulse-shimmer"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                padding: "20px",
+                gap: 20,
+                alignItems: "center",
+                borderBottom: "1px solid var(--border)"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 8, background: "var(--border)" }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <div style={{ width: 180, height: 16, borderRadius: 4, background: "var(--border)" }} />
+                  <div style={{ width: 90, height: 10, borderRadius: 3, background: "var(--border)" }} />
+                </div>
+              </div>
+              <div style={{ width: 120, height: 14, borderRadius: 4, background: "var(--border)" }} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ width: 60, height: 18, borderRadius: 4, background: "var(--border)" }} />
+                <div style={{ width: 90, height: 32, borderRadius: 8, background: "var(--border)" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fu">

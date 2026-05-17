@@ -30,8 +30,28 @@ export default function App() {
       return null;
     }
   });
-  const [allTests, setAllTests] = useState([]);
-  const [packages, setPackages] = useState([]);
+  const [allTests, setAllTests] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("cached_all_tests")) || [];
+    } catch {
+      return [];
+    }
+  });
+  const [packages, setPackages] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("cached_packages")) || [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem("cached_all_tests");
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [userLocation, setUserLocation] = useState({
     lat: 28.6314,
@@ -119,17 +139,39 @@ export default function App() {
       ? `?lat=${encodeURIComponent(userLocation.lat)}&lng=${encodeURIComponent(userLocation.lng)}`
       : "";
     
-    // Fetch tests
-    fetch(`${API_BASE_URL}/api/tests${params}`)
+    setLoading(true);
+
+    const testPromise = fetch(`${API_BASE_URL}/api/tests${params}`)
       .then((res) => res.json())
-      .then((data) => setAllTests(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setAllTests(data);
+          try {
+            localStorage.setItem("cached_all_tests", JSON.stringify(data));
+          } catch (e) {
+            console.error("Failed to save cached tests:", e);
+          }
+        }
+      })
       .catch((err) => console.error("Database not running yet:", err));
 
-    // Fetch common packages
-    fetch(`${API_BASE_URL}/api/packages`)
+    const packagePromise = fetch(`${API_BASE_URL}/api/packages`)
       .then((res) => res.json())
-      .then((data) => setPackages(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setPackages(data);
+          try {
+            localStorage.setItem("cached_packages", JSON.stringify(data));
+          } catch (e) {
+            console.error("Failed to save cached packages:", e);
+          }
+        }
+      })
       .catch((err) => console.error("Could not fetch packages:", err));
+
+    Promise.allSettled([testPromise, packagePromise]).finally(() => {
+      setLoading(false);
+    });
   }, [userLocation]);
 
   function render() {
@@ -150,6 +192,7 @@ export default function App() {
             setPage={setPage}
             setTestName={setTestName}
             allTests={allTests}
+            loading={loading}
           />
         );
       case "package":
@@ -162,6 +205,7 @@ export default function App() {
             allTests={allTests}
             packages={packages}
             setSelectedPackage={setSelectedPackage}
+            loading={loading}
           />
         );
       case "package-compare":
@@ -182,6 +226,7 @@ export default function App() {
             setPage={setPage}
             setTestName={setTestName}
             allTests={allTests}
+            loading={loading}
           />
         );
       case "gastro":
@@ -192,6 +237,7 @@ export default function App() {
             setPage={setPage}
             setTestName={setTestName}
             allTests={allTests}
+            loading={loading}
           />
         );
       case "consultation":

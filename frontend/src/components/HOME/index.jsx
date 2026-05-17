@@ -189,7 +189,39 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
             {gpsError}
           </div>
         )}
-        {isLoadingResults && <div style={{ ...S.muted, ...S.mono, fontSize: 12 }}>Loading labs...</div>}
+        {isLoadingResults && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10, marginTop: 14 }}>
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="pulse-shimmer"
+                style={{
+                  border: "1px solid var(--border)",
+                  background: "var(--card)",
+                  borderRadius: 10,
+                  padding: 16,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ width: 120, height: 16, borderRadius: 4, background: "var(--border)" }} />
+                    <div style={{ width: 80, height: 12, borderRadius: 3, background: "var(--border)" }} />
+                  </div>
+                  <div style={{ width: 50, height: 18, borderRadius: 4, background: "var(--border)" }} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
+                  <div style={{ width: "90%", height: 10, borderRadius: 2, background: "var(--border)" }} />
+                  <div style={{ width: "70%", height: 10, borderRadius: 2, background: "var(--border)" }} />
+                </div>
+                <div style={{ width: 80, height: 28, borderRadius: 6, background: "var(--border)", marginTop: 8 }} />
+              </div>
+            ))}
+          </div>
+        )}
+
 
         {searchMethod === "gps" && nearbyLabs.length > 0 && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
