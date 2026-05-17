@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { S } from '../../utils/reusables';
+import { S, MapLink } from '../../utils/reusables';
 import { CATEGORIES } from '../../utils/data';
 
 // HOME
@@ -122,6 +122,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
       <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginTop: 10, lineHeight: 1.6 }}>
         {lab.address}<br />
         {lab.phone || "Phone unavailable"}
+        <MapLink item={lab} style={{ display: "flex", marginTop: 6 }} />
       </div>
       <button
         className="bl"

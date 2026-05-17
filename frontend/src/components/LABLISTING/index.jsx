@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { S, formatDistance, compareNearby } from '../../utils/reusables';
+import { S, formatDistance, compareNearby, MapLink } from '../../utils/reusables';
 import { LabTHead, COL_LABS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // LAB LISTING
@@ -233,15 +233,21 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
             <div
               style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}
             >
-              {t.lab}
+              {t.lab_name || t.lab}
+              {t.branch_name && (
+                <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 400, marginTop: 2 }}>
+                  ({t.branch_name})
+                </div>
+              )}
             </div>
             <div style={{ fontSize: 12, ...S.muted, ...S.mono }}>
-              <div>{t.loc}</div>
+              <div>{t.address || t.loc}</div>
               {formatDistance(t) && (
                 <div style={{ color: "var(--lime)", marginTop: 3 }}>
                   {formatDistance(t)}
                 </div>
               )}
+              <MapLink item={t} />
             </div>
             <div style={{ ...S.tag, textAlign: "center", fontSize: 11 }}>
               {t.rep}

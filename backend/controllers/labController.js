@@ -159,7 +159,9 @@ exports.get_api_labs_city = async (req, res) => {
         lb.address,
         lb.city,
         lb.phone,
-        lb.home_collection
+        lb.home_collection,
+        lb.latitude,
+        lb.longitude
       FROM lab_branches lb
       JOIN labs l ON l.id = lb.lab_id
       WHERE lower(lb.city) = lower($1)
@@ -185,7 +187,8 @@ exports.get_api_labs_labId_branches = async (req, res) => {
   try {
     const result = await db.query(`
       SELECT
-        lb.*
+        lb.*,
+        lb.branch_name AS name
       FROM lab_branches lb
       WHERE lb.lab_id = $1
       ORDER BY lb.is_active DESC, lb.branch_name ASC
@@ -201,6 +204,7 @@ exports.post_api_branches = async (req, res) => {
   const {
     lab_id,
     branch_name,
+    name, // Support both fields
     address,
     city,
     state,
@@ -213,7 +217,9 @@ exports.post_api_branches = async (req, res) => {
     is_active,
   } = req.body;
 
-  if (!lab_id || !branch_name) {
+  const actualBranchName = branch_name || name;
+
+  if (!lab_id || !actualBranchName) {
     return res.status(400).json({ error: 'lab_id and branch_name are required' });
   }
 
@@ -226,7 +232,7 @@ exports.post_api_branches = async (req, res) => {
        RETURNING *`,
       [
         lab_id,
-        branch_name.trim(),
+        actualBranchName.trim(),
         address || null,
         city || null,
         state || null,
@@ -250,6 +256,7 @@ exports.put_api_branches_id = async (req, res) => {
   const { id } = req.params;
   const {
     branch_name,
+    name, // Support both fields
     address,
     city,
     state,
@@ -262,7 +269,9 @@ exports.put_api_branches_id = async (req, res) => {
     is_active,
   } = req.body;
 
-  if (!branch_name) {
+  const actualBranchName = branch_name || name;
+
+  if (!actualBranchName) {
     return res.status(400).json({ error: 'branch_name is required' });
   }
 
@@ -284,7 +293,7 @@ exports.put_api_branches_id = async (req, res) => {
        WHERE id = $12
        RETURNING *`,
       [
-        branch_name.trim(),
+        actualBranchName.trim(),
         address || null,
         city || null,
         state || null,

@@ -32,7 +32,11 @@ export default function App() {
   const [allTests, setAllTests] = useState([]);
   const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState({
+    lat: 28.6314,
+    lng: 77.2789,
+    label: "Delhi Pincode 110092 (Shakarpur)"
+  });
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [branchTests, setBranchTests] = useState([]);
 
@@ -101,8 +105,8 @@ export default function App() {
           label: "Current browser location",
         });
       },
-      () => {
-        setUserLocation(null);
+      (error) => {
+        console.warn("Geolocation failed or denied, keeping default location of Pincode 110092:", error.message);
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 },
     );

@@ -9,7 +9,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
   const pageSize = 10;
 
   const isPackage = cat === "package";
-  const sourceData = isPackage ? packages : (allTests || []).filter((t) => t.cat === cat);
+  const sourceData = isPackage ? packages : (allTests || []).filter((t) => (t.cat || "").toLowerCase() === cat.toLowerCase());
   
   const grouped = {};
   if (isPackage) {

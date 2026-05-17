@@ -98,8 +98,8 @@ export function Booking({ test, user, setPage, userLocation }) {
         </p>
         {[
           ["Test", test.name],
-          ["Lab", test.lab],
-          ["Branch", test.branch_name || test.loc],
+          ["Lab", test.lab_name || test.lab],
+          ["Branch", test.branch_name || test.address || test.loc],
           ["Date", date],
           ["Time", slot],
           ["Price", "₹" + test.price],
@@ -168,7 +168,7 @@ export function Booking({ test, user, setPage, userLocation }) {
           </div>
           <div style={{ ...S.serif, fontSize: 19 }}>{test.name}</div>
           <div style={{ ...S.muted, fontSize: 12, marginTop: 4 }}>
-            {test.lab} {test.branch_name ? `- ${test.branch_name} Branch` : ""}
+            {test.lab_name || test.lab} {test.branch_name ? `- ${test.branch_name} Branch` : ""}
           </div>
           {test.address && (
             <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginTop: 4 }}>

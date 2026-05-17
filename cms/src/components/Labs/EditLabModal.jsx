@@ -33,8 +33,8 @@ const EditLabModal = ({ isOpen, onClose, onEdit, lab }) => {
     setError(null);
     
     // Basic validation
-    if (!formData.name || !formData.phone || !formData.email) {
-      setError('Name, phone, and email are required fields.');
+    if (!formData.name) {
+      setError('Lab Name is a required field.');
       return;
     }
 
@@ -75,7 +75,7 @@ const EditLabModal = ({ isOpen, onClose, onEdit, lab }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Phone Number <span className="text-error">*</span></label>
+            <label className="block text-sm font-medium text-text-main mb-1">Phone Number</label>
             <input 
               type="text" 
               name="phone" 
@@ -86,7 +86,7 @@ const EditLabModal = ({ isOpen, onClose, onEdit, lab }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-text-main mb-1">Email Address <span className="text-error">*</span></label>
+            <label className="block text-sm font-medium text-text-main mb-1">Email Address</label>
             <input 
               type="email" 
               name="email" 

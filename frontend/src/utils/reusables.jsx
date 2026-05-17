@@ -36,7 +36,8 @@ export function Divider() {
 }
 
 export function getDistanceKm(test) {
-  const distance = Number(test?.distance_km);
+  if (test?.distance_km === null || test?.distance_km === undefined) return null;
+  const distance = Number(test.distance_km);
   return Number.isFinite(distance) ? distance : null;
 }
 
@@ -53,5 +54,46 @@ export function compareNearby(a, b) {
   const bDistance = b.nearestDistance ?? getDistanceKm(b) ?? Number.POSITIVE_INFINITY;
   if (aDistance !== bDistance) return aDistance - bDistance;
   return (a.price ?? a.minPrice ?? 0) - (b.price ?? b.minPrice ?? 0);
+}
+
+export function getMapLink(t) {
+  if (!t) return '#';
+  const lat = t.latitude ?? t.lat;
+  const lng = t.longitude ?? t.lng;
+  if (lat !== null && lat !== undefined && lng !== null && lng !== undefined) {
+    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  }
+  const query = t.address || t.loc || `${t.branch_name || ''} ${t.city || ''}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+export function MapLink({ item, style }) {
+  const url = getMapLink(item);
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        color: "var(--lime)",
+        textDecoration: "none",
+        fontSize: 11,
+        fontFamily: "var(--fm)",
+        fontWeight: 600,
+        cursor: "pointer",
+        marginTop: 4,
+        transition: "opacity .15s",
+        ...style
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.opacity = 0.8)}
+      onMouseLeave={(e) => (e.currentTarget.style.opacity = 1)}
+    >
+      <span>📍</span>
+      <span style={{ textDecoration: "underline" }}>Get Location</span>
+    </a>
+  );
 }
 

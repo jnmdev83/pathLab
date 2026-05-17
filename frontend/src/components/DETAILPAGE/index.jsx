@@ -1,5 +1,5 @@
 import React from 'react';
-import { S } from '../../utils/reusables';
+import { S, MapLink } from '../../utils/reusables';
 import { COL_LABS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // DETAIL PAGE
@@ -55,9 +55,10 @@ export function BranchTests({ selectedBranch, branchTests, setPage, setTest, use
         <h1 style={{ ...S.serif, fontSize: 34, marginTop: 8 }}>
           {selectedBranch.lab_name}
         </h1>
-        <div style={{ ...S.muted, fontSize: 13, lineHeight: 1.6 }}>
-          {selectedBranch.branch_name} Branch - {selectedBranch.address}<br />
-          {selectedBranch.phone || "Phone unavailable"}
+        <div style={{ ...S.muted, fontSize: 13, lineHeight: 1.6, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+          <div>{selectedBranch.branch_name} Branch - {selectedBranch.address}</div>
+          <div>{selectedBranch.phone || "Phone unavailable"}</div>
+          <MapLink item={selectedBranch} style={{ marginTop: 2 }} />
         </div>
       </div>
 
@@ -170,9 +171,10 @@ export function Detail({ test, setPage, user }) {
           >
             {test.name}
           </h2>
-          <p style={{ ...S.muted, ...S.mono, fontSize: 11, marginBottom: 20 }}>
-            {test.lab} · {test.loc}
-          </p>
+          <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginBottom: 20, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+            <div>{test.lab_name || test.lab} · {test.address || test.loc}</div>
+            <MapLink item={test} />
+          </div>
           <div
             style={{
               width: 36,
@@ -297,10 +299,11 @@ export function Detail({ test, setPage, user }) {
                 }}
               >
                 <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>
-                  {test.lab}
+                  {test.lab_name || test.lab}
                 </div>
-                <div style={{ ...S.muted, ...S.mono, fontSize: 11 }}>
-                  {test.loc}
+                <div style={{ ...S.muted, ...S.mono, fontSize: 11, display: "flex", flexDirection: "column", gap: 3, alignItems: "flex-start" }}>
+                  <div>{test.address || test.loc}</div>
+                  <MapLink item={test} />
                 </div>
               </div>
               <div

@@ -177,17 +177,11 @@ async function setupDatabase() {
     await db.query(`CREATE INDEX IF NOT EXISTS idx_lab_package_branches_package ON lab_package_branches (package_id)`);
     await db.query(`CREATE INDEX IF NOT EXISTS idx_lab_package_branches_price ON lab_package_branches (price)`);
 
-    // Temporarily clear old data to inject the new Delhi region data
-    await db.query('DELETE FROM reports');
-    await db.query('DELETE FROM bookings');
-    await db.query('DELETE FROM lab_test_branches');
-    await db.query('DELETE FROM lab_branches');
-    await db.query('DELETE FROM labs');
-    await db.query('DELETE FROM tests');
-
-    const testCount = await db.query('SELECT COUNT(*) FROM tests');
-    if (parseInt(testCount.rows[0].count) === 0) {
-      console.log("No tests found. Adding rich Delhi sample tests...");
+    // Seeding logic is guarded by the SEED_DEMO_DATA environment variable.
+    // By default, it will not auto-delete or auto-seed so you can work with actual real data.
+    const shouldSeed = process.env.SEED_DEMO_DATA === 'true';
+    if (shouldSeed) {
+      console.log("SEED_DEMO_DATA is true. Adding rich Delhi sample tests...");
       await db.query(`
         INSERT INTO tests (name, lab, loc, rep, price, cat, ok) VALUES
         ('LFT (Liver Function Test)', 'Dr. Lal PathLabs', 'Rohini, Delhi', '6 HR', 350, 'blood', true),
@@ -397,33 +391,11 @@ async function setupDatabase() {
           is_available = EXCLUDED.is_available
       `);
 
-      // Create a dummy user for demoing the Profile/Dashboard
-      await db.query(`INSERT INTO users (name, email, phone, password) VALUES ('Demo User', 'test@test.com', '9876543210', 'test') ON CONFLICT DO NOTHING`);
-      await db.query(`INSERT INTO users (name, email, phone, password, role) VALUES ('System Admin', 'admin@pathlab.com', '0000000000', 'admin123', 'admin') ON CONFLICT DO NOTHING`);
-      const userRes = await db.query(`SELECT id FROM users WHERE email = 'test@test.com'`);
-      if (userRes.rows.length > 0) {
-        const userId = userRes.rows[0].id;
-        const testRes = await db.query(`
-          SELECT t.id, lb.id AS lab_branch_id
-          FROM tests t
-          JOIN lab_test_branches ltb ON ltb.test_id = t.id
-          JOIN lab_branches lb ON lb.id = ltb.lab_branch_id
-          LIMIT 3
-        `);
-        if (testRes.rows.length === 3) {
-          await db.query(`INSERT INTO bookings (user_id, test_id, lab_branch_id, patient_name, patient_phone, booking_date, time_slot, status) VALUES 
-            (${userId}, ${testRes.rows[0].id}, ${testRes.rows[0].lab_branch_id}, 'Demo User', '9876543210', '2026-05-10', '10:00 AM', 'completed'),
-            (${userId}, ${testRes.rows[1].id}, ${testRes.rows[1].lab_branch_id}, 'Demo User', '9876543210', '2026-05-20', '12:00 PM', 'pending')
-          `);
-          const bookingRes = await db.query(`SELECT id FROM bookings WHERE user_id = $1 AND status = 'completed'`, [userId]);
-          if (bookingRes.rows.length > 0) {
-            await db.query(`INSERT INTO reports (user_id, booking_id, report_url, result_summary, date_generated) VALUES
-              ($1, $2, '#', 'All parameters within normal range. Vitamin D slightly low.', '2026-05-11')
-            `, [userId, bookingRes.rows[0].id]);
-          }
-        }
-      }
     }
+
+    // Always ensure the demo user and admin user exist for authentication and CMS access
+    await db.query(`INSERT INTO users (name, email, phone, password) VALUES ('Demo User', 'test@test.com', '9876543210', 'test') ON CONFLICT DO NOTHING`);
+    await db.query(`INSERT INTO users (name, email, phone, password, role) VALUES ('System Admin', 'admin@pathlab.com', '0000000000', 'admin123', 'admin') ON CONFLICT DO NOTHING`);
 
     // --- MIGRATION: Old Duplicated Packages to New Modular Structure ---
       console.log("Migrating legacy package data to modular architecture...");

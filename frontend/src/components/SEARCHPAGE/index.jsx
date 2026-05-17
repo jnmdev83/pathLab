@@ -1,5 +1,5 @@
 import React from 'react';
-import { S, formatDistance, compareNearby } from '../../utils/reusables';
+import { S, formatDistance, compareNearby, MapLink } from '../../utils/reusables';
 import { LabTHead, COL_LABS } from '../TABLEHEADERROWHELPERS';
 
 // SEARCH PAGE
@@ -7,9 +7,10 @@ export function Search({ q, setPage, setTest, allTests, user }) {
   const results = (allTests || [])
     .filter(
       (t) =>
-        t.name.toLowerCase().includes(q.toLowerCase()) ||
-        t.lab.toLowerCase().includes(q.toLowerCase()) ||
-        t.loc.toLowerCase().includes(q.toLowerCase()),
+        (t.name || "").toLowerCase().includes(q.toLowerCase()) ||
+        (t.lab_name || t.lab || "").toLowerCase().includes(q.toLowerCase()) ||
+        (t.branch_name || "").toLowerCase().includes(q.toLowerCase()) ||
+        (t.address || t.loc || "").toLowerCase().includes(q.toLowerCase()),
     )
     .sort(compareNearby);
   return (
@@ -80,15 +81,21 @@ export function Search({ q, setPage, setTest, allTests, user }) {
               <div
                 style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}
               >
-                {t.lab}
+                {t.lab_name || t.lab}
+                {t.branch_name && (
+                  <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 400, marginTop: 2 }}>
+                    ({t.branch_name})
+                  </div>
+                )}
               </div>
               <div style={{ fontSize: 12, ...S.muted, ...S.mono }}>
-                <div>{t.loc}</div>
+                <div>{t.address || t.loc}</div>
                 {formatDistance(t) && (
                   <div style={{ color: "var(--lime)", marginTop: 3 }}>
                     {formatDistance(t)}
                   </div>
                 )}
+                <MapLink item={t} />
               </div>
               <div style={{ ...S.tag, fontSize: 11, textAlign: "center" }}>
                 {t.rep}
