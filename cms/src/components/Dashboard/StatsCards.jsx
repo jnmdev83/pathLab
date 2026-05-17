@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Calendar, DollarSign, Activity, Clock } from 'lucide-react';
+import { Calendar, IndianRupee, Activity, Clock } from 'lucide-react';
 
 const StatsCards = () => {
   const [data, setData] = useState({
@@ -68,8 +68,8 @@ const StatsCards = () => {
     },
     {
       title: 'Total Revenue',
-      value: `$${data.totalRevenue.toLocaleString()}`,
-      icon: <DollarSign className="text-emerald-500" size={24} />,
+      value: `₹${data.totalRevenue.toLocaleString()}`,
+      icon: <IndianRupee className="text-emerald-500" size={24} />,
       bgColor: 'bg-emerald-50',
     },
     {
