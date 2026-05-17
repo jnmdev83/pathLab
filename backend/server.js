@@ -1,7 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
+
 const setupDatabase = require('./models/setup');
 
+// Routes
 const testRoutes = require('./routes/testRoutes');
 const labRoutes = require('./routes/labRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -10,13 +14,24 @@ const authRoutes = require('./routes/authRoutes');
 const packageRoutes = require('./routes/packageRoutes');
 
 const app = express();
+
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+
+
+// Health Check Route
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
 
 // Setup Database
 setupDatabase();
 
-// Routes
+
+// API Routes
 app.use('/api', testRoutes);
 app.use('/api', labRoutes);
 app.use('/api', userRoutes);
@@ -24,5 +39,20 @@ app.use('/api', bookingRoutes);
 app.use('/api', packageRoutes);
 app.use('/api/auth', authRoutes);
 
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(500).json({
+    success: false,
+    message: 'Internal Server Error',
+  });
+});
+
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
