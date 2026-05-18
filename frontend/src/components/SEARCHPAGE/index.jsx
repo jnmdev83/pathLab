@@ -45,6 +45,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
           {results.map((t, i) => (
             <div
               key={t.id}
+              className="tbl-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: COL_LABS,
