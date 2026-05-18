@@ -14,5 +14,6 @@ router.delete('/admin/packages/:id', controller.delete_api_admin_packages_id);
 
 router.get('/admin/package-mappings', controller.get_api_admin_package_mappings);
 router.post('/admin/package-mappings', controller.post_api_admin_package_mappings);
+router.delete('/admin/package-mappings/:id', controller.delete_api_admin_package_mappings_id);
 
 module.exports = router;

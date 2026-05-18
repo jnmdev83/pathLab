@@ -28,7 +28,11 @@ const PackageModal = ({ isOpen, onClose, package: pkg, onSave }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await onSave(formData);
+      const cleanData = {
+        ...formData,
+        test_ids: formData.test_ids.filter(id => id !== '' && id !== null && id !== undefined)
+      };
+      await onSave(cleanData);
       onClose();
     } catch (err) {
       console.error(err);
@@ -37,13 +41,26 @@ const PackageModal = ({ isOpen, onClose, package: pkg, onSave }) => {
     }
   };
 
-  const toggleTest = (id) => {
+  const addTestRow = () => {
     setFormData(prev => ({
       ...prev,
-      test_ids: prev.test_ids.includes(id) 
-        ? prev.test_ids.filter(tid => tid !== id)
-        : [...prev.test_ids, id]
+      test_ids: [...prev.test_ids, '']
     }));
+  };
+
+  const removeTestRow = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      test_ids: prev.test_ids.filter((_, idx) => idx !== index)
+    }));
+  };
+
+  const handleTestChange = (index, value) => {
+    setFormData(prev => {
+      const updated = [...prev.test_ids];
+      updated[index] = value ? Number(value) : '';
+      return { ...prev, test_ids: updated };
+    });
   };
 
   if (!isOpen) return null;
@@ -106,27 +123,55 @@ const PackageModal = ({ isOpen, onClose, package: pkg, onSave }) => {
           </div>
 
           <div className="mb-8">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Include Tests in this Package</label>
-            <div className="max-h-48 overflow-y-auto border rounded-xl p-4 bg-gray-50 grid grid-cols-2 gap-3">
-              {availableTests.map(test => (
-                <button
-                  key={test.id || test.test_id}
-                  type="button"
-                  onClick={() => toggleTest(test.id || test.test_id)}
-                  className={`flex items-center gap-3 p-2 rounded-lg text-left transition-all ${
-                    formData.test_ids.includes(test.id || test.test_id) 
-                    ? 'bg-indigo-600 text-white shadow-md' 
-                    : 'bg-white border text-gray-600 hover:border-indigo-400'
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded flex items-center justify-center border ${
-                    formData.test_ids.includes(test.id || test.test_id) ? 'bg-white border-white' : 'border-gray-300'
-                  }`}>
-                    {formData.test_ids.includes(test.id || test.test_id) && <div className="w-2 h-2 bg-indigo-600 rounded-sm" />}
+            <div className="flex justify-between items-center mb-3">
+              <label className="block text-sm font-semibold text-gray-700">Include Tests in this Package</label>
+              <button 
+                type="button" 
+                onClick={addTestRow}
+                className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-all"
+              >
+                <Plus size={14} /> Add Test Row
+              </button>
+            </div>
+            
+            <div className="space-y-3 max-h-48 overflow-y-auto border rounded-xl p-4 bg-gray-50">
+              {formData.test_ids.length === 0 ? (
+                <div className="text-center py-6 text-xs text-gray-400 italic">No tests added yet. Click "+ Add Test Row" to include tests in this package.</div>
+              ) : (
+                formData.test_ids.map((testId, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <select
+                      value={testId || ''}
+                      onChange={e => handleTestChange(index, e.target.value)}
+                      required
+                      className="flex-1 p-2.5 border rounded-lg bg-white outline-none text-sm"
+                    >
+                      <option value="">Select a Test...</option>
+                      {availableTests.map(t => {
+                        const isAlreadySelected = formData.test_ids.some((selectedId, sIdx) => selectedId === (t.id || t.test_id) && sIdx !== index);
+                        return (
+                          <option 
+                            key={t.id || t.test_id} 
+                            value={t.id || t.test_id}
+                            disabled={isAlreadySelected}
+                          >
+                            {t.name || t.test_name} {isAlreadySelected ? '(Already Selected)' : ''}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    
+                    <button
+                      type="button"
+                      onClick={() => removeTestRow(index)}
+                      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                      title="Remove Test"
+                    >
+                      <X size={18} />
+                    </button>
                   </div>
-                  <span className="text-xs font-medium truncate">{test.name || test.test_name}</span>
-                </button>
-              ))}
+                ))
+              )}
             </div>
           </div>
 

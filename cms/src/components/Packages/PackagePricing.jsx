@@ -56,6 +56,17 @@ const PackagePricing = ({ package: pkg, onClose }) => {
     }
   };
 
+  const handleRemoveMapping = async (mappingId) => {
+    if (window.confirm('Are you sure you want to remove this assignment?')) {
+      try {
+        await api.delete(`/admin/package-mappings/${mappingId}`);
+        fetchMappings();
+      } catch (err) {
+        alert('Error removing package assignment');
+      }
+    }
+  };
+
   if (!pkg) return null;
 
   return (
@@ -99,6 +110,7 @@ const PackagePricing = ({ package: pkg, onClose }) => {
                   onChange={e => setFormData({ ...formData, lab_branch_id: e.target.value })}
                 >
                   <option value="">Choose Branch...</option>
+                  {branches.length > 0 && <option value="all">⭐ All Branches (Global Lab Assignment)</option>}
                   {branches.map(b => <option key={b.id} value={b.id}>{b.branch_name}</option>)}
                 </select>
               </div>
@@ -170,7 +182,12 @@ const PackagePricing = ({ package: pkg, onClose }) => {
                   </div>
                   <div className="text-right">
                     {m.discount_label && <div className="text-[10px] text-amber-600 font-bold mb-1">{m.discount_label}</div>}
-                    <button onClick={() => {}} className="text-xs text-red-500 font-bold hover:underline">Remove</button>
+                    <button 
+                      onClick={() => handleRemoveMapping(m.id)} 
+                      className="text-xs text-red-500 font-bold hover:text-red-700 hover:underline transition-colors"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               ))}

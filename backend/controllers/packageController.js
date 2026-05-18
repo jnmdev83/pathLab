@@ -82,6 +82,11 @@ exports.get_api_admin_packages = async (req, res) => {
           WHERE pt.package_id = p.id
         ) AS included_tests,
         (
+          SELECT COALESCE(json_agg(pt.test_id), '[]'::json)
+          FROM package_tests pt
+          WHERE pt.package_id = p.id
+        ) AS test_ids,
+        (
           SELECT COUNT(DISTINCT lab_id)::INT
           FROM lab_package_branches
           WHERE package_id = p.id
@@ -194,20 +199,52 @@ exports.get_api_admin_package_mappings = async (req, res) => {
 exports.post_api_admin_package_mappings = async (req, res) => {
   const { lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes } = req.body;
   try {
-    await db.query(`
-      INSERT INTO lab_package_branches (
-        lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      ON CONFLICT (lab_branch_id, package_id) DO UPDATE SET
-        price = EXCLUDED.price,
-        reporting_time = EXCLUDED.reporting_time,
-        home_collection = EXCLUDED.home_collection,
-        discount_label = EXCLUDED.discount_label,
-        notes = EXCLUDED.notes
-    `, [lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes]);
-    res.status(201).json({ message: 'Mapping created/updated' });
+    if (lab_branch_id === 'all') {
+      const { rows: branches } = await db.query('SELECT id FROM lab_branches WHERE lab_id = $1', [lab_id]);
+      if (branches.length === 0) {
+        return res.status(400).json({ error: 'No branches found for this laboratory' });
+      }
+      for (const branch of branches) {
+        await db.query(`
+          INSERT INTO lab_package_branches (
+            lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ON CONFLICT (lab_branch_id, package_id) DO UPDATE SET
+            price = EXCLUDED.price,
+            reporting_time = EXCLUDED.reporting_time,
+            home_collection = EXCLUDED.home_collection,
+            discount_label = EXCLUDED.discount_label,
+            notes = EXCLUDED.notes
+        `, [lab_id, branch.id, package_id, price, reporting_time, home_collection, discount_label, notes]);
+      }
+      res.status(201).json({ message: 'Package assigned to all lab branches successfully' });
+    } else {
+      await db.query(`
+        INSERT INTO lab_package_branches (
+          lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (lab_branch_id, package_id) DO UPDATE SET
+          price = EXCLUDED.price,
+          reporting_time = EXCLUDED.reporting_time,
+          home_collection = EXCLUDED.home_collection,
+          discount_label = EXCLUDED.discount_label,
+          notes = EXCLUDED.notes
+      `, [lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes]);
+      res.status(201).json({ message: 'Mapping created/updated' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not create mapping' });
+  }
+};
+
+exports.delete_api_admin_package_mappings_id = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.query('DELETE FROM lab_package_branches WHERE id = $1', [id]);
+    res.json({ message: 'Mapping removed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not remove mapping' });
   }
 };
