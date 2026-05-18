@@ -24,7 +24,7 @@ dotenv.config({ path: path.resolve(__dirname, `../.env.${nodeEnv}`) });
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Enforce SSL only for production/stg (Neon cloud), disable for local development
-const isProductionOrstg = ['production', 'stg'].includes(nodeEnv);
+const isProductionOrStg = ['production', 'stg'].includes(nodeEnv);
 
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
