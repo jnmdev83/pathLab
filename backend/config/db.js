@@ -10,11 +10,10 @@ if (!nodeEnv) {
     const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
     if (branch === 'main') {
       nodeEnv = 'production';
-    } else if (branch === 'dev') {
-      nodeEnv = 'staging';
+    } else if (branch === 'stg') {
+      nodeEnv = 'stg';
     } else {
       nodeEnv = 'development';
-      nodeEnv = 'staging';
     }
   } catch (e) {
     nodeEnv = 'development';
@@ -24,12 +23,12 @@ if (!nodeEnv) {
 dotenv.config({ path: path.resolve(__dirname, `../.env.${nodeEnv}`) });
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-// Enforce SSL only for production/staging (Neon cloud), disable for local development
-const isProductionOrStaging = ['production', 'staging'].includes(nodeEnv);
+// Enforce SSL only for production/stg (Neon cloud), disable for local development
+const isProductionOrstg = ['production', 'stg'].includes(nodeEnv);
 
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: isProductionOrStaging ? { rejectUnauthorized: false } : false,
+  ssl: isProductionOrStg ? { rejectUnauthorized: false } : false,
 });
 
 module.exports = db;

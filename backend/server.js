@@ -9,8 +9,8 @@ if (!nodeEnv) {
     const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
     if (branch === 'main') {
       nodeEnv = 'production';
-    } else if (branch === 'staging') {
-      nodeEnv = 'staging';
+    } else if (branch === 'stg') {
+      nodeEnv = 'stg';
     } else {
       nodeEnv = 'development';
     }
