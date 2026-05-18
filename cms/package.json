@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:staging": "vite --mode staging",
+    "dev:stg": "vite --mode stg",
     "dev:production": "vite --mode production",
     "build": "vite build",
-    "build:staging": "vite build --mode staging",
+    "build:stg": "vite build --mode stg",
     "build:production": "vite build --mode production",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
