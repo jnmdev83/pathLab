@@ -20,6 +20,14 @@ export const setupApiInterceptors = (tokenToSet) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      
+      // Prevent GET request caching by appending a timestamp cache-buster parameter
+      if (config.method === 'get') {
+        config.params = {
+          ...config.params,
+          _t: Date.now()
+        };
+      }
       return config;
     },
     (error) => {

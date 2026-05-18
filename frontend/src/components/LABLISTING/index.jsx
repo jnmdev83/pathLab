@@ -240,7 +240,17 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
                 </div>
               )}
             </div>
-            <div style={{ fontSize: 12, ...S.muted, ...S.mono }}>
+            <div
+              style={{
+                fontSize: 12,
+                ...S.muted,
+                ...S.mono,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                width: "100%",
+              }}
+            >
               <div>{t.address || t.loc}</div>
               {formatDistance(t) && (
                 <div style={{ color: "var(--lime)", marginTop: 3 }}>

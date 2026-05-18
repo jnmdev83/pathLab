@@ -50,7 +50,7 @@ const LabsPage = () => {
   const handleAddLab = async (formData) => {
     try {
       await api.post('/labs', formData);
-      fetchLabs(); // Refresh table
+      await fetchLabs(); // Refresh table
     } catch (error) {
       throw error; // Re-throw to be handled by modal
     }
@@ -59,7 +59,7 @@ const LabsPage = () => {
   const handleEditLab = async (id, formData) => {
     try {
       await api.put(`/labs/${id}`, formData);
-      fetchLabs(); // Refresh table
+      await fetchLabs(); // Refresh table
     } catch (error) {
       throw error; // Re-throw to be handled by modal
     }

@@ -42,7 +42,7 @@ const PackagesPage = () => {
         await api.post('/admin/packages', data);
         showToast('New package created');
       }
-      fetchPackages();
+      await fetchPackages();
     } catch {
       showToast('Error saving package', 'error');
       throw new Error();

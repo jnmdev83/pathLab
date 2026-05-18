@@ -59,13 +59,13 @@ const BranchesPage = () => {
 
   const handleAdd = async (data) => {
     await api.post('/branches', data);
-    fetchBranches(selectedLabId);
+    await fetchBranches(selectedLabId);
     showToast('Branch added successfully');
   };
 
   const handleEdit = async (id, data) => {
     await api.put(`/branches/${id}`, data);
-    fetchBranches(selectedLabId);
+    await fetchBranches(selectedLabId);
     showToast('Branch updated successfully');
   };
 

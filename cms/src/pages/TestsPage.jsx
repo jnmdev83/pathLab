@@ -47,7 +47,7 @@ const TestsPage = () => {
     try {
       if (editTest) await api.put(`/admin/tests/${editTest.id || editTest.test_id}`, data);
       else await api.post('/admin/tests', data);
-      fetchTests();
+      await fetchTests();
       showToast('Test saved successfully');
     } catch { showToast('Error saving test', 'error'); throw new Error(); }
   };
