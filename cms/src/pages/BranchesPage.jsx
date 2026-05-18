@@ -95,11 +95,11 @@ const BranchesPage = () => {
           <p className="text-text-muted mt-1">Manage laboratory branch locations.</p>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <select 
             value={selectedLabId} 
             onChange={(e) => setSelectedLabId(e.target.value)}
-            className="p-2 border rounded-lg bg-white outline-none min-w-[200px] max-w-[320px] truncate text-sm"
+            className="h-[40px] px-3 border rounded-lg bg-white outline-none text-sm min-w-[200px] max-w-[320px] truncate shadow-sm transition-all"
           >
             <option value="">Select Lab...</option>
             {labs.map(lab => (
@@ -109,9 +109,9 @@ const BranchesPage = () => {
 
           <button 
             onClick={() => selectedLabId ? setIsAddOpen(true) : alert('Select a lab first')}
-            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg"
+            className="h-[40px] flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 rounded-lg text-sm font-medium whitespace-nowrap transition-colors shadow-sm"
           >
-            <Plus size={20} /> Add Branch
+            <Plus size={18} /> Add Branch
           </button>
         </div>
       </div>

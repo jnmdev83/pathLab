@@ -71,19 +71,22 @@ const TestsPage = () => {
           <h1 className="text-3xl font-bold font-serif">Tests Library</h1>
           <p className="text-gray-500 mt-1">Manage global tests and branch pricing.</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <select 
             value={selectedLab} 
             onChange={e => setSelectedLab(e.target.value)}
-            className="p-2 border rounded-lg bg-white outline-none text-sm min-w-[200px] max-w-[320px] truncate"
+            className="h-[40px] px-3 border rounded-lg bg-white outline-none text-sm min-w-[200px] max-w-[320px] truncate shadow-sm transition-all"
           >
             <option value="">All Labs (Global Library)</option>
             {labs.map(lab => (
               <option key={lab.id} value={lab.id}>{lab.name}</option>
             ))}
           </select>
-          <button onClick={() => { setEditTest(null); setIsModalOpen(true); }} className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg">
-            <Plus size={20} /> Add Test
+          <button 
+            onClick={() => { setEditTest(null); setIsModalOpen(true); }} 
+            className="h-[40px] flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 rounded-lg text-sm font-medium whitespace-nowrap transition-colors shadow-sm"
+          >
+            <Plus size={18} /> Add Test
           </button>
         </div>
       </div>
