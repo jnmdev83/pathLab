@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import api from '../../services/api';
 
 const PackageModal = ({ isOpen, onClose, package: pkg, onSave }) => {
