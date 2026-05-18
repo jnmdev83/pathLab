@@ -59,5 +59,32 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  const { execSync } = require('child_process');
+  let currentBranch = 'unknown';
+  try {
+    currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  } catch (e) {
+    // Fallback if git command is not present
+  }
+
+  console.log(`\n=========================================`);
+  console.log(`🚀 PATHLAB BACKEND SERVER IS RUNNING`);
+  console.log(`=========================================`);
+  console.log(`🌿 Active Env    : ${nodeEnv.toUpperCase()}`);
+  console.log(`🌿 Git Branch    : ${currentBranch}`);
+  console.log(`🔌 Port          : ${PORT}`);
+  
+  if (process.env.DATABASE_URL) {
+    try {
+      // Safely parse URL to show host & db name without credentials
+      const dbUrl = new URL(process.env.DATABASE_URL);
+      console.log(`🗄️  Database Host : ${dbUrl.hostname}`);
+      console.log(`🗄️  Database Name : ${dbUrl.pathname.replace('/', '')}`);
+    } catch (err) {
+      console.log(`🗄️  Database Host : Cloud Database`);
+    }
+  } else {
+    console.log(`🗄️  Database      : No DATABASE_URL configured`);
+  }
+  console.log(`=========================================\n`);
 });
