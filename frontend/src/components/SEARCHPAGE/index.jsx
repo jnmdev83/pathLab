@@ -88,14 +88,12 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                   </div>
                 )}
               </div>
-              <div
+              <section
                 style={{
                   fontSize: 12,
                   ...S.muted,
                   ...S.mono,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
+                  display: "block",
                   width: "100%",
                 }}
               >
@@ -106,7 +104,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                   </div>
                 )}
                 <MapLink item={t} />
-              </div>
+              </section>
               <div style={{ ...S.tag, fontSize: 11, textAlign: "center" }}>
                 {t.rep}
               </div>

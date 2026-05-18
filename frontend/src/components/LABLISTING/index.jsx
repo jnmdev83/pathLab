@@ -240,14 +240,12 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
                 </div>
               )}
             </div>
-            <div
+            <section
               style={{
                 fontSize: 12,
                 ...S.muted,
                 ...S.mono,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
+                display: "block",
                 width: "100%",
               }}
             >
@@ -258,7 +256,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
                 </div>
               )}
               <MapLink item={t} />
-            </div>
+            </section>
             <div style={{ ...S.tag, textAlign: "center", fontSize: 11 }}>
               {t.rep}
             </div>
