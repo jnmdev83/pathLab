@@ -1,16 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Beaker, MapPin, ClipboardList, Calendar, Users, LogOut, Boxes } from 'lucide-react';
-import { clearAuthToken } from '../../services/auth';
+import { LayoutDashboard, Beaker, MapPin, ClipboardList, Calendar, Users, Boxes } from 'lucide-react';
 
 const Sidebar = () => {
-  const handleLogout = () => {
-    clearAuthToken();
-    // Redirect to login handled by ProtectedRoute when token is removed and state changes,
-    // or we can force reload/redirect:
-    window.location.href = '/login';
-  };
-
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Labs', path: '/labs', icon: <Beaker size={20} /> },
@@ -48,16 +40,6 @@ const Sidebar = () => {
           ))}
         </ul>
       </nav>
-
-      <div className="p-4 border-t border-border">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 w-full text-left text-text-muted hover:bg-red-50 hover:text-error rounded-lg transition-colors"
-        >
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
-      </div>
     </div>
   );
 };
