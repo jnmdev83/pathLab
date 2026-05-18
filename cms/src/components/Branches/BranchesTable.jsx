@@ -93,7 +93,7 @@ const BranchesTable = ({ branches, loading, onEdit, onDelete, onToggleStatus }) 
                     </button>
                   </td>
                   <td className="p-4">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                       <button onClick={() => onEdit(branch)} className="p-1.5 text-text-muted hover:text-amber-600 hover:bg-amber-50 rounded transition-colors" title="Edit">
                         <Edit2 size={18} />
                       </button>

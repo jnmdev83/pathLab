@@ -51,7 +51,7 @@ const UsersTable = ({ users, loading, onEdit, onDelete, onToggleStatus }) => {
                    {user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}
                  </td>
                  <td className="p-4">
-                   <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100">
+                   <div className="flex justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100">
                      <button onClick={() => onEdit(user)} className="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded"><Edit2 size={18} /></button>
                      <button onClick={() => onDelete(user.id || user.user_id, user.name)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded"><Trash2 size={18} /></button>
                    </div>

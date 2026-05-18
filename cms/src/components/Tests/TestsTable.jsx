@@ -56,7 +56,7 @@ const TestsTable = ({ tests, loading, onEdit, onDelete, onViewPricing }) => {
                    <span className="bg-indigo-50 text-primary px-3 py-1 rounded-lg text-sm font-medium">{test.branch_count || 0}</span>
                  </td>
                  <td className="p-4">
-                   <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <div className="flex justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                      <button onClick={() => onViewPricing(test)} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded" title="Pricing & Branches"><DollarSign size={18} /></button>
                      <button onClick={() => onEdit(test)} className="p-1.5 text-amber-600 hover:bg-amber-50 rounded" title="Edit"><Edit2 size={18} /></button>
                      <button onClick={() => onDelete(test.test_id || test.id, test.test_name)} className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Delete"><Trash2 size={18} /></button>

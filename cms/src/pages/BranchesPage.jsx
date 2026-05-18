@@ -99,7 +99,7 @@ const BranchesPage = () => {
           <select 
             value={selectedLabId} 
             onChange={(e) => setSelectedLabId(e.target.value)}
-            className="p-2 border rounded-lg bg-white outline-none min-w-[200px]"
+            className="p-2 border rounded-lg bg-white outline-none min-w-[200px] max-w-[320px] truncate text-sm"
           >
             <option value="">Select Lab...</option>
             {labs.map(lab => (

@@ -47,7 +47,7 @@ const BookingsTable = ({ bookings, loading, onViewDetail, onUpdateStatus }) => {
                  </td>
                  <td className="p-4 text-center">{getStatusBadge(b.status)}</td>
                  <td className="p-4">
-                   <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100">
+                   <div className="flex justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100">
                      <button onClick={() => onViewDetail(b)} className="p-1.5 text-gray-500 hover:text-primary hover:bg-indigo-50 rounded"><Eye size={18} /></button>
                      <button onClick={() => onUpdateStatus(b)} className="p-1.5 text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded"><Edit3 size={18} /></button>
                    </div>

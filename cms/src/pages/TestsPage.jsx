@@ -75,7 +75,7 @@ const TestsPage = () => {
           <select 
             value={selectedLab} 
             onChange={e => setSelectedLab(e.target.value)}
-            className="p-2 border rounded-lg bg-white outline-none text-sm min-w-[200px]"
+            className="p-2 border rounded-lg bg-white outline-none text-sm min-w-[200px] max-w-[320px] truncate"
           >
             <option value="">All Labs (Global Library)</option>
             {labs.map(lab => (
