@@ -311,6 +311,45 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
         )}
       </div>
 
+      {/* Mobile Horizontal Scroll Category Pills */}
+      <div 
+        className="mobile-nav-links"
+        style={{
+          background: "var(--surface)",
+          borderTop: "1px solid var(--border)",
+          padding: "8px 16px",
+          gap: 8,
+          overflowX: "auto",
+          whiteSpace: "nowrap",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        {links.map(([label, p]) => (
+          <button
+            key={p}
+            onClick={() => setPage(p)}
+            style={{
+              background: page === p ? "rgba(37,99,235,.08)" : "var(--bg)",
+              color: page === p ? "var(--lime)" : "var(--muted)",
+              border: page === p ? "1px solid rgba(37,99,235,.2)" : "1px solid var(--border)",
+              cursor: "pointer",
+              fontFamily: "var(--fb)",
+              fontWeight: 600,
+              fontSize: 12,
+              padding: "6px 14px",
+              borderRadius: 20,
+              letterSpacing: ".02em",
+              display: "inline-block",
+              transition: "all .15s",
+              marginRight: 4
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       {/* Bottom Nav for Mobile */}
       <div className="bottom-nav">
         <button onClick={() => setPage("home")} className={page === "home" ? "active" : ""}>
