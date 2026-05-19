@@ -83,6 +83,82 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
+/* Package compare responsive grid system */
+.package-detail-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+}
+
+.comparison-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px 100px 120px;
+  gap: 20px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  align-items: center;
+}
+
+.comparison-header > div {
+  font-family: var(--fm);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.comparison-card {
+  display: grid;
+  grid-template-columns: 1fr 120px 160px 100px 120px;
+  gap: 20px;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  align-items: center;
+  transition: background .12s;
+}
+
+.comparison-card:hover {
+  background: #f8fafc;
+}
+
+.comparison-card .lab-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.comparison-card .lab-branch {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.comparison-card .lab-distance {
+  color: var(--lime);
+  font-size: 11px;
+  font-family: var(--fm);
+  margin-top: 4px;
+}
+
+.comparison-card .lab-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.comparison-card .lab-booking {
+  display: contents;
+}
+
+.comparison-card .lab-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
 /* Primary button */
 .bl {
   background: var(--lime);
@@ -318,6 +394,41 @@ label {
     flex-direction: column;
     gap: 8px;
     align-items: flex-start !important;
+  }
+
+  /* Package Detail and Lab Comparison Mobile Layout */
+  .package-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .comparison-header {
+    display: none !important;
+  }
+
+  .comparison-card {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 16px !important;
+  }
+
+  .comparison-card .lab-details {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .comparison-card .lab-booking {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 4px !important;
+    border-top: 1px dashed var(--border) !important;
+    padding-top: 12px !important;
+  }
+
+  .comparison-card .lab-price {
+    font-size: 18px !important;
   }
 }
 

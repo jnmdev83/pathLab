@@ -52,7 +52,7 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 30 }}>
+      <div className="package-detail-grid">
         {/* Left: Included Tests */}
         <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, height: 'fit-content' }}>
           <h3 style={{ ...S.mono, fontSize: 14, textTransform: 'uppercase', marginBottom: 20 }}>Included Tests</h3>
@@ -73,7 +73,7 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
             <select 
               value={sort} 
               onChange={e => setSort(e.target.value)}
-              style={{ padding: '6px 12px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }}
+              style={{ padding: '6px 12px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
             >
               <option value="low">Price: Low to High</option>
               <option value="high">Price: High to Low</option>
@@ -82,69 +82,74 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
           </div>
 
           <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
-                  <th style={{ padding: '15px 20px', ...S.mono, fontSize: 11, fontWeight: 600 }}>PATHOLOGY LAB</th>
-                  <th style={{ padding: '15px 20px', ...S.mono, fontSize: 11, fontWeight: 600 }}>REPORTING TIME</th>
-                  <th style={{ padding: '15px 20px', ...S.mono, fontSize: 11, fontWeight: 600 }}>OFFERS</th>
-                  <th style={{ padding: '15px 20px', ...S.mono, fontSize: 11, fontWeight: 600 }}>PRICE</th>
-                  <th style={{ padding: '15px 20px', ...S.mono, fontSize: 11, fontWeight: 600 }}>ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedLabs.map(l => (
-                  <tr key={l.id} style={{ borderBottom: '1px solid var(--border)', transition: 'background .1s' }} className="hover-row">
-                    <td style={{ padding: '20px' }}>
-                      <div style={{ fontWeight: 600, fontSize: 15 }}>{l.lab_name}</div>
-                      <div style={{ ...S.muted, fontSize: 12, marginTop: 4 }}>{l.branch_name}, {l.city}</div>
-                      {userLocation && (
-                        <div style={{ color: 'var(--lime)', fontSize: 11, ...S.mono, marginTop: 4 }}>
-                          {formatDistance(l)}
-                        </div>
-                      )}
-                    </td>
-                    <td style={{ padding: '20px' }}>
-                      <span style={{ ...S.tag, fontSize: 11 }}>{l.reporting_time}</span>
-                    </td>
-                    <td style={{ padding: '20px' }}>
-                      {l.discount_label && (
-                        <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600 }}>
-                          {l.discount_label}
-                        </span>
-                      )}
-                      {l.home_collection && (
-                        <div style={{ fontSize: 10, color: 'var(--lime)', marginTop: 5 }}>Free Home Collection</div>
-                      )}
-                    </td>
-                    <td style={{ padding: '20px' }}>
-                      <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>₹{l.price}</div>
-                    </td>
-                    <td style={{ padding: '20px' }}>
-                      <button 
-                        className="bl"
-                        onClick={() => {
-                          // Adapt the new modular package to the old "test" structure for the booking page
-                          const mockTest = {
-                            id: `pkg-${l.id}`,
-                            name: selectedPackage.name,
-                            price: l.price,
-                            lab: l.lab_name,
-                            loc: `${l.branch_name}, ${l.city}`,
-                            lab_branch_id: l.lab_branch_id,
-                            cat: 'package'
-                          };
-                          setTest(mockTest);
-                          user ? setPage("booking") : setPage("signup");
-                        }}
-                      >
-                        Book Now
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {/* Header row on desktop */}
+            <div className="comparison-header">
+              <div>PATHOLOGY LAB</div>
+              <div>REPORTING TIME</div>
+              <div>OFFERS</div>
+              <div>PRICE</div>
+              <div>ACTION</div>
+            </div>
+
+            {/* Comparison Cards list */}
+            {sortedLabs.map(l => (
+              <div key={l.id} className="comparison-card">
+                {/* 1. Lab Info */}
+                <div>
+                  <div className="lab-title">{l.lab_name}</div>
+                  <div className="lab-branch">{l.branch_name}, {l.city}</div>
+                  {userLocation && (
+                    <div className="lab-distance">
+                      {formatDistance(l)}
+                    </div>
+                  )}
+                </div>
+
+                {/* 2. Reporting Time */}
+                <div>
+                  <span style={{ ...S.tag, fontSize: 11 }}>{l.reporting_time}</span>
+                </div>
+
+                {/* 3. Offers */}
+                <div className="lab-details">
+                  {l.discount_label && (
+                    <span style={{ background: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600, display: 'inline-block' }}>
+                      {l.discount_label}
+                    </span>
+                  )}
+                  {l.home_collection && (
+                    <div style={{ fontSize: 10, color: 'var(--lime)', marginTop: l.discount_label ? 5 : 0 }}>Free Home Collection</div>
+                  )}
+                </div>
+
+                {/* 4 & 5. Booking Info */}
+                <div className="lab-booking">
+                  <div className="lab-price">₹{l.price}</div>
+                  <div>
+                    <button 
+                      className="bl"
+                      onClick={() => {
+                        // Adapt the new modular package to the old "test" structure for the booking page
+                        const mockTest = {
+                          id: `pkg-${l.id}`,
+                          name: selectedPackage.name,
+                          price: l.price,
+                          lab: l.lab_name,
+                          loc: `${l.branch_name}, ${l.city}`,
+                          lab_branch_id: l.lab_branch_id,
+                          cat: 'package'
+                        };
+                        setTest(mockTest);
+                        user ? setPage("booking") : setPage("signup");
+                      }}
+                      style={{ padding: '8px 16px', fontSize: 13 }}
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
