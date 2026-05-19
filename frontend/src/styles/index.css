@@ -90,6 +90,13 @@ body {
   gap: 30px;
 }
 
+.modal-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+
 .comparison-header {
   display: grid;
   grid-template-columns: 1fr 120px 160px 100px 120px;
@@ -430,7 +437,13 @@ label {
   .comparison-card .lab-price {
     font-size: 18px !important;
   }
+
+  .modal-compare-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
 }
+
 
 @media (max-width: 480px) {
 
