@@ -150,7 +150,7 @@ export function Detail({ test, setPage, user }) {
         <span style={S.lime}>{test.name}</span>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+      <div className="detail-grid" style={{ display: "grid", gap: 14 }}>
         {/* Description */}
         <div
           style={{

@@ -77,6 +77,12 @@ body {
   border-color: var(--lime);
 }
 
+/* Detail page columns */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 /* Primary button */
 .bl {
   background: var(--lime);
@@ -224,12 +230,25 @@ label {
   nav>div {
     height: auto !important;
     padding: 10px 14px !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
+  /* Logo stays left */
+  nav>div>button:first-child {
+    order: 1 !important;
+  }
+
+  /* Search input goes middle and stretches */
   nav>div>div:nth-child(3) {
-    order: 2;
-    flex: 1;
+    order: 2 !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+
+  /* Profile avatar / login button goes right of search */
+  nav>div>div:nth-child(4),
+  nav>div>button:last-child {
+    order: 3 !important;
   }
 
   /* Main padding */
