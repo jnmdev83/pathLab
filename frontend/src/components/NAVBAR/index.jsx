@@ -148,8 +148,9 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
         </div>
 
         {/* Auth Area */}
-        {user ? (
-          <div ref={dropRef} style={{ position: "relative", flexShrink: 0 }}>
+        <div className="desktop-auth-area" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+          {user ? (
+            <div ref={dropRef} style={{ position: "relative", flexShrink: 0 }}>
             {/* Avatar button */}
             <button
               onClick={() => setDropOpen((o) => !o)}
@@ -309,6 +310,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
             Sign Up
           </button>
         )}
+        </div>
       </div>
 
       {/* Mobile Horizontal Scroll Category Pills */}
@@ -358,11 +360,18 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
         <button onClick={() => setPage("search")} className={page === "search" ? "active" : ""}>
           <span>⌕</span>Search
         </button>
-        <button onClick={() => { if(user) setPage("bookings-page"); else setPage("signup"); }} className={page === "bookings-page" ? "active" : ""}>
+        <button 
+          onClick={() => { if(user) setPage("bookings-page"); else setPage("signup"); }} 
+          className={(page === "bookings-page" || (!user && page === "signup")) ? "active" : ""}
+        >
           <span>📋</span>Bookings
         </button>
-        <button onClick={() => { if(user) setPage("profile-page"); else setPage("signup"); }} className={page === "profile-page" ? "active" : ""}>
-          <span>👤</span>Profile
+        <button 
+          onClick={() => { if(user) setPage("profile-page"); else setPage("signup"); }} 
+          className={(page === "profile-page" || page === "signup") ? "active" : ""}
+        >
+          <span>👤</span>
+          {user ? "Profile" : "Sign Up"}
         </button>
       </div>
     </nav>

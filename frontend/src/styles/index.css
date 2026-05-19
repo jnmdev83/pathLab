@@ -179,7 +179,8 @@ label {
 @media (max-width: 768px) {
 
   /* Navbar */
-  .desktop-nav-links {
+  .desktop-nav-links,
+  .desktop-auth-area {
     display: none !important;
   }
 

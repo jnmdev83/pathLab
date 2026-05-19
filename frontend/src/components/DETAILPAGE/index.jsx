@@ -165,16 +165,12 @@ export function Detail({ test, setPage, user }) {
               ...S.serif,
               fontSize: 24,
               letterSpacing: "-.01em",
-              margin: "14px 0 6px",
+              margin: "14px 0 16px",
               lineHeight: 1.2,
             }}
           >
             {test.name}
           </h2>
-          <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginBottom: 20, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
-            <div>{test.lab_name || test.lab} · {test.address || test.loc}</div>
-            <MapLink item={test} />
-          </div>
           <div
             style={{
               width: 36,
@@ -197,26 +193,8 @@ export function Detail({ test, setPage, user }) {
             About This Test
           </div>
           <p style={{ ...S.muted, fontSize: 14, lineHeight: 1.75 }}>
-            This test helps diagnose and monitor health conditions accurately.
-            Performed by certified lab technicians at our partner laboratory.
-            Results delivered within{" "}
-            <strong style={{ color: "var(--text)" }}>{test.rep}</strong> of
-            sample collection.
+            {test.description || "This test helps diagnose and monitor health conditions accurately. Performed by certified lab technicians at our partner laboratory."}
           </p>
-          <div
-            style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 20 }}
-          >
-            {[
-              ["⏱", "Report: " + test.rep],
-              ["💰", "₹" + test.price + " all-in"],
-              [test.ok ? "✅" : "❌", test.ok ? "Available" : "Fully Booked"],
-            ].map(([ic, tx]) => (
-              <div key={tx} style={{ ...S.tag, display: "flex", gap: 5 }}>
-                <span>{ic}</span>
-                <span>{tx}</span>
-              </div>
-            ))}
-          </div>
 
           {/* Included tests for packages */}
           {test.cat === "package" && PACKAGE_INCLUDES[test.name] && (
@@ -284,10 +262,25 @@ export function Detail({ test, setPage, user }) {
               textTransform: "uppercase",
               letterSpacing: ".07em",
               fontWeight: 700,
-              marginBottom: 20,
+              marginBottom: 16,
             }}
           >
             Booking Details
+          </div>
+
+          <div
+            style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}
+          >
+            {[
+              ["⏱", "Report: " + test.rep],
+              ["💰", "₹" + test.price + " all-in"],
+              [test.ok ? "✅" : "❌", test.ok ? "Available" : "Fully Booked"],
+            ].map(([ic, tx]) => (
+              <div key={tx} style={{ ...S.tag, display: "flex", gap: 5 }}>
+                <span>{ic}</span>
+                <span>{tx}</span>
+              </div>
+            ))}
           </div>
           {test.ok ? (
             <>
