@@ -118,7 +118,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
         <LabTHead />
         {rows.map((t, i) => (
           <div
-            key={t.id}
+            key={`${t.id}-${t.lab_branch_id}-${i}`}
             className="tbl-row"
             style={{
               display: "grid",
