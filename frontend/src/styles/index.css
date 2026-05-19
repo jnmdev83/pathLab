@@ -228,27 +228,27 @@ label {
   }
 
   /* Space for bottom nav */
-  nav>div {
+  nav>.nav-header {
     height: auto !important;
     padding: 10px 14px !important;
     gap: 8px !important;
   }
 
   /* Logo stays left */
-  nav>div>button:first-child {
+  nav>.nav-header>button:first-child {
     order: 1 !important;
   }
 
   /* Search input goes middle and stretches */
-  nav>div>div:nth-child(3) {
+  nav>.nav-header>div:nth-child(3) {
     order: 2 !important;
     flex: 1 !important;
     width: auto !important;
   }
 
   /* Profile avatar / login button goes right of search */
-  nav>div>div:nth-child(4),
-  nav>div>button:last-child {
+  nav>.nav-header>div:nth-child(4),
+  nav>.nav-header>button:last-child {
     order: 3 !important;
   }
 

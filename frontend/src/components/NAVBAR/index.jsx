@@ -45,6 +45,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
       }}
     >
       <div
+        className="nav-header"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
