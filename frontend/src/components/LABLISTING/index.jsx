@@ -298,25 +298,76 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
             {Math.min(pageIdx * pageSize, allRows.length)} of {allRows.length}
           </span>
           <div style={{ display: "flex", gap: 3 }}>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                onClick={() => setPageIdx(n)}
-                style={{
-                  width: 28,
-                  height: 28,
-                  cursor: "pointer",
-                  background: n === pageIdx ? "var(--lime)" : "var(--surface)",
-                  color: n === pageIdx ? "#fff" : "var(--muted)",
-                  border: "1px solid var(--border)",
-                  ...S.mono,
-                  fontSize: 12,
-                  borderRadius: 6,
-                }}
-              >
-                {n}
-              </button>
-            ))}
+            {/* First Page Button */}
+            <button
+              onClick={() => setPageIdx(1)}
+              disabled={pageIdx === 1}
+              style={{
+                width: 28,
+                height: 28,
+                cursor: pageIdx === 1 ? "not-allowed" : "pointer",
+                background: "var(--surface)",
+                color: pageIdx === 1 ? "#ccc" : "var(--muted)",
+                border: "1px solid var(--border)",
+                ...S.mono,
+                fontSize: 12,
+                borderRadius: 6,
+                opacity: pageIdx === 1 ? 0.5 : 1
+              }}
+              title="First Page"
+            >
+              «
+            </button>
+            
+            {/* Ellipsis Page Numbers */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(n => Math.abs(n - pageIdx) <= 2 || n === 1 || n === totalPages)
+              .map((n, idx, arr) => {
+                const prev = arr[idx - 1];
+                const showEllipsis = prev && n - prev > 1;
+                return (
+                  <React.Fragment key={n}>
+                    {showEllipsis && <span style={{ alignSelf: "center", padding: "0 4px", color: "var(--muted)" }}>...</span>}
+                    <button
+                      onClick={() => setPageIdx(n)}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        cursor: "pointer",
+                        background: n === pageIdx ? "var(--lime)" : "var(--surface)",
+                        color: n === pageIdx ? "#fff" : "var(--muted)",
+                        border: "1px solid var(--border)",
+                        ...S.mono,
+                        fontSize: 12,
+                        borderRadius: 6,
+                      }}
+                    >
+                      {n}
+                    </button>
+                  </React.Fragment>
+                );
+              })}
+              
+            {/* Last Page Button */}
+            <button
+              onClick={() => setPageIdx(totalPages)}
+              disabled={pageIdx === totalPages}
+              style={{
+                width: 28,
+                height: 28,
+                cursor: pageIdx === totalPages ? "not-allowed" : "pointer",
+                background: "var(--surface)",
+                color: pageIdx === totalPages ? "#ccc" : "var(--muted)",
+                border: "1px solid var(--border)",
+                ...S.mono,
+                fontSize: 12,
+                borderRadius: 6,
+                opacity: pageIdx === totalPages ? 0.5 : 1
+              }}
+              title="Last Page"
+            >
+              »
+            </button>
           </div>
         </div>
       )}

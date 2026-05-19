@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { S, formatDistance, compareNearby, MapLink } from '../../utils/reusables';
 import { LabTHead, COL_LABS } from '../TABLEHEADERROWHELPERS';
 
 // SEARCH PAGE
 export function Search({ q, setPage, setTest, allTests, user }) {
+  const [pageIdx, setPageIdx] = useState(1);
+  const pageSize = 10;
+
+  // Reset page when search term changes
+  useEffect(() => {
+    setPageIdx(1);
+  }, [q]);
+
   const results = (allTests || [])
     .filter(
       (t) =>
@@ -11,8 +19,16 @@ export function Search({ q, setPage, setTest, allTests, user }) {
         (t.lab_name || t.lab || "").toLowerCase().includes(q.toLowerCase()) ||
         (t.branch_name || "").toLowerCase().includes(q.toLowerCase()) ||
         (t.address || t.loc || "").toLowerCase().includes(q.toLowerCase()),
-    )
-    .sort(compareNearby);
+    );
+
+  // Alphabetical sort (A-Z) if search box is cleared; otherwise sort by proximity/nearby
+  const sortedResults = q.trim()
+    ? [...results].sort(compareNearby)
+    : [...results].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+  const totalPages = Math.ceil(sortedResults.length / pageSize) || 1;
+  const rows = sortedResults.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);
+
   return (
     <div className="fu">
       <h2
@@ -26,114 +42,209 @@ export function Search({ q, setPage, setTest, allTests, user }) {
         Search Results
       </h2>
       <p style={{ ...S.muted, ...S.mono, fontSize: 12, marginBottom: 20 }}>
-        "{q}" — {results.length} found
+        {q.trim() ? `"${q}"` : "All Tests"} — {sortedResults.length} found
       </p>
-      {results.length === 0 ? (
+      {rows.length === 0 ? (
         <div style={{ textAlign: "center", padding: "64px 0", ...S.muted }}>
           <div style={{ fontSize: 44, marginBottom: 12 }}>⌕</div>
           <p>No results for "{q}"</p>
         </div>
       ) : (
-        <div
-          style={{
-            border: "1px solid var(--border)",
-            borderRadius: 12,
-            overflow: "hidden",
-          }}
-        >
-          <LabTHead />
-          {results.map((t, i) => (
-            <div
-              key={t.id}
-              className="tbl-row"
-              style={{
-                display: "grid",
-                gridTemplateColumns: COL_LABS,
-                padding: "14px 20px",
-                gap: 12,
-                alignItems: "center",
-                borderBottom: "1px solid var(--border)",
-                background: i % 2 === 0 ? "var(--card)" : "var(--surface)",
-              }}
-            >
-              <div>
-                <button
-                  onClick={() => {
-                    setTest(t);
-                    setPage("detail");
-                  }}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    fontFamily: "var(--fb)",
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: "var(--text)",
-                    textAlign: "left",
-                    marginBottom: 6,
-                  }}
-                  onMouseEnter={(e) => (e.target.style.color = "var(--lime)")}
-                  onMouseLeave={(e) => (e.target.style.color = "var(--text)")}
-                >
-                  {t.name}
-                </button>
-              </div>
+        <>
+          <div
+            style={{
+              border: "1px solid var(--border)",
+              borderRadius: 12,
+              overflow: "hidden",
+            }}
+          >
+            <LabTHead />
+            {rows.map((t, i) => (
               <div
-                style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}
-              >
-                {t.lab_name || t.lab}
-                {t.branch_name && (
-                  <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 400, marginTop: 2 }}>
-                    ({t.branch_name})
-                  </div>
-                )}
-              </div>
-              <section
+                key={t.id}
+                className="tbl-row"
                 style={{
-                  fontSize: 12,
-                  ...S.muted,
-                  ...S.mono,
-                  display: "block",
-                  width: "100%",
+                  display: "grid",
+                  gridTemplateColumns: COL_LABS,
+                  padding: "14px 20px",
+                  gap: 12,
+                  alignItems: "center",
+                  borderBottom: "1px solid var(--border)",
+                  background: i % 2 === 0 ? "var(--card)" : "var(--surface)",
                 }}
               >
-                <div>{t.address || t.loc}</div>
-                {formatDistance(t) && (
-                  <div style={{ color: "var(--lime)", marginTop: 3 }}>
-                    {formatDistance(t)}
-                  </div>
-                )}
-                <MapLink item={t} />
-              </section>
-              <div style={{ ...S.tag, fontSize: 11, textAlign: "center" }}>
-                {t.rep}
-              </div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                <span
+                <div>
+                  <button
+                    onClick={() => {
+                      setTest(t);
+                      setPage("detail");
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "var(--fb)",
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "var(--text)",
+                      textAlign: "left",
+                      marginBottom: 6,
+                    }}
+                    onMouseEnter={(e) => (e.target.style.color = "var(--lime)")}
+                    onMouseLeave={(e) => (e.target.style.color = "var(--text)")}
+                  >
+                    {t.name}
+                  </button>
+                </div>
+                <div
+                  style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}
+                >
+                  {t.lab_name || t.lab}
+                  {t.branch_name && (
+                    <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 400, marginTop: 2 }}>
+                      ({t.branch_name})
+                    </div>
+                  )}
+                </div>
+                <section
                   style={{
+                    fontSize: 12,
+                    ...S.muted,
                     ...S.mono,
-                    fontSize: 16,
-                    fontWeight: 600,
-                    ...S.lime,
+                    display: "block",
+                    width: "100%",
                   }}
                 >
-                  ₹{t.price}
-                </span>
+                  <div>{t.address || t.loc}</div>
+                  {formatDistance(t) && (
+                    <div style={{ color: "var(--lime)", marginTop: 3 }}>
+                      {formatDistance(t)}
+                    </div>
+                  )}
+                  <MapLink item={t} />
+                </section>
+                <div style={{ ...S.tag, fontSize: 11, textAlign: "center" }}>
+                  {t.rep}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                  <span
+                    style={{
+                      ...S.mono,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      ...S.lime,
+                    }}
+                  >
+                    ₹{t.price}
+                  </span>
+                  <button
+                    className="bl"
+                    onClick={() => {
+                      setTest(t);
+                      user ? setPage("booking") : setPage("signup");
+                    }}
+                    style={{ padding: "7px 14px", fontSize: 12 }}
+                  >
+                    Book
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Premium Pagination Controls with Ellipsis and First/Last Buttons */}
+          {totalPages > 1 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 14,
+                ...S.muted,
+                ...S.mono,
+                fontSize: 11,
+              }}
+            >
+              <span>
+                Showing {(pageIdx - 1) * pageSize + 1}–
+                {Math.min(pageIdx * pageSize, sortedResults.length)} of {sortedResults.length}
+              </span>
+              
+              <div style={{ display: "flex", gap: 3 }}>
+                {/* First Page Button */}
                 <button
-                  className="bl"
-                  onClick={() => {
-                    setTest(t);
-                    user ? setPage("booking") : setPage("signup");
+                  onClick={() => setPageIdx(1)}
+                  disabled={pageIdx === 1}
+                  style={{
+                    width: 28,
+                    height: 28,
+                    cursor: pageIdx === 1 ? "not-allowed" : "pointer",
+                    background: "var(--surface)",
+                    color: pageIdx === 1 ? "#ccc" : "var(--muted)",
+                    border: "1px solid var(--border)",
+                    ...S.mono,
+                    fontSize: 12,
+                    borderRadius: 6,
+                    opacity: pageIdx === 1 ? 0.5 : 1
                   }}
-                  style={{ padding: "7px 14px", fontSize: 12 }}
+                  title="First Page"
                 >
-                  Book
+                  «
+                </button>
+                
+                {/* Dynamically Filtered Page Numbers with Ellipsis */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(n => Math.abs(n - pageIdx) <= 2 || n === 1 || n === totalPages)
+                  .map((n, idx, arr) => {
+                    const prev = arr[idx - 1];
+                    const showEllipsis = prev && n - prev > 1;
+                    return (
+                      <React.Fragment key={n}>
+                        {showEllipsis && <span style={{ alignSelf: "center", padding: "0 4px", color: "var(--muted)" }}>...</span>}
+                        <button
+                          onClick={() => setPageIdx(n)}
+                          style={{
+                            width: 28,
+                            height: 28,
+                            cursor: "pointer",
+                            background: n === pageIdx ? "var(--lime)" : "var(--surface)",
+                            color: n === pageIdx ? "#fff" : "var(--muted)",
+                            border: "1px solid var(--border)",
+                            ...S.mono,
+                            fontSize: 12,
+                            borderRadius: 6,
+                          }}
+                        >
+                          {n}
+                        </button>
+                      </React.Fragment>
+                    );
+                  })}
+                  
+                {/* Last Page Button */}
+                <button
+                  onClick={() => setPageIdx(totalPages)}
+                  disabled={pageIdx === totalPages}
+                  style={{
+                    width: 28,
+                    height: 28,
+                    cursor: pageIdx === totalPages ? "not-allowed" : "pointer",
+                    background: "var(--surface)",
+                    color: pageIdx === totalPages ? "#ccc" : "var(--muted)",
+                    border: "1px solid var(--border)",
+                    ...S.mono,
+                    fontSize: 12,
+                    borderRadius: 6,
+                    opacity: pageIdx === totalPages ? 0.5 : 1
+                  }}
+                  title="Last Page"
+                >
+                  »
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
