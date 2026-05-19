@@ -13,18 +13,48 @@ export function Search({ q, setPage, setTest, allTests, user }) {
   }, [q]);
 
   const results = (allTests || [])
-    .filter(
-      (t) =>
-        (t.name || "").toLowerCase().includes(q.toLowerCase()) ||
-        (t.lab_name || t.lab || "").toLowerCase().includes(q.toLowerCase()) ||
-        (t.branch_name || "").toLowerCase().includes(q.toLowerCase()) ||
-        (t.address || t.loc || "").toLowerCase().includes(q.toLowerCase()),
-    );
+    .filter((t) => {
+      const searchStr = q.toLowerCase().trim();
+      if (!searchStr) return true;
 
-  // Alphabetical sort (A-Z) if search box is cleared; otherwise sort by proximity/nearby
+      const name = (t.name || "").toLowerCase();
+      const labName = (t.lab_name || t.lab || "").toLowerCase();
+      const branchName = (t.branch_name || "").toLowerCase();
+      const address = (t.address || t.loc || "").toLowerCase();
+
+      // Dynamic acronym mapping (e.g., "House of Diagnostic" -> "hod", "Malik Radix Healthcare" -> "mrh")
+      const labWords = labName.split(/[^a-zA-Z0-9]+/).filter(w => w.length > 0);
+      const labAcronym = labWords.map(w => w[0]).join("");
+      const labAcronymNoOf = labWords.filter(w => w !== "of" && w !== "and" && w !== "the").map(w => w[0]).join("");
+
+      const matchesAcronym = 
+        labAcronym === searchStr || 
+        labAcronymNoOf === searchStr;
+
+      return (
+        name.includes(searchStr) ||
+        labName.includes(searchStr) ||
+        branchName.includes(searchStr) ||
+        address.includes(searchStr) ||
+        matchesAcronym
+      );
+    });
+
+  // Alphabetical sort (A-Z actual alphabets first, digits like "2D Echo" at the very end)
   const sortedResults = q.trim()
     ? [...results].sort(compareNearby)
-    : [...results].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    : [...results].sort((a, b) => {
+        const nameA = (a.name || "").trim().toLowerCase();
+        const nameB = (b.name || "").trim().toLowerCase();
+
+        const isNumA = /^\d/.test(nameA);
+        const isNumB = /^\d/.test(nameB);
+
+        if (isNumA && !isNumB) return 1;
+        if (!isNumA && isNumB) return -1;
+
+        return nameA.localeCompare(nameB);
+      });
 
   const totalPages = Math.ceil(sortedResults.length / pageSize) || 1;
   const rows = sortedResults.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);

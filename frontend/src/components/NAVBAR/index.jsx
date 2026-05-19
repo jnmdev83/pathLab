@@ -129,8 +129,12 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
           <input
             placeholder="Search tests…"
             value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && setPage("search")}
+            onChange={(e) => {
+              setQ(e.target.value);
+              if (page !== "search") {
+                setPage("search");
+              }
+            }}
             style={{
               width: 180,
               paddingLeft: 28,
