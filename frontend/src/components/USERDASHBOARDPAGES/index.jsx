@@ -519,11 +519,53 @@ export function UserProfile({ user, setPage, setUser }) {
       });
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    setPage("home");
+  };
+
   return (
     <div className="fu" style={{ maxWidth: 560, margin: "0 auto" }}>
-      <h1 style={{ ...S.serif, fontSize: 30, marginBottom: 20 }}>
-        Personal Information
-      </h1>
+      {/* Header section with Name, Email, and Phone */}
+      <div
+        style={{
+          background: "var(--card)",
+          border: "1.5px solid var(--border)",
+          borderRadius: 12,
+          padding: 24,
+          marginBottom: 18,
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+        }}
+      >
+        <div
+          style={{
+            width: 62,
+            height: 62,
+            borderRadius: "50%",
+            background: "var(--lime)",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 700,
+            fontSize: 22,
+            fontFamily: "var(--fb)",
+          }}
+        >
+          {initials || "?"}
+        </div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 18 }}>{name}</div>
+          <div style={{ ...S.muted, fontSize: 13, marginTop: 2 }}>{user.email}</div>
+          {phone && (
+            <div style={{ ...S.muted, fontSize: 13, marginTop: 2 }}>
+              📞 {phone}
+            </div>
+          )}
+        </div>
+      </div>
 
       {saved && (
         <div
@@ -542,116 +584,160 @@ export function UserProfile({ user, setPage, setUser }) {
         </div>
       )}
 
-      <DashCard title="Profile" icon="👤">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 20,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div
-              style={{
-                width: 62,
-                height: 62,
-                borderRadius: "50%",
-                background: "var(--lime)",
-                color: "#fff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 700,
-                fontSize: 22,
-                fontFamily: "var(--fb)",
-              }}
-            >
-              {initials || "?"}
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 18 }}>{name}</div>
-              <div
-                style={{ ...S.muted, ...S.mono, fontSize: 12, marginTop: 2 }}
-              >
-                Verified Patient Account
-              </div>
-            </div>
-          </div>
+      {/* Main Options / Edit Form */}
+      {!editMode ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {/* Quick links as requested */}
           <button
-            onClick={() => {
-              setEditMode((e) => !e);
-              setErr("");
-              setSaved(false);
-            }}
+            onClick={() => setPage("reports-page")}
             style={{
-              background: "none",
+              background: "var(--card)",
               border: "1.5px solid var(--border)",
-              borderRadius: 8,
-              padding: "6px 14px",
-              cursor: "pointer",
-              fontFamily: "var(--fb)",
-              fontSize: 12,
-              color: "var(--text)",
+              borderRadius: 12,
+              padding: "18px 24px",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontSize: 15,
               fontWeight: 600,
+              cursor: "pointer",
+              color: "var(--text)",
+              textAlign: "left",
+              width: "100%",
+              transition: "all .15s",
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
           >
-            {editMode ? "Cancel" : "✏ Edit"}
+            <span style={{ fontSize: 20 }}>📄</span>
+            My Reports
+          </button>
+
+          <button
+            onClick={() => setPage("bookings-page")}
+            style={{
+              background: "var(--card)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 12,
+              padding: "18px 24px",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontSize: 15,
+              fontWeight: 600,
+              cursor: "pointer",
+              color: "var(--text)",
+              textAlign: "left",
+              width: "100%",
+              transition: "all .15s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+          >
+            <span style={{ fontSize: 20 }}>📋</span>
+            My Bookings
+          </button>
+
+          <button
+            onClick={() => setEditMode(true)}
+            style={{
+              background: "var(--card)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 12,
+              padding: "18px 24px",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontSize: 15,
+              fontWeight: 600,
+              cursor: "pointer",
+              color: "var(--text)",
+              textAlign: "left",
+              width: "100%",
+              transition: "all .15s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+          >
+            <span style={{ fontSize: 20 }}>👤</span>
+            Personal Information
+          </button>
+
+          {/* Logout Section */}
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "rgba(239, 68, 68, 0.05)",
+              border: "1.5px solid rgba(239, 68, 68, 0.2)",
+              borderRadius: 12,
+              padding: "18px 24px",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              fontSize: 15,
+              fontWeight: 700,
+              cursor: "pointer",
+              color: "var(--danger)",
+              textAlign: "left",
+              width: "100%",
+              transition: "all .15s",
+              marginTop: 12,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(239, 68, 68, 0.05)")}
+          >
+            <span style={{ fontSize: 20 }}>🚪</span>
+            Logout
           </button>
         </div>
+      ) : (
+        <DashCard title="Edit Personal Information" icon="👤">
+          {err && (
+            <div
+              style={{
+                color: "var(--danger)",
+                ...S.mono,
+                fontSize: 12,
+                marginBottom: 12,
+              }}
+            >
+              ⚠ {err}
+            </div>
+          )}
 
-        {err && (
-          <div
-            style={{
-              color: "var(--danger)",
-              ...S.mono,
-              fontSize: 12,
-              marginBottom: 12,
-            }}
-          >
-            ⚠ {err}
+          {/* Email */}
+          <div style={{ padding: "12px 0" }}>
+            <div
+              style={{
+                ...S.muted,
+                ...S.mono,
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: ".07em",
+                marginBottom: 4,
+              }}
+            >
+              Email Address
+            </div>
+            <div style={{ fontWeight: 500, fontSize: 13, ...S.muted }}>
+              🔒 {user.email} (read-only)
+            </div>
           </div>
-        )}
 
-        {/* Email (read-only always) */}
-        <div
-          style={{ padding: "12px 0", borderTop: "1px solid var(--border)" }}
-        >
-          <div
-            style={{
-              ...S.muted,
-              ...S.mono,
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: ".07em",
-              marginBottom: 4,
-            }}
-          >
-            Email Address
-          </div>
-          <div style={{ fontWeight: 500, fontSize: 13, ...S.muted }}>
-            🔒 {user.email}{" "}
-            <span style={{ fontSize: 10 }}>(cannot be changed)</span>
-          </div>
-        </div>
-
-        {/* Name */}
-        <div
-          style={{ padding: "12px 0", borderTop: "1px solid var(--border)" }}
-        >
-          <div
-            style={{
-              ...S.muted,
-              ...S.mono,
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: ".07em",
-              marginBottom: 4,
-            }}
-          >
-            Full Name
-          </div>
-          {editMode ? (
+          {/* Name */}
+          <div style={{ padding: "12px 0", borderTop: "1px solid var(--border)" }}>
+            <div
+              style={{
+                ...S.muted,
+                ...S.mono,
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: ".07em",
+                marginBottom: 8,
+              }}
+            >
+              Full Name
+            </div>
             <input
               value={name}
               onChange={(e) => {
@@ -659,29 +745,33 @@ export function UserProfile({ user, setPage, setUser }) {
                 setErr("");
               }}
               placeholder="Your full name"
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                border: "1.5px solid var(--border)",
+                borderRadius: 8,
+                background: "var(--bg)",
+                color: "var(--text)",
+                fontSize: 14,
+                outline: "none",
+              }}
             />
-          ) : (
-            <div style={{ fontWeight: 500, fontSize: 13 }}>{name}</div>
-          )}
-        </div>
-
-        {/* Phone */}
-        <div
-          style={{ padding: "12px 0", borderTop: "1px solid var(--border)" }}
-        >
-          <div
-            style={{
-              ...S.muted,
-              ...S.mono,
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: ".07em",
-              marginBottom: 4,
-            }}
-          >
-            Phone Number
           </div>
-          {editMode ? (
+
+          {/* Phone */}
+          <div style={{ padding: "12px 0", borderTop: "1px solid var(--border)" }}>
+            <div
+              style={{
+                ...S.muted,
+                ...S.mono,
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: ".07em",
+                marginBottom: 8,
+              }}
+            >
+              Phone Number
+            </div>
             <input
               type="tel"
               value={phone}
@@ -690,25 +780,49 @@ export function UserProfile({ user, setPage, setUser }) {
                 setErr("");
               }}
               placeholder="10-digit mobile"
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                border: "1.5px solid var(--border)",
+                borderRadius: 8,
+                background: "var(--bg)",
+                color: "var(--text)",
+                fontSize: 14,
+                outline: "none",
+              }}
             />
-          ) : (
-            <div style={{ fontWeight: 500, fontSize: 13 }}>
-              {phone || <span style={S.muted}>Not provided</span>}
-            </div>
-          )}
-        </div>
+          </div>
 
-        {editMode && (
-          <button
-            className="bl"
-            onClick={saveProfile}
-            disabled={saving}
-            style={{ width: "100%", padding: 12, marginTop: 16, fontSize: 14 }}
-          >
-            {saving ? "Saving…" : "Save Changes →"}
-          </button>
-        )}
-      </DashCard>
+          <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
+            <button
+              className="bl"
+              onClick={saveProfile}
+              disabled={saving}
+              style={{ flex: 1, padding: 12, fontSize: 13 }}
+            >
+              {saving ? "Saving…" : "Save Changes →"}
+            </button>
+            <button
+              onClick={() => {
+                setEditMode(false);
+                setErr("");
+              }}
+              style={{
+                padding: "12px 20px",
+                background: "none",
+                border: "1.5px solid var(--border)",
+                borderRadius: 8,
+                cursor: "pointer",
+                fontFamily: "var(--fb)",
+                fontSize: 13,
+                color: "var(--text)",
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </DashCard>
+      )}
     </div>
   );
 }
