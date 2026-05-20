@@ -588,44 +588,93 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
         </div>
       )}
 
-      {/* STICKY FLOATING COMPARE ACTION BAR FOR PACKAGES */}
+      {/* PREMIUM STICKY TOP COMPARE PANEL */}
       {isPackage && selectedPackagesForCompare.length > 0 && (
         <div style={{
           position: 'fixed',
-          bottom: 75, // Give clear clearance for the bottom navigation bar on mobile!
+          top: 64, // Positioned perfectly right below the sticky Navbar!
           left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(255, 255, 255, 0.96)',
-          backdropFilter: 'blur(12px)',
-          border: '2px solid var(--lime)',
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(16, 185, 129, 0.3)',
           borderRadius: 20,
-          padding: '14px 24px',
-          boxShadow: '0 12px 36px rgba(0,0,0,0.18)',
+          padding: '12px 20px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(16, 185, 129, 0.1)',
           display: 'flex',
           alignItems: 'center',
-          gap: 15,
+          gap: 16,
           zIndex: 999,
-          width: '90%',
-          maxWidth: 600,
+          width: '92%',
+          maxWidth: 780,
           justifyContent: 'space-between',
-          animation: 'pulse 2s infinite ease-in-out'
-        }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>⚖</span>
-            <span>
-              Compare: <strong>{selectedPackagesForCompare.length}</strong> package{selectedPackagesForCompare.length > 1 ? 's' : ''} selected.
-            </span>
+          animation: 'slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+        }} className="sticky-compare-bar animate-in">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, overflow: 'hidden' }}>
+            <div style={{
+              background: 'var(--lime)',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 12,
+              padding: '6px 12px',
+              borderRadius: 12,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              whiteSpace: 'nowrap',
+              ...S.mono
+            }}>
+              <span>⚖</span>
+              <span>{selectedPackagesForCompare.length} Selected</span>
+            </div>
+            
+            {/* Selected Package Badges / Chips */}
+            <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 2 }} className="no-scrollbar hide-scrollbar-mobile">
+              {selectedPackagesForCompare.map(pkg => (
+                <span 
+                  key={pkg.id}
+                  style={{
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 8,
+                    padding: '4px 10px',
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: 'var(--text)',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6
+                  }}
+                >
+                  {pkg.name}
+                  <button 
+                    onClick={() => handlePackageSelectForCompare(pkg)}
+                    style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: 0, fontWeight: 700, fontSize: 10 }}
+                  >
+                    ✕
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
             <button 
               className="bl"
               disabled={selectedPackagesForCompare.length < 2}
               onClick={startPackageComparison}
               style={{
-                padding: '8px 16px',
+                padding: '8px 18px',
                 fontSize: 12,
+                fontWeight: 700,
                 opacity: selectedPackagesForCompare.length < 2 ? 0.5 : 1,
-                cursor: selectedPackagesForCompare.length < 2 ? 'not-allowed' : 'pointer'
+                cursor: selectedPackagesForCompare.length < 2 ? 'not-allowed' : 'pointer',
+                background: selectedPackagesForCompare.length >= 2 ? 'var(--lime)' : 'var(--border)',
+                border: 'none',
+                color: '#fff',
+                borderRadius: 10,
+                ...S.mono
               }}
             >
               {selectedPackagesForCompare.length < 2 ? 'Select 2 to Compare' : 'Compare Now'}
@@ -636,11 +685,15 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                color: 'var(--danger)',
-                fontWeight: 700,
+                color: 'var(--muted)',
+                fontWeight: 600,
                 fontSize: 12,
-                padding: '4px 8px'
+                padding: '6px 10px',
+                borderRadius: 8,
+                transition: 'all 0.15s'
               }}
+              onMouseEnter={e => e.target.style.color = 'var(--danger)'}
+              onMouseLeave={e => e.target.style.color = 'var(--muted)'}
             >
               Reset
             </button>
