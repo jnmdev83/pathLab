@@ -141,10 +141,6 @@ export default function App() {
     );
   };
 
-  useEffect(() => {
-    if (page === "home") return;
-    requestGeolocation();
-  }, [page]);
 
   // Fetch tests dynamically from our PostgreSQL database!
   useEffect(() => {
