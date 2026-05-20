@@ -63,7 +63,7 @@ export function TestTHead() {
   );
 }
 
-export const COL_LABS = "2.5fr 1.5fr 1.5fr 72px 180px";
+export const COL_LABS = "2.3fr 1.5fr 1.5fr 100px 180px";
 export function LabTHead() {
   return (
     <div
