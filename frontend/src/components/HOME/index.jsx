@@ -120,24 +120,23 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
             {lab.branch_name} Branch
           </div>
         </div>
-        {showDistance && lab.distance_km !== undefined && (
-          <span
-            style={{
-              ...S.mono,
-              ...S.lime,
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: ".02em",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {Number(lab.distance_km).toFixed(1)} km away
-          </span>
-        )}
       </div>
       <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginTop: 10, lineHeight: 1.6 }}>
         {lab.address}<br />
         {lab.phone || "Phone unavailable"}
+        {showDistance && lab.distance_km !== undefined && (
+          <div
+            style={{
+              ...S.lime,
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: ".02em",
+              marginTop: 6,
+            }}
+          >
+            {Number(lab.distance_km).toFixed(1)} km away
+          </div>
+        )}
         <MapLink item={lab} style={{ display: "flex", marginTop: 6 }} />
       </div>
       <button
