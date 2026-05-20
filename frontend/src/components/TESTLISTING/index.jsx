@@ -288,7 +288,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: isPackage ? "3fr 2fr 260px" : COL_TESTS,
+            gridTemplateColumns: isPackage ? "3fr 1.2fr 360px" : COL_TESTS,
             background: "var(--surface)",
             borderBottom: "1px solid var(--border)",
             padding: "9px 20px",
@@ -316,7 +316,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
             className="tbl-row"
             style={{
               display: "grid",
-              gridTemplateColumns: isPackage ? "3fr 2fr 260px" : COL_TESTS,
+              gridTemplateColumns: isPackage ? "3fr 1.2fr 360px" : COL_TESTS,
               padding: "15px 20px",
               gap: 12,
               alignItems: "center",
