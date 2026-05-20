@@ -73,196 +73,198 @@ export function Search({ q, setPage, setTest, allTests, user }) {
   const rows = sortedResults.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);
 
   return (
-    <div className="fu">
-      <h2
-        style={{
-          ...S.serif,
-          fontSize: 28,
-          letterSpacing: "-.01em",
-          marginBottom: 3,
-        }}
-      >
-        Search Results
-      </h2>
-      <p style={{ ...S.muted, ...S.mono, fontSize: 12, marginBottom: 20 }}>
-        {q.trim() ? `"${q}"` : "All Tests"} — {sortedResults.length} found
-      </p>
-      {rows.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "64px 0", ...S.muted }}>
-          <div style={{ fontSize: 44, marginBottom: 12 }}>⌕</div>
-          <p>No results for "{q}"</p>
-        </div>
-      ) : (
-        <>
-          {/* Lab List Cards Container */}
-          <div
-            style={{
-              display: "grid",
-              gap: 12,
-              border: "1px solid var(--border)",
-              borderRadius: 12,
-              overflow: "hidden",
-              background: "var(--card)"
-            }}
-          >
-            {rows.map((t, i) => (
+    <>
+      <div className="fu">
+        <h2
+          style={{
+            ...S.serif,
+            fontSize: 28,
+            letterSpacing: "-.01em",
+            marginBottom: 3,
+          }}
+        >
+          Search Results
+        </h2>
+        <p style={{ ...S.muted, ...S.mono, fontSize: 12, marginBottom: 20 }}>
+          {q.trim() ? `"${q}"` : "All Tests"} — {sortedResults.length} found
+        </p>
+        {rows.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "64px 0", ...S.muted }}>
+            <div style={{ fontSize: 44, marginBottom: 12 }}>⌕</div>
+            <p>No results for "{q}"</p>
+          </div>
+        ) : (
+          <>
+            {/* Lab List Cards Container */}
+            <div
+              style={{
+                display: "grid",
+                gap: 12,
+                border: "1px solid var(--border)",
+                borderRadius: 12,
+                overflow: "hidden",
+                background: "var(--card)"
+              }}
+            >
+              {rows.map((t, i) => (
+                <div
+                  key={`${t.id}-${t.lab_branch_id}-${i}`}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "16px 20px",
+                    borderBottom: i === rows.length - 1 ? "none" : "1px solid var(--border)",
+                    background: i % 2 === 0 ? "var(--card)" : "var(--surface)",
+                    gap: 12,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {/* Left side: Test Name and Lab */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 200, flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>
+                      {t.name}
+                    </div>
+                    <div style={{ ...S.muted, fontSize: 12 }}>
+                      🏢 {t.lab_name || t.lab} ({t.branch_name || "Main"} Branch)
+                    </div>
+                  </div>
+
+                  {/* Right side: Two Clean Action Buttons */}
+                  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                    <button
+                      className="bg"
+                      onClick={() => setActiveModalTest(t)}
+                      style={{
+                        padding: "7px 13px",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      View Details
+                    </button>
+                    <button
+                      className="bl"
+                      onClick={() => {
+                        setTest(t);
+                        user ? setPage("booking") : setPage("signup");
+                      }}
+                      style={{
+                        padding: "7px 13px",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      Book Test
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Premium Pagination Controls with Ellipsis and First/Last Buttons */}
+            {totalPages > 1 && (
               <div
-                key={`${t.id}-${t.lab_branch_id}-${i}`}
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  padding: "16px 20px",
-                  borderBottom: i === rows.length - 1 ? "none" : "1px solid var(--border)",
-                  background: i % 2 === 0 ? "var(--card)" : "var(--surface)",
-                  gap: 12,
-                  flexWrap: "wrap",
+                  marginTop: 14,
+                  ...S.muted,
+                  ...S.mono,
+                  fontSize: 11,
                 }}
               >
-                {/* Left side: Test Name and Lab */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 200, flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>
-                    {t.name}
-                  </div>
-                  <div style={{ ...S.muted, fontSize: 12 }}>
-                    🏢 {t.lab_name || t.lab} ({t.branch_name || "Main"} Branch)
-                  </div>
-                </div>
-
-                {/* Right side: Two Clean Action Buttons */}
-                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                  <button
-                    className="bg"
-                    onClick={() => setActiveModalTest(t)}
-                    style={{
-                      padding: "7px 13px",
-                      fontSize: 11,
-                      fontWeight: 600,
-                      borderRadius: 6,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    View Details
-                  </button>
-                  <button
-                    className="bl"
-                    onClick={() => {
-                      setTest(t);
-                      user ? setPage("booking") : setPage("signup");
-                    }}
-                    style={{
-                      padding: "7px 13px",
-                      fontSize: 11,
-                      fontWeight: 600,
-                      borderRadius: 6,
-                      cursor: "pointer",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    Book Test
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Premium Pagination Controls with Ellipsis and First/Last Buttons */}
-          {totalPages > 1 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 14,
-                ...S.muted,
-                ...S.mono,
-                fontSize: 11,
-              }}
-            >
-              <span>
-                Showing {(pageIdx - 1) * pageSize + 1}–
-                {Math.min(pageIdx * pageSize, sortedResults.length)} of {sortedResults.length}
-              </span>
-              
-              <div style={{ display: "flex", gap: 3 }}>
-                {/* First Page Button */}
-                <button
-                  onClick={() => setPageIdx(1)}
-                  disabled={pageIdx === 1}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    cursor: pageIdx === 1 ? "not-allowed" : "pointer",
-                    background: "var(--surface)",
-                    color: pageIdx === 1 ? "#ccc" : "var(--muted)",
-                    border: "1px solid var(--border)",
-                    ...S.mono,
-                    fontSize: 12,
-                    borderRadius: 6,
-                    opacity: pageIdx === 1 ? 0.5 : 1
-                  }}
-                  title="First Page"
-                >
-                  «
-                </button>
+                <span>
+                  Showing {(pageIdx - 1) * pageSize + 1}–
+                  {Math.min(pageIdx * pageSize, sortedResults.length)} of {sortedResults.length}
+                </span>
                 
-                {/* Dynamically Filtered Page Numbers with Ellipsis */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter(n => Math.abs(n - pageIdx) <= 2 || n === 1 || n === totalPages)
-                  .map((n, idx, arr) => {
-                    const prev = arr[idx - 1];
-                    const showEllipsis = prev && n - prev > 1;
-                    return (
-                      <React.Fragment key={n}>
-                        {showEllipsis && <span style={{ alignSelf: "center", padding: "0 4px", color: "var(--muted)" }}>...</span>}
-                        <button
-                          onClick={() => setPageIdx(n)}
-                          style={{
-                            width: 28,
-                            height: 28,
-                            cursor: "pointer",
-                            background: n === pageIdx ? "var(--lime)" : "var(--surface)",
-                            color: n === pageIdx ? "#fff" : "var(--muted)",
-                            border: "1px solid var(--border)",
-                            ...S.mono,
-                            fontSize: 12,
-                            borderRadius: 6,
-                          }}
-                        >
-                          {n}
-                        </button>
-                      </React.Fragment>
-                    );
-                  })}
+                <div style={{ display: "flex", gap: 3 }}>
+                  {/* First Page Button */}
+                  <button
+                    onClick={() => setPageIdx(1)}
+                    disabled={pageIdx === 1}
+                    style={{
+                      width: 28,
+                      height: 28,
+                      cursor: pageIdx === 1 ? "not-allowed" : "pointer",
+                      background: "var(--surface)",
+                      color: pageIdx === 1 ? "#ccc" : "var(--muted)",
+                      border: "1px solid var(--border)",
+                      ...S.mono,
+                      fontSize: 12,
+                      borderRadius: 6,
+                      opacity: pageIdx === 1 ? 0.5 : 1
+                    }}
+                    title="First Page"
+                  >
+                    «
+                  </button>
                   
-                {/* Last Page Button */}
-                <button
-                  onClick={() => setPageIdx(totalPages)}
-                  disabled={pageIdx === totalPages}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    cursor: pageIdx === totalPages ? "not-allowed" : "pointer",
-                    background: "var(--surface)",
-                    color: pageIdx === totalPages ? "#ccc" : "var(--muted)",
-                    border: "1px solid var(--border)",
-                    ...S.mono,
-                    fontSize: 12,
-                    borderRadius: 6,
-                    opacity: pageIdx === totalPages ? 0.5 : 1
-                  }}
-                  title="Last Page"
-                >
-                  »
-                </button>
+                  {/* Dynamically Filtered Page Numbers with Ellipsis */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(n => Math.abs(n - pageIdx) <= 2 || n === 1 || n === totalPages)
+                    .map((n, idx, arr) => {
+                      const prev = arr[idx - 1];
+                      const showEllipsis = prev && n - prev > 1;
+                      return (
+                        <React.Fragment key={n}>
+                          {showEllipsis && <span style={{ alignSelf: "center", padding: "0 4px", color: "var(--muted)" }}>...</span>}
+                          <button
+                            onClick={() => setPageIdx(n)}
+                            style={{
+                              width: 28,
+                              height: 28,
+                              cursor: "pointer",
+                              background: n === pageIdx ? "var(--lime)" : "var(--surface)",
+                              color: n === pageIdx ? "#fff" : "var(--muted)",
+                              border: "1px solid var(--border)",
+                              ...S.mono,
+                              fontSize: 12,
+                              borderRadius: 6,
+                            }}
+                          >
+                            {n}
+                          </button>
+                        </React.Fragment>
+                      );
+                    })}
+                    
+                  {/* Last Page Button */}
+                  <button
+                    onClick={() => setPageIdx(totalPages)}
+                    disabled={pageIdx === totalPages}
+                    style={{
+                      width: 28,
+                      height: 28,
+                      cursor: pageIdx === totalPages ? "not-allowed" : "pointer",
+                      background: "var(--surface)",
+                      color: pageIdx === totalPages ? "#ccc" : "var(--muted)",
+                      border: "1px solid var(--border)",
+                      ...S.mono,
+                      fontSize: 12,
+                      borderRadius: 6,
+                      opacity: pageIdx === totalPages ? 0.5 : 1
+                    }}
+                    title="Last Page"
+                  >
+                    »
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </div>
 
-      {/* Pop-up Detail Modal / Slide-over Drawer */}
+      {/* Pop-up Detail Modal / Slide-over Drawer RENDERED OUTSIDE OF FADE-UP ANIMATED CONTAINER TO PREVENT TRANSFORM POSITIONING BUGS ON MOBILE */}
       {activeModalTest && (
         <div
           style={{
@@ -452,6 +454,6 @@ export function Search({ q, setPage, setTest, allTests, user }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
