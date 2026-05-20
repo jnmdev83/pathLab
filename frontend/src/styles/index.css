@@ -622,20 +622,24 @@ label {
 
 @media (max-width: 768px) {
   .props-flex-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
   }
   .prop-item-divider {
-    display: none;
+    display: block !important;
+    height: 18px !important;
   }
   .prop-item {
-    gap: 12px;
+    gap: 6px !important;
+  }
+  .prop-icon {
+    font-size: 14px !important;
   }
   .prop-title {
-    font-size: 12px;
+    font-size: 10px !important;
   }
   .prop-desc {
-    font-size: 9px;
+    display: none !important;
   }
 }
