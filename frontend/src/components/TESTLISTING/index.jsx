@@ -235,47 +235,47 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           flexWrap: "wrap",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", padding: "4px 8px", borderRadius: 6, fontSize: 11 }}>
-          <span style={{ ...S.mono, color: "var(--muted)" }}>{userLocation?.label || "Delhi"}</span>
-          <button
-            onClick={requestGeolocation}
-            title="Detect Location"
+        <button
+          onClick={requestGeolocation}
+          title="Detect Location"
+          style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            cursor: "pointer",
+            fontSize: 14,
+            width: 32,
+            height: 32,
+            borderRadius: 8,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          📍
+        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: "auto" }}>
+          <span
             style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: 12,
-              padding: 2,
-              display: "inline-flex",
-              alignItems: "center",
+              ...S.mono,
+              ...S.muted,
+              fontSize: 10,
+              textTransform: "uppercase",
+              letterSpacing: ".07em",
             }}
           >
-            📍
-          </button>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <span
-          style={{
-            ...S.mono,
-            ...S.muted,
-            fontSize: 10,
-            textTransform: "uppercase",
-            letterSpacing: ".07em",
-          }}
-        >
-          Sort
-        </span>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          style={{
-            width: "auto",
-            padding: "6px 12px",
-            ...S.mono,
-            fontSize: 12,
-            cursor: "pointer",
-          }}
-        >
+            Sort
+          </span>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            style={{
+              width: "auto",
+              padding: "6px 12px",
+              ...S.mono,
+              fontSize: 12,
+              cursor: "pointer",
+            }}
+          >
           <option value="low">Starting Price: Low → High</option>
           <option value="high">Starting Price: High → Low</option>
           <option value="loc">Nearby First</option>

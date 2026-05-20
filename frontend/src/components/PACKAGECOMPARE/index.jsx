@@ -121,26 +121,26 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
         {/* Right column: Compare Lab Pricing */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, flexWrap: 'wrap', gap: 12 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", padding: "4px 8px", borderRadius: 6, fontSize: 11 }}>
-              <span style={{ ...S.mono, color: "var(--muted)" }}>{userLocation?.label || "Delhi"}</span>
-              <button
-                onClick={requestGeolocation}
-                title="Detect Location"
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: 12,
-                  padding: 2,
-                  display: "inline-flex",
-                  alignItems: "center",
-                }}
-              >
-                📍
-              </button>
-            </div>
+            <button
+              onClick={requestGeolocation}
+              title="Detect Location"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                cursor: "pointer",
+                fontSize: 14,
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              📍
+            </button>
 
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginLeft: "auto" }}>
               <span style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.07em' }}>Sort</span>
               <select 
                 value={sort} 
