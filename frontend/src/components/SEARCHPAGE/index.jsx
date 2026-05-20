@@ -127,7 +127,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                   </button>
                 </div>
                 <div
-                  style={{ fontSize: 13, fontWeight: 500, color: "var(--text)" }}
+                  style={{ fontSize: 13, fontWeight: 500, color: "var(--text)", wordBreak: "break-word" }}
                 >
                   {t.lab_name || t.lab}
                   {t.branch_name && (
