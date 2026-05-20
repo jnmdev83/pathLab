@@ -116,7 +116,7 @@ export default function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  useEffect(() => {
+  const requestGeolocation = () => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -127,11 +127,16 @@ export default function App() {
         });
       },
       (error) => {
-        console.warn("Geolocation failed or denied, keeping default location of Pincode 110092:", error.message);
+        console.warn("Geolocation failed or denied:", error.message);
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 },
     );
-  }, []);
+  };
+
+  useEffect(() => {
+    if (page === "home") return;
+    requestGeolocation();
+  }, [page]);
 
   // Fetch tests dynamically from our PostgreSQL database!
   useEffect(() => {
@@ -193,6 +198,9 @@ export default function App() {
             setTestName={setTestName}
             allTests={allTests}
             loading={loading}
+            userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "package":
@@ -206,6 +214,9 @@ export default function App() {
             packages={packages}
             setSelectedPackage={setSelectedPackage}
             loading={loading}
+            userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "package-compare":
@@ -216,6 +227,8 @@ export default function App() {
             setTest={setTest}
             user={user}
             userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "scanning":
@@ -227,6 +240,9 @@ export default function App() {
             setTestName={setTestName}
             allTests={allTests}
             loading={loading}
+            userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "gastro":
@@ -238,6 +254,9 @@ export default function App() {
             setTestName={setTestName}
             allTests={allTests}
             loading={loading}
+            userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "consultation":
@@ -250,6 +269,9 @@ export default function App() {
             setTest={setTest}
             allTests={allTests}
             user={user}
+            userLocation={userLocation}
+            setUserLocation={setUserLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "detail":

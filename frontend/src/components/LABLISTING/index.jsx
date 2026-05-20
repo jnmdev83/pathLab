@@ -3,7 +3,7 @@ import { S, formatDistance, compareNearby, MapLink } from '../../utils/reusables
 import { LabTHead, COL_LABS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // LAB LISTING
-export function LabListing({ testName, setPage, setTest, allTests, user }) {
+export function LabListing({ testName, setPage, setTest, allTests, user, userLocation, setUserLocation, requestGeolocation }) {
   const [sort, setSort] = useState("loc");
   const [pageIdx, setPageIdx] = useState(1);
   const pageSize = 10;
@@ -73,12 +73,24 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
           gap: 10,
           marginBottom: 14,
+          flexWrap: "wrap",
         }}
       >
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface)", border: "1px solid var(--border)", padding: "6px 12px", borderRadius: 8 }}>
+          <span style={{ fontSize: 13 }}>📍 {userLocation?.label || "Delhi"}</span>
+          <button
+            className="bg"
+            onClick={requestGeolocation}
+            style={{ padding: "3px 8px", fontSize: 10, cursor: "pointer", borderRadius: 6 }}
+          >
+            Detect Location
+          </button>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <span
           style={{
             ...S.mono,
@@ -106,6 +118,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user }) {
           <option value="loc">Nearby First</option>
           <option value="rating">Most Rated</option>
         </select>
+        </div>
       </div>
 
       <div

@@ -5,7 +5,7 @@ import { API_BASE_URL } from '../../config';
 
 // HOME
 export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }) {
-  const [searchMethod, setSearchMethod] = useState(null);
+  const [searchMethod, setSearchMethod] = useState("city");
   const [selectedCity, setSelectedCity] = useState("Delhi");
   const [radius, setRadius] = useState(5);
   const [gpsLoading, setGpsLoading] = useState(false);
@@ -147,16 +147,8 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
       >
         <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
           <div>
-            <h2 style={{ ...S.serif, fontSize: 26, marginBottom: 4 }}>Find labs around you</h2>
-            <p style={{ ...S.muted, fontSize: 13 }}>Choose GPS or city search, then book tests at a specific branch.</p>
-          </div>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            <button className="bl" onClick={requestUserLocation} disabled={gpsLoading}>
-              {gpsLoading ? "Detecting..." : "Find Labs Near Me"}
-            </button>
-            <button className="bg" onClick={() => setSearchMethod("city")}>
-              Search by City
-            </button>
+            <h2 style={{ ...S.serif, fontSize: 26, marginBottom: 4 }}>Find labs in your city</h2>
+            <p style={{ ...S.muted, fontSize: 13 }}>Search for your city, then book tests at a specific branch.</p>
           </div>
         </div>
 

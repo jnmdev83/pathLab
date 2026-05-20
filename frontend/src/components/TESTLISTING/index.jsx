@@ -1,12 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { S, getDistanceKm, compareNearby } from '../../utils/reusables';
 import { TestTHead, COL_TESTS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
+import { API_BASE_URL } from '../../config';
 
 // TEST LISTING
-export function Listing({ cat, title, setPage, setTestName, allTests, packages, setSelectedPackage, loading }) {
+export function Listing({ cat, title, setPage, setTestName, allTests, packages, setSelectedPackage, loading, userLocation, setUserLocation, requestGeolocation }) {
   const [sort, setSort] = useState("loc");
   const [pageIdx, setPageIdx] = useState(1);
   const pageSize = 10;
+
+  // Comparative states for package-to-package comparison (max 3)
+  const [selectedPackagesForCompare, setSelectedPackagesForCompare] = useState([]);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [comparedPackagesTests, setComparedPackagesTests] = useState([]);
+  const [isLoadingCompare, setIsLoadingCompare] = useState(false);
+
+  const handlePackageSelectForCompare = (pkg) => {
+    setSelectedPackagesForCompare(prev => {
+      const exists = prev.find(p => p.id === pkg.id);
+      if (exists) {
+        return prev.filter(p => p.id !== pkg.id);
+      }
+      if (prev.length >= 3) {
+        alert("You can compare a maximum of 3 packages at the same time.");
+        return prev;
+      }
+      return [...prev, pkg];
+    });
+  };
+
+  const startPackageComparison = () => {
+    if (selectedPackagesForCompare.length < 2) return;
+    setIsLoadingCompare(true);
+    setIsCompareModalOpen(true);
+    
+    Promise.all(
+      selectedPackagesForCompare.map(pkg =>
+        fetch(`${API_BASE_URL}/api/packages/${pkg.id}/tests`).then(res => res.json())
+      )
+    )
+    .then(results => {
+      setComparedPackagesTests(results);
+      setIsLoadingCompare(false);
+    })
+    .catch(err => {
+      console.error("Failed to load compared packages tests:", err);
+      setIsLoadingCompare(false);
+    });
+  };
+
+  const getUniqueTests = () => {
+    const allUnique = [];
+    const testNamesSet = new Set();
+    
+    comparedPackagesTests.forEach((testsList) => {
+      if (Array.isArray(testsList)) {
+        testsList.forEach(t => {
+          const normalName = t.name.trim();
+          if (!testNamesSet.has(normalName.toLowerCase())) {
+            testNamesSet.add(normalName.toLowerCase());
+            allUnique.push({
+              name: normalName,
+              description: t.description || ""
+            });
+          }
+        });
+      }
+    });
+    
+    return allUnique.sort((a, b) => a.name.localeCompare(b.name));
+  };
+
+  const packageHasTest = (pkgTestsList, testName) => {
+    if (!Array.isArray(pkgTestsList)) return false;
+    return pkgTestsList.some(t => t.name.toLowerCase().trim() === testName.toLowerCase().trim());
+  };
 
   const isPackage = cat === "package";
   const sourceData = isPackage ? packages : (allTests || []).filter((t) => (t.cat || "").toLowerCase() === cat.toLowerCase());
@@ -156,16 +224,28 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
         </div>
       </div>
 
-      {/* Sort */}
+      {/* Sort & Location */}
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
           gap: 10,
           marginBottom: 14,
+          flexWrap: "wrap",
         }}
       >
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface)", border: "1px solid var(--border)", padding: "6px 12px", borderRadius: 8 }}>
+          <span style={{ fontSize: 13 }}>📍 {userLocation?.label || "Delhi"}</span>
+          <button
+            className="bg"
+            onClick={requestGeolocation}
+            style={{ padding: "3px 8px", fontSize: 10, cursor: "pointer", borderRadius: 6 }}
+          >
+            Detect Location
+          </button>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <span
           style={{
             ...S.mono,
@@ -193,6 +273,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           <option value="loc">Nearby First</option>
           <option value="rating">Most Rated</option>
         </select>
+        </div>
       </div>
 
       {/* Table */}
@@ -349,21 +430,42 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
                   ₹{t.minPrice}
                 </div>
               </div>
-              <button
-                className="bl"
-                onClick={() => {
-                  if (isPackage) {
-                    setSelectedPackage(t);
-                    setPage("package-compare");
-                  } else {
-                    setTestName(t.name);
-                    setPage("lab-listing");
-                  }
-                }}
-                style={{ padding: "7px 14px", fontSize: 12 }}
-              >
-                {isPackage ? 'Compare Labs →' : 'View Labs →'}
-              </button>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <button
+                  className="bl"
+                  onClick={() => {
+                    if (isPackage) {
+                      setSelectedPackage(t);
+                      setPage("package-compare");
+                    } else {
+                      setTestName(t.name);
+                      setPage("lab-listing");
+                    }
+                  }}
+                  style={{ padding: "7px 14px", fontSize: 12, whiteSpace: "nowrap" }}
+                >
+                  {isPackage ? 'View Details' : 'View Labs →'}
+                </button>
+                {isPackage && (
+                  <button
+                    onClick={() => handlePackageSelectForCompare(t)}
+                    style={{
+                      padding: "7px 14px",
+                      fontSize: 12,
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                      background: selectedPackagesForCompare.some(p => p.id === t.id) ? "var(--lime)" : "var(--surface)",
+                      color: selectedPackagesForCompare.some(p => p.id === t.id) ? "#fff" : "var(--text)",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      whiteSpace: "nowrap",
+                      ...S.mono
+                    }}
+                  >
+                    {selectedPackagesForCompare.some(p => p.id === t.id) ? '✓ Selected' : '⚖ Compare'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}
@@ -457,6 +559,292 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
             >
               »
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* STICKY FLOATING COMPARE ACTION BAR FOR PACKAGES */}
+      {isPackage && selectedPackagesForCompare.length > 0 && (
+        <div style={{
+          position: 'fixed',
+          bottom: 75, // Give clear clearance for the bottom navigation bar on mobile!
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(255, 255, 255, 0.96)',
+          backdropFilter: 'blur(12px)',
+          border: '2px solid var(--lime)',
+          borderRadius: 20,
+          padding: '14px 24px',
+          boxShadow: '0 12px 36px rgba(0,0,0,0.18)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 15,
+          zIndex: 999,
+          width: '90%',
+          maxWidth: 600,
+          justifyContent: 'space-between',
+          animation: 'pulse 2s infinite ease-in-out'
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>⚖</span>
+            <span>
+              Compare: <strong>{selectedPackagesForCompare.length}</strong> package{selectedPackagesForCompare.length > 1 ? 's' : ''} selected.
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button 
+              className="bl"
+              disabled={selectedPackagesForCompare.length < 2}
+              onClick={startPackageComparison}
+              style={{
+                padding: '8px 16px',
+                fontSize: 12,
+                opacity: selectedPackagesForCompare.length < 2 ? 0.5 : 1,
+                cursor: selectedPackagesForCompare.length < 2 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {selectedPackagesForCompare.length < 2 ? 'Select 2 to Compare' : 'Compare Now'}
+            </button>
+            <button 
+              onClick={() => setSelectedPackagesForCompare([])}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--danger)',
+                fontWeight: 700,
+                fontSize: 12,
+                padding: '4px 8px'
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* FULLSCREEN PACKAGE COMPARISON MATRIX MODAL */}
+      {isCompareModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(15, 23, 42, 0.75)',
+          backdropFilter: 'blur(10px)',
+          zIndex: 2000,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '16px'
+        }}>
+          <div style={{
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
+            borderRadius: 24,
+            width: '100%',
+            maxWidth: selectedPackagesForCompare.length === 3 ? 980 : 800,
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: '20px 24px',
+              borderBottom: '1px solid var(--border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              position: 'sticky',
+              top: 0,
+              background: 'var(--card)',
+              zIndex: 10
+            }}>
+              <div>
+                <h2 style={{ ...S.serif, fontSize: 24, margin: 0 }}>Package Comparison Details</h2>
+                <p style={{ ...S.muted, fontSize: 13, margin: '4px 0 0' }}>
+                  Comparing test inclusions side-by-side (Max 3 Packages)
+                </p>
+              </div>
+              <button
+                onClick={() => setIsCompareModalOpen(false)}
+                style={{
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '50%',
+                  width: 38,
+                  height: 38,
+                  cursor: 'pointer',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--muted)',
+                  transition: 'all 0.15s'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '24px', flex: 1 }}>
+              {isLoadingCompare ? (
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <div className="pulse-shimmer" style={{ fontSize: 16, color: 'var(--lime)', fontWeight: 600 }}>
+                    ⚡ Fetching package test inclusions...
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Top package columns grid */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: `1.5fr repeat(${selectedPackagesForCompare.length}, 1fr)`,
+                    gap: 16,
+                    paddingBottom: 20,
+                    borderBottom: '2px solid var(--border)',
+                    marginBottom: 20
+                  }} className="modal-compare-grid">
+                    {/* Blank spacer col */}
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }} className="compare-spacer-col">
+                      <span style={{ ...S.mono, fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>
+                        Package Details
+                      </span>
+                    </div>
+
+                    {selectedPackagesForCompare.map((pkg, idx) => (
+                      <div key={pkg.id} style={{
+                        background: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 12,
+                        padding: 16,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        minWidth: 150
+                      }}>
+                        <div>
+                          <span style={{ ...S.pill, background: 'rgba(37,99,235,0.1)', color: 'var(--lime)', fontSize: 9 }}>
+                            Package {idx + 1}
+                          </span>
+                          <h4 style={{ fontSize: 15, fontWeight: 700, margin: '8px 0 4px', color: 'var(--text)' }}>
+                            {pkg.name}
+                          </h4>
+                          <p style={{ ...S.muted, fontSize: 12, margin: 0 }}>
+                            {comparedPackagesTests[idx]?.length || pkg.testCount || 0} tests included
+                          </p>
+                        </div>
+                        <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px dashed var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ ...S.mono, ...S.lime, fontSize: 16, fontWeight: 700 }}>
+                            ₹{pkg.minPrice}
+                          </span>
+                          <button
+                            className="bl"
+                            onClick={() => {
+                              setIsCompareModalOpen(false);
+                              setSelectedPackage(pkg);
+                              setPage("package-compare");
+                            }}
+                            style={{ padding: '6px 12px', fontSize: 11 }}
+                          >
+                            View Labs
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <h3 style={{ ...S.serif, fontSize: 18, marginBottom: 16 }}>
+                    Test Availability Matrix
+                  </h3>
+
+                  {/* matrix rows */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {getUniqueTests().map((testItem) => {
+                      const inclusionStates = selectedPackagesForCompare.map((pkg, idx) => 
+                        packageHasTest(comparedPackagesTests[idx], testItem.name)
+                      );
+                      const isDivergent = inclusionStates.some(x => x === true) && inclusionStates.some(x => x === false);
+
+                      return (
+                        <div
+                          key={testItem.name}
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: `1.5fr repeat(${selectedPackagesForCompare.length}, 1fr)`,
+                            gap: 16,
+                            padding: '14px 16px',
+                            background: isDivergent ? '#fffbeb' : 'var(--card)',
+                            border: isDivergent ? '1px solid #fde68a' : '1px solid var(--border)',
+                            borderRadius: 12,
+                            alignItems: 'center',
+                            transition: 'all 0.15s'
+                          }}
+                          className="modal-compare-grid"
+                        >
+                          {/* Test Info */}
+                          <div>
+                            <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text)' }}>
+                              {testItem.name}
+                            </div>
+                            {testItem.description && (
+                              <div style={{ ...S.muted, fontSize: 11, marginTop: 4 }}>
+                                {testItem.description}
+                              </div>
+                            )}
+                            {isDivergent && (
+                              <span style={{
+                                background: '#fef3c7',
+                                color: '#b45309',
+                                fontSize: 9,
+                                fontWeight: 600,
+                                padding: '2px 6px',
+                                borderRadius: 4,
+                                marginTop: 6,
+                                display: 'inline-block'
+                              }}>
+                                ⚠️ DIFFERENTIATOR
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Inclusion Badges */}
+                          {selectedPackagesForCompare.map((pkg, idx) => {
+                            const hasIt = inclusionStates[idx];
+                            return (
+                              <div key={pkg.id} style={{ display: 'flex', justifyContent: 'center', width: '100%' }} className="mobile-inclusion-indicator">
+                                {/* Desktop indicator */}
+                                <div className="desktop-indicator" style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 6,
+                                  background: hasIt ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.08)',
+                                  color: hasIt ? '#15803d' : '#b91c1c',
+                                  padding: '6px 12px',
+                                  borderRadius: 8,
+                                  fontSize: 12,
+                                  fontWeight: 600
+                                }}>
+                                  <span className="mobile-only-package-name" style={{ marginRight: 6 }}>{pkg.name.split(' ')[0]}:</span>
+                                  <span>{hasIt ? '✓' : '—'}</span>
+                                  <span className="desktop-only-text" style={{ marginLeft: 4 }}>{hasIt ? 'Included' : 'Not Included'}</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
