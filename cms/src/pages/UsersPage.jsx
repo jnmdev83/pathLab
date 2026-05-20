@@ -19,8 +19,8 @@ const UsersPage = () => {
       setUsers(res.data);
     } catch {
       setUsers([
-        { id: 1, name: 'Admin', email: 'admin@pathlab.com', phone: '1234567890', role: 'Super Admin', is_active: true, last_login: '2023-11-20T10:00:00Z' },
-        { id: 2, name: 'Staff Member', email: 'staff@pathlab.com', phone: '0987654321', role: 'Support Staff', is_active: true, last_login: null }
+        { id: 1, name: 'Admin', email: 'admin@choosemylab.com', phone: '1234567890', role: 'Super Admin', is_active: true, last_login: '2023-11-20T10:00:00Z' },
+        { id: 2, name: 'Staff Member', email: 'staff@choosemylab.com', phone: '0987654321', role: 'Support Staff', is_active: true, last_login: null }
       ]);
     } finally {
       setLoading(false);

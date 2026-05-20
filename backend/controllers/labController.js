@@ -54,7 +54,7 @@ exports.post_api_dev_seed_nearby_lab = async (req, res) => {
   try {
     const labResult = await db.query(`
       INSERT INTO labs (name, phone, email, website, is_active, is_verified)
-      VALUES ('Demo Nearby Lab', '011-0000-9999', 'demo-nearby@pathlab.example', 'https://example.com/demo-nearby', true, true)
+      VALUES ('Demo Nearby Lab', '011-0000-9999', 'demo-nearby@choosemylab.example', 'https://example.com/demo-nearby', true, true)
       ON CONFLICT (name) DO UPDATE SET
         phone = EXCLUDED.phone,
         is_active = true,

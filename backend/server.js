@@ -85,7 +85,7 @@ app.listen(PORT, () => {
   }
 
   console.log(`\n=========================================`);
-  console.log(`🚀 PATHLAB BACKEND SERVER IS RUNNING`);
+  console.log(`🚀 CHOOSEMYLAB BACKEND SERVER IS RUNNING`);
   console.log(`=========================================`);
   console.log(`🌿 Active Env    : ${nodeEnv.toUpperCase()}`);
   console.log(`🌿 Git Branch    : ${currentBranch}`);

@@ -18,7 +18,7 @@ export function Footer() {
       }}
     >
       <span style={{ ...S.serif, fontSize: 20, ...S.lime }}>
-        PathLab<span style={S.muted}>.</span>
+        ChooseMyLab<span style={S.muted}>.</span>
       </span>
       <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
         {["Privacy Policy", "Terms of Service", "Contact", "Documentation"].map(
@@ -43,7 +43,7 @@ export function Footer() {
         )}
       </div>
       <span style={{ ...S.mono, fontSize: 10, color: "var(--border)" }}>
-        © 2025 PathLab
+        © 2025 ChooseMyLab
       </span>
     </footer>
   );

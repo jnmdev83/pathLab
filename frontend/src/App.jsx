@@ -25,7 +25,7 @@ export default function App() {
   // Rehydrate user from localStorage so login persists across page refreshes
   const [user, _setUser] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("pathlab_user")) || null;
+      return JSON.parse(localStorage.getItem("choosemylab_user")) || null;
     } catch {
       return null;
     }
@@ -63,8 +63,8 @@ export default function App() {
 
   const setUser = (u) => {
     _setUser(u);
-    if (u) localStorage.setItem("pathlab_user", JSON.stringify(u));
-    else localStorage.removeItem("pathlab_user");
+    if (u) localStorage.setItem("choosemylab_user", JSON.stringify(u));
+    else localStorage.removeItem("choosemylab_user");
   };
 
   // Use a ref to always capture the latest state synchronously

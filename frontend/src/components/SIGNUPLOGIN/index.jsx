@@ -60,7 +60,7 @@ export function Signup({ setUser, setPage }) {
             marginBottom: 4,
           }}
         >
-          PathLab.
+          ChooseMyLab.
         </div>
         <div style={{ ...S.muted, fontSize: 13 }}>
           Find & Book Affordable Lab Tests

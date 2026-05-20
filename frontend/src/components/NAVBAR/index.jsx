@@ -71,7 +71,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
             flexShrink: 0,
           }}
         >
-          PathLab<span style={S.muted}>.</span>
+          ChooseMyLab<span style={S.muted}>.</span>
         </button>
 
         {/* Links */}

@@ -17,7 +17,7 @@ const LoginPage = () => {
     <div className="min-h-screen bg-background flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-md bg-surface rounded-2xl shadow-xl overflow-hidden border border-border">
         <div className="bg-primary p-6 text-center">
-          <h1 className="text-3xl font-bold text-white font-serif tracking-wide">PathLab CMS</h1>
+          <h1 className="text-3xl font-bold text-white font-serif tracking-wide">ChooseMyLab CMS</h1>
           <p className="text-indigo-100 mt-2 text-sm font-medium opacity-90">Secure Administration Portal</p>
         </div>
         
@@ -28,7 +28,7 @@ const LoginPage = () => {
       </div>
       
       <p className="mt-8 text-sm text-text-muted">
-        &copy; {new Date().getFullYear()} PathLab. All rights reserved.
+        &copy; {new Date().getFullYear()} ChooseMyLab. All rights reserved.
       </p>
     </div>
   );

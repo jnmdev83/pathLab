@@ -336,7 +336,7 @@ async function setupDatabase() {
           lab,
           '011-' || lpad(((abs(hashtext(lab)) % 9000) + 1000)::text, 4, '0') || '-' ||
             lpad(((abs(hashtext(lab || 'phone')) % 9000) + 1000)::text, 4, '0'),
-          lower(regexp_replace(lab, '[^a-zA-Z0-9]+', '', 'g')) || '@pathlab.example',
+          lower(regexp_replace(lab, '[^a-zA-Z0-9]+', '', 'g')) || '@choosemylab.example',
           'https://example.com/' || lower(regexp_replace(lab, '[^a-zA-Z0-9]+', '-', 'g')),
           true,
           true
@@ -395,7 +395,7 @@ async function setupDatabase() {
 
     // Always ensure the demo user and admin user exist for authentication and CMS access
     await db.query(`INSERT INTO users (name, email, phone, password) VALUES ('Demo User', 'test@test.com', '9876543210', 'test') ON CONFLICT DO NOTHING`);
-    await db.query(`INSERT INTO users (name, email, phone, password, role) VALUES ('System Admin', 'admin@pathlab.com', '0000000000', 'admin123', 'admin') ON CONFLICT DO NOTHING`);
+    await db.query(`INSERT INTO users (name, email, phone, password, role) VALUES ('System Admin', 'admin@choosemylab.com', '0000000000', 'admin123', 'admin') ON CONFLICT DO NOTHING`);
 
     // --- MIGRATION: Old Duplicated Packages to New Modular Structure ---
       console.log("Migrating legacy package data to modular architecture...");

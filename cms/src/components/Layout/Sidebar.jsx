@@ -16,7 +16,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-surface border-r border-border h-full flex flex-col shadow-sm">
       <div className="p-6 border-b border-border">
-        <h1 className="text-2xl font-bold text-primary font-serif">PathLab CMS</h1>
+        <h1 className="text-2xl font-bold text-primary font-serif">ChooseMyLab CMS</h1>
       </div>
       
       <nav className="flex-1 py-4">
