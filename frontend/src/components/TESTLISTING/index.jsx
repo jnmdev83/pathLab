@@ -314,6 +314,15 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           <div
             key={t.name}
             className="tbl-row"
+            onClick={() => {
+              if (isPackage) {
+                setSelectedPackage(t);
+                setPage("package-compare");
+              } else {
+                setTestName(t.name);
+                setPage("lab-listing");
+              }
+            }}
             style={{
               display: "grid",
               gridTemplateColumns: isPackage ? "3fr 1.2fr 360px" : COL_TESTS,
@@ -323,6 +332,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
               borderBottom: "1px solid var(--border)",
               background: i % 2 === 0 ? "var(--card)" : "var(--surface)",
               transition: "background .12s",
+              cursor: "pointer",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
             onMouseLeave={(e) =>
@@ -348,33 +358,18 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
                 {isPackage ? '📦' : '🧪'}
               </div>
               <div>
-                <button
-                  onClick={() => {
-                    if (isPackage) {
-                      setSelectedPackage(t);
-                      setPage("package-compare");
-                    } else {
-                      setTestName(t.name);
-                      setPage("lab-listing");
-                    }
-                  }}
+                <span
                   style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
                     fontFamily: "var(--fb)",
                     fontSize: 16,
                     fontWeight: 600,
                     color: "var(--text)",
                     textAlign: "left",
                     lineHeight: 1.3,
-                    transition: "color .12s",
                   }}
-                  onMouseEnter={(e) => (e.target.style.color = "var(--lime)")}
-                  onMouseLeave={(e) => (e.target.style.color = "var(--text)")}
                 >
                   {t.name}
-                </button>
+                </span>
                 {isPackage && t.testCount > 0 && (
                   <div style={{ fontSize: 11, color: 'var(--lime)', fontWeight: 500, marginTop: 4 }}>
                     {t.testCount} Tests Included
@@ -458,7 +453,8 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                 <button
                   className="bl"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (isPackage) {
                       setSelectedPackage(t);
                       setPage("package-compare");
@@ -473,7 +469,10 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
                 </button>
                 {isPackage && (
                   <button
-                    onClick={() => handlePackageSelectForCompare(t)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePackageSelectForCompare(t);
+                    }}
                     style={{
                       padding: "7px 14px",
                       fontSize: 12,

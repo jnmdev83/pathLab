@@ -143,37 +143,38 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                       <span style={{ ...S.muted, fontSize: 12 }}>
                         🏢 {t.lab_name || t.lab} ({t.branch_name || "Main"} Branch)
                       </span>
-                      
-                      {/* Styled Compare Checkbox Pill */}
-                      <label
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 4,
-                          fontSize: 10,
-                          fontWeight: 600,
-                          color: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "var(--lime)" : "var(--muted)",
-                          background: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.06)" : "var(--surface)",
-                          border: `1px solid ${comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.25)" : "var(--border)"}`,
-                          padding: "2px 8px",
-                          borderRadius: 99,
-                          cursor: "pointer",
-                          userSelect: "none"
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id)}
-                          onChange={() => toggleCompare(t)}
-                          style={{ display: "none" }}
-                        />
-                        <span>{comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "✓ Selected" : "⚖ Compare"}</span>
-                      </label>
                     </div>
                   </div>
 
-                  {/* Right side: Two Clean Action Buttons */}
+                  {/* Right side: Action Buttons */}
                   <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                    {/* Styled Compare Checkbox Pill */}
+                    <label
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 4,
+                        fontSize: 10,
+                        fontWeight: 600,
+                        color: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "var(--lime)" : "var(--muted)",
+                        background: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.06)" : "var(--surface)",
+                        border: `1px solid ${comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.25)" : "var(--border)"}`,
+                        padding: "6px 12px",
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        userSelect: "none",
+                        whiteSpace: "nowrap"
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id)}
+                        onChange={() => toggleCompare(t)}
+                        style={{ display: "none" }}
+                      />
+                      <span>{comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "✓ Selected" : "⚖ Compare"}</span>
+                    </label>
+
                     <button
                       className="bg"
                       onClick={() => setActiveModalTest(t)}
