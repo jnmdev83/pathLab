@@ -62,11 +62,39 @@ const UsersTable = ({ users, loading, onEdit, onDelete, onToggleStatus }) => {
         </table>
       </div>
       {totalPages > 1 && (
-        <div className="p-4 flex justify-between bg-gray-50 border-t text-sm">
-          <span>Page {currentPage} of {totalPages}</span>
-          <div className="flex gap-2">
-            <button onClick={() => setCurrentPage(p=>p-1)} disabled={currentPage===1} className="px-3 py-1 bg-white border rounded disabled:opacity-50">Prev</button>
-            <button onClick={() => setCurrentPage(p=>p+1)} disabled={currentPage===totalPages} className="px-3 py-1 bg-white border rounded disabled:opacity-50">Next</button>
+        <div className="p-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 text-sm">
+          <div className="text-gray-500 font-medium">Page {currentPage} of {totalPages}</div>
+          <div className="flex items-center gap-1.5">
+            <button 
+              onClick={() => setCurrentPage(1)} 
+              disabled={currentPage === 1} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              title="First Page"
+            >
+              « First
+            </button>
+            <button 
+              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} 
+              disabled={currentPage === 1} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+            >
+              Prev
+            </button>
+            <button 
+              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} 
+              disabled={currentPage === totalPages} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+            >
+              Next
+            </button>
+            <button 
+              onClick={() => setCurrentPage(totalPages)} 
+              disabled={currentPage === totalPages} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              title="Last Page"
+            >
+              Last »
+            </button>
           </div>
         </div>
       )}

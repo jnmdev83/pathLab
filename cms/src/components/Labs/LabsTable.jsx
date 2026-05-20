@@ -198,32 +198,38 @@ const LabsTable = ({
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (
-        <div className="p-4 border-t border-border flex items-center justify-between bg-gray-50">
-          <div className="text-sm text-text-muted">
-            Page {currentPage} of {totalPages}
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                currentPage === 1 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'bg-white border border-border text-text-main hover:bg-gray-50'
-              }`}
+        <div className="p-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 text-sm">
+          <div className="text-gray-500 font-medium">Page {currentPage} of {totalPages}</div>
+          <div className="flex items-center gap-1.5">
+            <button 
+              onClick={() => setCurrentPage(1)} 
+              disabled={currentPage === 1} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              title="First Page"
             >
-              Previous
+              « First
             </button>
-            <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                currentPage === totalPages 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'bg-white border border-border text-text-main hover:bg-gray-50'
-              }`}
+            <button 
+              onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} 
+              disabled={currentPage === 1} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+            >
+              Prev
+            </button>
+            <button 
+              onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} 
+              disabled={currentPage === totalPages} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
             >
               Next
+            </button>
+            <button 
+              onClick={() => setCurrentPage(totalPages)} 
+              disabled={currentPage === totalPages} 
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white border border-border text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              title="Last Page"
+            >
+              Last »
             </button>
           </div>
         </div>
