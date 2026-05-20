@@ -136,19 +136,19 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   );
 
   return (
-    <section style={{ marginBottom: 28 }}>
+    <section style={{ marginBottom: 24 }}>
       <div
         style={{
           background: "var(--surface)",
           border: "1.5px solid var(--border)",
           borderRadius: 12,
-          padding: 22,
+          padding: "var(--find-labs-pad)",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
           <div>
-            <h2 style={{ ...S.serif, fontSize: 26, marginBottom: 4 }}>Find labs in your city</h2>
-            <p style={{ ...S.muted, fontSize: 13 }}>Search for your city, then book tests at a specific branch.</p>
+            <h2 style={{ ...S.serif, fontSize: "clamp(20px, 4.5vw, 24px)", marginBottom: 4 }}>Find labs in your city</h2>
+            <p style={{ ...S.muted, fontSize: 12 }}>Search for your city, then book tests at a specific branch.</p>
           </div>
         </div>
 
@@ -251,8 +251,8 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
       <div
         className="fu hc"
         style={{
-          padding: "44px 40px",
-          marginBottom: 28,
+          padding: "var(--hero-pad)",
+          marginBottom: 24,
           position: "relative",
           overflow: "hidden",
           cursor: "default",
@@ -277,12 +277,12 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         <h1
           style={{
             ...S.serif,
-            fontSize: "clamp(30px,4.5vw,54px)",
+            fontSize: "clamp(24px,4.5vw,44px)",
             lineHeight: 1.05,
             letterSpacing: "-.02em",
             color: "var(--text)",
             maxWidth: 500,
-            margin: "14px 0 14px",
+            margin: "12px 0 10px",
           }}
         >
           Stop overpaying
@@ -292,16 +292,16 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         <p
           style={{
             ...S.muted,
-            fontSize: 14,
+            fontSize: 13,
             maxWidth: 430,
-            marginBottom: 28,
-            lineHeight: 1.7,
+            marginBottom: 20,
+            lineHeight: 1.6,
           }}
         >
           Compare prices from local diagnostic labs that big platforms ignore.
           Book in 30 seconds. Save up to 70%.
         </p>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button className="bl" onClick={() => setPage("blood")}>
             Compare Tests →
           </button>
@@ -311,13 +311,11 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         </div>
         {/* Stats row */}
         <div
+          className="hero-stats-grid"
           style={{
-            display: "flex",
-            gap: 28,
-            marginTop: 32,
-            paddingTop: 24,
+            marginTop: 24,
+            paddingTop: 20,
             borderTop: "1px solid var(--border)",
-            flexWrap: "wrap",
           }}
         >
           {[
@@ -327,20 +325,10 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
             ["1 HR", "Fastest Report"],
           ].map(([v, l]) => (
             <div key={l}>
-              <div
-                style={{ ...S.mono, fontSize: 22, ...S.lime, fontWeight: 500 }}
-              >
+              <div className="stats-val">
                 {v}
               </div>
-              <div
-                style={{
-                  ...S.muted,
-                  ...S.mono,
-                  fontSize: 10,
-                  textTransform: "uppercase",
-                  letterSpacing: ".06em",
-                }}
-              >
+              <div className="stats-lbl">
                 {l}
               </div>
             </div>
@@ -368,18 +356,11 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
       </h2>
 
       {/* Category cards */}
-      <div
-        className="cat-grid"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill,minmax(175px,1fr))",
-          gap: 10,
-        }}
-      >
+      <div className="cat-slider-container">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.id}
-            className="hc"
+            className="hc cat-card-item"
             onClick={() => setPage(cat.page)}
             style={{
               padding: "22px 18px",
@@ -387,11 +368,12 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
               border: "1.5px solid var(--border)",
             }}
           >
-            <div style={{ fontSize: 30, marginBottom: 10 }}>{cat.icon}</div>
-            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
+            <div className="cat-card-icon" style={{ fontSize: 30, marginBottom: 10 }}>{cat.icon}</div>
+            <div className="cat-card-name" style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
               {cat.name}
             </div>
             <div
+              className="cat-card-tag"
               style={{
                 ...S.mono,
                 ...S.muted,
@@ -405,28 +387,46 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         ))}
       </div>
 
-      {/* Ticker */}
+      {/* Redesigned Value Props Ticker */}
       <div
-        className="fu4"
+        className="fu4 redesigned-props-bar"
         style={{
           marginTop: 24,
-          background: "var(--lime)",
-          padding: "10px 20px",
-          borderRadius: 8,
+          background: "linear-gradient(135deg, var(--lime) 0%, #1e40af 100%)",
+          padding: "14px 20px",
+          borderRadius: 12,
+          boxShadow: "0 4px 15px -3px rgba(37, 99, 235, 0.15)",
         }}
       >
-        <span
-          style={{
-            ...S.mono,
-            fontSize: 12,
-            fontWeight: 600,
-            color: "#fff",
-            letterSpacing: ".05em",
-          }}
-        >
-          ⚡ LOCAL LABS · PRICES FROM ₹99 · BOOK IN 30 SECONDS · HOME COLLECTION
-          AVAILABLE
-        </span>
+        <div className="props-flex-container">
+          <div className="prop-item">
+            <span className="prop-icon">⚡</span>
+            <div className="prop-text-wrap">
+              <span className="prop-title">100% Local Labs</span>
+              <span className="prop-desc">Direct verified branch prices</span>
+            </div>
+          </div>
+          
+          <div className="prop-item-divider" />
+          
+          <div className="prop-item">
+            <span className="prop-icon">🏷️</span>
+            <div className="prop-text-wrap">
+              <span className="prop-title">Unbeatable Rates</span>
+              <span className="prop-desc">Tests starting from ₹99</span>
+            </div>
+          </div>
+          
+          <div className="prop-item-divider" />
+          
+          <div className="prop-item">
+            <span className="prop-icon">🏠</span>
+            <div className="prop-text-wrap">
+              <span className="prop-title">Home Collection</span>
+              <span className="prop-desc">Available on demand</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

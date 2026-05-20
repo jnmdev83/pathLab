@@ -9,7 +9,7 @@ export function Footer() {
         borderTop: "1.5px solid var(--border)",
         padding: "28px 24px",
         maxWidth: 1280,
-        margin: "60px auto 0",
+        margin: "var(--footer-margin-top) auto 0",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
