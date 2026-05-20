@@ -235,14 +235,22 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           flexWrap: "wrap",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--surface)", border: "1px solid var(--border)", padding: "6px 12px", borderRadius: 8 }}>
-          <span style={{ fontSize: 13 }}>📍 {userLocation?.label || "Delhi"}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", padding: "4px 8px", borderRadius: 6, fontSize: 11 }}>
+          <span style={{ ...S.mono, color: "var(--muted)" }}>{userLocation?.label || "Delhi"}</span>
           <button
-            className="bg"
             onClick={requestGeolocation}
-            style={{ padding: "3px 8px", fontSize: 10, cursor: "pointer", borderRadius: 6 }}
+            title="Detect Location"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: 12,
+              padding: 2,
+              display: "inline-flex",
+              alignItems: "center",
+            }}
           >
-            Detect Location
+            📍
           </button>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
