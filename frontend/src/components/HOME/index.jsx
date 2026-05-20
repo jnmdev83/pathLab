@@ -121,7 +121,18 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
           </div>
         </div>
         {showDistance && lab.distance_km !== undefined && (
-          <span style={{ ...S.tag }}>{Number(lab.distance_km).toFixed(1)} km away</span>
+          <span
+            style={{
+              ...S.mono,
+              ...S.lime,
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: ".02em",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {Number(lab.distance_km).toFixed(1)} km away
+          </span>
         )}
       </div>
       <div style={{ ...S.muted, ...S.mono, fontSize: 11, marginTop: 10, lineHeight: 1.6 }}>
