@@ -6,11 +6,13 @@ import { PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 export function Search({ q, setPage, setTest, allTests, user }) {
   const [pageIdx, setPageIdx] = useState(1);
   const [activeModalTest, setActiveModalTest] = useState(null);
+  const [comparedLabs, setComparedLabs] = useState([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
   const pageSize = 10;
 
   // Lock body scroll when modal is active so it stays perfectly visible at center without background scrolling
   useEffect(() => {
-    if (activeModalTest) {
+    if (activeModalTest || showCompareModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -18,12 +20,24 @@ export function Search({ q, setPage, setTest, allTests, user }) {
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [activeModalTest]);
+  }, [activeModalTest, showCompareModal]);
 
   // Reset page when search term changes
   useEffect(() => {
     setPageIdx(1);
   }, [q]);
+
+  const toggleCompare = (lab) => {
+    if (comparedLabs.some(x => x.lab_branch_id === lab.lab_branch_id)) {
+      setComparedLabs(comparedLabs.filter(x => x.lab_branch_id !== lab.lab_branch_id));
+    } else {
+      if (comparedLabs.length >= 5) {
+        alert("You can compare up to 5 labs at a time.");
+        return;
+      }
+      setComparedLabs([...comparedLabs, lab]);
+    }
+  };
 
   const results = (allTests || [])
     .filter((t) => {
@@ -120,13 +134,41 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                     flexWrap: "wrap",
                   }}
                 >
-                  {/* Left side: Test Name and Lab */}
+                  {/* Left side: Test Name, Lab, and Compare Checkbox Tag */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 200, flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>
                       {t.name}
                     </div>
-                    <div style={{ ...S.muted, fontSize: 12 }}>
-                      🏢 {t.lab_name || t.lab} ({t.branch_name || "Main"} Branch)
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                      <span style={{ ...S.muted, fontSize: 12 }}>
+                        🏢 {t.lab_name || t.lab} ({t.branch_name || "Main"} Branch)
+                      </span>
+                      
+                      {/* Styled Compare Checkbox Pill */}
+                      <label
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          fontSize: 10,
+                          fontWeight: 600,
+                          color: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "var(--lime)" : "var(--muted)",
+                          background: comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.06)" : "var(--surface)",
+                          border: `1px solid ${comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "rgba(37,99,235,0.25)" : "var(--border)"}`,
+                          padding: "2px 8px",
+                          borderRadius: 99,
+                          cursor: "pointer",
+                          userSelect: "none"
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id)}
+                          onChange={() => toggleCompare(t)}
+                          style={{ display: "none" }}
+                        />
+                        <span>{comparedLabs.some(x => x.lab_branch_id === t.lab_branch_id) ? "✓ Selected" : "⚖ Compare"}</span>
+                      </label>
                     </div>
                   </div>
 
@@ -264,7 +306,68 @@ export function Search({ q, setPage, setTest, allTests, user }) {
         )}
       </div>
 
-      {/* Pop-up Detail Modal / Slide-over Drawer RENDERED OUTSIDE OF FADE-UP ANIMATED CONTAINER TO PREVENT TRANSFORM POSITIONING BUGS ON MOBILE */}
+      {/* Floating Compare Bar */}
+      {comparedLabs.length > 0 && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 20,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "var(--card)",
+            border: "1.5px solid var(--border)",
+            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+            borderRadius: 16,
+            padding: "12px 24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 16,
+            maxWidth: 500,
+            width: "calc(100% - 32px)",
+            zIndex: 999,
+            animation: "slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0, flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: 13 }}>
+              ⚖️ Compare Prices ({comparedLabs.length}/5)
+            </div>
+            <div style={{ ...S.muted, fontSize: 11, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {comparedLabs.map(x => x.lab_name || x.lab || x.name).join(", ")}
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <button
+              onClick={() => setComparedLabs([])}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--muted)",
+                fontSize: 11,
+                cursor: "pointer",
+                padding: "4px 8px",
+              }}
+            >
+              Clear
+            </button>
+            <button
+              className="bl"
+              onClick={() => setShowCompareModal(true)}
+              style={{
+                padding: "6px 14px",
+                fontSize: 11,
+                fontWeight: 600,
+                borderRadius: 8,
+              }}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Pop-up Detail Modal / Slide-over Drawer RENDERED OUTSIDE OF FADE-UP ANIMATED CONTAINER */}
       {activeModalTest && (
         <div
           style={{
@@ -450,6 +553,170 @@ export function Search({ q, setPage, setTest, allTests, user }) {
               >
                 Book Now →
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Price Comparison Modal */}
+      {showCompareModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(6px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            padding: 16,
+          }}
+          onClick={() => setShowCompareModal(false)}
+        >
+          <div
+            style={{
+              background: "var(--card)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 16,
+              maxWidth: 550,
+              width: "100%",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              overflow: "hidden",
+              animation: "slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: "20px 24px",
+                borderBottom: "1px solid var(--border)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                background: "var(--surface)",
+              }}
+            >
+              <div>
+                <h3 style={{ ...S.serif, fontSize: 20, fontWeight: 700, margin: 0 }}>
+                  ⚖️ Price Comparison
+                </h3>
+                <div style={{ ...S.muted, fontSize: 12, marginTop: 4 }}>
+                  Comparing rates for <strong>{q}</strong> across your selected labs
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCompareModal(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: 18,
+                  cursor: "pointer",
+                  color: "var(--muted)",
+                  padding: 4,
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div
+              style={{
+                padding: 24,
+                maxHeight: "calc(80vh - 120px)",
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}
+            >
+              {(() => {
+                // Find the lowest price among the selected compared labs
+                const lowestPrice = Math.min(...comparedLabs.map(x => Number(x.price)));
+                
+                return comparedLabs.map((lab, idx) => {
+                  const isLowest = Number(lab.price) === lowestPrice;
+                  
+                  return (
+                    <div
+                      key={lab.lab_branch_id}
+                      style={{
+                        background: isLowest ? "rgba(37,99,235,0.02)" : "var(--surface)",
+                        border: isLowest ? "1.5px solid var(--lime)" : "1px solid var(--border)",
+                        borderRadius: 12,
+                        padding: 16,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 12,
+                        position: "relative",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {isLowest && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: -10,
+                            right: 16,
+                            background: "var(--lime)",
+                            color: "#fff",
+                            fontSize: 9,
+                            fontWeight: 700,
+                            padding: "2px 8px",
+                            borderRadius: 99,
+                            letterSpacing: ".04em",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          🏆 Lowest Rate
+                        </div>
+                      )}
+
+                      <div style={{ minWidth: 200, flex: 1 }}>
+                        <div style={{ fontWeight: 700, fontSize: 14 }}>
+                          {lab.lab_name || lab.lab || lab.name}
+                        </div>
+                        <div style={{ ...S.muted, fontSize: 11, marginTop: 3 }}>
+                          🏢 {lab.branch_name || "Main"} Branch
+                        </div>
+                        <div style={{ ...S.muted, ...S.mono, fontSize: 10, marginTop: 4 }}>
+                          ⏱ Report: {lab.rep} | 📍 Distance: {formatDistance(lab) || "N/A"}
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+                        <div style={{ textAlign: "right" }}>
+                          <span style={{ ...S.mono, fontSize: 20, fontWeight: 700, color: isLowest ? "var(--lime)" : "var(--text)" }}>
+                            ₹{lab.price}
+                          </span>
+                        </div>
+                        <button
+                          className="bl"
+                          onClick={() => {
+                            setTest(lab);
+                            setShowCompareModal(false);
+                            user ? setPage("booking") : setPage("signup");
+                          }}
+                          style={{
+                            padding: "8px 16px",
+                            fontSize: 12,
+                            fontWeight: 600,
+                            borderRadius: 8,
+                          }}
+                        >
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>
