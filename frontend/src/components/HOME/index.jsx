@@ -223,16 +223,9 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
           <div style={{ ...S.muted, fontSize: 13 }}>No labs found in this radius yet.</div>
         )}
 
-        {searchMethod === "city" && Object.keys(groupedCityLabs).length > 0 && (
-          <div style={{ display: "grid", gap: 12 }}>
-            {Object.entries(groupedCityLabs).map(([labName, branches]) => (
-              <div key={labName}>
-                <div style={{ fontWeight: 700, marginBottom: 8 }}>{labName}</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
-                  {branches.map((branch) => renderLabCard(branch))}
-                </div>
-              </div>
-            ))}
+        {searchMethod === "city" && cityLabs.length > 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
+            {cityLabs.map((branch) => renderLabCard(branch))}
           </div>
         )}
         {searchMethod === "city" && !isLoadingResults && cityLabs.length === 0 && !gpsError && (
@@ -292,7 +285,7 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         >
           ₹
         </span>
-        <div style={S.pill}>India's Local Lab Finder</div>
+        <div className="hero-pill">India's Local Lab Finder</div>
         <h1
           style={{
             ...S.serif,

@@ -52,6 +52,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
           padding: "0 24px",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           gap: 8,
           height: 54,
         }}
