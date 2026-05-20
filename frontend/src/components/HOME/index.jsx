@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { S, MapLink } from '../../utils/reusables';
 import { CATEGORIES } from '../../utils/data';
 import { API_BASE_URL } from '../../config';
 
 // HOME
 export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }) {
-  const [searchMethod, setSearchMethod] = useState("city");
+  const [searchMethod, setSearchMethod] = useState("gps");
   const [selectedCity, setSelectedCity] = useState("Delhi");
   const [radius, setRadius] = useState(5);
   const [gpsLoading, setGpsLoading] = useState(false);
@@ -13,6 +13,10 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   const [nearbyLabs, setNearbyLabs] = useState([]);
   const [cityLabs, setCityLabs] = useState([]);
   const [isLoadingResults, setIsLoadingResults] = useState(false);
+
+  useEffect(() => {
+    requestUserLocation();
+  }, []);
 
   const fetchNearbyLabs = (lat, lng, searchRadius = radius) => {
     setIsLoadingResults(true);
@@ -143,9 +147,33 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 18 }}>📍</span>
-            <h2 style={{ ...S.serif, fontSize: 18, fontWeight: 700, margin: 0 }}>Find Labs in Your City</h2>
+            <h2 style={{ ...S.serif, fontSize: 18, fontWeight: 700, margin: 0 }}>Find Labs near you</h2>
           </div>
-          <span style={{ ...S.muted, fontSize: 11, letterSpacing: ".02em" }}>Enter your city to discover local verified branches</span>
+          <button 
+            onClick={() => {
+              if (searchMethod === "gps") {
+                setSearchMethod("city");
+              } else {
+                requestUserLocation();
+              }
+            }}
+            style={{
+              background: "rgba(37,99,235,.06)",
+              color: "var(--lime)",
+              border: "1px solid rgba(37,99,235,.15)",
+              fontFamily: "var(--fb)",
+              fontWeight: 600,
+              fontSize: 10,
+              padding: "4px 10px",
+              borderRadius: 99,
+              cursor: "pointer",
+              transition: "all 0.12s",
+            }}
+            onMouseEnter={(e) => e.target.style.background = "rgba(37,99,235,.12)"}
+            onMouseLeave={(e) => e.target.style.background = "rgba(37,99,235,.06)"}
+          >
+            {searchMethod === "gps" ? "🔍 Search by City" : "🛰️ Use Live GPS"}
+          </button>
         </div>
 
         {searchMethod === "gps" && (
