@@ -284,14 +284,39 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           overflow: "hidden",
         }}
       >
-        <TestTHead />
+        {/* Custom Table Head to perfectly match the dynamic column widths */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: isPackage ? "3fr 2fr 260px" : COL_TESTS,
+            background: "var(--surface)",
+            borderBottom: "1px solid var(--border)",
+            padding: "9px 20px",
+            gap: 12,
+          }}
+        >
+          {["Test Details", "Available Offers", isPackage ? "Price & Actions" : "Price"].map((h) => (
+            <div
+              key={h}
+              style={{
+                ...S.mono,
+                ...S.muted,
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: ".08em",
+              }}
+            >
+              {h}
+            </div>
+          ))}
+        </div>
         {rows.map((t, i) => (
           <div
             key={t.name}
             className="tbl-row"
             style={{
               display: "grid",
-              gridTemplateColumns: COL_TESTS,
+              gridTemplateColumns: isPackage ? "3fr 2fr 260px" : COL_TESTS,
               padding: "15px 20px",
               gap: 12,
               alignItems: "center",
