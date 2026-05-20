@@ -273,23 +273,23 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
             <div style={{ ...S.tag, textAlign: "center", fontSize: 11 }}>
               {t.rep}
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-              <span
-                style={{ ...S.mono, fontSize: 16, fontWeight: 600, ...S.lime }}
-              >
-                ₹{t.price}
-              </span>
-              <button
-                className="bl"
-                onClick={() => {
-                  setTest(t);
-                  user ? setPage("booking") : setPage("signup");
-                }}
-                style={{ padding: "7px 14px", fontSize: 12 }}
-              >
-                Book
-              </button>
-            </div>
+             {/* Column 5: Price */}
+             <span
+               style={{ ...S.mono, fontSize: 16, fontWeight: 600, ...S.lime }}
+             >
+               ₹{t.price}
+             </span>
+             {/* Column 6: Action */}
+             <button
+               className="bl"
+               onClick={() => {
+                 setTest(t);
+                 user ? setPage("booking") : setPage("signup");
+               }}
+               style={{ padding: "7px 14px", fontSize: 12, justifySelf: "end" }}
+             >
+               Book
+             </button>
           </div>
         ))}
       </div>
