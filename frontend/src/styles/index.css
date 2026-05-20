@@ -751,3 +751,15 @@ label {
     letter-spacing: .02em !important;
   }
 }
+
+/* ── MODAL DRAWER SLIDE-UP ANIMATION ── */
+@keyframes slideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
