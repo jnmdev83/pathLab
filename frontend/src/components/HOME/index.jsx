@@ -245,6 +245,26 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
 }
 
 export function Home({ setPage, setSelectedBranch, setBranchTests }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const chunkArray = (arr, size) => {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+      chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+  };
+  const categoryChunks = chunkArray(CATEGORIES, 4);
+
+  const handleScroll = (e) => {
+    const scrollLeft = e.target.scrollLeft;
+    const width = e.target.clientWidth;
+    if (width > 0) {
+      const index = Math.round(scrollLeft / width);
+      setActiveSlide(index);
+    }
+  };
+
   return (
     <div className="fu">
       {/* Hero */}
@@ -355,35 +375,62 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         Browse by Category
       </h2>
 
-      {/* Category cards */}
-      <div className="cat-slider-container">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat.id}
-            className="hc cat-card-item"
-            onClick={() => setPage(cat.page)}
+      {/* Grouped Category Carousel Viewport */}
+      <div 
+        className="cat-carousel-viewport"
+        onScroll={handleScroll}
+      >
+        {categoryChunks.map((chunk, pageIdx) => (
+          <div key={pageIdx} className="cat-carousel-page">
+            {chunk.map((cat) => (
+              <button
+                key={cat.id}
+                className="hc"
+                onClick={() => setPage(cat.page)}
+                style={{
+                  padding: "16px 14px",
+                  textAlign: "left",
+                  border: "1.5px solid var(--border)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <div style={{ fontSize: 24, marginBottom: 8 }}>{cat.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2, color: "var(--text)" }}>
+                  {cat.name}
+                </div>
+                <div
+                  style={{
+                    ...S.mono,
+                    ...S.muted,
+                    fontSize: 9,
+                    letterSpacing: ".02em",
+                  }}
+                >
+                  {cat.tag}
+                </div>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* Elegant Dot Indicators */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 10, marginBottom: 14 }}>
+        {categoryChunks.map((_, idx) => (
+          <span 
+            key={idx}
             style={{
-              padding: "22px 18px",
-              textAlign: "left",
-              border: "1.5px solid var(--border)",
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              backgroundColor: idx === activeSlide ? "var(--lime)" : "var(--border)",
+              transition: "all 0.25s ease",
+              transform: idx === activeSlide ? "scale(1.2)" : "scale(1)",
             }}
-          >
-            <div className="cat-card-icon" style={{ fontSize: 30, marginBottom: 10 }}>{cat.icon}</div>
-            <div className="cat-card-name" style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-              {cat.name}
-            </div>
-            <div
-              className="cat-card-tag"
-              style={{
-                ...S.mono,
-                ...S.muted,
-                fontSize: 10,
-                letterSpacing: ".03em",
-              }}
-            >
-              {cat.tag}
-            </div>
-          </button>
+          />
         ))}
       </div>
 

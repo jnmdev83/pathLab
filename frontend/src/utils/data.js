@@ -21,16 +21,57 @@ export const CATEGORIES = [
     tag: "Tumor Markers",
     page: "package",
   },
-  { id: 5, name: "Heart", icon: "❤️", tag: "Cardiac Panel", page: "scanning" },
+  { id: 5, name: "Heart", icon: "❤️", tag: "Cardiac Panel", page: "blood" },
   {
     id: 6,
     name: "Allergy",
     icon: "🌿",
     tag: "IgE Profiling",
-    page: "scanning",
+    page: "blood",
+  },
+  {
+    id: 7,
+    name: "Vitamin Panel",
+    icon: "☀️",
+    tag: "D3 · B12 · Iron",
+    page: "package",
+  },
+  {
+    id: 8,
+    name: "Kidney Care",
+    icon: "💧",
+    tag: "Urea & Creatinine",
+    page: "blood",
+  },
+  {
+    id: 9,
+    name: "Liver Wellness",
+    icon: "🧪",
+    tag: "Bilirubin & SGPT",
+    page: "blood",
+  },
+  {
+    id: 10,
+    name: "Full Body Check",
+    icon: "📋",
+    tag: "Comprehensive Panel",
+    page: "package",
+  },
+  {
+    id: 11,
+    name: "Bone & Joint",
+    icon: "🦴",
+    tag: "Calcium & Joints",
+    page: "blood",
+  },
+  {
+    id: 12,
+    name: "Fever & Infection",
+    icon: "🤒",
+    tag: "CBC & Widal",
+    page: "blood",
   },
 ];
 
 // The ALL_TESTS hardcoded list was removed!
 // We now fetch tests dynamically from our PostgreSQL database.
-
