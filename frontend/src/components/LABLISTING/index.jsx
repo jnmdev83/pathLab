@@ -270,12 +270,12 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
               )}
               <MapLink item={t} />
             </section>
-            <div style={{ ...S.tag, textAlign: "center", fontSize: 11, justifySelf: "center" }}>
+            <div style={{ ...S.tag, textAlign: "center", fontSize: 11, justifySelf: "start" }}>
               {t.rep}
             </div>
              {/* Column 5: Price */}
              <span
-               style={{ ...S.mono, fontSize: 16, fontWeight: 600, ...S.lime, justifySelf: "center" }}
+               style={{ ...S.mono, fontSize: 16, fontWeight: 600, ...S.lime, justifySelf: "start" }}
              >
                ₹{t.price}
              </span>
@@ -286,7 +286,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                  setTest(t);
                  user ? setPage("booking") : setPage("signup");
                }}
-               style={{ padding: "7px 14px", fontSize: 12, justifySelf: "center" }}
+               style={{ padding: "7px 14px", fontSize: 12, justifySelf: "start" }}
              >
                Book
              </button>

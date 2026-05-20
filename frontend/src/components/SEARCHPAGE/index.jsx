@@ -153,7 +153,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                   )}
                   <MapLink item={t} />
                 </section>
-                <div style={{ ...S.tag, fontSize: 11, textAlign: "center", justifySelf: "center" }}>
+                <div style={{ ...S.tag, fontSize: 11, textAlign: "center", justifySelf: "start" }}>
                   {t.rep}
                 </div>
                  {/* Column 5: Price */}
@@ -163,7 +163,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                      fontSize: 16,
                      fontWeight: 600,
                      ...S.lime,
-                     justifySelf: "center",
+                     justifySelf: "start",
                    }}
                  >
                    ₹{t.price}
@@ -175,7 +175,7 @@ export function Search({ q, setPage, setTest, allTests, user }) {
                      setTest(t);
                      user ? setPage("booking") : setPage("signup");
                    }}
-                   style={{ padding: "7px 14px", fontSize: 12, justifySelf: "center" }}
+                   style={{ padding: "7px 14px", fontSize: 12, justifySelf: "start" }}
                  >
                    Book
                  </button>

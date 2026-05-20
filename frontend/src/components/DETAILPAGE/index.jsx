@@ -90,11 +90,11 @@ export function BranchTests({ selectedBranch, branchTests, setPage, setTest, use
                   <div style={{ fontWeight: 700 }}>{row.test_name}</div>
                   <div style={{ ...S.muted, fontSize: 13 }}>{row.lab_name}</div>
                   <div style={{ ...S.muted, ...S.mono, fontSize: 12 }}>{selectedBranch.branch_name}</div>
-                  <div style={{ ...S.tag, textAlign: "center", justifySelf: "center" }}>{row.reporting_time}</div>
+                  <div style={{ ...S.tag, textAlign: "center", justifySelf: "start" }}>{row.reporting_time}</div>
                   {/* Column 5: Price */}
-                  <span style={{ ...S.mono, ...S.lime, fontSize: 16, fontWeight: 700, justifySelf: "center" }}>₹{row.price}</span>
+                  <span style={{ ...S.mono, ...S.lime, fontSize: 16, fontWeight: 700, justifySelf: "start" }}>₹{row.price}</span>
                   {/* Column 6: Action */}
-                  <button className="bl" onClick={() => bookTest(row)} style={{ padding: "7px 14px", fontSize: 12, justifySelf: "center" }}>
+                  <button className="bl" onClick={() => bookTest(row)} style={{ padding: "7px 14px", fontSize: 12, justifySelf: "start" }}>
                     Book Now
                   </button>
                 </div>
