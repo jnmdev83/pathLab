@@ -10,6 +10,15 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
   const [comparedLabs, setComparedLabs] = useState([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const pageSize = 10;
+  const [isMobile, setIsMobile] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(15);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Lock body scroll when modal is active so it stays perfectly visible at center without background scrolling
   useEffect(() => {
@@ -46,9 +55,28 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
     });
 
   const totalPages = Math.ceil(allRows.length / pageSize) || 1;
-  const rows = allRows.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);
+  const rows = isMobile
+    ? allRows.slice(0, visibleCount)
+    : allRows.slice((pageIdx - 1) * pageSize, pageIdx * pageSize);
 
-  useEffect(() => setPageIdx(1), [sort, testName]);
+  useEffect(() => {
+    setPageIdx(1);
+    setVisibleCount(15);
+  }, [sort, testName]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 250
+      ) {
+        setVisibleCount((prev) => Math.min(prev + 10, allRows.length));
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobile, allRows.length]);
 
   if (!testName) return null;
 
@@ -288,7 +316,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
+        {!isMobile && totalPages > 1 && (
           <div
             style={{
               display: "flex",
