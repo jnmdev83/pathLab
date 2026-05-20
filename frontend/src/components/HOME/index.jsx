@@ -136,48 +136,47 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   );
 
   return (
-    <section style={{ marginBottom: 24 }}>
-      <div
-        style={{
-          background: "var(--surface)",
-          border: "1.5px solid var(--border)",
-          borderRadius: 12,
-          padding: "var(--find-labs-pad)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
-          <div>
-            <h2 style={{ ...S.serif, fontSize: "clamp(20px, 4.5vw, 24px)", marginBottom: 4 }}>Find labs in your city</h2>
-            <p style={{ ...S.muted, fontSize: 12 }}>Search for your city, then book tests at a specific branch.</p>
+    <section style={{ marginBottom: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        
+        {/* Sleek Row Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 18 }}>📍</span>
+            <h2 style={{ ...S.serif, fontSize: 18, fontWeight: 700, margin: 0 }}>Find Labs in Your City</h2>
           </div>
+          <span style={{ ...S.muted, fontSize: 11, letterSpacing: ".02em" }}>Enter your city to discover local verified branches</span>
         </div>
 
         {searchMethod === "gps" && (
-          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 14 }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <label style={{ margin: 0 }}>Radius</label>
-            <select value={radius} onChange={(e) => setRadius(Number(e.target.value))} style={{ width: 120 }}>
+            <select value={radius} onChange={(e) => setRadius(Number(e.target.value))} style={{ width: 100, height: 34, padding: "0 8px" }}>
               <option value={3}>3 KM</option>
               <option value={5}>5 KM</option>
               <option value={10}>10 KM</option>
               <option value={25}>25 KM</option>
             </select>
-            <button className="bg" onClick={requestUserLocation}>Refresh GPS Search</button>
+            <button className="bg" style={{ padding: "0 14px", height: 34, fontSize: 12 }} onClick={requestUserLocation}>Refresh GPS</button>
           </div>
         )}
 
         {searchMethod === "city" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, marginBottom: 14 }}>
+          <div className="location-search-pill-container">
             <input
+              className="location-search-pill-input"
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              placeholder="Enter city, e.g. Delhi"
+              placeholder="Enter city, e.g. Delhi, Noida..."
             />
-            <button className="bl" onClick={handleCitySearch}>Search</button>
+            <button className="location-search-pill-btn" onClick={handleCitySearch}>
+              Search
+            </button>
           </div>
         )}
 
         {gpsError && (
-          <div style={{ color: "var(--danger)", ...S.mono, fontSize: 12, marginBottom: 12 }}>
+          <div style={{ color: "var(--danger)", ...S.mono, fontSize: 11 }}>
             {gpsError}
           </div>
         )}

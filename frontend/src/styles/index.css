@@ -672,3 +672,60 @@ label {
     flex: 0 0 calc(50% - 8px) !important;
   }
 }
+
+/* ── SLEEK LOCATION SEARCH PILL ── */
+.location-search-pill-container {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  padding: 4px 6px 4px 14px;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.location-search-pill-container:focus-within {
+  border-color: var(--lime);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+}
+
+.location-search-pill-input {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  width: 100% !important;
+  font-size: 13px !important;
+  height: 34px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.location-search-pill-btn {
+  background: var(--lime);
+  color: #fff;
+  border: none;
+  font-family: var(--fb);
+  font-weight: 600;
+  font-size: 12px;
+  height: 34px;
+  padding: 0 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location-search-pill-btn:hover {
+  background: var(--lime2);
+  transform: translateY(-0.5px);
+}
+
+.location-search-pill-btn:active {
+  transform: scale(0.97);
+}
