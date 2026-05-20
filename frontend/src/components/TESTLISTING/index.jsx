@@ -276,8 +276,8 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
               cursor: "pointer",
             }}
           >
-          <option value="low">Starting Price: Low → High</option>
-          <option value="high">Starting Price: High → Low</option>
+          <option value="low">Price: Low → High</option>
+          <option value="high">Price: High → Low</option>
           <option value="loc">Nearby First</option>
           <option value="rating">Most Rated</option>
         </select>

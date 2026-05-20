@@ -117,7 +117,10 @@ export default function App() {
   }, []);
 
   const requestGeolocation = () => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser. Please enter your location or enable location access manually.");
+      return;
+    }
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setUserLocation({
@@ -128,6 +131,11 @@ export default function App() {
       },
       (error) => {
         console.warn("Geolocation failed or denied:", error.message);
+        if (error.code === 1) {
+          alert("Location access denied. Please allow/enable location permissions for ChooseMyLab in your browser/app settings to find nearby labs.");
+        } else {
+          alert("Unable to detect location. Please turn on your device's location services (GPS) and allow browser access, then try clicking the button again.");
+        }
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 },
     );
