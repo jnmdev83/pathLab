@@ -9,6 +9,18 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
   const [activeModalTest, setActiveModalTest] = useState(null);
   const pageSize = 10;
 
+  // Lock body scroll when modal is active so it stays perfectly visible at center without background scrolling
+  useEffect(() => {
+    if (activeModalTest) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [activeModalTest]);
+
   const allRows = (allTests || [])
     .filter((t) => t.name === testName)
     .sort((a, b) => {
@@ -185,23 +197,40 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
               </div>
             </div>
 
-            {/* Right side: View Details Action Button */}
-            <button
-              className="bl"
-              onClick={() => setActiveModalTest(t)}
-              style={{
-                padding: "8px 16px",
-                fontSize: 12,
-                fontWeight: 600,
-                borderRadius: 8,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                whiteSpace: "nowrap"
-              }}
-            >
-              <span>ℹ️</span> View Details & Book
-            </button>
+            {/* Right side: Two Clean Action Buttons */}
+            <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              <button
+                className="bg"
+                onClick={() => setActiveModalTest(t)}
+                style={{
+                  padding: "7px 13px",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                View Details
+              </button>
+              <button
+                className="bl"
+                onClick={() => {
+                  setTest(t);
+                  user ? setPage("booking") : setPage("signup");
+                }}
+                style={{
+                  padding: "7px 13px",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                Book Test
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -307,8 +336,8 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(15, 23, 42, 0.65)",
-            backdropFilter: "blur(4px)",
+            background: "rgba(0, 0, 0, 0.45)",
+            backdropFilter: "blur(6px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
