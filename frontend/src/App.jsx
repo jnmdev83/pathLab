@@ -18,9 +18,27 @@ import { PackageCompare } from './components/PACKAGECOMPARE';
 import { API_BASE_URL } from './config';
 
 export default function App() {
-  const [page, _setPage] = useState("home");
-  const [test, _setTest] = useState(null);
-  const [testName, _setTestName] = useState(null);
+  const [page, _setPage] = useState(() => {
+    try {
+      return sessionStorage.getItem("choosemylab_page") || "home";
+    } catch {
+      return "home";
+    }
+  });
+  const [test, _setTest] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem("choosemylab_test")) || null;
+    } catch {
+      return null;
+    }
+  });
+  const [testName, _setTestName] = useState(() => {
+    try {
+      return sessionStorage.getItem("choosemylab_testName") || null;
+    } catch {
+      return null;
+    }
+  });
   const [q, setQ] = useState("");
   // Rehydrate user from localStorage so login persists across page refreshes
   const [user, _setUser] = useState(() => {
@@ -52,14 +70,46 @@ export default function App() {
       return true;
     }
   });
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedPackage, _setSelectedPackage] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem("choosemylab_selectedPackage")) || null;
+    } catch {
+      return null;
+    }
+  });
   const [userLocation, setUserLocation] = useState({
     lat: 28.6314,
     lng: 77.2789,
     label: "Delhi Pincode 110092 (Shakarpur)"
   });
-  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedBranch, _setSelectedBranch] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem("choosemylab_selectedBranch")) || null;
+    } catch {
+      return null;
+    }
+  });
   const [branchTests, setBranchTests] = useState([]);
+
+  const setSelectedPackage = (pkg) => {
+    _setSelectedPackage(pkg);
+    try {
+      if (pkg) sessionStorage.setItem("choosemylab_selectedPackage", JSON.stringify(pkg));
+      else sessionStorage.removeItem("choosemylab_selectedPackage");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const setSelectedBranch = (br) => {
+    _setSelectedBranch(br);
+    try {
+      if (br) sessionStorage.setItem("choosemylab_selectedBranch", JSON.stringify(br));
+      else sessionStorage.removeItem("choosemylab_selectedBranch");
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const setUser = (u) => {
     _setUser(u);
@@ -71,19 +121,48 @@ export default function App() {
   // before pushState is executed, bypassing React's async batching.
   const stateRef = useRef({ test: null, testName: null });
 
+  // Sync ref with initial state from sessionStorage
+  useEffect(() => {
+    try {
+      const initialTest = JSON.parse(sessionStorage.getItem("choosemylab_test"));
+      const initialTestName = sessionStorage.getItem("choosemylab_testName");
+      stateRef.current.test = initialTest;
+      stateRef.current.testName = initialTestName;
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   const setTest = (t) => {
     stateRef.current.test = t;
     _setTest(t);
+    try {
+      if (t) sessionStorage.setItem("choosemylab_test", JSON.stringify(t));
+      else sessionStorage.removeItem("choosemylab_test");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const setTestName = (tn) => {
     stateRef.current.testName = tn;
     _setTestName(tn);
+    try {
+      if (tn) sessionStorage.setItem("choosemylab_testName", tn);
+      else sessionStorage.removeItem("choosemylab_testName");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // Enable Browser Back Button Navigation
   const setPage = (newPage) => {
     _setPage(newPage);
+    try {
+      sessionStorage.setItem("choosemylab_page", newPage);
+    } catch (e) {
+      console.error(e);
+    }
     window.history.pushState(
       {
         page: newPage,
@@ -106,10 +185,16 @@ export default function App() {
     const handlePopState = (e) => {
       if (e.state && e.state.page) {
         _setPage(e.state.page);
+        try {
+          sessionStorage.setItem("choosemylab_page", e.state.page);
+        } catch {}
         if (e.state.test !== undefined) setTest(e.state.test);
         if (e.state.testName !== undefined) setTestName(e.state.testName);
       } else {
         _setPage("home");
+        try {
+          sessionStorage.setItem("choosemylab_page", "home");
+        } catch {}
       }
     };
     window.addEventListener("popstate", handlePopState);
