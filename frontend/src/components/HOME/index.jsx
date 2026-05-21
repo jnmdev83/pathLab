@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { S, MapLink } from '../../utils/reusables';
+import { S, MapLink, getMapLink } from '../../utils/reusables';
 import { CATEGORIES } from '../../utils/data';
 import { API_BASE_URL } from '../../config';
 
@@ -150,19 +150,25 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
         {lab.address}<br />
         {lab.phone || "Phone unavailable"}
         {showDistance && lab.distance_km !== undefined && (
-          <div
+          <a
+            href={getMapLink(lab)}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               ...S.lime,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
               fontSize: 11,
               fontWeight: 600,
               letterSpacing: ".02em",
               marginTop: 6,
+              textDecoration: "none",
             }}
           >
-            {Number(lab.distance_km).toFixed(1)} km away
-          </div>
+            📍 {Number(lab.distance_km).toFixed(1)} km away
+          </a>
         )}
-        <MapLink item={lab} style={{ display: "flex", marginTop: 6 }} />
       </div>
       <button
         className="bl"
