@@ -57,22 +57,23 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
       </div>
 
       {/* Full-width Actions Header: Back button on the Left, Sort options on the Right */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <button 
           onClick={() => setPage("package")}
           style={{
             ...S.mono,
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 6,
+            gap: 5,
             background: 'rgba(37,99,235,.05)',
             color: 'var(--lime)',
             border: '1.5px solid rgba(37,99,235,.15)',
-            padding: '8px 16px',
+            padding: '6px 12px',
             borderRadius: 99,
             cursor: 'pointer',
-            fontSize: 12,
+            fontSize: 11,
             fontWeight: 600,
+            whiteSpace: 'nowrap',
             transition: 'all 0.15s ease'
           }}
           onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,99,235,.1)'}
@@ -81,18 +82,15 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
           ← Back to Packages
         </button>
 
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <span style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.07em' }}>Sort</span>
-          <select 
-            value={sort} 
-            onChange={e => setSort(e.target.value)}
-            style={{ padding: '6px 12px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
-          >
-            <option value="low">Price: Low to High</option>
-            <option value="high">Price: High to Low</option>
-            <option value="loc">Distance: Nearest First</option>
-          </select>
-        </div>
+        <select 
+          value={sort} 
+          onChange={e => setSort(e.target.value)}
+          style={{ padding: '6px 10px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
+        >
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="loc">Distance: Nearest First</option>
+        </select>
       </div>
 
       <div className="package-detail-grid">
