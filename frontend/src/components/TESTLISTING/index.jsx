@@ -5,7 +5,7 @@ import { API_BASE_URL } from '../../config';
 
 // TEST LISTING
 export function Listing({ cat, title, setPage, setTestName, allTests, packages, setSelectedPackage, loading, userLocation, setUserLocation, requestGeolocation }) {
-  const [sort, setSort] = useState("loc");
+  const [sort, setSort] = useState("name");
   const [pageIdx, setPageIdx] = useState(1);
   const pageSize = 10;
   const [isMobile, setIsMobile] = useState(false);
@@ -129,6 +129,7 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
     if (sort === "high") return b.minPrice - a.minPrice;
     if (sort === "rating") return b.count - a.count; // Most available/rated
     if (sort === "loc") return compareNearby(a, b);
+    if (sort === "name") return (a.name || "").localeCompare(b.name || "");
     return 0;
   });
   const totalPages = Math.ceil(allRows.length / pageSize) || 1;
@@ -286,11 +287,12 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
               cursor: "pointer",
             }}
           >
-          <option value="low">Price: Low → High</option>
-          <option value="high">Price: High → Low</option>
-          <option value="loc">Nearby First</option>
-          <option value="rating">Most Rated</option>
-        </select>
+            <option value="name">Alphabetical (A-Z)</option>
+            <option value="low">Price: Low → High</option>
+            <option value="high">Price: High → Low</option>
+            <option value="loc">Nearby First</option>
+            <option value="rating">Most Rated</option>
+          </select>
         </div>
       </div>
 

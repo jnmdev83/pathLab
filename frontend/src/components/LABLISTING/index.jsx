@@ -4,7 +4,7 @@ import { PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // LAB LISTING
 export function LabListing({ testName, setPage, setTest, allTests, user, userLocation, setUserLocation, requestGeolocation }) {
-  const [sort, setSort] = useState("loc");
+  const [sort, setSort] = useState("name");
   const [pageIdx, setPageIdx] = useState(1);
   const [activeModalTest, setActiveModalTest] = useState(null);
   const [comparedLabs, setComparedLabs] = useState([]);
@@ -51,6 +51,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
       if (sort === "high") return b.price - a.price;
       if (sort === "loc") return compareNearby(a, b);
       if (sort === "rating") return (b.id % 100) - (a.id % 100); // Pseudo-rating based on ID
+      if (sort === "name") return (a.lab_name || a.lab || "").localeCompare(b.lab_name || b.lab || "");
       return 0;
     });
 
@@ -159,6 +160,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
               cursor: "pointer",
             }}
           >
+            <option value="name">Alphabetical (A-Z)</option>
             <option value="low">Price: Low → High</option>
             <option value="high">Price: High → Low</option>
             <option value="loc">Nearby First</option>
