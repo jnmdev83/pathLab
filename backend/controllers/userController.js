@@ -1,6 +1,7 @@
 const db  = require('../config/db');
 const jwt = require('jsonwebtoken');
 const { sendWelcomeEmail, sendOtpEmail } = require('../utils/mailer');
+const { OAuth2Client } = require('google-auth-library');
 
 // JWT secret comes from environment variable. Falls back to a dev placeholder.
 // ⚠️  Set JWT_SECRET in your .env.production file for security.
@@ -198,16 +199,30 @@ exports.post_api_verify_otp = async (req, res) => {
 // ─── POST /api/auth/google ────────────────────────────────────────────────────
 // 🧒 CHILD-FRIENDLY EXPLANATION:
 // Google Sign-In is like showing your official school badge to enter the club instantly!
-// If your badge email is already in our list, we say "Come on in!" (Log in).
-// If not, we copy your name and email from Google and make you a brand new club card automatically!
-exports.post_api_google = async (req, res) => {
-  const { email, name } = req.body;
+// Instead of trusting just any badge, we scan the barcode securely with Google's servers.
+// If your badge is verified, we say "Come on in!" (Log in).
+// If you are new, we make you a brand new club card automatically!
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-  if (!email || !name) {
-    return res.status(400).json({ error: 'Google authentication did not provide required user info.' });
+exports.post_api_google = async (req, res) => {
+  const { credential } = req.body;
+
+  if (!credential) {
+    return res.status(400).json({ error: 'No Google credential token provided.' });
   }
 
   try {
+    // 🛡️ SECURE VERIFICATION: We ask Google's official library to verify the token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID, 
+    });
+
+    // Extract the secure, verified user information from the payload
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    const name = payload.name;
+
     // Check if the user is already in our database by their Google email
     const { rows: existingUser } = await db.query(
       'SELECT id, name, email, phone FROM users WHERE email = $1',
