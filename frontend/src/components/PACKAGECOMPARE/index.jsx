@@ -56,6 +56,45 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
         </div>
       </div>
 
+      {/* Full-width Actions Header: Back button on the Left, Sort options on the Right */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <button 
+          onClick={() => setPage("package")}
+          style={{
+            ...S.mono,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            background: 'rgba(37,99,235,.05)',
+            color: 'var(--lime)',
+            border: '1.5px solid rgba(37,99,235,.15)',
+            padding: '8px 16px',
+            borderRadius: 99,
+            cursor: 'pointer',
+            fontSize: 12,
+            fontWeight: 600,
+            transition: 'all 0.15s ease'
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,99,235,.1)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(37,99,235,.05)'}
+        >
+          ← Back to Packages
+        </button>
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <span style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.07em' }}>Sort</span>
+          <select 
+            value={sort} 
+            onChange={e => setSort(e.target.value)}
+            style={{ padding: '6px 12px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
+          >
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+            <option value="loc">Distance: Nearest First</option>
+          </select>
+        </div>
+      </div>
+
       <div className="package-detail-grid">
         {/* Left Sidebar: Included Tests */}
         <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 20, padding: "24px 20px", height: 'fit-content' }}>
@@ -158,43 +197,6 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
 
         {/* Right column: Compare Lab Pricing */}
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, flexWrap: 'wrap', gap: 12 }}>
-            <button 
-              onClick={() => setPage("package")}
-              style={{
-                ...S.mono,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                background: 'rgba(37,99,235,.05)',
-                color: 'var(--lime)',
-                border: '1.5px solid rgba(37,99,235,.15)',
-                padding: '8px 16px',
-                borderRadius: 99,
-                cursor: 'pointer',
-                fontSize: 12,
-                fontWeight: 600,
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,99,235,.1)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(37,99,235,.05)'}
-            >
-              ← Back to Packages
-            </button>
-
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              <span style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.07em' }}>Sort</span>
-              <select 
-                value={sort} 
-                onChange={e => setSort(e.target.value)}
-                style={{ padding: '6px 12px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
-              >
-                <option value="low">Price: Low to High</option>
-                <option value="high">Price: High to Low</option>
-                <option value="loc">Distance: Nearest First</option>
-              </select>
-            </div>
-          </div>
 
           <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
             {/* Header row on desktop */}
