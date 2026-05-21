@@ -239,8 +239,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                   gap: 8,
                   alignItems: "center",
                   flexWrap: "wrap",
-                  flex: isMobile ? 1 : "none",
-                  width: isMobile ? "100%" : "auto",
+                  flexGrow: isMobile ? 1 : 0,
                 }}
               >
                 <button
