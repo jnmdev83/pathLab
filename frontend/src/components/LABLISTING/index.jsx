@@ -88,16 +88,25 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
           <div
             style={{
               display: "flex",
-              alignItems: "baseline",
-              gap: 12,
-              marginBottom: 3,
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "flex-start" : "baseline",
+              gap: isMobile ? 4 : 12,
+              marginBottom: 8,
             }}
           >
-            <h1 style={{ ...S.serif, fontSize: 34, letterSpacing: "-.02em" }}>
+            <h1
+              style={{
+                ...S.serif,
+                fontSize: isMobile ? 24 : 34,
+                letterSpacing: "-.02em",
+                margin: 0,
+                lineHeight: 1.2,
+              }}
+            >
               {testName}
             </h1>
-            <span style={{ ...S.mono, ...S.muted, fontSize: 12 }}>
-              {rows.length} labs
+            <span style={{ ...S.mono, ...S.muted, fontSize: 12, marginTop: isMobile ? 2 : 0 }}>
+              {allRows.length} labs available
             </span>
           </div>
           <div
@@ -107,23 +116,50 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
               ...S.mono,
               display: "flex",
               gap: 8,
+              alignItems: "center",
             }}
           >
-            <button
-              onClick={() => setPage("home")}
-              style={{
-                background: "none",
-                border: "none",
-                ...S.muted,
-                ...S.mono,
-                fontSize: 12,
-                cursor: "pointer",
-              }}
-            >
-              Home
-            </button>
-            <span>/</span>
-            <span style={S.lime}>Labs for {testName}</span>
+            {isMobile ? (
+              <button
+                onClick={() => setPage("home")}
+                style={{
+                  background: "rgba(37,99,235,0.06)",
+                  border: "1px solid rgba(37,99,235,0.12)",
+                  color: "var(--lime)",
+                  fontFamily: "var(--fb)",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  padding: "5px 12px",
+                  borderRadius: 99,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  transition: "all 0.1s ease",
+                  marginTop: 4,
+                }}
+              >
+                ← Back to Home
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => setPage("home")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    ...S.muted,
+                    ...S.mono,
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  Home
+                </button>
+                <span>/</span>
+                <span style={S.lime}>Labs for {testName}</span>
+              </>
+            )}
           </div>
         </div>
 
