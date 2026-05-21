@@ -128,16 +128,25 @@ export default function App() {
         setUserLocation({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-          label: "Current browser location",
+          label: "My Location",
         });
       },
       (error) => {
         console.warn("Geolocation failed or denied:", error.message);
         if (!silent) {
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           if (error.code === 1) {
-            alert("Location access denied. Please allow/enable location permissions for ChooseMyLab in your browser/app settings to find nearby labs.");
+            alert(
+              isMobile
+                ? "Location permission denied. Please allow location permissions for ChooseMyLab in your phone settings to find nearby labs."
+                : "Location access denied. Please allow location permissions for ChooseMyLab in your browser settings to find nearby labs."
+            );
           } else {
-            alert("Unable to detect location. Please turn on your device's location services (GPS) and allow browser access, then try clicking the button again.");
+            alert(
+              isMobile
+                ? "Could not detect location. Please turn on your mobile device's GPS/Location services (e.g. from swipe down quick settings) and try again."
+                : "Unable to detect location. Please ensure your device's location services (GPS) are enabled and browser access is allowed, then try again."
+            );
           }
         }
       },

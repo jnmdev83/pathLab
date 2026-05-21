@@ -65,11 +65,26 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
       (error) => {
         setGpsLoading(false);
         setSearchMethod("city");
-        if (error.code === error.PERMISSION_DENIED)
-          setGpsError("Location access was denied. Please search for a city/region below.");
-        else if (error.code === error.TIMEOUT)
-          setGpsError("Location request timed out. Please search for a city/region below.");
-        else setGpsError("Unable to detect location. Please search for a city/region below.");
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (error.code === error.PERMISSION_DENIED) {
+          setGpsError(
+            isMobile
+              ? "Location permission denied. Please allow location access in your phone settings or search by city manually below."
+              : "Location access was denied. Please allow location permissions in your browser or search by city manually below."
+          );
+        } else if (error.code === error.TIMEOUT) {
+          setGpsError(
+            isMobile
+              ? "GPS request timed out. Please turn on high-accuracy GPS on your mobile device and try again, or search by city below."
+              : "Location request timed out. Please ensure GPS is active and try again, or search by city below."
+          );
+        } else {
+          setGpsError(
+            isMobile
+              ? "Unable to detect location. Please turn on your phone's GPS/Location services (e.g. from swipe down quick settings) and try again, or search by city below."
+              : "Unable to detect location. Please ensure location services are enabled on your device and try again, or search by city below."
+          );
+        }
         setHasRequested(false);
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
