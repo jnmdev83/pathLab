@@ -1,6 +1,6 @@
 import React from 'react';
 import { S, MapLink } from '../../utils/reusables';
-import { COL_LABS, PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
+import { PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // DETAIL PAGE
 export function BranchTests({ selectedBranch, branchTests, setPage, setTest, user }) {

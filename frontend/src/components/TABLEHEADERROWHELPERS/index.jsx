@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React from 'react';
 import { S } from '../../utils/reusables';
 
 // TABLE HEADER / ROW HELPERS
@@ -46,45 +46,6 @@ export function TestTHead() {
       }}
     >
       {["Test Details", "Available Offers", "Price"].map((h) => (
-        <div
-          key={h}
-          style={{
-            ...S.mono,
-            ...S.muted,
-            fontSize: 10,
-            textTransform: "uppercase",
-            letterSpacing: ".08em",
-          }}
-        >
-          {h}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export const COL_LABS = "1.2fr 2.3fr 1.7fr 100px 80px 100px";
-export function LabTHead() {
-  return (
-    <div
-      className="tbl-head"
-      style={{
-        display: "grid",
-        gridTemplateColumns: COL_LABS,
-        background: "var(--surface)",
-        borderBottom: "1px solid var(--border)",
-        padding: "9px 20px",
-        gap: 12,
-      }}
-    >
-      {[
-        "Test Details",
-        "Lab / Clinic",
-        "Location",
-        "Report",
-        "Price",
-        "",
-      ].map((h) => (
         <div
           key={h}
           style={{

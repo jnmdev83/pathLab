@@ -29,11 +29,7 @@ export const S = {
   },
 };
 
-export function Divider() {
-  return (
-    <div style={{ height: 1, background: "var(--border)", width: "100%" }} />
-  );
-}
+
 
 export function getDistanceKm(test) {
   if (test?.distance_km === null || test?.distance_km === undefined) return null;

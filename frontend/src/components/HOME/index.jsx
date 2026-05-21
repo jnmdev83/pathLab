@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { S, MapLink, getMapLink } from '../../utils/reusables';
+import { S, getMapLink } from '../../utils/reusables';
 import { CATEGORIES } from '../../utils/data';
 import { API_BASE_URL } from '../../config';
 

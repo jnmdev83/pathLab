@@ -1,5 +1,4 @@
 const db = require('../config/db');
-const { validCoordinate, haversineSql } = require('../utils/helpers');
 const jwt = require('jsonwebtoken');
 
 exports.post_api_signup = async (req, res) => {
