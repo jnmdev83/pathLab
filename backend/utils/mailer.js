@@ -1,29 +1,30 @@
 const nodemailer = require('nodemailer');
 
-// 🧒 CHILD-FRIENDLY EXPLANATION:
-// This is our magic mail carrier! 
-// When a new kid joins the club (signs up), we use this mail carrier to send them a beautiful Welcome Email.
-// Because we are running locally and don't want to spam real inboxes by accident,
-// we use "Ethereal Email" which creates a fake inbox just for testing!
-// It gives us a magic URL where we can see the exact email that was sent.
+// ─── REAL EMAIL TRANSPORTER ──────────────────────────────────────────────────
+// To send REAL emails to actual inboxes, we must use a real email provider.
+// We are configuring this to use Gmail. You need to provide your Gmail address
+// and a special "App Password" in your .env file!
+async function getTransporter() {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn("⚠️ [EMAIL SYSTEM] Missing EMAIL_USER or EMAIL_PASS in .env file. Real emails cannot be sent.");
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    service: 'gmail', // Use Gmail as the real email provider
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+}
 
 async function sendWelcomeEmail(userEmail, userName) {
   try {
-    // 1. Create a test account on Ethereal (fake SMTP for testing)
-    const testAccount = await nodemailer.createTestAccount();
+    const transporter = await getTransporter();
+    if (!transporter) return false;
 
-    // 2. Create the transporter using the test account
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-
-    // 3. Write our beautiful industry-standard welcome email
+    // Write our beautiful industry-standard welcome email
     const htmlContent = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -41,7 +42,7 @@ async function sendWelcomeEmail(userEmail, userName) {
           </p>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:5173" style="background-color: #84cc16; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+            <a href="https://pathlab-5ktj.onrender.com" style="background-color: #84cc16; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
               Explore Tests Now
             </a>
           </div>
@@ -61,25 +62,55 @@ async function sendWelcomeEmail(userEmail, userName) {
       </div>
     `;
 
-    // 4. Send the email
-    const info = await transporter.sendMail({
-      from: '"ChooseMyLab Support" <welcome@choosemylab.com>',
+    // Send the REAL email
+    await transporter.sendMail({
+      from: `"ChooseMyLab Support" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: "Welcome to ChooseMyLab! 🎉",
       html: htmlContent,
     });
 
-    // 5. Log the preview URL so the developer can see the email in their browser!
-    console.log(`\n📧 [EMAIL SYSTEM] Welcome email sent to ${userEmail}`);
-    console.log(`✨ Preview your email here: ${nodemailer.getTestMessageUrl(info)}\n`);
-    
+    console.log(`\n✅ [EMAIL SYSTEM] Real welcome email successfully delivered to ${userEmail}\n`);
     return true;
   } catch (error) {
-    console.error("❌ [EMAIL SYSTEM] Error sending welcome email:", error);
+    console.error("❌ [EMAIL SYSTEM] Error sending real welcome email:", error);
+    return false;
+  }
+}
+
+// Function to send REAL OTP via Email
+async function sendOtpEmail(userEmail, otpCode) {
+  try {
+    const transporter = await getTransporter();
+    if (!transporter) return false;
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; text-align: center;">
+        <h2 style="color: #333;">ChooseMyLab Verification</h2>
+        <p style="color: #555; font-size: 16px;">Your One-Time Password (OTP) for login/signup is:</p>
+        <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #84cc16; margin: 20px 0;">
+          ${otpCode}
+        </div>
+        <p style="color: #888; font-size: 12px;">This code will expire in 5 minutes. Do not share this code with anyone.</p>
+      </div>
+    `;
+
+    await transporter.sendMail({
+      from: `"ChooseMyLab Auth" <${process.env.EMAIL_USER}>`,
+      to: userEmail,
+      subject: "Your ChooseMyLab Login Code",
+      html: htmlContent,
+    });
+
+    console.log(`\n✅ [EMAIL SYSTEM] Real OTP email successfully delivered to ${userEmail}\n`);
+    return true;
+  } catch (error) {
+    console.error("❌ [EMAIL SYSTEM] Error sending real OTP email:", error);
     return false;
   }
 }
 
 module.exports = {
-  sendWelcomeEmail
+  sendWelcomeEmail,
+  sendOtpEmail
 };
