@@ -21,12 +21,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleMapClick = (e, item) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const url = getMapLink(item);
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+
 
   // Lock body scroll when modal is active so it stays perfectly visible at center without background scrolling
   useEffect(() => {
@@ -315,27 +310,32 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                     {t.lab_name || t.lab}
                   </span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", ...S.muted, fontSize: 12 }}>
-                  <span>🏢 {t.branch_name || "Main"} Branch</span>
-                  {formatDistance(t) && (
-                    <span>
-                      • <a
+                <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 4 }}>
+                  <div style={{ ...S.muted, fontSize: 12 }}>
+                    🏢 {t.branch_name || "Main"} Branch
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, ...S.muted, fontSize: 12, flexWrap: "wrap" }}>
+                    {formatDistance(t) && (
+                      <a
                         href={getMapLink(t)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={(e) => handleMapClick(e, t)}
                         style={{
                           color: "var(--lime)",
-                          textDecoration: "underline",
+                          textDecoration: "none",
                           fontWeight: 600,
-                          cursor: "pointer"
+                          cursor: "pointer",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4
                         }}
                       >
                         📍 {formatDistance(t)}
                       </a>
-                    </span>
-                  )}
-                  {t.rep && <span>• ⏱ Report: {t.rep}</span>}
+                    )}
+                    {formatDistance(t) && t.rep && <span>•</span>}
+                    {t.rep && <span>⏱ Report: {t.rep}</span>}
+                  </div>
                 </div>
                 
                 {/* Price Display directly on the card */}
