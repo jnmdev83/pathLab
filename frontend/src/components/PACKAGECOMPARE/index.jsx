@@ -64,14 +64,14 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
             ...S.mono,
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 5,
+            gap: 4,
             background: 'rgba(37,99,235,.05)',
             color: 'var(--lime)',
-            border: '1.5px solid rgba(37,99,235,.15)',
-            padding: '6px 12px',
+            border: '1px solid rgba(37,99,235,.15)',
+            padding: '4px 10px',
             borderRadius: 99,
             cursor: 'pointer',
-            fontSize: 11,
+            fontSize: 10,
             fontWeight: 600,
             whiteSpace: 'nowrap',
             transition: 'all 0.15s ease'
@@ -85,7 +85,7 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
         <select 
           value={sort} 
           onChange={e => setSort(e.target.value)}
-          style={{ padding: '6px 10px', ...S.mono, fontSize: 12, borderRadius: 8, border: '1px solid var(--border)', width: 'auto' }}
+          style={{ padding: '4px 8px', ...S.mono, fontSize: 11, borderRadius: 6, border: '1px solid var(--border)', width: 'auto' }}
         >
           <option value="low">Price: Low to High</option>
           <option value="high">Price: High to Low</option>
