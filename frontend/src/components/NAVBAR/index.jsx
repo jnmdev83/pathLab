@@ -53,7 +53,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: 8,
+          gap: 20,
           height: 54,
         }}
       >
@@ -76,7 +76,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
         </button>
 
         {/* Links */}
-        <div className="desktop-nav-links" style={{ display: "flex", gap: 2, flex: 1, overflowX: "auto" }}>
+        <div className="desktop-nav-links" style={{ display: "flex", gap: 2, overflowX: "auto" }}>
           {links.map(([label, p]) => (
             <button
               key={p}
@@ -113,8 +113,8 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
           ))}
         </div>
 
-        {/* Search */}
-        <div style={{ position: "relative", flexShrink: 0 }}>
+        {/* Search — pushed to the right with marginLeft auto */}
+        <div style={{ position: "relative", flexShrink: 0, marginLeft: "auto" }}>
           <span
             style={{
               position: "absolute",

@@ -46,7 +46,7 @@ exports.put_api_bookings_id_reschedule = async (req, res) => {
        RETURNING *`,
       [booking_date, time_slot, id]
     );
-    if (rows.length > 0) res.json({ success: true, booking: rows[0] });
+    if (rows.length > 0) res.json({ success: true, booking: rows[0] }); 
     else res.status(400).json({ error: 'Cannot reschedule a completed booking' });
   } catch (error) {
     console.error(error);
