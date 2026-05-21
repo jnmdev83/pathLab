@@ -34,6 +34,7 @@ export function Signup({ setUser, setPage }) {
   const [showGooglePopup, setShowGooglePopup] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState("");
   const [customGoogleName, setCustomGoogleName] = useState("");
+  const [showCustomGoogle, setShowCustomGoogle] = useState(false);
 
   // ─── EMAIL/PASSWORD SUBMIT HANDLER ───
   // 🧒 CHILD-FRIENDLY EXPLANATION:
@@ -105,18 +106,14 @@ export function Signup({ setUser, setPage }) {
     fetch(`${API_BASE_URL}/api/auth/send-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone }),
+      body: JSON.stringify({ email }), // 🧒 Now sending Email instead of Phone!
     })
       .then((res) => res.json())
       .then((data) => {
         setLoading(false);
         if (data.success) {
           setOtpSent(true);
-          setSuccessMsg("SMS OTP simulated successfully!");
-          // Trigger a beautiful simulated push notification SMS overlay at the top!
-          setSimulatedSms(`💬 SMS from ChooseMyLab: Your secret OTP is [${data.simulatedOtp}]. Enter it to sign in!`);
-          // Clear notification alert after 10 seconds
-          setTimeout(() => setSimulatedSms(""), 10000);
+          setSuccessMsg("Check your inbox! We sent a real OTP email.");
         } else {
           setErr(data.error || "Failed to request OTP.");
         }
@@ -142,11 +139,10 @@ export function Signup({ setUser, setPage }) {
     setErr("");
 
     const body = {
-      phone,
+      email, // Using email instead of phone!
       otp: otpCode,
-      // If we are in the second step of registration, send these along to create the account!
       name: needsOtpRegistration ? name : undefined,
-      email: needsOtpRegistration ? email : undefined
+      phone: needsOtpRegistration ? phone : undefined
     };
 
     fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
@@ -164,9 +160,9 @@ export function Signup({ setUser, setPage }) {
         setLoading(false);
         if (data.success) {
           if (data.needsRegistration) {
-            // 🛡️ EDGE CASE: Backend says the phone is verified but we need Name and Email to complete signup!
+            // 🛡️ EDGE CASE: Backend says the email is verified but we need Name and Phone to complete signup!
             setNeedsOtpRegistration(true);
-            setSuccessMsg("Phone verified! Please enter your name and email to complete registration.");
+            setSuccessMsg("Email verified! Please enter your name and phone number to complete registration.");
           } else {
             // Log them in!
             setUser(data.user);
@@ -330,7 +326,7 @@ export function Signup({ setUser, setPage }) {
               transition: "all .2s",
             }}
           >
-            📱 Mobile OTP
+            ✉️ Email OTP
           </button>
         </div>
 
@@ -474,15 +470,15 @@ export function Signup({ setUser, setPage }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               
               {!otpSent ? (
-                // STEP A: ENTER PHONE
+                // STEP A: ENTER EMAIL
                 <div>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Mobile Number</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Email Address</label>
                   <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
                     <input
-                      type="tel"
-                      placeholder="10-digit phone number"
-                      value={phone}
-                      onChange={(e) => { setPhone(e.target.value); setErr(""); }}
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setErr(""); }}
                       style={{ flex: 1, padding: 12, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--bg)", outline: "none" }}
                     />
                   </div>
@@ -509,7 +505,7 @@ export function Signup({ setUser, setPage }) {
                     />
                   </div>
 
-                  {/* 🛡️ EDGE CASE: Phone verified but user doesn't exist, collect profile registration details */}
+                  {/* 🛡️ EDGE CASE: Email verified but user doesn't exist, collect profile registration details */}
                   {needsOtpRegistration && (
                     <div style={{ display: "flex", flexDirection: "column", gap: 12, background: "var(--bg)", padding: 16, borderRadius: 12, border: "1.5px solid var(--border)" }}>
                       <span style={{ fontSize: 11, fontWeight: 700, color: "var(--lime)", textTransform: "uppercase" }}>
@@ -525,12 +521,12 @@ export function Signup({ setUser, setPage }) {
                         />
                       </div>
                       <div>
-                        <label style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)" }}>Email Address *</label>
+                        <label style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)" }}>Mobile Number *</label>
                         <input
-                          type="email"
-                          placeholder="youremail@test.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          type="tel"
+                          placeholder="10-digit phone number"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
                           style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid var(--border)", background: "var(--card)", outline: "none", marginTop: 4 }}
                         />
                       </div>
@@ -556,7 +552,7 @@ export function Signup({ setUser, setPage }) {
                     }}
                     style={{ background: "none", border: "none", color: "var(--muted)", textDecoration: "underline", fontSize: 11, cursor: "pointer" }}
                   >
-                    Change Phone Number
+                    Change Email Address
                   </button>
                 </div>
               )}
@@ -723,46 +719,81 @@ export function Signup({ setUser, setPage }) {
 
             {/* Simulated custom sign-in option */}
             <div style={{ borderTop: "1px solid #e0e0e0", paddingTop: 14 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#5f6368", textTransform: "uppercase", marginBottom: 8 }}>
-                Or use a custom account
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <input
-                  placeholder="Enter custom Google Name"
-                  value={customGoogleName}
-                  onChange={(e) => setCustomGoogleName(e.target.value)}
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid #e0e0e0", outline: "none", fontSize: 12 }}
-                />
-                <input
-                  type="email"
-                  placeholder="Enter custom Google Email"
-                  value={customGoogleEmail}
-                  onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                  style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid #e0e0e0", outline: "none", fontSize: 12 }}
-                />
+              {!showCustomGoogle ? (
                 <button
-                  onClick={() => {
-                    if (!customGoogleEmail || !customGoogleName) {
-                      alert("Please enter both custom name and email.");
-                      return;
-                    }
-                    handleGoogleAuth(customGoogleEmail, customGoogleName);
-                  }}
+                  onClick={() => setShowCustomGoogle(true)}
                   style={{
-                    width: "100%",
-                    padding: 10,
-                    borderRadius: 8,
-                    background: "#1a73e8",
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    border: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "12px 14px",
+                    borderRadius: 12,
+                    border: "1px solid transparent",
+                    background: "#fff",
                     cursor: "pointer",
+                    textAlign: "left",
+                    transition: "background-color 0.2s",
+                    width: "100%",
                   }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8f9fa"}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#fff"}
                 >
-                  Sign in with Custom Google account
+                  <div
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: "50%",
+                      background: "#f1f3f4",
+                      color: "#5f6368",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: 12,
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: "#3c4043" }}>Use another account</div>
                 </button>
-              </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, animation: "slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+                  <input
+                    placeholder="Enter custom Google Name"
+                    value={customGoogleName}
+                    onChange={(e) => setCustomGoogleName(e.target.value)}
+                    style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #dadce0", outline: "none", fontSize: 13 }}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Enter custom Google Email"
+                    value={customGoogleEmail}
+                    onChange={(e) => setCustomGoogleEmail(e.target.value)}
+                    style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #dadce0", outline: "none", fontSize: 13 }}
+                  />
+                  <button
+                    onClick={() => {
+                      if (!customGoogleEmail || !customGoogleName) {
+                        alert("Please enter both custom name and email.");
+                        return;
+                      }
+                      handleGoogleAuth(customGoogleEmail, customGoogleName);
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: 12,
+                      borderRadius: 8,
+                      background: "#1a73e8",
+                      color: "#fff",
+                      fontWeight: 600,
+                      fontSize: 13,
+                      border: "none",
+                      cursor: "pointer",
+                      marginTop: 4
+                    }}
+                  >
+                    Sign in to ChooseMyLab
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

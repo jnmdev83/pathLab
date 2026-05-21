@@ -1,6 +1,6 @@
 const db  = require('../config/db');
 const jwt = require('jsonwebtoken');
-const { sendWelcomeEmail } = require('../utils/mailer');
+const { sendWelcomeEmail, sendOtpEmail } = require('../utils/mailer');
 
 // JWT secret comes from environment variable. Falls back to a dev placeholder.
 // ⚠️  Set JWT_SECRET in your .env.production file for security.
@@ -74,32 +74,33 @@ const otpStore = new Map();
 
 // ─── POST /api/auth/send-otp ──────────────────────────────────────────────────
 // 🧒 CHILD-FRIENDLY EXPLANATION:
-// Sending an OTP is like mailing a temporary secret passcode to a kid's phone.
-// Since we don't have a real SMS satellite in our workspace, we generate a magic 4-digit code (like 4829)
-// and return it in our message so our app can display a cute pop-up simulated SMS text!
+// Sending an OTP is like mailing a temporary secret passcode to a kid's email.
+// We generate a magic 4-digit code (like 4829) and use our real mail carrier to send it!
 exports.post_api_send_otp = async (req, res) => {
-  const { phone } = req.body;
-  if (!phone || phone.length < 10) {
-    return res.status(400).json({ error: 'Please enter a valid 10-digit mobile number.' });
+  const { email } = req.body;
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
   }
 
   try {
     // Generate a random 4-digit number between 1000 and 9999
     const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
     
-    // Save it to our virtual box for this phone number, with a timestamp
-    otpStore.set(phone, {
+    // Save it to our virtual box for this email, with a timestamp
+    otpStore.set(email, {
       otp: generatedOtp,
       expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes from now
     });
 
-    console.log(`📡 [SMS SIMULATOR] Sent OTP code [${generatedOtp}] to mobile: ${phone}`);
+    console.log(`📡 [OTP SYSTEM] Sending OTP code [${generatedOtp}] to email: ${email}`);
 
-    // Return success AND the OTP so the frontend can simulate receiving the text message!
+    // Send the real email
+    await sendOtpEmail(email, generatedOtp);
+
+    // Return success
     res.json({ 
       success: true, 
-      message: 'OTP sent successfully!', 
-      simulatedOtp: generatedOtp // Frontend will display this beautifully
+      message: 'OTP sent successfully to your email!'
     });
   } catch (error) {
     console.error(error);
@@ -109,26 +110,23 @@ exports.post_api_send_otp = async (req, res) => {
 
 // ─── POST /api/auth/verify-otp ────────────────────────────────────────────────
 // 🧒 CHILD-FRIENDLY EXPLANATION:
-// Now we check if the kid entered the exact secret code we sent them!
-// If the code matches, they are verified. 
-// If they already have an account, we log them in!
-// If they are brand new, we create a fresh account using their unique details.
+// Now we check if the kid entered the exact secret code we sent them via email!
 exports.post_api_verify_otp = async (req, res) => {
-  const { phone, otp, name, email } = req.body;
+  const { email, otp, name, phone } = req.body;
 
-  if (!phone || !otp) {
-    return res.status(400).json({ error: 'Phone number and OTP code are required.' });
+  if (!email || !otp) {
+    return res.status(400).json({ error: 'Email and OTP code are required.' });
   }
 
   // 1. Get the OTP record from our virtual box
-  const record = otpStore.get(phone);
+  const record = otpStore.get(email);
   if (!record) {
-    return res.status(400).json({ error: 'No OTP requested for this number. Please request a new one.' });
+    return res.status(400).json({ error: 'No OTP requested for this email. Please request a new one.' });
   }
 
   // 2. Check if the OTP has expired
   if (Date.now() > record.expiresAt) {
-    otpStore.delete(phone);
+    otpStore.delete(email);
     return res.status(400).json({ error: 'This OTP has expired. Please request a new code.' });
   }
 
@@ -138,13 +136,13 @@ exports.post_api_verify_otp = async (req, res) => {
   }
 
   // OTP verified successfully! Let's erase it so it can't be reused.
-  otpStore.delete(phone);
+  otpStore.delete(email);
 
   try {
-    // 4. Check if the user already exists with this phone number
+    // 4. Check if the user already exists with this email address
     const { rows: existingUser } = await db.query(
-      'SELECT id, name, email, phone FROM users WHERE phone = $1',
-      [phone]
+      'SELECT id, name, email, phone FROM users WHERE email = $1',
+      [email]
     );
 
     if (existingUser.length > 0) {
@@ -157,19 +155,19 @@ exports.post_api_verify_otp = async (req, res) => {
     }
 
     // 🚀 USER DOES NOT EXIST: This is a new signup!
-    if (!name || !email) {
-      // Tell frontend we verified the phone, but need them to provide Name and Email to finish signup
+    if (!name || !phone) {
+      // Tell frontend we verified the email, but need them to provide Name and Phone to finish signup
       return res.json({ 
         success: true, 
         needsRegistration: true, 
-        message: 'Phone verified! Please complete your name and email to register.' 
+        message: 'Email verified! Please complete your name and phone to register.' 
       });
     }
 
-    // 🛡️ EDGE CASE: Check email uniqueness for new signup
-    const emailCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
-    if (emailCheck.rows.length > 0) {
-      return res.status(400).json({ error: 'This email is already registered. Please log in or use a different email.' });
+    // 🛡️ EDGE CASE: Check phone uniqueness for new signup
+    const phoneCheck = await db.query('SELECT id FROM users WHERE phone = $1', [phone]);
+    if (phoneCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'This phone is already registered. Please use a different phone number.' });
     }
 
     // Create the brand new user!
