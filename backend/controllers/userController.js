@@ -6,10 +6,27 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_change_in_production';
 
 // ─── POST /api/signup ────────────────────────────────────────────────────────
-// Registers a new user. Returns the created user (no password in response).
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// Imagine you are joining a new club! We need to write your name, email, and phone number on a card.
+// But wait! If another kid already has the same email or phone number in our list,
+// we cannot add you twice because that would confuse the club leader. 
+// So, we check our database first to make sure your email and phone are completely brand new!
 exports.post_api_signup = async (req, res) => {
   const { name, email, phone, password } = req.body;
   try {
+    // 🛡️ EDGE CASE: Ensure email has not been registered already
+    const emailCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'This email address is already registered. Please login instead!' });
+    }
+
+    // 🛡️ EDGE CASE: Ensure phone number has not been registered already
+    const phoneCheck = await db.query('SELECT id FROM users WHERE phone = $1', [phone]);
+    if (phoneCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'This phone number is already registered. Please login instead!' });
+    }
+
+    // 🎉 Everything is unique! Let's insert the new kid into our database card box.
     const { rows } = await db.query(
       `INSERT INTO users (name, email, phone, password)
        VALUES ($1, $2, $3, $4)
@@ -19,12 +36,14 @@ exports.post_api_signup = async (req, res) => {
     res.json({ success: true, user: rows[0] });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ error: 'Could not sign up. Email may already be registered.' });
+    res.status(500).json({ error: 'An unexpected database error occurred. Please try again.' });
   }
 };
 
 // ─── POST /api/login ─────────────────────────────────────────────────────────
-// Authenticates a regular user by email + password.
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// This is like whispering your secret password to open the magic club door!
+// We search for your email and verify your password matches. If it does, we say "Welcome back!"
 exports.post_api_login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -37,6 +56,180 @@ exports.post_api_login = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+// ─── OTP IN-MEMORY STORAGE ───────────────────────────────────────────────────
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// We use a small virtual box (a Map) to store the secret OTP codes we send to phones.
+// The code will expire/erase automatically after 5 minutes so no one can steal it!
+const otpStore = new Map();
+
+// ─── POST /api/auth/send-otp ──────────────────────────────────────────────────
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// Sending an OTP is like mailing a temporary secret passcode to a kid's phone.
+// Since we don't have a real SMS satellite in our workspace, we generate a magic 4-digit code (like 4829)
+// and return it in our message so our app can display a cute pop-up simulated SMS text!
+exports.post_api_send_otp = async (req, res) => {
+  const { phone } = req.body;
+  if (!phone || phone.length < 10) {
+    return res.status(400).json({ error: 'Please enter a valid 10-digit mobile number.' });
+  }
+
+  try {
+    // Generate a random 4-digit number between 1000 and 9999
+    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+    
+    // Save it to our virtual box for this phone number, with a timestamp
+    otpStore.set(phone, {
+      otp: generatedOtp,
+      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes from now
+    });
+
+    console.log(`📡 [SMS SIMULATOR] Sent OTP code [${generatedOtp}] to mobile: ${phone}`);
+
+    // Return success AND the OTP so the frontend can simulate receiving the text message!
+    res.json({ 
+      success: true, 
+      message: 'OTP sent successfully!', 
+      simulatedOtp: generatedOtp // Frontend will display this beautifully
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to send OTP. Please try again.' });
+  }
+};
+
+// ─── POST /api/auth/verify-otp ────────────────────────────────────────────────
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// Now we check if the kid entered the exact secret code we sent them!
+// If the code matches, they are verified. 
+// If they already have an account, we log them in!
+// If they are brand new, we create a fresh account using their unique details.
+exports.post_api_verify_otp = async (req, res) => {
+  const { phone, otp, name, email } = req.body;
+
+  if (!phone || !otp) {
+    return res.status(400).json({ error: 'Phone number and OTP code are required.' });
+  }
+
+  // 1. Get the OTP record from our virtual box
+  const record = otpStore.get(phone);
+  if (!record) {
+    return res.status(400).json({ error: 'No OTP requested for this number. Please request a new one.' });
+  }
+
+  // 2. Check if the OTP has expired
+  if (Date.now() > record.expiresAt) {
+    otpStore.delete(phone);
+    return res.status(400).json({ error: 'This OTP has expired. Please request a new code.' });
+  }
+
+  // 3. Verify matching code
+  if (record.otp !== otp) {
+    return res.status(400).json({ error: 'Invalid OTP code. Please enter the correct code.' });
+  }
+
+  // OTP verified successfully! Let's erase it so it can't be reused.
+  otpStore.delete(phone);
+
+  try {
+    // 4. Check if the user already exists with this phone number
+    const { rows: existingUser } = await db.query(
+      'SELECT id, name, email, phone FROM users WHERE phone = $1',
+      [phone]
+    );
+
+    if (existingUser.length > 0) {
+      // 🎉 USER EXISTS: Log them in directly!
+      return res.json({ 
+        success: true, 
+        message: 'OTP verified! Welcome back.', 
+        user: existingUser[0] 
+      });
+    }
+
+    // 🚀 USER DOES NOT EXIST: This is a new signup!
+    if (!name || !email) {
+      // Tell frontend we verified the phone, but need them to provide Name and Email to finish signup
+      return res.json({ 
+        success: true, 
+        needsRegistration: true, 
+        message: 'Phone verified! Please complete your name and email to register.' 
+      });
+    }
+
+    // 🛡️ EDGE CASE: Check email uniqueness for new signup
+    const emailCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'This email is already registered. Please log in or use a different email.' });
+    }
+
+    // Create the brand new user!
+    const randomPassword = Math.random().toString(36).substring(2, 10); // Simple random secure password
+    const { rows: newUser } = await db.query(
+      `INSERT INTO users (name, email, phone, password)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, name, email, phone`,
+      [name, email, phone, randomPassword]
+    );
+
+    res.json({ 
+      success: true, 
+      message: 'Registration successful via OTP!', 
+      user: newUser[0] 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong during OTP verification.' });
+  }
+};
+
+// ─── POST /api/auth/google ────────────────────────────────────────────────────
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// Google Sign-In is like showing your official school badge to enter the club instantly!
+// If your badge email is already in our list, we say "Come on in!" (Log in).
+// If not, we copy your name and email from Google and make you a brand new club card automatically!
+exports.post_api_google = async (req, res) => {
+  const { email, name } = req.body;
+
+  if (!email || !name) {
+    return res.status(400).json({ error: 'Google authentication did not provide required user info.' });
+  }
+
+  try {
+    // Check if the user is already in our database by their Google email
+    const { rows: existingUser } = await db.query(
+      'SELECT id, name, email, phone FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.length > 0) {
+      // 🎉 USER EXISTS: Log them in instantly!
+      return res.json({
+        success: true,
+        message: 'Google Sign-In successful! Welcome back.',
+        user: existingUser[0]
+      });
+    }
+
+    // 🚀 NEW USER: Sign them up automatically!
+    const randomPassword = 'google_' + Math.random().toString(36).substring(2, 10);
+    const { rows: newUser } = await db.query(
+      `INSERT INTO users (name, email, password)
+       VALUES ($1, $2, $3)
+       RETURNING id, name, email, phone`,
+      [name, email, randomPassword]
+    );
+
+    res.json({
+      success: true,
+      message: 'New account created automatically via Google!',
+      user: newUser[0]
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to authenticate with Google. Please try again.' });
   }
 };
 
