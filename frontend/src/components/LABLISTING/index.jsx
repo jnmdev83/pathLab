@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { S, formatDistance, compareNearby, MapLink } from '../../utils/reusables';
+import { S, formatDistance, compareNearby, MapLink, getMapLink } from '../../utils/reusables';
 import { PACKAGE_INCLUDES } from '../TABLEHEADERROWHELPERS';
 
 // LAB LISTING
@@ -20,6 +20,13 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleMapClick = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = getMapLink(item);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   // Lock body scroll when modal is active so it stays perfectly visible at center without background scrolling
   useEffect(() => {
@@ -310,7 +317,24 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", ...S.muted, fontSize: 12 }}>
                   <span>🏢 {t.branch_name || "Main"} Branch</span>
-                  {formatDistance(t) && <span>• 📍 {formatDistance(t)}</span>}
+                  {formatDistance(t) && (
+                    <span>
+                      • <a
+                        href={getMapLink(t)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => handleMapClick(e, t)}
+                        style={{
+                          color: "var(--lime)",
+                          textDecoration: "underline",
+                          fontWeight: 600,
+                          cursor: "pointer"
+                        }}
+                      >
+                        📍 {formatDistance(t)}
+                      </a>
+                    </span>
+                  )}
                   {t.rep && <span>• ⏱ Report: {t.rep}</span>}
                 </div>
                 

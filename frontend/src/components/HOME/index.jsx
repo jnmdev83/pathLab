@@ -128,6 +128,13 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
     return acc;
   }, {});
 
+  const handleMapClick = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = getMapLink(item);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   const renderLabCard = (lab, showDistance = false) => (
     <div
       key={lab.branch_id}
@@ -154,6 +161,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
             href={getMapLink(lab)}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => handleMapClick(e, lab)}
             style={{
               ...S.lime,
               display: "inline-flex",
@@ -163,7 +171,8 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
               fontWeight: 600,
               letterSpacing: ".02em",
               marginTop: 6,
-              textDecoration: "none",
+              textDecoration: "underline",
+              cursor: "pointer",
             }}
           >
             📍 {Number(lab.distance_km).toFixed(1)} km away
