@@ -116,9 +116,11 @@ export default function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const requestGeolocation = () => {
+  const requestGeolocation = (silent = true) => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser. Please enter your location or enable location access manually.");
+      if (!silent) {
+        alert("Geolocation is not supported by your browser. Please enter your location or enable location access manually.");
+      }
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -131,15 +133,21 @@ export default function App() {
       },
       (error) => {
         console.warn("Geolocation failed or denied:", error.message);
-        if (error.code === 1) {
-          alert("Location access denied. Please allow/enable location permissions for ChooseMyLab in your browser/app settings to find nearby labs.");
-        } else {
-          alert("Unable to detect location. Please turn on your device's location services (GPS) and allow browser access, then try clicking the button again.");
+        if (!silent) {
+          if (error.code === 1) {
+            alert("Location access denied. Please allow/enable location permissions for ChooseMyLab in your browser/app settings to find nearby labs.");
+          } else {
+            alert("Unable to detect location. Please turn on your device's location services (GPS) and allow browser access, then try clicking the button again.");
+          }
         }
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 },
     );
   };
+
+  useEffect(() => {
+    requestGeolocation(true);
+  }, []);
 
 
   // Fetch tests dynamically from our PostgreSQL database!
@@ -191,6 +199,8 @@ export default function App() {
             setPage={setPage}
             setSelectedBranch={setSelectedBranch}
             setBranchTests={setBranchTests}
+            userLocation={userLocation}
+            requestGeolocation={requestGeolocation}
           />
         );
       case "blood":

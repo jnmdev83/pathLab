@@ -4,8 +4,8 @@ import { CATEGORIES } from '../../utils/data';
 import { API_BASE_URL } from '../../config';
 
 // HOME
-export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }) {
-  const [searchMethod, setSearchMethod] = useState("gps");
+export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, userLocation, requestGeolocation }) {
+  const [searchMethod, setSearchMethod] = useState("city");
   const [selectedCity, setSelectedCity] = useState("Delhi");
   const [radius, setRadius] = useState(5);
   const [gpsLoading, setGpsLoading] = useState(false);
@@ -13,10 +13,6 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   const [nearbyLabs, setNearbyLabs] = useState([]);
   const [cityLabs, setCityLabs] = useState([]);
   const [isLoadingResults, setIsLoadingResults] = useState(false);
-
-  useEffect(() => {
-    requestUserLocation();
-  }, []);
 
   const fetchNearbyLabs = (lat, lng, searchRadius = radius) => {
     setIsLoadingResults(true);
@@ -31,38 +27,55 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
       .finally(() => setIsLoadingResults(false));
   };
 
+  const [hasRequested, setHasRequested] = useState(false);
+
   const requestUserLocation = () => {
     setSearchMethod("gps");
     setGpsLoading(true);
     setGpsError("");
     setNearbyLabs([]);
+    setHasRequested(false);
+
+    const handleFetchWithCoords = (latitude, longitude) => {
+      fetch(`${API_BASE_URL}/api/dev/seed-nearby-lab`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat: latitude, lng: longitude }),
+      })
+        .catch(() => null)
+        .finally(() => {
+          fetchNearbyLabs(latitude, longitude);
+          setHasRequested(true);
+          setGpsLoading(false);
+        });
+    };
+
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      handleFetchWithCoords(userLocation.lat, userLocation.lng);
+      return;
+    }
+
     if (!navigator.geolocation) {
       setGpsLoading(false);
       setGpsError("Geolocation not supported. Please use manual city search.");
       return;
     }
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setGpsLoading(false);
-        fetch(`${API_BASE_URL}/api/dev/seed-nearby-lab`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lat: latitude, lng: longitude }),
-        })
-          .catch(() => null)
-          .finally(() => fetchNearbyLabs(latitude, longitude));
+        handleFetchWithCoords(latitude, longitude);
       },
       (error) => {
         setGpsLoading(false);
         if (error.code === error.PERMISSION_DENIED)
-          setGpsError("Permission denied. Please use manual city search.");
+          setGpsError("Location access was denied. Please allow location permissions or search by city manually.");
         else if (error.code === error.TIMEOUT)
           setGpsError("Location request timed out. Please try city search.");
         else setGpsError("Unable to detect your location.");
-        setSearchMethod("city");
+        setHasRequested(false);
       },
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
     );
   };
 
@@ -156,15 +169,18 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
         {/* Sleek Row Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 18 }}>📍</span>
             <h2 style={{ ...S.serif, fontSize: 18, fontWeight: 700, margin: 0 }}>Find Labs near you</h2>
           </div>
           <button 
             onClick={() => {
               if (searchMethod === "gps") {
                 setSearchMethod("city");
+                setNearbyLabs([]);
+                setHasRequested(false);
               } else {
-                requestUserLocation();
+                setSearchMethod("gps");
+                setNearbyLabs([]);
+                setHasRequested(false);
               }
             }}
             style={{
@@ -182,7 +198,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
             onMouseEnter={(e) => e.target.style.background = "rgba(37,99,235,.12)"}
             onMouseLeave={(e) => e.target.style.background = "rgba(37,99,235,.06)"}
           >
-            {searchMethod === "gps" ? "🔍 Search by City" : "🛰️ Use Live GPS"}
+            {searchMethod === "gps" ? "🔍 Search by City" : "🔍 Search Nearby"}
           </button>
         </div>
 
@@ -195,7 +211,9 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
               <option value={10}>10 KM</option>
               <option value={25}>25 KM</option>
             </select>
-            <button className="bg" style={{ padding: "0 14px", height: 34, fontSize: 12 }} onClick={requestUserLocation}>Refresh GPS</button>
+            <button className="location-search-pill-btn" style={{ height: 34, padding: "0 18px" }} onClick={requestUserLocation}>
+              Search
+            </button>
           </div>
         )}
 
@@ -252,11 +270,11 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
         )}
 
 
-        {searchMethod === "gps" && nearbyLabs.length > 0 && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
-            {nearbyLabs.map((lab) => renderLabCard(lab, true))}
-          </div>
-        )}
+          {searchMethod === "gps" && hasRequested && nearbyLabs.length > 0 && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 10 }}>
+              {nearbyLabs.map((lab) => renderLabCard(lab, true))}
+            </div>
+          )}
         {searchMethod === "gps" && !isLoadingResults && nearbyLabs.length === 0 && !gpsError && (
           <div style={{ ...S.muted, fontSize: 13 }}>No labs found in this radius yet.</div>
         )}
@@ -274,7 +292,7 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests }
   );
 }
 
-export function Home({ setPage, setSelectedBranch, setBranchTests }) {
+export function Home({ setPage, setSelectedBranch, setBranchTests, userLocation, requestGeolocation }) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const chunkArray = (arr, size) => {
@@ -390,6 +408,8 @@ export function Home({ setPage, setSelectedBranch, setBranchTests }) {
         setPage={setPage}
         setSelectedBranch={setSelectedBranch}
         setBranchTests={setBranchTests}
+        userLocation={userLocation}
+        requestGeolocation={requestGeolocation}
       />
 
       {/* Section label */}

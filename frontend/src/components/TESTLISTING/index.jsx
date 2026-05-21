@@ -263,24 +263,6 @@ export function Listing({ cat, title, setPage, setTestName, allTests, packages, 
           flexWrap: "wrap",
         }}
       >
-        <button
-          onClick={requestGeolocation}
-          title="Detect Location"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            cursor: "pointer",
-            fontSize: 14,
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          📍
-        </button>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: "auto" }}>
           <span
             style={{
