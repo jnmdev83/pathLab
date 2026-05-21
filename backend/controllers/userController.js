@@ -1,5 +1,6 @@
 const db  = require('../config/db');
 const jwt = require('jsonwebtoken');
+const { sendWelcomeEmail } = require('../utils/mailer');
 
 // JWT secret comes from environment variable. Falls back to a dev placeholder.
 // ⚠️  Set JWT_SECRET in your .env.production file for security.
@@ -33,6 +34,12 @@ exports.post_api_signup = async (req, res) => {
        RETURNING id, name, email, phone`,
       [name, email, phone, password]
     );
+
+    // 📧 SEND WELCOME EMAIL (Fire and forget, don't wait for it to block the response)
+    if (email) {
+      sendWelcomeEmail(email, name);
+    }
+
     res.json({ success: true, user: rows[0] });
   } catch (error) {
     console.error(error);
@@ -174,6 +181,11 @@ exports.post_api_verify_otp = async (req, res) => {
       [name, email, phone, randomPassword]
     );
 
+    // 📧 SEND WELCOME EMAIL
+    if (email) {
+      sendWelcomeEmail(email, name);
+    }
+
     res.json({ 
       success: true, 
       message: 'Registration successful via OTP!', 
@@ -221,6 +233,11 @@ exports.post_api_google = async (req, res) => {
        RETURNING id, name, email, phone`,
       [name, email, randomPassword]
     );
+
+    // 📧 SEND WELCOME EMAIL
+    if (email) {
+      sendWelcomeEmail(email, name);
+    }
 
     res.json({
       success: true,
