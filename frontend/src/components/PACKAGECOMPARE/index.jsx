@@ -43,12 +43,6 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
   return (
     <div className="fu animate-in">
       <div style={{ marginBottom: 30 }}>
-        <button 
-          onClick={() => setPage("package")}
-          style={{ ...S.mono, ...S.muted, background: 'none', border: 'none', cursor: 'pointer', marginBottom: 10 }}
-        >
-          ← Back to Packages
-        </button>
         <h1 style={{ ...S.serif, fontSize: 38, marginBottom: 10 }}>{selectedPackage.name}</h1>
         <p style={{ ...S.muted, maxWidth: 700, fontSize: 16 }}>{selectedPackage.description}</p>
         
@@ -64,29 +58,74 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
 
       <div className="package-detail-grid">
         {/* Left Sidebar: Included Tests */}
-        <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, height: 'fit-content' }}>
-          <h3 style={{ ...S.mono, fontSize: 14, textTransform: 'uppercase', marginBottom: 15, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>📋</span> Included Tests
+        <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 20, padding: "24px 20px", height: 'fit-content' }}>
+          <h3 style={{ ...S.mono, fontSize: 13, textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>📋</span> Included Diagnostics
           </h3>
+          <div style={{ ...S.muted, fontSize: 11, marginBottom: 20 }}>💡 Tap any test card below to read its clinical details.</div>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...S.muted, fontSize: 11, marginBottom: 10 }}>💡 Click any test below to read its description.</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {includedTests.map(t => {
               const isExpanded = !!expandedTests[t.id];
+              let catLabel = "🧪 Diagnostic";
+              let catBg = "rgba(37,99,235,.05)";
+              let catColor = "var(--lime)";
+              
+              const category = (t.cat || '').toLowerCase();
+              if (category.includes("blood")) {
+                catLabel = "🩸 Blood Specimen";
+                catBg = "rgba(239,68,68,.05)";
+                catColor = "#ef4444";
+              } else if (category.includes("oncology") || category.includes("cancer")) {
+                catLabel = "🎗 Oncology Marker";
+                catBg = "rgba(139,92,246,.05)";
+                catColor = "#8b5cf6";
+              } else if (category.includes("scanning") || category.includes("imaging")) {
+                catLabel = "📸 Imaging Scan";
+                catBg = "rgba(245,158,11,.05)";
+                catColor = "#f59e0b";
+              } else if (category.includes("cardiac") || category.includes("heart")) {
+                catLabel = "❤️ Cardiology";
+                catBg = "rgba(236,72,153,.05)";
+                catColor = "#ec4899";
+              }
+
               return (
                 <div 
                   key={t.id} 
                   style={{ 
-                    borderBottom: '1px solid var(--border)', 
-                    padding: '12px 0', 
-                    cursor: 'pointer' 
+                    border: isExpanded ? '1px solid var(--lime)' : '1px solid var(--border)', 
+                    borderRadius: 12,
+                    padding: '14px 16px', 
+                    cursor: 'pointer',
+                    background: isExpanded ? 'rgba(37,99,235,.02)' : 'var(--card)',
+                    transition: 'all 0.15s ease'
                   }}
                   onClick={() => toggleTestExpand(t.id)}
+                  onMouseEnter={e => {
+                    if (!isExpanded) e.currentTarget.style.borderColor = 'rgba(37,99,235,.3)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isExpanded) e.currentTarget.style.borderColor = 'var(--border)';
+                  }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 16 }}>✅</span>
-                      <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{t.name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{t.name}</span>
+                      <div>
+                        <span style={{ 
+                          fontSize: 9, 
+                          fontWeight: 700, 
+                          color: catColor, 
+                          background: catBg, 
+                          padding: '3px 8px', 
+                          borderRadius: 6, 
+                          textTransform: 'uppercase',
+                          letterSpacing: '.05em'
+                        }}>
+                          {catLabel}
+                        </span>
+                      </div>
                     </div>
                     <span style={{ 
                       fontSize: 10, 
@@ -99,15 +138,14 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
                   </div>
                   {isExpanded && (
                     <div style={{ 
-                      marginTop: 8, 
-                      marginLeft: 26, 
+                      marginTop: 12, 
                       fontSize: 12, 
                       color: 'var(--muted)', 
                       lineHeight: 1.5,
                       background: 'var(--surface)',
-                      padding: '10px 14px',
+                      padding: '12px 14px',
                       borderRadius: 8,
-                      borderLeft: '2px solid var(--lime)'
+                      borderLeft: '3px solid var(--lime)'
                     }}>
                       {t.description || "Diagnostic laboratory test included as part of this healthcare screening package."}
                     </div>
@@ -121,8 +159,30 @@ export function PackageCompare({ selectedPackage, setPage, setTest, user, userLo
         {/* Right column: Compare Lab Pricing */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, flexWrap: 'wrap', gap: 12 }}>
+            <button 
+              onClick={() => setPage("package")}
+              style={{
+                ...S.mono,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                background: 'rgba(37,99,235,.05)',
+                color: 'var(--lime)',
+                border: '1.5px solid rgba(37,99,235,.15)',
+                padding: '8px 16px',
+                borderRadius: 99,
+                cursor: 'pointer',
+                fontSize: 12,
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,99,235,.1)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(37,99,235,.05)'}
+            >
+              ← Back to Packages
+            </button>
 
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginLeft: "auto" }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               <span style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: '.07em' }}>Sort</span>
               <select 
                 value={sort} 

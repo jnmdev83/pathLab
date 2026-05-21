@@ -98,7 +98,7 @@ export default function App() {
       else sessionStorage.removeItem("choosemylab_selectedPackage");
     } catch (e) {
       console.error(e);
-    }
+    } 
   };
 
   const setSelectedBranch = (br) => {
