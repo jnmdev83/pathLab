@@ -461,6 +461,7 @@ export function UserProfile({ user, setPage, setUser }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [err, setErr] = useState("");
+  const [hoveredIdx, setHoveredIdx] = useState(null);
 
   if (!user)
     return (
@@ -524,46 +525,129 @@ export function UserProfile({ user, setPage, setUser }) {
     setPage("home");
   };
 
+  const menuItems = [
+    {
+      title: "My Reports",
+      desc: "View your generated medical lab results",
+      icon: "📄",
+      page: "reports-page",
+      bg: "rgba(37, 99, 235, 0.07)",
+      color: "var(--lime)",
+    },
+    {
+      title: "My Bookings",
+      desc: "Track and reschedule your diagnostics",
+      icon: "📋",
+      page: "bookings-page",
+      bg: "rgba(139, 92, 246, 0.07)",
+      color: "#8b5cf6",
+    },
+    {
+      title: "Personal Information",
+      desc: "Edit your account and contact details",
+      icon: "👤",
+      action: () => setEditMode(true),
+      bg: "rgba(20, 184, 166, 0.07)",
+      color: "#14b8a6",
+    },
+  ];
+
   return (
-    <div className="fu" style={{ maxWidth: 560, margin: "0 auto" }}>
-      {/* Header section with Name, Email, and Phone */}
+    <div className="fu" style={{ maxWidth: 480, margin: "0 auto", padding: "0 10px" }}>
+      {/* Header section with Premium Blue Gradient and Glassmorphism */}
       <div
         style={{
-          background: "var(--card)",
-          border: "1.5px solid var(--border)",
-          borderRadius: 12,
-          padding: 24,
-          marginBottom: 18,
+          background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
+          borderRadius: 20,
+          padding: "28px 24px",
+          marginBottom: 20,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          gap: 16,
+          textAlign: "center",
+          boxShadow: "0 12px 30px rgba(37, 99, 235, 0.18)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
+        {/* Subtle background abstract shapes */}
         <div
           style={{
-            width: 62,
-            height: 62,
+            position: "absolute",
+            top: -20,
+            right: -20,
+            width: 100,
+            height: 100,
             borderRadius: "50%",
-            background: "var(--lime)",
+            background: "rgba(255, 255, 255, 0.06)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -30,
+            left: -30,
+            width: 120,
+            height: 120,
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.04)",
+          }}
+        />
+
+        {/* Initials avatar with glass borders */}
+        <div
+          style={{
+            width: 76,
+            height: 76,
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.12)",
+            backdropFilter: "blur(8px)",
+            border: "1.5px solid rgba(255, 255, 255, 0.25)",
             color: "#fff",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontWeight: 700,
-            fontSize: 22,
+            fontSize: 26,
             fontFamily: "var(--fb)",
+            marginBottom: 16,
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
           }}
         >
           {initials || "?"}
         </div>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>{name}</div>
-          <div style={{ ...S.muted, fontSize: 13, marginTop: 2 }}>{user.email}</div>
-          {phone && (
-            <div style={{ ...S.muted, fontSize: 13, marginTop: 2 }}>
-              📞 {phone}
-            </div>
-          )}
+
+        <div style={{ color: "#fff", fontWeight: 700, fontSize: 20, letterSpacing: "-0.01em" }}>
+          {name}
+        </div>
+        <div style={{ color: "rgba(255, 255, 255, 0.75)", fontSize: 12, fontFamily: "var(--fm)", marginTop: 4 }}>
+          {user.email}
+        </div>
+        {phone && (
+          <div style={{ color: "rgba(255, 255, 255, 0.9)", fontSize: 13, marginTop: 8, display: "flex", alignItems: "center", gap: 6, fontWeight: 500 }}>
+            <span>📞</span> {phone}
+          </div>
+        )}
+
+        <div
+          style={{
+            marginTop: 14,
+            background: "rgba(255, 255, 255, 0.15)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            color: "#fff",
+            fontSize: 10,
+            fontFamily: "var(--fm)",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            padding: "4px 12px",
+            borderRadius: 99,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <span>✓</span> Verified Profile
         </div>
       </div>
 
@@ -575,9 +659,10 @@ export function UserProfile({ user, setPage, setUser }) {
             color: "#16a34a",
             ...S.mono,
             fontSize: 13,
-            padding: "10px 16px",
-            borderRadius: 8,
+            padding: "12px 16px",
+            borderRadius: 12,
             marginBottom: 16,
+            textAlign: "center",
           }}
         >
           ✓ Profile updated successfully!
@@ -586,108 +671,117 @@ export function UserProfile({ user, setPage, setUser }) {
 
       {/* Main Options / Edit Form */}
       {!editMode ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Quick links as requested */}
-          <button
-            onClick={() => setPage("reports-page")}
-            style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 12,
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: "pointer",
-              color: "var(--text)",
-              textAlign: "left",
-              width: "100%",
-              transition: "all .15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-          >
-            <span style={{ fontSize: 20 }}>📄</span>
-            My Reports
-          </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
+          {menuItems.map((item, index) => {
+            const isHovered = hoveredIdx === index;
+            return (
+              <button
+                key={index}
+                onClick={item.action ? item.action : () => setPage(item.page)}
+                onMouseEnter={() => setHoveredIdx(index)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                style={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 16,
+                  padding: "16px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  color: "var(--text)",
+                  textAlign: "left",
+                  width: "100%",
+                  transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                  boxShadow: isHovered ? "0 8px 24px rgba(0, 0, 0, 0.04)" : "none",
+                  transform: isHovered ? "translateY(-2px)" : "none",
+                  borderColor: isHovered ? "var(--lime)" : "var(--border)",
+                }}
+              >
+                {/* Modern Circular Icon Badging */}
+                <div
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: "50%",
+                    background: item.bg,
+                    color: item.color,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 18,
+                    flexShrink: 0,
+                    transition: "transform 0.25s",
+                    transform: isHovered ? "scale(1.08)" : "none",
+                  }}
+                >
+                  {item.icon}
+                </div>
 
-          <button
-            onClick={() => setPage("bookings-page")}
-            style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 12,
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: "pointer",
-              color: "var(--text)",
-              textAlign: "left",
-              width: "100%",
-              transition: "all .15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-          >
-            <span style={{ fontSize: 20 }}>📋</span>
-            My Bookings
-          </button>
+                <div style={{ marginLeft: 16, flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: "var(--text)" }}>{item.title}</div>
+                  <div style={{ ...S.muted, fontSize: 11, fontWeight: 400, marginTop: 2 }}>{item.desc}</div>
+                </div>
 
-          <button
-            onClick={() => setEditMode(true)}
-            style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 12,
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: "pointer",
-              color: "var(--text)",
-              textAlign: "left",
-              width: "100%",
-              transition: "all .15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--lime)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-          >
-            <span style={{ fontSize: 20 }}>👤</span>
-            Personal Information
-          </button>
+                <span
+                  style={{
+                    fontSize: 16,
+                    color: isHovered ? "var(--lime)" : "var(--muted)",
+                    transition: "transform 0.2s",
+                    transform: isHovered ? "translateX(4px)" : "none",
+                  }}
+                >
+                  →
+                </span>
+              </button>
+            );
+          })}
 
-          {/* Logout Section */}
+          {/* Premium styled Logout Card */}
           <button
             onClick={handleLogout}
+            onMouseEnter={() => setHoveredIdx("logout")}
+            onMouseLeave={() => setHoveredIdx(null)}
             style={{
-              background: "rgba(239, 68, 68, 0.05)",
-              border: "1.5px solid rgba(239, 68, 68, 0.2)",
-              borderRadius: 12,
-              padding: "18px 24px",
+              border: "1px dashed rgba(239, 68, 68, 0.25)",
+              borderRadius: 16,
+              padding: "16px 20px",
               display: "flex",
               alignItems: "center",
-              gap: 14,
               fontSize: 15,
               fontWeight: 700,
               cursor: "pointer",
               color: "var(--danger)",
               textAlign: "left",
               width: "100%",
-              transition: "all .15s",
-              marginTop: 12,
+              transition: "all 0.25s",
+              marginTop: 10,
+              borderColor: hoveredIdx === "logout" ? "var(--danger)" : "rgba(239, 68, 68, 0.25)",
+              background: hoveredIdx === "logout" ? "rgba(239, 68, 68, 0.06)" : "rgba(239, 68, 68, 0.03)",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(239, 68, 68, 0.05)")}
           >
-            <span style={{ fontSize: 20 }}>🚪</span>
-            Logout
+            <div
+              style={{
+                width: 42,
+                height: 42,
+                borderRadius: "50%",
+                background: "rgba(239, 68, 68, 0.08)",
+                color: "var(--danger)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 18,
+                flexShrink: 0,
+              }}
+            >
+              🚪
+            </div>
+            <div style={{ marginLeft: 16, flex: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: 15 }}>Logout</div>
+              <div style={{ color: "rgba(239, 68, 68, 0.6)", fontSize: 11, fontWeight: 400, marginTop: 2 }}>Securely sign out of your account</div>
+            </div>
+            <span style={{ fontSize: 16, opacity: hoveredIdx === "logout" ? 1 : 0.6 }}>→</span>
           </button>
         </div>
       ) : (
