@@ -671,7 +671,7 @@ export function UserProfile({ user, setPage, setUser }) {
 
       {/* Main Options / Edit Form */}
       {!editMode ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 20 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
           {menuItems.map((item, index) => {
             const isHovered = hoveredIdx === index;
             return (
@@ -756,7 +756,7 @@ export function UserProfile({ user, setPage, setUser }) {
               textAlign: "left",
               width: "100%",
               transition: "all 0.25s",
-              marginTop: 10,
+              marginTop: 2,
               borderColor: hoveredIdx === "logout" ? "var(--danger)" : "rgba(239, 68, 68, 0.25)",
               background: hoveredIdx === "logout" ? "rgba(239, 68, 68, 0.06)" : "rgba(239, 68, 68, 0.03)",
             }}
