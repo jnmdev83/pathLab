@@ -322,11 +322,10 @@ label {
     order: 1 !important;
   }
 
-  /* Search input goes middle and stretches */
+  /* Search input goes right with auto margin for spacing */
   nav>.nav-header>div:nth-child(3) {
     order: 2 !important;
-    flex: 1 !important;
-    width: auto !important;
+    margin-left: auto !important;
   }
 
   /* Profile avatar / login button goes right of search */
