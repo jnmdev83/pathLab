@@ -9,6 +9,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
   const [activeModalTest, setActiveModalTest] = useState(null);
   const [comparedLabs, setComparedLabs] = useState([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [showTestInfo, setShowTestInfo] = useState(false);
   const pageSize = 10;
   const [isMobile, setIsMobile] = useState(false);
   const [visibleCount, setVisibleCount] = useState(15);
@@ -163,6 +164,50 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
           </div>
         </div>
 
+        {/* Modern Premium Expandable Test Details Card */}
+        {allRows.length > 0 && (
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1.5px solid var(--border)",
+              borderRadius: 12,
+              padding: "12px 16px",
+              marginBottom: 16,
+              cursor: "pointer",
+              userSelect: "none",
+              transition: "all 0.15s ease",
+            }}
+            onClick={() => setShowTestInfo(!showTestInfo)}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 16 }}>📝</span>
+                <span style={{ fontWeight: 700, fontSize: 13, color: "var(--text)" }}>
+                  About this Test / Clinical Details
+                </span>
+              </div>
+              <span style={{ fontSize: 12, color: "var(--lime)", fontWeight: 600 }}>
+                {showTestInfo ? "Hide Details ✕" : "View Details ➔"}
+              </span>
+            </div>
+            {showTestInfo && (
+              <div
+                style={{
+                  marginTop: 12,
+                  paddingTop: 12,
+                  borderTop: "1px solid var(--border)",
+                  fontSize: 13,
+                  color: "var(--text)",
+                  lineHeight: 1.6,
+                  animation: "fadeIn 0.2s ease-in-out",
+                }}
+              >
+                {allRows[0]?.description || "This diagnostic test is performed to measure clinical parameters. Certified technicians will collect your blood or sample at home or at the lab branch to provide accurate reports."}
+              </div>
+            )}
+          </div>
+        )}
+
         <div
           style={{
             display: "flex",
@@ -263,10 +308,18 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                     {t.lab_name || t.lab}
                   </span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                  <span style={{ ...S.muted, fontSize: 12 }}>
-                    🏢 {t.branch_name || "Main"} Branch
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", ...S.muted, fontSize: 12 }}>
+                  <span>🏢 {t.branch_name || "Main"} Branch</span>
+                  {formatDistance(t) && <span>• 📍 {formatDistance(t)}</span>}
+                  {t.rep && <span>• ⏱ Report: {t.rep}</span>}
+                </div>
+                
+                {/* Price Display directly on the card */}
+                <div style={{ marginTop: 4 }}>
+                  <span style={{ ...S.mono, fontSize: 16, fontWeight: 700, color: "var(--lime)" }}>
+                    ₹{t.price}
                   </span>
+                  <span style={{ fontSize: 10, ...S.muted, marginLeft: 6 }}>All-Inclusive Rate</span>
                 </div>
               </div>
 
@@ -280,20 +333,6 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                   flexGrow: isMobile ? 1 : 0,
                 }}
               >
-                <button
-                  className="bg"
-                  onClick={() => setActiveModalTest(t)}
-                  style={{
-                    padding: "7px 13px",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  View Details
-                </button>
                 <button
                   className="bl"
                   onClick={() => {
@@ -497,196 +536,7 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
         </div>
       )}
 
-      {/* Pop-up Detail Modal / Slide-over Drawer RENDERED OUTSIDE OF FADE-UP ANIMATED CONTAINER */}
-      {activeModalTest && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.45)",
-            backdropFilter: "blur(6px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-            padding: 16,
-          }}
-          onClick={() => setActiveModalTest(null)}
-        >
-          <div
-            style={{
-              background: "var(--card)",
-              border: "1.5px solid var(--border)",
-              borderRadius: 16,
-              maxWidth: 500,
-              width: "100%",
-              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-              overflow: "hidden",
-              animation: "slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div
-              style={{
-                padding: "20px 24px",
-                borderBottom: "1px solid var(--border)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                background: "var(--surface)",
-              }}
-            >
-              <div>
-                <h3 style={{ ...S.serif, fontSize: 20, fontWeight: 700, margin: 0 }}>
-                  {activeModalTest.name}
-                </h3>
-                <div style={{ ...S.muted, fontSize: 12, marginTop: 4 }}>
-                  Provided by <strong>{activeModalTest.lab_name || activeModalTest.lab}</strong> ({activeModalTest.branch_name || "Main"} Branch)
-                </div>
-              </div>
-              <button
-                onClick={() => setActiveModalTest(null)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: 18,
-                  cursor: "pointer",
-                  color: "var(--muted)",
-                  padding: 4,
-                }}
-              >
-                ✕
-              </button>
-            </div>
 
-            {/* Modal Body */}
-            <div
-              style={{
-                padding: 24,
-                maxHeight: "calc(80vh - 120px)",
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-            >
-              {/* Distance / Location info if available */}
-              {formatDistance(activeModalTest) && (
-                <div
-                  style={{
-                    background: "rgba(37,99,235,0.06)",
-                    border: "1px solid rgba(37,99,235,0.15)",
-                    borderRadius: 8,
-                    padding: "8px 12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span style={{ fontSize: 13, fontWeight: 600, color: "var(--lime)" }}>
-                    📍 Nearest branch is {formatDistance(activeModalTest)}
-                  </span>
-                  <MapLink item={activeModalTest} style={{ margin: 0 }} />
-                </div>
-              )}
-
-              {/* Specifications pills */}
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <span style={{ ...S.tag, background: "var(--surface)" }}>
-                  ⏱ Report: {activeModalTest.rep}
-                </span>
-                <span style={{ ...S.tag, background: "var(--surface)", color: "var(--lime)" }}>
-                  ⚡ Status: Available
-                </span>
-              </div>
-
-              {/* Description */}
-              <div>
-                <h4 style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "var(--muted)", margin: "0 0 6px 0" }}>
-                  Description & Information
-                </h4>
-                <p style={{ fontSize: 13, color: "var(--text)", lineHeight: 1.6, margin: 0 }}>
-                  {activeModalTest.description || "This diagnostic test is performed to measure clinical parameters. Certified technicians will collect your blood or sample at home or at the lab branch to provide accurate reports."}
-                </p>
-              </div>
-
-              {/* Address details */}
-              <div>
-                <h4 style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "var(--muted)", margin: "0 0 6px 0" }}>
-                  Lab Address & Contact
-                </h4>
-                <div style={{ ...S.mono, fontSize: 12, lineHeight: 1.5 }}>
-                  📍 {activeModalTest.address || activeModalTest.loc || "Address not provided"}<br />
-                  📞 {activeModalTest.phone || "Phone unavailable"}
-                </div>
-                {!formatDistance(activeModalTest) && (
-                  <MapLink item={activeModalTest} style={{ display: "flex", marginTop: 8 }} />
-                )}
-              </div>
-
-              {/* Package includes */}
-              {activeModalTest.cat === "package" && PACKAGE_INCLUDES[activeModalTest.name] && (
-                <div>
-                  <h4 style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "var(--muted)", margin: "0 0 10px 0" }}>
-                    Included Tests ({PACKAGE_INCLUDES[activeModalTest.name].length})
-                  </h4>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                    {PACKAGE_INCLUDES[activeModalTest.name].map((inc) => (
-                      <div key={inc} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}>
-                        <span style={{ color: "var(--lime)" }}>✓</span>
-                        <span>{inc}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Footer */}
-            <div
-              style={{
-                padding: "16px 24px",
-                borderTop: "1px solid var(--border)",
-                background: "var(--surface)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 12,
-              }}
-            >
-              <div>
-                <div style={{ ...S.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: ".04em" }}>
-                  All-Inclusive Price
-                </div>
-                <div style={{ ...S.mono, fontSize: 24, fontWeight: 700, color: "var(--lime)" }}>
-                  ₹{activeModalTest.price}
-                </div>
-              </div>
-
-              <button
-                className="bl"
-                onClick={() => {
-                  setTest(activeModalTest);
-                  setActiveModalTest(null);
-                  user ? setPage("booking") : setPage("signup");
-                }}
-                style={{
-                  padding: "12px 24px",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  borderRadius: 8,
-                }}
-              >
-                Book Now →
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Price Comparison Modal */}
       {showCompareModal && (
