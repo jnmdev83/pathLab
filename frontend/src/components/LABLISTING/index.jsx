@@ -233,7 +233,16 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
               </div>
 
               {/* Right side: Action Buttons */}
-              <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  flex: isMobile ? 1 : "none",
+                  width: isMobile ? "100%" : "auto",
+                }}
+              >
                 <button
                   className="bg"
                   onClick={() => setActiveModalTest(t)}
@@ -280,7 +289,8 @@ export function LabListing({ testName, setPage, setTest, allTests, user, userLoc
                     padding: "4px 8px",
                     cursor: "pointer",
                     userSelect: "none",
-                    whiteSpace: "nowrap"
+                    whiteSpace: "nowrap",
+                    marginLeft: isMobile ? "auto" : 0,
                   }}
                 >
                   <input
