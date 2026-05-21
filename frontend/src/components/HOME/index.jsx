@@ -50,14 +50,10 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
         });
     };
 
-    if (userLocation && userLocation.lat && userLocation.lng) {
-      handleFetchWithCoords(userLocation.lat, userLocation.lng);
-      return;
-    }
-
     if (!navigator.geolocation) {
       setGpsLoading(false);
-      setGpsError("Geolocation not supported. Please use manual city search.");
+      setSearchMethod("city");
+      setGpsError("Geolocation not supported. Please search for a city/region manually.");
       return;
     }
 
@@ -68,11 +64,12 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
       },
       (error) => {
         setGpsLoading(false);
+        setSearchMethod("city");
         if (error.code === error.PERMISSION_DENIED)
-          setGpsError("Location access was denied. Please allow location permissions or search by city manually.");
+          setGpsError("Location access was denied. Please search for a city/region below.");
         else if (error.code === error.TIMEOUT)
-          setGpsError("Location request timed out. Please try city search.");
-        else setGpsError("Unable to detect your location.");
+          setGpsError("Location request timed out. Please search for a city/region below.");
+        else setGpsError("Unable to detect location. Please search for a city/region below.");
         setHasRequested(false);
       },
       { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
@@ -177,10 +174,9 @@ export function LocationSearchHub({ setPage, setSelectedBranch, setBranchTests, 
                 setSearchMethod("city");
                 setNearbyLabs([]);
                 setHasRequested(false);
+                setGpsError("");
               } else {
-                setSearchMethod("gps");
-                setNearbyLabs([]);
-                setHasRequested(false);
+                requestUserLocation();
               }
             }}
             style={{
