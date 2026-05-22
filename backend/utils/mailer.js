@@ -32,7 +32,10 @@ async function getTransporter() {
   }
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    family: 4, // 🚀 FORCE IPv4: Bypasses Render's IPv6 networking restrictions (fixes ENETUNREACH!)
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
