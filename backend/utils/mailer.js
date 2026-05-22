@@ -54,13 +54,14 @@ async function getTransporter() {
 
   return nodemailer.createTransport({
     host: smtpHost,
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // Use STARTTLS on port 587 instead of implicit TLS on port 465
     connectionTimeout: 10000,
     greetingTimeout: 10000,
     socketTimeout: 15000,
+    requireTLS: true, // Upgrade to TLS after connecting
     tls: {
-      servername: 'smtp.gmail.com', // Required: TLS certificate is issued to this hostname, not the IP
+      servername: 'smtp.gmail.com',
     },
     auth: {
       user: process.env.EMAIL_USER,
