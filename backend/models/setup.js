@@ -185,6 +185,12 @@ async function setupDatabase() {
     await db.query(`CREATE INDEX IF NOT EXISTS idx_lab_package_branches_package ON lab_package_branches (package_id)`);
     await db.query(`CREATE INDEX IF NOT EXISTS idx_lab_package_branches_price ON lab_package_branches (price)`);
 
+    // Alter packages table to add premium clinical columns
+    await db.query(`ALTER TABLE packages ADD COLUMN IF NOT EXISTS samples_required VARCHAR(150)`);
+    await db.query(`ALTER TABLE packages ADD COLUMN IF NOT EXISTS preparations TEXT`);
+    await db.query(`ALTER TABLE packages ADD COLUMN IF NOT EXISTS why_booked JSONB`);
+    await db.query(`ALTER TABLE packages ADD COLUMN IF NOT EXISTS what_it_measures JSONB`);
+
     // Seeding logic is guarded by the SEED_DEMO_DATA environment variable.
     // By default, it will not auto-delete or auto-seed so you can work with actual real data.
     const shouldSeed = process.env.SEED_DEMO_DATA === 'true';
@@ -463,11 +469,75 @@ async function setupDatabase() {
         }
       }
 
-      // 4. Hydrate package premium clinical metadata columns dynamically
+      // 4. Hydrate package premium clinical metadata columns in packages table
       await db.query(`
-        UPDATE tests
+        UPDATE packages
         SET 
-          samples_required = COALESCE(samples_required, 'Blood & Urine'),
+          samples_required = 'Blood & Urine Specimen',
+          preparations = 'Requires 10-12 hours of strict overnight fasting. Water is permitted.',
+          why_booked = '[
+            {"title": "Full System Screening", "body": "Checks 64 critical markers across heart, liver, kidneys, blood, and thyroid systems to establish a baseline health score."},
+            {"title": "Early Detection of Silent Killers", "body": "Screens for pre-diabetes, high cholesterol, liver fatty changes, and chronic inflammation before any physical symptoms manifest."},
+            {"title": "Preventative Lifestyle Auditing", "body": "Provides concrete biochemical feedback on your sleep, diet, stress, and exercise impacts to help customize your wellness roadmap."}
+          ]'::jsonb,
+          what_it_measures = '[
+            {"name": "Cardiovascular Health", "desc": "Evaluates lipid profiles, LDL/HDL ratio, and triglycerides for coronary risk tracking.", "strength": "95%"},
+            {"name": "Hepatic Metabolic Output", "desc": "LFT checks enzymes like SGOT/SGPT, albumin, and total bilirubin.", "strength": "100%"},
+            {"name": "Renal Filtration Rate", "desc": "KFT measures creatinine, blood urea nitrogen, and waste clearance.", "strength": "90%"},
+            {"name": "Thyroid Speed (TSH)", "desc": "TSH checks metabolic activation levels for hypothyroidism tracking.", "strength": "100%"},
+            {"name": "Hematological Vitality", "desc": "CBC counts red/white cells, hemoglobin level, and platelet values.", "strength": "100%"},
+            {"name": "Glycemic Control Index", "desc": "Fasting blood sugar tracks average insulin regularities and glucose levels.", "strength": "95%"}
+          ]'::jsonb
+        WHERE name LIKE '%Full Body%' OR name LIKE '%Checkup%'
+      `);
+
+      await db.query(`
+        UPDATE packages
+        SET 
+          samples_required = 'Blood & Urine Specimen',
+          preparations = 'Overnight fasting required for 10 to 12 hours. Do not consume alcohol 24 hours prior.',
+          why_booked = '[
+            {"title": "Geriatric Health Baseline", "body": "Custom-designed for adults aged 60+ to evaluate systemic metabolic slowing and age-associated chronic conditions."},
+            {"title": "Cardio-Vascular & Bone Checks", "body": "Tracks artery clogging cholesterol ratios alongside bone mineral calcium retention to monitor stroke and fracture risks."},
+            {"title": "Dehydration & Kidney Auditing", "body": "Checks renal clearance and electrolyte balances, which frequently fluctuate in older adults and impact cognitive function."}
+          ]'::jsonb,
+          what_it_measures = '[
+            {"name": "Bone Density & Calcium", "desc": "Measures serum calcium levels to track osteoporosis risk and joint health.", "strength": "95%"},
+            {"name": "Kidney Health & Clearance", "desc": "BUN, Creatinine, and Urea checks to track hydration and kidney age.", "strength": "100%"},
+            {"name": "Heart & Artery Integrity", "desc": "Lipid screening to evaluate stroke and cardiovascular artery blocks.", "strength": "90%"},
+            {"name": "Blood Composition", "desc": "CBC screens for geriatric anemia, chronic inflammation, and immune strength.", "strength": "100%"},
+            {"name": "Liver Waste Filtering", "desc": "LFT screening to track liver enzyme health and toxic chemical filtering.", "strength": "95%"},
+            {"name": "Diabetes & Sugar Control", "desc": "HbA1c & Fasting glucose tracks average long-term insulin efficiency.", "strength": "100%"}
+          ]'::jsonb
+        WHERE name LIKE '%Senior Citizen%'
+      `);
+
+      await db.query(`
+        UPDATE packages
+        SET 
+          samples_required = 'Blood & Urine Specimen',
+          preparations = 'Requires overnight fasting for 8 to 10 hours. Best scheduled 5-10 days after menstrual cycle.',
+          why_booked = '[
+            {"title": "Hormonal & Thyroid Balance", "body": "Tracks TSH, bone density minerals, and blood counts to screen for thyroid disorders and hormonal imbalances common in women."},
+            {"title": "Anemia & Iron Store Screening", "body": "Evaluates hemoglobin, ferritin, and iron indexes to detect hidden chronic anemia or heavy-cycle iron loss."},
+            {"title": "Immunity & Metabolic Health", "body": "Measures kidney and liver filtration capacity alongside lipid indexes to screen for metabolic syndrome risk."}
+          ]'::jsonb,
+          what_it_measures = '[
+            {"name": "Anemia & Iron Levels", "desc": "Hemoglobin and iron profiles to diagnose fatigue and blood health.", "strength": "100%"},
+            {"name": "Thyroid Stimulation", "desc": "Measures TSH to monitor weight changes, energy, and hormonal speed.", "strength": "95%"},
+            {"name": "Heart Risk (Lipids)", "desc": "Cholesterol, triglycerides, and HDL/LDL ratio screening.", "strength": "90%"},
+            {"name": "Bone Mineral Retention", "desc": "Tracks calcium levels to screen for osteopenia and bone thinning.", "strength": "100%"},
+            {"name": "Kidney Filtration", "desc": "KFT screens for uric acid, hydration levels, and waste filtration.", "strength": "95%"},
+            {"name": "Liver Performance", "desc": "LFT checks enzymes and proteins to monitor detox capacity.", "strength": "95%"}
+          ]'::jsonb
+        WHERE name LIKE '%Women%'
+      `);
+
+      // Fill fallback general values for other packages just in case
+      await db.query(`
+        UPDATE packages
+        SET 
+          samples_required = COALESCE(samples_required, 'Blood & Urine Specimen'),
           preparations = COALESCE(preparations, 'Overnight fasting required for 8 to 12 hours'),
           why_booked = COALESCE(why_booked, '[
             {"title": "Early Disease Screening", "body": "Identifies early warning signs of chronic conditions like high cholesterol, diabetes, and hormonal fluctuations before symptoms occur."},
@@ -481,17 +551,8 @@ async function setupDatabase() {
             {"name": "Heart Risk (Lipid Profile)", "desc": "Screens cholesterol levels and cardiovascular health.", "strength": "85%"},
             {"name": "Thyroid & Hormone health", "desc": "Measures TSH to evaluate metabolic speeds.", "strength": "80%"},
             {"name": "Diabetes Screening", "desc": "Fasting Blood Sugar checks insulin control.", "strength": "100%"}
-          ]'::jsonb),
-          test_includes = COALESCE(test_includes, ARRAY[
-            'LFT (Liver Function)',
-            'KFT (Kidney Function)',
-            'CBC (Complete Blood Count)',
-            'Thyroid Profile',
-            'Lipid Profile',
-            'Blood Sugar Fasting',
-            'Urine Routine'
-          ])
-        WHERE cat = 'package' OR name LIKE '%Checkup%' OR name LIKE '%Package%'
+          ]'::jsonb)
+        WHERE samples_required IS NULL OR preparations IS NULL OR why_booked IS NULL OR what_it_measures IS NULL
       `);
 
     console.log("✅ PostgreSQL Database is ready with premium package specifications!");
