@@ -80,7 +80,13 @@ body {
 /* Package compare responsive grid system */
 .package-detail-grid {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 1fr 340px;
+  gap: 30px;
+}
+
+.package-compare-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.3fr;
   gap: 30px;
 }
 
@@ -366,7 +372,8 @@ label {
   }
 
   /* Package Detail and Lab Comparison Mobile Layout */
-  .package-detail-grid {
+  .package-detail-grid,
+  .package-compare-grid {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
