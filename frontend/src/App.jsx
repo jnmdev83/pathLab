@@ -437,12 +437,10 @@ export default function App() {
   return (
     <div
       style={{
-        height: isSignupPage ? "100vh" : "auto",
         minHeight: "100vh",
         background: "var(--bg)",
         display: isSignupPage ? "flex" : "block",
         flexDirection: isSignupPage ? "column" : "row",
-        overflow: isSignupPage ? "hidden" : "visible",
       }}
     >
       <Navbar

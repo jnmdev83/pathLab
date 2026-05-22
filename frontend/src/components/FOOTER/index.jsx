@@ -17,6 +17,7 @@ export function Footer({ page }) {
         flexWrap: "wrap",
         gap: 14,
         width: "100%",
+        flexShrink: 0,
       }}
     >
       <span style={{ ...S.serif, fontSize: 20, ...S.lime }}>
