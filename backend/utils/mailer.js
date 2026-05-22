@@ -37,13 +37,31 @@ async function getTransporter() {
     return null;
   }
 
+  // 🚀 MANUALLY resolve smtp.gmail.com to IPv4 address.
+  // Render's free-tier containers have broken IPv6 networking, causing ENETUNREACH.
+  // By resolving the hostname ourselves to a pure IPv4 address, we guarantee
+  // Nodemailer will NEVER attempt an IPv6 connection.
+  let smtpHost = 'smtp.gmail.com';
+  try {
+    const ipv4Addresses = await dns.promises.resolve4('smtp.gmail.com');
+    if (ipv4Addresses && ipv4Addresses.length > 0) {
+      smtpHost = ipv4Addresses[0];
+      console.log(`[EMAIL SYSTEM] Resolved smtp.gmail.com to IPv4: ${smtpHost}`);
+    }
+  } catch (dnsErr) {
+    console.warn(`[EMAIL SYSTEM] DNS resolve4 failed, falling back to hostname: ${dnsErr.message}`);
+  }
+
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: smtpHost,
     port: 465,
     secure: true,
-    connectionTimeout: 10000, // 10 second connection timeout (prevents infinite hang)
-    greetingTimeout: 10000,   // 10 second greeting timeout
-    socketTimeout: 15000,     // 15 second socket timeout
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
+    tls: {
+      servername: 'smtp.gmail.com', // Required: TLS certificate is issued to this hostname, not the IP
+    },
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
