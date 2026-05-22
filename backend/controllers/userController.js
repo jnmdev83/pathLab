@@ -196,6 +196,76 @@ exports.post_api_verify_otp = async (req, res) => {
   }
 };
 
+// ─── POST /api/auth/firebase-phone-login ──────────────────────────────────────────
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// Firebase verified the kid's phone number! Now they send us their official phone number.
+// 1. If we already know this phone number, we log them in instantly!
+// 2. If it's a completely new kid, they must provide their Name and Email to finish signup.
+// 3. Once they do, we register them in our Postgres card box and send a warm welcome email!
+exports.post_api_firebase_phone_login = async (req, res) => {
+  const { phone, name, email } = req.body;
+
+  if (!phone) {
+    return res.status(400).json({ error: 'Phone number is required.' });
+  }
+
+  try {
+    // 1. Check if the user already exists with this phone number
+    const { rows: existingUser } = await db.query(
+      'SELECT id, name, email, phone FROM users WHERE phone = $1',
+      [phone]
+    );
+
+    if (existingUser.length > 0) {
+      // 🎉 USER EXISTS: Log them in directly!
+      return res.json({ 
+        success: true, 
+        message: 'Phone verified! Welcome back.', 
+        user: existingUser[0] 
+      });
+    }
+
+    // 🚀 USER DOES NOT EXIST: This is a new signup!
+    if (!name || !email) {
+      // Tell frontend we verified the phone, but need them to provide Name and Email to finish signup
+      return res.json({ 
+        success: true, 
+        needsRegistration: true, 
+        message: 'Phone verified! Please complete your name and email to register.' 
+      });
+    }
+
+    // 🛡️ EDGE CASE: Check email uniqueness for new signup
+    const emailCheck = await db.query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'This email is already registered. Please login or use a different email address.' });
+    }
+
+    // Create the brand new user!
+    const randomPassword = 'phone_' + Math.random().toString(36).substring(2, 10); // Safe secure placeholder password
+    const { rows: newUser } = await db.query(
+      `INSERT INTO users (name, email, phone, password)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, name, email, phone`,
+      [name, email, phone, randomPassword]
+    );
+
+    // 📧 SEND WELCOME EMAIL
+    if (email) {
+      await sendWelcomeEmail(email, name);
+    }
+
+    res.json({ 
+      success: true, 
+      message: 'Registration successful via Phone Auth!', 
+      user: newUser[0] 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong during Phone Authentication.' });
+  }
+};
+
 // ─── POST /api/auth/google ────────────────────────────────────────────────────
 // 🧒 CHILD-FRIENDLY EXPLANATION:
 // Google Sign-In is like showing your official school badge to enter the club instantly!

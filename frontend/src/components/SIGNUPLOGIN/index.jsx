@@ -2,32 +2,39 @@ import React, { useState } from 'react';
 import { S } from '../../utils/reusables';
 import { API_BASE_URL } from '../../config';
 import { GoogleLogin } from '@react-oauth/google';
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../../config/firebase';
 
 // 🧒 CHILD-FRIENDLY EXPLANATION:
 // Welcome to the Magic Entrance Door of ChooseMyLab!
 // Here, we have three different keys to open the door and join our club:
 // 1. 📧 Email & Password Key (Write down your details and secure it with a passcode)
-// 2. 📱 OTP Mobile Key (Send a temporary secret message code to your phone)
+// 2. 📱 Firebase Mobile SMS OTP Key (Get a REAL free SMS on your phone to login safely!)
 // 3. 🌐 Google Badge Key (One click and you show us your Google badge to login instantly!)
 // Let's implement these three methods beautifully and explain them with cute steps!
 export function Signup({ setUser, setPage }) {
+  // ─── MASTER AUTH STATE ───
+  const [authMode, setAuthMode] = useState("email"); // "email" or "phone"
+
   // ─── STATE MANAGEMENT ───
-  // Imagine these variables are little buckets where we keep what the kid types!
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [pass, setPass] = useState("");
   
-  // 🧒 CHANGE: isLogin is now TRUE by default so kids see the Login button first!
+  // Email credentials states
   const [isLogin, setIsLogin] = useState(true); 
   const [err, setErr] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Firebase SMS OTP states
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [confirmObj, setConfirmObj] = useState(null);
+  const [needsPhoneRegistration, setNeedsPhoneRegistration] = useState(false);
+
   // ─── EMAIL/PASSWORD SUBMIT HANDLER ───
-  // 🧒 CHILD-FRIENDLY EXPLANATION:
-  // When a kid clicks the "Login" or "Create Account" button using email,
-  // we first check if they filled everything, then tell the server database to save or check it!
   function submitEmailAuth() {
     if (!isLogin && (!name || !email || !phone || !pass)) {
       setErr("Please fill all required fields.");
@@ -44,6 +51,7 @@ export function Signup({ setUser, setPage }) {
 
     setLoading(true);
     setErr("");
+    setSuccessMsg("");
     
     const endpoint = isLogin ? "login" : "signup";
     const body = isLogin
@@ -57,7 +65,6 @@ export function Signup({ setUser, setPage }) {
     })
       .then((res) => {
         if (!res.ok) {
-          // If the status is bad (like 400 or 401), parse the custom duplicate error!
           return res.json().then((d) => { throw new Error(d.error || "Failed"); });
         }
         return res.json();
@@ -78,9 +85,6 @@ export function Signup({ setUser, setPage }) {
   }
 
   // ─── GOOGLE SIGN-IN HANDLER ───
-  // 🧒 CHILD-FRIENDLY EXPLANATION:
-  // This sends the verified Google Credential token (ID Token) to our backend server
-  // where it is validated securely before creating a session!
   function handleGoogleAuth(credentialResponse) {
     if (!credentialResponse.credential) {
       setErr("Failed to receive secure token from Google.");
@@ -88,6 +92,7 @@ export function Signup({ setUser, setPage }) {
     }
     setLoading(true);
     setErr("");
+    setSuccessMsg("");
 
     fetch(`${API_BASE_URL}/api/auth/google`, {
       method: "POST",
@@ -110,10 +115,152 @@ export function Signup({ setUser, setPage }) {
       });
   }
 
+  // ─── FIREBASE SEND SMS OTP HANDLER ───
+  function sendFirebaseOtp() {
+    if (!phoneOtp) {
+      setErr("Please enter your mobile phone number.");
+      return;
+    }
+
+    // Format phone number to E.164 (defaults to India +91 if no code provided)
+    let formattedPhone = phoneOtp.trim();
+    if (!formattedPhone.startsWith("+")) {
+      formattedPhone = "+91" + formattedPhone;
+    }
+
+    setLoading(true);
+    setErr("");
+    setSuccessMsg("");
+
+    try {
+      if (!window.recaptchaVerifier) {
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+          size: 'invisible',
+          callback: () => {
+            // Invisible reCAPTCHA solved
+          },
+          'expired-callback': () => {
+            setErr("reCAPTCHA security checks expired. Please request OTP again.");
+          }
+        });
+      }
+
+      signInWithPhoneNumber(auth, formattedPhone, window.recaptchaVerifier)
+        .then((confirmationResult) => {
+          setLoading(false);
+          setConfirmObj(confirmationResult);
+          setOtpSent(true);
+          setSuccessMsg(`Live SMS OTP verification code sent to ${formattedPhone}!`);
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.error("Firebase SMS send failed:", error);
+          setErr(error.message || "Failed to send SMS code. Make sure format is correct.");
+        });
+    } catch (e) {
+      setLoading(false);
+      console.error(e);
+      setErr("Could not initialize security verification framework.");
+    }
+  }
+
+  // ─── FIREBASE VERIFY SMS OTP HANDLER ───
+  function verifyFirebaseOtp() {
+    if (!otpCode) {
+      setErr("Please enter the 6-digit OTP code.");
+      return;
+    }
+
+    setLoading(true);
+    setErr("");
+    setSuccessMsg("");
+
+    confirmObj.confirm(otpCode)
+      .then(async (result) => {
+        const verifiedPhone = result.user.phoneNumber;
+
+        // OTP is confirmed by Google Firebase! Now verify with our Node.js PostgreSQL database
+        const response = await fetch(`${API_BASE_URL}/api/auth/firebase-phone-login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone: verifiedPhone })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.needsRegistration) {
+            // New user phone number, prompt for name and email to finish the profile!
+            setNeedsPhoneRegistration(true);
+            setLoading(false);
+            setSuccessMsg("Phone verified! Enter your name and email to complete registration.");
+          } else {
+            // User exists, log them in!
+            setLoading(false);
+            setUser(data.user);
+            setPage("home");
+          }
+        } else {
+          setLoading(false);
+          setErr(data.error || "Failed to finalize session with the secure backend server.");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Firebase Confirm OTP Failed:", error);
+        setErr("Invalid verification code. Please check your SMS and try again.");
+      });
+  }
+
+  // ─── COMPLETE PHONE REGISTRATION FLOW ───
+  function completePhoneSignup() {
+    if (!name || !email) {
+      setErr("Please enter both your name and email to complete registration.");
+      return;
+    }
+
+    setLoading(true);
+    setErr("");
+    setSuccessMsg("");
+
+    let formattedPhone = phoneOtp.trim();
+    if (!formattedPhone.startsWith("+")) {
+      formattedPhone = "+91" + formattedPhone;
+    }
+
+    fetch(`${API_BASE_URL}/api/auth/firebase-phone-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone: formattedPhone,
+        name,
+        email
+      })
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((d) => { throw new Error(d.error || "Failed to create profile"); });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setLoading(false);
+        if (data.success) {
+          setUser(data.user);
+          setPage("home");
+        } else {
+          setErr(data.error || "An unexpected error occurred during signup.");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        setErr(err.message || "Failed to register profile on database server.");
+      });
+  }
+
   return (
     <div className="fu" style={{ maxWidth: 420, margin: "0 auto", padding: "0 12px", position: "relative", width: "100%" }}>
-      
-
+      {/* Invisible container for Firebase invisible reCAPTCHA */}
+      <div id="recaptcha-container"></div>
 
       {/* HEADER SECTION */}
       <div style={{ textAlign: "center", marginBottom: 24 }}>
@@ -177,8 +324,51 @@ export function Signup({ setUser, setPage }) {
             </div>
           )}
 
+          {/* Main Auth Mode Tabs */}
+          {!needsPhoneRegistration && (
+            <div style={{ display: "flex", background: "var(--bg)", padding: 4, borderRadius: 10, marginBottom: 8 }}>
+              <button
+                onClick={() => { setAuthMode("email"); setErr(""); setSuccessMsg(""); }}
+                style={{
+                  flex: 1,
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: authMode === "email" ? "var(--card)" : "transparent",
+                  color: authMode === "email" ? "var(--text)" : "var(--muted)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                  cursor: "pointer",
+                  boxShadow: authMode === "email" ? "0 2px 8px rgba(0,0,0,0.03)" : "none",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                📧 Email Key
+              </button>
+              <button
+                onClick={() => { setAuthMode("phone"); setErr(""); setSuccessMsg(""); }}
+                style={{
+                  flex: 1,
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: authMode === "phone" ? "var(--card)" : "transparent",
+                  color: authMode === "phone" ? "var(--text)" : "var(--muted)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                  cursor: "pointer",
+                  boxShadow: authMode === "phone" ? "0 2px 8px rgba(0,0,0,0.03)" : "none",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                📱 Mobile OTP
+              </button>
+            </div>
+          )}
+
           {/* ────────────────── METHOD 1: EMAIL & PASSWORD ────────────────── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {authMode === "email" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               
               {/* Secondary switch to toggle Sign Up and Login */}
               <div style={{ display: "flex", background: "var(--bg)", padding: 4, borderRadius: 10, marginBottom: 4 }}>
@@ -274,22 +464,125 @@ export function Signup({ setUser, setPage }) {
                 {loading ? "Authenticating..." : isLogin ? "Log In →" : "Register →"}
               </button>
             </div>
+          )}
 
-          {/* ────────────────── METHOD 3: GOOGLE AUTHENTICATION ────────────────── */}
-          <div style={{ margin: "8px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
-            <div style={{ height: 1, background: "var(--border)", flex: 1 }} />
-            <span style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600 }}>OR</span>
-            <div style={{ height: 1, background: "var(--border)", flex: 1 }} />
-          </div>
+          {/* ────────────────── METHOD 2: FIREBASE MOBILE SMS OTP ────────────────── */}
+          {authMode === "phone" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              
+              {/* SUB-FLOW A: Dynamic signup parameters request if phone number is new */}
+              {needsPhoneRegistration ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Full Name</label>
+                    <input
+                      placeholder="E.g. Divyansh Gahlot"
+                      value={name}
+                      onChange={(e) => { setName(e.target.value); setErr(""); }}
+                      style={{ width: "100%", padding: 12, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--bg)", outline: "none", marginTop: 4 }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="you@email.com"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setErr(""); }}
+                      style={{ width: "100%", padding: 12, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--bg)", outline: "none", marginTop: 4 }}
+                    />
+                  </div>
+                  <button
+                    className="bl"
+                    onClick={completePhoneSignup}
+                    disabled={loading}
+                    style={{ padding: 14, fontSize: 14, width: "100%", marginTop: 8 }}
+                  >
+                    {loading ? "Completing Profile..." : "Finish Registration →"}
+                  </button>
+                </div>
+              ) : (
+                /* SUB-FLOW B: Standard OTP send/verify layout */
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Mobile Phone Number</label>
+                    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                      <input
+                        type="tel"
+                        placeholder="E.g. +91 99999 99999"
+                        value={phoneOtp}
+                        onChange={(e) => { setPhoneOtp(e.target.value); setErr(""); }}
+                        disabled={otpSent}
+                        style={{ flex: 1, padding: 12, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--bg)", outline: "none" }}
+                      />
+                      {!otpSent && (
+                        <button
+                          className="bl"
+                          onClick={sendFirebaseOtp}
+                          disabled={loading}
+                          style={{ padding: "12px 18px", fontSize: 12 }}
+                        >
+                          {loading ? "Sending..." : "Send OTP"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
 
-          {/* Real Google Identity integration button */}
-          <div style={{ display: "flex", justifyContent: "center", width: "100%", marginTop: 8 }}>
-            <GoogleLogin
-              onSuccess={handleGoogleAuth}
-              onError={() => setErr("Google Sign-In Failed")}
-              useOneTap
-            />
-          </div>
+                  {otpSent && (
+                    <div>
+                      <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>SMS Verification Code</label>
+                      <input
+                        type="text"
+                        maxLength="6"
+                        placeholder="Enter 6-digit code"
+                        value={otpCode}
+                        onChange={(e) => { setOtpCode(e.target.value); setErr(""); }}
+                        style={{ width: "100%", padding: 12, borderRadius: 10, border: "1.5px solid var(--border)", background: "var(--bg)", outline: "none", marginTop: 4, letterSpacing: "0.5em", textAlign: "center", fontWeight: 700, fontSize: 16 }}
+                      />
+                      
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+                        <button
+                          onClick={() => { setOtpSent(false); setConfirmObj(null); setOtpCode(""); }}
+                          style={{ background: "none", border: "none", color: "var(--muted)", fontSize: 11, cursor: "pointer", fontWeight: 600 }}
+                        >
+                          ← Change Number
+                        </button>
+                        
+                        <button
+                          className="bl"
+                          onClick={verifyFirebaseOtp}
+                          disabled={loading}
+                          style={{ padding: "10px 20px", fontSize: 12 }}
+                        >
+                          {loading ? "Verifying..." : "Verify Code →"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ────────────────── GOOGLE AUTHENTICATION ────────────────── */}
+          {!needsPhoneRegistration && (
+            <>
+              <div style={{ margin: "8px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                <div style={{ height: 1, background: "var(--border)", flex: 1 }} />
+                <span style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600 }}>OR</span>
+                <div style={{ height: 1, background: "var(--border)", flex: 1 }} />
+              </div>
+
+              {/* Real Google Identity integration button */}
+              <div style={{ display: "flex", justifyContent: "center", width: "100%", marginTop: 8 }}>
+                <GoogleLogin
+                  onSuccess={handleGoogleAuth}
+                  onError={() => setErr("Google Sign-In Failed")}
+                  useOneTap
+                />
+              </div>
+            </>
+          )}
 
           <p
             style={{
