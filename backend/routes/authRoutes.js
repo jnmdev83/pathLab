@@ -23,4 +23,29 @@ router.get('/email-logs', (req, res) => {
   });
 });
 
+// 🧪 DIRECT EMAIL TEST:
+// Open https://pathlab-5ktj.onrender.com/api/auth/test-email in the browser to send a test email RIGHT NOW!
+const { sendWelcomeEmail } = require('../utils/mailer');
+router.get('/test-email', async (req, res) => {
+  const testEmail = req.query.to || 'dgahlot39@gmail.com';
+  try {
+    const result = await sendWelcomeEmail(testEmail, 'Test User');
+    res.json({
+      success: result,
+      message: result ? `✅ Email sent to ${testEmail}!` : `❌ Email failed. Check /api/auth/email-logs`,
+      emailUser: process.env.EMAIL_USER ? 'SET' : 'MISSING',
+      emailPass: process.env.EMAIL_PASS ? 'SET' : 'MISSING',
+      nodeEnv: process.env.NODE_ENV || 'not set'
+    });
+  } catch (err) {
+    res.json({
+      success: false,
+      message: `❌ Exception: ${err.message}`,
+      emailUser: process.env.EMAIL_USER ? 'SET' : 'MISSING',
+      emailPass: process.env.EMAIL_PASS ? 'SET' : 'MISSING',
+      nodeEnv: process.env.NODE_ENV || 'not set'
+    });
+  }
+});
+
 module.exports = router;
