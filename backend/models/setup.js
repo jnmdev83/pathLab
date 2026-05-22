@@ -108,6 +108,14 @@ async function setupDatabase() {
     await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 7)`);
     await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS longitude DECIMAL(10, 7)`);
     await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS description TEXT`);
+    
+    // Add premium package-specific columns
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS samples_required VARCHAR(150)`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS preparations TEXT`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS why_booked JSONB`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS what_it_measures JSONB`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS test_includes TEXT[]`);
+
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS lab_branch_id INTEGER REFERENCES lab_branches(id)`);
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_latitude DECIMAL(10, 7)`);
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_longitude DECIMAL(10, 7)`);
@@ -455,7 +463,38 @@ async function setupDatabase() {
         }
       }
 
-    console.log("✅ PostgreSQL Database is ready!");
+      // 4. Hydrate package premium clinical metadata columns dynamically
+      await db.query(`
+        UPDATE tests
+        SET 
+          samples_required = COALESCE(samples_required, 'Blood & Urine'),
+          preparations = COALESCE(preparations, 'Overnight fasting required for 8 to 12 hours'),
+          why_booked = COALESCE(why_booked, '[
+            {"title": "Early Disease Screening", "body": "Identifies early warning signs of chronic conditions like high cholesterol, diabetes, and hormonal fluctuations before symptoms occur."},
+            {"title": "Comprehensive Organ Tracking", "body": "Monitors the performance of vital organs like your Kidneys, Liver, and Thyroid to ensure optimal systemic metabolism."},
+            {"title": "Active Health Auditing", "body": "Provides a benchmark assessment of your current health status to review life safety, lifestyle, and dietary patterns."}
+          ]'::jsonb),
+          what_it_measures = COALESCE(what_it_measures, '[
+            {"name": "Blood Health (CBC & ESR)", "desc": "Checks for anemia, infections, and basic immunity markers.", "strength": "100%"},
+            {"name": "Liver health (LFT)", "desc": "Assesses enzymes, protein metabolism, and waste filtration.", "strength": "95%"},
+            {"name": "Kidney Function (KFT)", "desc": "Checks filtration efficiency, uric acid, and urea levels.", "strength": "90%"},
+            {"name": "Heart Risk (Lipid Profile)", "desc": "Screens cholesterol levels and cardiovascular health.", "strength": "85%"},
+            {"name": "Thyroid & Hormone health", "desc": "Measures TSH to evaluate metabolic speeds.", "strength": "80%"},
+            {"name": "Diabetes Screening", "desc": "Fasting Blood Sugar checks insulin control.", "strength": "100%"}
+          ]'::jsonb),
+          test_includes = COALESCE(test_includes, ARRAY[
+            'LFT (Liver Function)',
+            'KFT (Kidney Function)',
+            'CBC (Complete Blood Count)',
+            'Thyroid Profile',
+            'Lipid Profile',
+            'Blood Sugar Fasting',
+            'Urine Routine'
+          ])
+        WHERE cat = 'package' OR name LIKE '%Checkup%' OR name LIKE '%Package%'
+      `);
+
+    console.log("✅ PostgreSQL Database is ready with premium package specifications!");
   } catch (error) {
     console.error("❌ Error setting up database:", error.message);
   }

@@ -146,22 +146,25 @@ export function Detail({ test, setPage, user }) {
   const isPackage = test.cat === "package" || test.name.toLowerCase().includes("package") || test.name.toLowerCase().includes("checkup");
   const [expandedTest, setExpandedTest] = useState(null);
 
-  // Extract included tests or use default comprehensive list for rich display
-  let includes = PACKAGE_INCLUDES[test.name];
-  if (!includes) {
-    // Look up case-insensitively or use a smart comprehensive fallback list
-    const foundKey = Object.keys(PACKAGE_INCLUDES).find(
-      k => k.toLowerCase() === test.name.toLowerCase()
-    );
-    includes = foundKey ? PACKAGE_INCLUDES[foundKey] : [
-      "CBC (Complete Blood Count)",
-      "LFT (Liver Function)",
-      "KFT (Kidney Function)",
-      "Lipid Profile",
-      "Thyroid Profile",
-      "Blood Sugar Fasting",
-      "Urine Routine"
-    ];
+  // Extract included tests from database test_includes, or fallback to static mapping or default lists
+  let includes = test.test_includes;
+  if (!includes || !Array.isArray(includes) || includes.length === 0) {
+    includes = PACKAGE_INCLUDES[test.name];
+    if (!includes) {
+      // Look up case-insensitively or use a smart comprehensive fallback list
+      const foundKey = Object.keys(PACKAGE_INCLUDES).find(
+        k => k.toLowerCase() === test.name.toLowerCase()
+      );
+      includes = foundKey ? PACKAGE_INCLUDES[foundKey] : [
+        "CBC (Complete Blood Count)",
+        "LFT (Liver Function)",
+        "KFT (Kidney Function)",
+        "Lipid Profile",
+        "Thyroid Profile",
+        "Blood Sugar Fasting",
+        "Urine Routine"
+      ];
+    }
   }
 
   // Toggle helper for accordion
@@ -279,7 +282,7 @@ export function Detail({ test, setPage, user }) {
               <div style={{ fontSize: 28, background: "rgba(37,99,235,.05)", width: 50, height: 50, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>🧪</div>
               <div>
                 <div style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: ".05em", fontWeight: 700 }}>Samples Required</div>
-                <div style={{ fontWeight: 600, fontSize: 14.5, color: "var(--text)", marginTop: 2 }}>Blood & Urine</div>
+                <div style={{ fontWeight: 600, fontSize: 14.5, color: "var(--text)", marginTop: 2 }}>{test.samples_required || "Blood & Urine"}</div>
               </div>
             </div>
 
@@ -298,7 +301,7 @@ export function Detail({ test, setPage, user }) {
               <div style={{ fontSize: 28, background: "rgba(37,99,235,.05)", width: 50, height: 50, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>🍽️</div>
               <div>
                 <div style={{ ...S.mono, ...S.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: ".05em", fontWeight: 700 }}>Preparations Required</div>
-                <div style={{ fontWeight: 600, fontSize: 13.5, color: "var(--text)", marginTop: 2, lineHeight: 1.3 }}>Overnight fasting required for 8 to 12 hours</div>
+                <div style={{ fontWeight: 600, fontSize: 13.5, color: "var(--text)", marginTop: 2, lineHeight: 1.3 }}>{test.preparations || "Overnight fasting required for 8 to 12 hours"}</div>
               </div>
             </div>
           </div>
@@ -318,11 +321,11 @@ export function Detail({ test, setPage, user }) {
             </div>
             
             <div style={{ display: "grid", gap: 12 }}>
-              {[
+              {(Array.isArray(test.why_booked) ? test.why_booked : [
                 { title: "Early Disease Screening", body: "Identifies early warning signs of chronic conditions like high cholesterol, diabetes, and hormonal fluctuations before symptoms occur." },
                 { title: "Comprehensive Organ Tracking", body: "Monitors the performance of vital organs like your Kidneys, Liver, and Thyroid to ensure optimal systemic metabolism." },
                 { title: "Active Health Auditing", body: "Provides a benchmark assessment of your current health status to review life safety, lifestyle, and dietary patterns." }
-              ].map((reason, index) => (
+              ]).map((reason, index) => (
                 <div 
                   key={index}
                   style={{
@@ -362,11 +365,11 @@ export function Detail({ test, setPage, user }) {
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              {MEASURE_CATEGORIES.map((cat, idx) => (
+              {(Array.isArray(test.what_it_measures) ? test.what_it_measures : MEASURE_CATEGORIES).map((cat, idx) => (
                 <div key={idx} style={{ padding: 14, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                     <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text)" }}>{cat.name}</span>
-                    <span style={{ ...S.mono, fontSize: 10, color: "var(--lime)", fontWeight: 700 }}>{cat.strength} Coverage</span>
+                    <span style={{ ...S.mono, fontSize: 10, color: "var(--lime)", fontWeight: 700 }}>{cat.strength || "100%"} Coverage</span>
                   </div>
                   <div style={{ ...S.muted, fontSize: 11.5, lineHeight: 1.4 }}>{cat.desc}</div>
                 </div>
