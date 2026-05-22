@@ -1,5 +1,3 @@
-const { Resend } = require('resend');
-
 // ─── IN-MEMORY EMAIL DEBUG LOGS ──────────────────────────────────────────────
 const emailLogs = [];
 
@@ -20,25 +18,49 @@ function addEmailLog(type, to, status, detail = null) {
   }
 }
 
-// ─── RESEND HTTP EMAIL CLIENT ────────────────────────────────────────────────
-// Resend sends emails over HTTPS (port 443) — works on ALL hosting platforms
-// including Render, Heroku, Railway, Vercel, etc.
-// SMTP ports (465/587) are blocked by Render's free tier, so we use HTTP instead.
-function getResendClient() {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("⚠️ [EMAIL SYSTEM] Missing RESEND_API_KEY in environment. Emails cannot be sent.");
-    addEmailLog('system', 'all', 'warning', 'Missing RESEND_API_KEY configuration.');
-    return null;
+// ─── BREVO (SENDINBLUE) HTTP EMAIL API ───────────────────────────────────────
+// Sends emails over HTTPS (port 443) — works on ALL hosting platforms.
+// Free tier: 300 emails/day, no domain verification required.
+// No SMTP ports needed — completely bypasses Render's port blocking.
+async function sendEmailViaBrevo(to, toName, subject, htmlContent) {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.warn("⚠️ [EMAIL SYSTEM] Missing BREVO_API_KEY in environment.");
+    addEmailLog('system', to, 'warning', 'Missing BREVO_API_KEY configuration.');
+    return false;
   }
-  return new Resend(process.env.RESEND_API_KEY);
+
+  const senderEmail = process.env.EMAIL_USER || 'noreply@choosemylab.com';
+  
+  const body = JSON.stringify({
+    sender: { name: 'ChooseMyLab', email: senderEmail },
+    to: [{ email: to, name: toName || 'User' }],
+    subject: subject,
+    htmlContent: htmlContent,
+  });
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: body,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || `Brevo API returned ${response.status}`);
+  }
+
+  return data;
 }
 
 // ─── WELCOME EMAIL ───────────────────────────────────────────────────────────
 async function sendWelcomeEmail(userEmail, userName) {
   try {
-    const resend = getResendClient();
-    if (!resend) return false;
-
     const htmlContent = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -76,25 +98,13 @@ async function sendWelcomeEmail(userEmail, userName) {
       </div>
     `;
 
-    const { data, error } = await resend.emails.send({
-      from: 'ChooseMyLab <onboarding@resend.dev>',
-      to: [userEmail],
-      subject: 'Welcome to ChooseMyLab! 🎉',
-      html: htmlContent,
-    });
-
-    if (error) {
-      console.error("❌ [EMAIL SYSTEM] Resend API error:", error);
-      addEmailLog('welcome', userEmail, 'error', `Resend Error: ${error.message}`);
-      return false;
-    }
-
-    console.log(`\n✅ [EMAIL SYSTEM] Welcome email delivered to ${userEmail} (ID: ${data.id})\n`);
-    addEmailLog('welcome', userEmail, 'success', `Delivered via Resend. ID: ${data.id}`);
+    const result = await sendEmailViaBrevo(userEmail, userName, 'Welcome to ChooseMyLab! 🎉', htmlContent);
+    console.log(`\n✅ [EMAIL SYSTEM] Welcome email delivered to ${userEmail} (ID: ${result.messageId})\n`);
+    addEmailLog('welcome', userEmail, 'success', `Delivered via Brevo. ID: ${result.messageId}`);
     return true;
   } catch (error) {
     console.error("❌ [EMAIL SYSTEM] Error sending welcome email:", error);
-    addEmailLog('welcome', userEmail, 'error', `Exception: ${error.message}`);
+    addEmailLog('welcome', userEmail, 'error', `Brevo Error: ${error.message}`);
     return false;
   }
 }
@@ -102,9 +112,6 @@ async function sendWelcomeEmail(userEmail, userName) {
 // ─── OTP EMAIL ───────────────────────────────────────────────────────────────
 async function sendOtpEmail(userEmail, otpCode) {
   try {
-    const resend = getResendClient();
-    if (!resend) return false;
-
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; text-align: center;">
         <h2 style="color: #333;">ChooseMyLab Verification</h2>
@@ -116,25 +123,13 @@ async function sendOtpEmail(userEmail, otpCode) {
       </div>
     `;
 
-    const { data, error } = await resend.emails.send({
-      from: 'ChooseMyLab Auth <onboarding@resend.dev>',
-      to: [userEmail],
-      subject: 'Your ChooseMyLab Login Code',
-      html: htmlContent,
-    });
-
-    if (error) {
-      console.error("❌ [EMAIL SYSTEM] Resend OTP error:", error);
-      addEmailLog('otp', userEmail, 'error', `Resend Error: ${error.message}`);
-      return false;
-    }
-
-    console.log(`\n✅ [EMAIL SYSTEM] OTP email delivered to ${userEmail} (ID: ${data.id})\n`);
-    addEmailLog('otp', userEmail, 'success', `Delivered via Resend. ID: ${data.id}`);
+    const result = await sendEmailViaBrevo(userEmail, 'User', 'Your ChooseMyLab Login Code', htmlContent);
+    console.log(`\n✅ [EMAIL SYSTEM] OTP email delivered to ${userEmail} (ID: ${result.messageId})\n`);
+    addEmailLog('otp', userEmail, 'success', `Delivered via Brevo. ID: ${result.messageId}`);
     return true;
   } catch (error) {
     console.error("❌ [EMAIL SYSTEM] Error sending OTP email:", error);
-    addEmailLog('otp', userEmail, 'error', `Exception: ${error.message}`);
+    addEmailLog('otp', userEmail, 'error', `Brevo Error: ${error.message}`);
     return false;
   }
 }
