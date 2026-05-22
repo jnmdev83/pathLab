@@ -17,7 +17,7 @@ exports.post_api_signup = async (req, res) => {
   const { name, email, phone, password } = req.body;
   try {
     // 🛡️ EDGE CASE: Ensure email has not been registered already
-    const emailCheck = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+    const emailCheck = await db.query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [email]);
     if (emailCheck.rows.length > 0) {
       return res.status(400).json({ error: 'This email address is already registered. Please login instead!' });
     }
@@ -36,9 +36,9 @@ exports.post_api_signup = async (req, res) => {
       [name, email, phone, password]
     );
 
-    // 📧 SEND WELCOME EMAIL (Fire and forget, don't wait for it to block the response)
+    // 📧 SEND WELCOME EMAIL
     if (email) {
-      sendWelcomeEmail(email, name);
+      await sendWelcomeEmail(email, name);
     }
 
     res.json({ success: true, user: rows[0] });
@@ -56,7 +56,7 @@ exports.post_api_login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const { rows } = await db.query(
-      'SELECT id, name, email, phone FROM users WHERE email = $1 AND password = $2',
+      'SELECT id, name, email, phone FROM users WHERE LOWER(email) = LOWER($1) AND password = $2',
       [email, password]
     );
     if (rows.length > 0) res.json({ success: true, user: rows[0] });
@@ -225,7 +225,7 @@ exports.post_api_google = async (req, res) => {
 
     // Check if the user is already in our database by their Google email
     const { rows: existingUser } = await db.query(
-      'SELECT id, name, email, phone FROM users WHERE email = $1',
+      'SELECT id, name, email, phone FROM users WHERE LOWER(email) = LOWER($1)',
       [email]
     );
 
@@ -249,7 +249,7 @@ exports.post_api_google = async (req, res) => {
 
     // 📧 SEND WELCOME EMAIL
     if (email) {
-      sendWelcomeEmail(email, name);
+      await sendWelcomeEmail(email, name);
     }
 
     res.json({
