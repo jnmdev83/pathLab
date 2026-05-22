@@ -1,14 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
+// 🧒 CHILD-FRIENDLY EXPLANATION:
+// We load our keys from our environment backpack (.env) securely!
+// This keeps our credentials safe and keeps GitHub automated bots happy!
 const firebaseConfig = {
-  apiKey: "AIzaSyCKVsU3MhDCd-c2-2zYVOf1prqWS9RL8yI",
-  authDomain: "choosemylab-auth.firebaseapp.com",
-  projectId: "choosemylab-auth",
-  storageBucket: "choosemylab-auth.firebasestorage.app",
-  messagingSenderId: "185235908088",
-  appId: "1:185235908088:web:989d4d0904876d3362a20d",
-  measurementId: "G-5LMSK0FLW4"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
