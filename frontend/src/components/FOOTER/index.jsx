@@ -2,19 +2,21 @@ import React from 'react';
 import { S } from '../../utils/reusables';
 
 // FOOTER
-export function Footer() {
+export function Footer({ page }) {
+  const isSignup = page === "signup";
   return (
     <footer
       style={{
         borderTop: "1.5px solid var(--border)",
-        padding: "28px 24px",
+        padding: isSignup ? "14px 24px" : "28px 24px",
         maxWidth: 1280,
-        margin: "var(--footer-margin-top) auto 0",
+        margin: isSignup ? "0 auto" : "var(--footer-margin-top) auto 0",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         flexWrap: "wrap",
         gap: 14,
+        width: "100%",
       }}
     >
       <span style={{ ...S.serif, fontSize: 20, ...S.lime }}>

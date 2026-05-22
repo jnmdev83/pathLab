@@ -111,7 +111,7 @@ export function Signup({ setUser, setPage }) {
   }
 
   return (
-    <div className="fu" style={{ maxWidth: 420, margin: "36px auto", padding: "0 12px", position: "relative" }}>
+    <div className="fu" style={{ maxWidth: 420, margin: "0 auto", padding: "0 12px", position: "relative", width: "100%" }}>
       
 
 

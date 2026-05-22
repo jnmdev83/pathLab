@@ -432,8 +432,19 @@ export default function App() {
     }
   }
 
+  const isSignupPage = page === "signup";
+
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <div
+      style={{
+        height: isSignupPage ? "100vh" : "auto",
+        minHeight: "100vh",
+        background: "var(--bg)",
+        display: isSignupPage ? "flex" : "block",
+        flexDirection: isSignupPage ? "column" : "row",
+        overflow: isSignupPage ? "hidden" : "visible",
+      }}
+    >
       <Navbar
         page={page}
         setPage={setPage}
@@ -442,10 +453,21 @@ export default function App() {
         user={user}
         setUser={setUser}
       />
-      <main style={{ maxWidth: 1280, margin: "0 auto", padding: "var(--main-padding)" }}>
+      <main
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: isSignupPage ? "12px 24px" : "var(--main-padding)",
+          flex: isSignupPage ? 1 : "none",
+          display: isSignupPage ? "flex" : "block",
+          alignItems: isSignupPage ? "center" : "stretch",
+          justifyContent: isSignupPage ? "center" : "stretch",
+          width: "100%",
+        }}
+      >
         {render()}
       </main>
-      <Footer />
+      <Footer page={page} />
     </div>
   );
 }
