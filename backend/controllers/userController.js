@@ -38,7 +38,7 @@ exports.post_api_signup = async (req, res) => {
 
     // 📧 SEND WELCOME EMAIL
     if (email) {
-      await sendWelcomeEmail(email, name);
+      sendWelcomeEmail(email, name);
     }
 
     res.json({ success: true, user: rows[0] });
@@ -252,7 +252,7 @@ exports.post_api_firebase_phone_login = async (req, res) => {
 
     // 📧 SEND WELCOME EMAIL
     if (email) {
-      await sendWelcomeEmail(email, name);
+      sendWelcomeEmail(email, name);
     }
 
     res.json({ 
@@ -319,7 +319,7 @@ exports.post_api_google = async (req, res) => {
 
     // 📧 SEND WELCOME EMAIL
     if (email) {
-      await sendWelcomeEmail(email, name);
+      sendWelcomeEmail(email, name);
     }
 
     res.json({
