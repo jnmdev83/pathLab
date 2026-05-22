@@ -1,14 +1,6 @@
-const nodemailer = require('nodemailer');
-const dns = require('dns');
-
-// 🚀 FORCE IPv4 GLOBALLY: Render's free-tier containers cannot reach IPv6 addresses.
-// This forces Node.js DNS resolver to always return IPv4 addresses first,
-// preventing the ENETUNREACH error when connecting to smtp.gmail.com.
-dns.setDefaultResultOrder('ipv4first');
+const { Resend } = require('resend');
 
 // ─── IN-MEMORY EMAIL DEBUG LOGS ──────────────────────────────────────────────
-// This lets the user open /api/auth/email-logs in the browser to inspect
-// the exact Nodemailer connection errors live on Render!
 const emailLogs = [];
 
 function getEmailLogs() {
@@ -23,60 +15,29 @@ function addEmailLog(type, to, status, detail = null) {
     status,
     detail
   });
-  // Keep only the most recent 100 logs
   if (emailLogs.length > 100) {
     emailLogs.pop();
   }
 }
 
-// ─── REAL EMAIL TRANSPORTER ──────────────────────────────────────────────────
-async function getTransporter() {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.warn("⚠️ [EMAIL SYSTEM] Missing EMAIL_USER or EMAIL_PASS in .env file. Real emails cannot be sent.");
-    addEmailLog('system', 'all', 'warning', 'Missing EMAIL_USER or EMAIL_PASS configuration.');
+// ─── RESEND HTTP EMAIL CLIENT ────────────────────────────────────────────────
+// Resend sends emails over HTTPS (port 443) — works on ALL hosting platforms
+// including Render, Heroku, Railway, Vercel, etc.
+// SMTP ports (465/587) are blocked by Render's free tier, so we use HTTP instead.
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("⚠️ [EMAIL SYSTEM] Missing RESEND_API_KEY in environment. Emails cannot be sent.");
+    addEmailLog('system', 'all', 'warning', 'Missing RESEND_API_KEY configuration.');
     return null;
   }
-
-  // 🚀 MANUALLY resolve smtp.gmail.com to IPv4 address.
-  // Render's free-tier containers have broken IPv6 networking, causing ENETUNREACH.
-  // By resolving the hostname ourselves to a pure IPv4 address, we guarantee
-  // Nodemailer will NEVER attempt an IPv6 connection.
-  let smtpHost = 'smtp.gmail.com';
-  try {
-    const ipv4Addresses = await dns.promises.resolve4('smtp.gmail.com');
-    if (ipv4Addresses && ipv4Addresses.length > 0) {
-      smtpHost = ipv4Addresses[0];
-      console.log(`[EMAIL SYSTEM] Resolved smtp.gmail.com to IPv4: ${smtpHost}`);
-    }
-  } catch (dnsErr) {
-    console.warn(`[EMAIL SYSTEM] DNS resolve4 failed, falling back to hostname: ${dnsErr.message}`);
-  }
-
-  return nodemailer.createTransport({
-    host: smtpHost,
-    port: 587,
-    secure: false, // Use STARTTLS on port 587 instead of implicit TLS on port 465
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-    requireTLS: true, // Upgrade to TLS after connecting
-    tls: {
-      servername: 'smtp.gmail.com',
-    },
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  return new Resend(process.env.RESEND_API_KEY);
 }
 
+// ─── WELCOME EMAIL ───────────────────────────────────────────────────────────
 async function sendWelcomeEmail(userEmail, userName) {
   try {
-    const transporter = await getTransporter();
-    if (!transporter) {
-      addEmailLog('welcome', userEmail, 'failed', 'Transporter not initialized. Missing environment keys.');
-      return false;
-    }
+    const resend = getResendClient();
+    if (!resend) return false;
 
     const htmlContent = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px;">
@@ -115,32 +76,34 @@ async function sendWelcomeEmail(userEmail, userName) {
       </div>
     `;
 
-    // Send the REAL email
-    await transporter.sendMail({
-      from: `"ChooseMyLab Support" <${process.env.EMAIL_USER}>`,
-      to: userEmail,
-      subject: "Welcome to ChooseMyLab! 🎉",
+    const { data, error } = await resend.emails.send({
+      from: 'ChooseMyLab <onboarding@resend.dev>',
+      to: [userEmail],
+      subject: 'Welcome to ChooseMyLab! 🎉',
       html: htmlContent,
     });
 
-    console.log(`\n✅ [EMAIL SYSTEM] Real welcome email successfully delivered to ${userEmail}\n`);
-    addEmailLog('welcome', userEmail, 'success', 'Welcome email delivered successfully.');
+    if (error) {
+      console.error("❌ [EMAIL SYSTEM] Resend API error:", error);
+      addEmailLog('welcome', userEmail, 'error', `Resend Error: ${error.message}`);
+      return false;
+    }
+
+    console.log(`\n✅ [EMAIL SYSTEM] Welcome email delivered to ${userEmail} (ID: ${data.id})\n`);
+    addEmailLog('welcome', userEmail, 'success', `Delivered via Resend. ID: ${data.id}`);
     return true;
   } catch (error) {
-    console.error("❌ [EMAIL SYSTEM] Error sending real welcome email:", error);
-    addEmailLog('welcome', userEmail, 'error', `Nodemailer Error: ${error.message}`);
+    console.error("❌ [EMAIL SYSTEM] Error sending welcome email:", error);
+    addEmailLog('welcome', userEmail, 'error', `Exception: ${error.message}`);
     return false;
   }
 }
 
-// Function to send REAL OTP via Email
+// ─── OTP EMAIL ───────────────────────────────────────────────────────────────
 async function sendOtpEmail(userEmail, otpCode) {
   try {
-    const transporter = await getTransporter();
-    if (!transporter) {
-      addEmailLog('otp', userEmail, 'failed', 'Transporter not initialized. Missing environment keys.');
-      return false;
-    }
+    const resend = getResendClient();
+    if (!resend) return false;
 
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; text-align: center;">
@@ -153,19 +116,25 @@ async function sendOtpEmail(userEmail, otpCode) {
       </div>
     `;
 
-    await transporter.sendMail({
-      from: `"ChooseMyLab Auth" <${process.env.EMAIL_USER}>`,
-      to: userEmail,
-      subject: "Your ChooseMyLab Login Code",
+    const { data, error } = await resend.emails.send({
+      from: 'ChooseMyLab Auth <onboarding@resend.dev>',
+      to: [userEmail],
+      subject: 'Your ChooseMyLab Login Code',
       html: htmlContent,
     });
 
-    console.log(`\n✅ [EMAIL SYSTEM] Real OTP email successfully delivered to ${userEmail}\n`);
-    addEmailLog('otp', userEmail, 'success', 'OTP email delivered successfully.');
+    if (error) {
+      console.error("❌ [EMAIL SYSTEM] Resend OTP error:", error);
+      addEmailLog('otp', userEmail, 'error', `Resend Error: ${error.message}`);
+      return false;
+    }
+
+    console.log(`\n✅ [EMAIL SYSTEM] OTP email delivered to ${userEmail} (ID: ${data.id})\n`);
+    addEmailLog('otp', userEmail, 'success', `Delivered via Resend. ID: ${data.id}`);
     return true;
   } catch (error) {
-    console.error("❌ [EMAIL SYSTEM] Error sending real OTP email:", error);
-    addEmailLog('otp', userEmail, 'error', `Nodemailer Error: ${error.message}`);
+    console.error("❌ [EMAIL SYSTEM] Error sending OTP email:", error);
+    addEmailLog('otp', userEmail, 'error', `Exception: ${error.message}`);
     return false;
   }
 }
