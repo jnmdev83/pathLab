@@ -309,7 +309,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
             onClick={() => setPage("signup")}
             style={{ whiteSpace: "nowrap", flexShrink: 0 }}
           >
-            Sign Up
+            Login
           </button>
         )}
         </div>
@@ -373,7 +373,7 @@ export function Navbar({ page, setPage, q, setQ, user, setUser }) {
           className={(page === "profile-page" || page === "signup") ? "active" : ""}
         >
           <span>👤</span>
-          {user ? "Profile" : "Sign Up"}
+          {user ? "Profile" : "Login"}
         </button>
       </div>
     </nav>
