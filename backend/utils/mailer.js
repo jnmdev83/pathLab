@@ -1,4 +1,10 @@
 const nodemailer = require('nodemailer');
+const dns = require('dns');
+
+// 🚀 FORCE IPv4 GLOBALLY: Render's free-tier containers cannot reach IPv6 addresses.
+// This forces Node.js DNS resolver to always return IPv4 addresses first,
+// preventing the ENETUNREACH error when connecting to smtp.gmail.com.
+dns.setDefaultResultOrder('ipv4first');
 
 // ─── IN-MEMORY EMAIL DEBUG LOGS ──────────────────────────────────────────────
 // This lets the user open /api/auth/email-logs in the browser to inspect
@@ -35,7 +41,9 @@ async function getTransporter() {
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
-    family: 4, // 🚀 FORCE IPv4: Bypasses Render's IPv6 networking restrictions (fixes ENETUNREACH!)
+    connectionTimeout: 10000, // 10 second connection timeout (prevents infinite hang)
+    greetingTimeout: 10000,   // 10 second greeting timeout
+    socketTimeout: 15000,     // 15 second socket timeout
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
