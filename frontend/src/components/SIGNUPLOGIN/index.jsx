@@ -113,49 +113,7 @@ export function Signup({ setUser, setPage }) {
   return (
     <div className="fu" style={{ maxWidth: 420, margin: "36px auto", padding: "0 12px", position: "relative" }}>
       
-      {/* 📡 FLOATING SIMULATED SMS PUSH NOTIFICATION */}
-      {simulatedSms && (
-        <div
-          style={{
-            position: "fixed",
-            top: 24,
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "rgba(15, 23, 42, 0.95)",
-            backdropFilter: "blur(12px)",
-            border: "1.5px solid rgba(255, 255, 255, 0.15)",
-            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
-            borderRadius: 16,
-            padding: "16px 20px",
-            color: "#fff",
-            zIndex: 9999,
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-            width: "90%",
-            maxWidth: 380,
-            animation: "slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", color: "var(--lime)", letterSpacing: "0.05em" }}>
-              💬 Incoming Message
-            </span>
-            <button
-              onClick={() => setSimulatedSms("")}
-              style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer", fontSize: 14 }}
-            >
-              ✕
-            </button>
-          </div>
-          <div style={{ fontSize: 13, lineHeight: 1.5, fontWeight: 500 }}>
-            {simulatedSms}
-          </div>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", textAlign: "right" }}>
-            Just now • simulated SMS service
-          </div>
-        </div>
-      )}
+
 
       {/* HEADER SECTION */}
       <div style={{ textAlign: "center", marginBottom: 24 }}>
