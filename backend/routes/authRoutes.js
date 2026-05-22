@@ -33,14 +33,12 @@ router.get('/test-email', async (req, res) => {
     res.json({
       success: result,
       message: result ? `✅ Email sent to ${testEmail}!` : `❌ Email failed. Check /api/auth/email-logs`,
-      brevoApiKey: process.env.BREVO_API_KEY ? 'SET' : 'MISSING',
       nodeEnv: process.env.NODE_ENV || 'not set'
     });
   } catch (err) {
     res.json({
       success: false,
       message: `❌ Exception: ${err.message}`,
-      brevoApiKey: process.env.BREVO_API_KEY ? 'SET' : 'MISSING',
       nodeEnv: process.env.NODE_ENV || 'not set'
     });
   }
