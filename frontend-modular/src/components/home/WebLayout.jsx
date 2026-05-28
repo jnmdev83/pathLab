@@ -922,24 +922,24 @@ export function WebLayout({
         </section>
 
         {/* Small & Compact Can't Decide Banner (Doctor Chat Button Hidden for now) */}
-        <section className="py-10 px-8 max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-[1.8rem] p-6 md:p-8 relative overflow-hidden shadow-xl text-left gap-6 min-h-[160px] md:min-h-[180px]">
+        <section className="py-5 px-8 max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl p-5 md:p-6 relative overflow-hidden shadow-lg text-left gap-6 min-h-[130px] md:min-h-[150px]">
             {/* Glowing blobs inside card */}
-            <div className="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-72 h-72 bg-blue-900/40 rounded-full blur-3xl" />
+            <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
+            <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-900/40 rounded-full blur-2xl" />
 
-            <div className="w-full md:w-3/5 relative z-10 space-y-3.5">
-              <h3 className="font-headline text-xl md:text-2xl font-black leading-tight text-white tracking-tight">
+            <div className="w-full md:w-3/5 relative z-10 space-y-2.5">
+              <h3 className="font-headline text-lg md:text-xl font-black leading-tight text-white tracking-tight">
                 Can't decide which package is right for you?
               </h3>
-              <p className="text-white/80 text-[11px] md:text-xs max-w-md font-medium leading-relaxed font-body">
+              <p className="text-white/80 text-[10px] md:text-[11px] max-w-md font-medium leading-relaxed font-body">
                 Our clinical experts are available for a free consultation to help you choose the best diagnostic path based on your symptoms and history.
               </p>
               
-              <div className="flex flex-wrap gap-3 pt-1">
+              <div className="flex flex-wrap gap-3 pt-0.5">
                 <a 
                   href="tel:1800123456"
-                  className="bg-white hover:bg-slate-100 text-blue-700 text-[11px] font-black px-5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline"
+                  className="bg-white hover:bg-slate-100 text-blue-700 text-[10px] font-black px-4.5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block"
                 >
                   Free Expert Consult
                 </a>
@@ -947,10 +947,10 @@ export function WebLayout({
             </div>
 
             {/* Compact Doctor Image Column */}
-            <div className="w-full md:w-2/5 flex justify-center md:justify-end mt-4 md:mt-0 relative z-10">
-              <div className="relative max-w-[130px] md:max-w-[170px] lg:max-w-[190px]">
+            <div className="w-full md:w-2/5 flex justify-center md:justify-end mt-2 md:mt-0 relative z-10">
+              <div className="relative max-w-[100px] md:max-w-[130px] lg:max-w-[145px]">
                 <img 
-                  className="w-full object-contain rounded-2xl drop-shadow-lg border-2 border-white/10" 
+                  className="w-full object-contain rounded-xl drop-shadow-lg border border-white/10" 
                   alt="Friendly doctor consulting" 
                   src="/doctor.png"
                 />
