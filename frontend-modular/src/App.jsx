@@ -458,7 +458,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-between">
+    <div className="min-h-screen bg-background flex flex-col justify-between overflow-x-hidden w-full max-w-full">
       <div>
         <Navbar
           page={page}
