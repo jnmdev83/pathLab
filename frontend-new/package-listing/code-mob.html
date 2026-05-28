@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cancer Screening Packages | PathoChoice</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#dae2ff",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001847",
+                    "surface-container": "#edeeef",
+                    "surface-dim": "#d9dadb",
+                    "primary": "#0041a2",
+                    "surface-tint": "#0856cf",
+                    "inverse-on-surface": "#f0f1f2",
+                    "background": "#f8f9fa",
+                    "tertiary-fixed-dim": "#ffb599",
+                    "on-primary-container": "#ced9ff",
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed-dim": "#b2c5ff",
+                    "on-secondary-fixed-variant": "#005320",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#802b00",
+                    "surface-container-high": "#e7e8e9",
+                    "outline-variant": "#c3c6d6",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdbce",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#7f2b00",
+                    "surface": "#f8f9fa",
+                    "secondary": "#006e2c",
+                    "on-secondary-fixed": "#002108",
+                    "inverse-primary": "#b2c5ff",
+                    "surface-bright": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "secondary-fixed": "#89fa9b",
+                    "secondary-container": "#86f898",
+                    "on-secondary-container": "#00722f",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#0b57d0",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#191c1d",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#a83b00",
+                    "outline": "#737785",
+                    "on-tertiary-container": "#ffcfbe",
+                    "on-surface-variant": "#424654",
+                    "inverse-surface": "#2e3132",
+                    "surface-container-low": "#f3f4f5",
+                    "on-primary-fixed-variant": "#0040a1",
+                    "on-background": "#191c1d",
+                    "secondary-fixed-dim": "#6ddd81",
+                    "on-tertiary-fixed": "#370e00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "section-gap": "80px",
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "gutter-mobile": "16px",
+                    "gutter-desktop": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Atkinson Hyperlegible Next"],
+                    "body-md": ["Atkinson Hyperlegible Next"],
+                    "body-lg": ["Atkinson Hyperlegible Next"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-md": ["Atkinson Hyperlegible Next"],
+                    "headline-lg-mobile": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+                    "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-filter-pill { background-color: #0b57d0; color: #ffffff; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface select-none overflow-x-hidden">
+<!-- Sticky Top Bar -->
+<nav class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md h-16 flex items-center justify-between px-margin-mobile shadow-[0px_4px_20px_rgba(11,87,208,0.05)]">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md font-bold text-primary">PathoChoice</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">menu</span>
+</button>
+</div>
+</nav>
+<main class="pb-24">
+<!-- Category Hero -->
+<header class="px-margin-mobile pt-8 pb-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Cancer Screening Packages</h1>
+<p class="text-on-surface-variant font-body-md opacity-80 mb-6">Expert-curated diagnostics for early detection and peace of mind. Choose from certified clinical profiles.</p>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center text-center gap-2 shadow-sm border border-outline-variant/30">
+<div class="w-10 h-10 bg-primary-container/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container">clinical_notes</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Early Risk Detection</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center text-center gap-2 shadow-sm border border-outline-variant/30">
+<div class="w-10 h-10 bg-secondary-container/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">verified_user</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">NABL Accredited</span>
+</div>
+</div>
+</header>
+<!-- Featured Tiers Horizontal Carousel -->
+<section class="mb-8">
+<div class="px-margin-mobile flex justify-between items-end mb-4">
+<h2 class="font-headline-md text-xl font-bold">Standardized Tiers</h2>
+<span class="text-primary font-label-sm">View Comparison</span>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-4 px-margin-mobile snap-x">
+<!-- Tier Card: Essential -->
+<div class="min-w-[260px] snap-center bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/20">
+<span class="bg-surface-container text-on-surface-variant text-[12px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">Tier 1</span>
+<h3 class="font-headline-md text-lg mb-1">Essential</h3>
+<p class="text-on-surface-variant font-label-sm mb-4">Baseline markers for core safety.</p>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="text-on-surface-variant text-sm">Starts at</span>
+<span class="text-primary font-bold text-xl">$149</span>
+</div>
+<button class="w-full py-2 bg-surface-container-high rounded-xl font-label-md text-primary hover:bg-primary-fixed transition-colors">Compare</button>
+</div>
+<!-- Tier Card: Advanced -->
+<div class="min-w-[260px] snap-center bg-white p-6 rounded-2xl shadow-[0px_8px_24px_rgba(11,87,208,0.08)] border-2 border-primary-container/30 relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-primary-container text-on-primary-container px-3 py-1 rounded-bl-xl font-label-sm text-[10px]">MOST POPULAR</div>
+<span class="bg-primary-container/10 text-primary-container text-[12px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">Tier 2</span>
+<h3 class="font-headline-md text-lg mb-1">Advanced</h3>
+<p class="text-on-surface-variant font-label-sm mb-4">Includes imaging &amp; specialized markers.</p>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="text-on-surface-variant text-sm">Starts at</span>
+<span class="text-primary font-bold text-xl">$299</span>
+</div>
+<button class="w-full py-2 bg-primary text-white rounded-xl font-label-md hover:bg-primary-container transition-colors">Compare</button>
+</div>
+<!-- Tier Card: Comprehensive -->
+<div class="min-w-[260px] snap-center bg-white p-6 rounded-2xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/20">
+<span class="bg-surface-container text-on-surface-variant text-[12px] font-bold px-2 py-0.5 rounded-full mb-3 inline-block">Tier 3</span>
+<h3 class="font-headline-md text-lg mb-1">Comprehensive</h3>
+<p class="text-on-surface-variant font-label-sm mb-4">Full body biopsy &amp; screening.</p>
+<div class="flex items-baseline gap-1 mb-4">
+<span class="text-on-surface-variant text-sm">Starts at</span>
+<span class="text-primary font-bold text-xl">$499</span>
+</div>
+<button class="w-full py-2 bg-surface-container-high rounded-xl font-label-md text-primary hover:bg-primary-fixed transition-colors">Compare</button>
+</div>
+</div>
+</section>
+<!-- Sticky Filter Trigger -->
+<div class="sticky top-16 z-40 bg-surface px-margin-mobile py-4 flex gap-2 overflow-x-auto hide-scrollbar border-b border-outline-variant/10">
+<button class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full font-label-sm whitespace-nowrap" onclick="toggleFilter()">
+<span class="material-symbols-outlined text-sm">tune</span>
+                Filter
+            </button>
+<button class="bg-primary text-white px-4 py-2 rounded-full font-label-sm whitespace-nowrap">All Packages</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full font-label-sm whitespace-nowrap">Men</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full font-label-sm whitespace-nowrap">Women</button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 py-2 rounded-full font-label-sm whitespace-nowrap">Under $200</button>
+</div>
+<!-- Listing Section -->
+<section class="px-margin-mobile mt-6 space-y-4">
+<!-- Listing Item 1 -->
+<div class="bg-white rounded-2xl p-5 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/10 relative">
+<div class="flex justify-between items-start mb-3">
+<div class="flex gap-2 items-center">
+<div class="w-10 h-10 rounded-lg overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-contain" data-alt="A clean, professional logo for Apollo Diagnostics lab, featuring a minimalist medical cross and modern sans-serif typography. The color palette is high-contrast white and deep clinical blue, conveying trust, precision, and healthcare excellence in a sleek digital format." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClgl3-QKDDeycHReW2Yoa0SDyvYe9UikA2j4Ofs1JXZUZWe8kJv_kX4adVrvVE-S74PQiSOc0i264d9QdJvHMz82qQNpfTKHrLsu89C9q8LVsAG0bK1IpYrjTtNMN3oRU_OSeMx19QTK72XGhfb0qTeOtdT9Kdegp7UkCf5nLICYEH1W_67PQU7nT_FK8h_-k9lwFapxhVr8GWVN4hU1e2chfAocGFCQ5SiBJxCiSJD9Vo1LwNWmgR_Kz8N6AELcPN-yFsSMCpmrE"/>
+</div>
+<div>
+<p class="font-label-sm text-on-surface">Apollo Diagnostics</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[12px] font-bold">4.8</span>
+</div>
+</div>
+</div>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="w-6 h-6 rounded-lg border-outline text-primary focus:ring-primary-container" type="checkbox"/>
+</label>
+</div>
+<h3 class="font-headline-md text-lg mb-2 leading-tight">Cancer Marker Gold Profile</h3>
+<!-- Test Chips -->
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">CA 125</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">CEA</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">PSA</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">AFP</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">+8 More</span>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs line-through">$240</span>
+<span class="text-primary font-bold text-xl">$189</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-xl text-on-surface-variant">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-6 py-2 bg-primary text-white font-label-md rounded-xl hover:bg-primary-container">Add</button>
+</div>
+</div>
+</div>
+<!-- Listing Item 2 -->
+<div class="bg-white rounded-2xl p-5 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/10 relative">
+<div class="flex justify-between items-start mb-3">
+<div class="flex gap-2 items-center">
+<div class="w-10 h-10 rounded-lg overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-contain" data-alt="The corporate visual identity for Thyrocare diagnostics, emphasizing clinical efficiency and reliability. The logo uses a bold blue and yellow scheme, set against a pristine white background. The aesthetic is modern and health-focused, suggesting high-tech medical laboratory standards and patient-centric care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOgPDFki5uhWJCAwur2M610_bDwAwGrnd97UHUUv7BgKOx57Vn6nulwmuWzirLmfsfKVF_kN7G92EG9G1LL631s8nySXsGuy3zU6lJcwvi2nMEQKUQDIJ1MlOIDJOQS64jKBJ7BRTtOLEY8zjMFsWNDe-u0ZcdFPxLkMenva1K4MnV91cVmMS8zc05K2FoAYysn0KlzhfvhXb20C-jKAtYCoUTVn5jflQgGaMRxWwDueVXwLn1jjtadmXN0CZf6Jf_SXRxDCmONWw"/>
+</div>
+<div>
+<p class="font-label-sm text-on-surface">Thyrocare Labs</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[12px] font-bold">4.6</span>
+</div>
+</div>
+</div>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="w-6 h-6 rounded-lg border-outline text-primary focus:ring-primary-container" type="checkbox"/>
+</label>
+</div>
+<h3 class="font-headline-md text-lg mb-2 leading-tight">Comprehensive Cancer Screen</h3>
+<!-- Test Chips -->
+<div class="flex flex-wrap gap-1.5 mb-4">
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">Mammography</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">PSA</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">CBC</span>
+<span class="bg-surface-container-low text-[11px] font-bold px-2 py-0.5 rounded text-on-surface-variant">+12 More</span>
+</div>
+<div class="flex justify-between items-center mt-4 pt-4 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-on-surface-variant text-xs line-through">$320</span>
+<span class="text-primary font-bold text-xl">$275</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-xl text-on-surface-variant">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-6 py-2 bg-primary text-white font-label-md rounded-xl hover:bg-primary-container">Add</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Comparison Insights -->
+<section class="mt-margin-mobile px-margin-mobile">
+<div class="bg-secondary-container/5 rounded-2xl p-6 border border-secondary-container/20">
+<h2 class="font-headline-md text-lg mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">info</span>
+                    Comparison Guide
+                </h2>
+<div class="space-y-4">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-secondary-container flex-shrink-0" style="font-variation-settings: 'FILL' 1;">biotech</span>
+<div>
+<h4 class="font-label-md text-on-surface">Precision Markers</h4>
+<p class="text-on-surface-variant font-label-sm">High-tier packages use quantitative assays for higher specificity.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-secondary-container flex-shrink-0" style="font-variation-settings: 'FILL' 1;">speed</span>
+<div>
+<h4 class="font-label-md text-on-surface">Processing Speed</h4>
+<p class="text-on-surface-variant font-label-sm">Express packages provide digital reports within 24 hours.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQs -->
+<section class="mt-12 px-margin-mobile">
+<h2 class="font-headline-md text-xl mb-6">Common Questions</h2>
+<div class="space-y-2">
+<details class="group bg-white rounded-xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-4 cursor-pointer list-none">
+<span class="font-label-md text-on-surface">Is fasting required?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-4 pb-4 text-on-surface-variant font-body-md text-sm">
+                        Yes, for accurate metabolic markers, a 10-12 hour overnight fast is highly recommended.
+                    </div>
+</details>
+<details class="group bg-white rounded-xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-4 cursor-pointer list-none">
+<span class="font-label-md text-on-surface">Are home visits available?</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="px-4 pb-4 text-on-surface-variant font-body-md text-sm">
+                        PathoChoice partners with labs offering certified phlebotomists for home sample collection in most metro areas.
+                    </div>
+</details>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-section-gap px-margin-mobile py-8 bg-surface-container-low text-center">
+<p class="font-headline-md text-primary mb-4">PathoChoice</p>
+<p class="text-on-surface-variant text-[12px] mb-6">© 2024 PathoChoice. All Diagnostic Labs are ISO &amp; NABL Certified.</p>
+<div class="flex justify-center gap-4 text-[12px] font-label-sm text-primary">
+<span>Privacy</span>
+<span>Terms</span>
+<span>Support</span>
+</div>
+</footer>
+</main>
+<!-- Filter Drawer (Hidden by default) -->
+<div class="fixed inset-0 z-[60] hidden transition-all duration-300" id="filterDrawer">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleFilter()"></div>
+<div class="absolute bottom-0 left-0 w-full bg-white rounded-t-3xl p-6 transition-transform translate-y-full duration-300" id="filterContent">
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full mx-auto mb-6"></div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-xl">Filter &amp; Sort</h3>
+<button class="text-primary font-label-md" onclick="toggleFilter()">Reset</button>
+</div>
+<div class="space-y-6">
+<div>
+<h4 class="font-label-md mb-3">Price Range</h4>
+<div class="flex gap-2">
+<button class="flex-1 py-2 border border-outline-variant rounded-xl font-label-sm active-filter-pill">Under $200</button>
+<button class="flex-1 py-2 border border-outline-variant rounded-xl font-label-sm"> $200 - $500</button>
+<button class="flex-1 py-2 border border-outline-variant rounded-xl font-label-sm">$500+</button>
+</div>
+</div>
+<div>
+<h4 class="font-label-md mb-3">Lab Accreditation</h4>
+<div class="space-y-2">
+<label class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary" type="checkbox"/>
+<span class="font-label-sm">NABL Accredited</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
+<input class="w-5 h-5 rounded border-outline text-primary" type="checkbox"/>
+<span class="font-label-sm">CAP Certified</span>
+</label>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-4 bg-primary text-white rounded-2xl font-headline-md text-lg" onclick="toggleFilter()">Apply Filters</button>
+</div>
+</div>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-white/90 backdrop-blur-lg px-margin-mobile py-4 shadow-[0px_-4px_20px_rgba(11,87,208,0.05)] border-t border-outline-variant/10">
+<div class="flex items-center justify-between gap-4 max-w-lg mx-auto">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-white bg-primary-fixed flex items-center justify-center text-[10px] font-bold text-on-primary-fixed">2</div>
+</div>
+<button class="flex-1 py-3.5 bg-primary-container text-on-primary-container rounded-2xl font-headline-md text-sm shadow-md flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">compare_arrows</span>
+                Compare Selected (2)
+            </button>
+</div>
+</div>
+<!-- Bottom Nav Bar Mobile (From JSON) -->
+<div class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-surface dark:bg-inverse-surface shadow-[0px_-4px_20px_rgba(11,87,208,0.05)] rounded-t-xl opacity-0 pointer-events-none">
+<!-- Hidden for this specific task as Sticky Bottom CTA is the priority anchor -->
+</div>
+<script>
+        function toggleFilter() {
+            const drawer = document.getElementById('filterDrawer');
+            const content = document.getElementById('filterContent');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('translate-y-full');
+                }, 10);
+            } else {
+                content.classList.add('translate-y-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Active filter toggle interaction
+        document.querySelectorAll('.active-filter-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                this.classList.toggle('bg-primary');
+                this.classList.toggle('text-white');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+.mesh-gradient {
+  background-color: #f8f9fa;
+  background-image: 
+      radial-gradient(at 0% 0%, hsla(216, 100%, 95%, 1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(180, 100%, 95%, 1) 0, transparent 50%), 
+      radial-gradient(at 100% 100%, hsla(216, 100%, 92%, 1) 0, transparent 50%), 
+      radial-gradient(at 0% 100%, hsla(180, 100%, 92%, 1) 0, transparent 50%);
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at 70% 30%, rgba(11, 87, 208, 0.08) 0%, transparent 50%);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(0, 65, 162, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 65, 162, 0.1);
+}
+
+.bento-card {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bento-card:hover {
+  transform: translateY(-8px);
+}
+
+.glow-soft {
+  box-shadow: 0 0 20px rgba(11, 87, 208, 0.08);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.pulse-shimmer {
+  animation: pulse 1.5s infinite ease-in-out;
+}

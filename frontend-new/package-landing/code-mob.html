@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChooseMyLab | Compare Health Packages</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#3c475a",
+                        "primary": "#0041a2",
+                        "secondary-container": "#6cf8bb",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#424654",
+                        "outline-variant": "#c3c6d6",
+                        "primary-container": "#0b57d0",
+                        "inverse-primary": "#b2c5ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-bright": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary": "#006c49",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#111c2d",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#d0dbf3",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed": "#002113",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#ced9ff",
+                        "surface-container-low": "#eff4ff",
+                        "outline": "#737785",
+                        "on-background": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#4edea3",
+                        "tertiary-fixed": "#d8e3fb",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#0856cf",
+                        "tertiary-container": "#556074",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#0040a1",
+                        "tertiary-fixed-dim": "#bcc7de",
+                        "on-secondary-container": "#00714d",
+                        "primary-fixed": "#dae2ff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-variant": "#d3e4fe",
+                        "surface": "#f8f9ff",
+                        "on-primary-fixed": "#001847",
+                        "on-secondary-fixed-variant": "#005236",
+                        "tertiary": "#3d485c",
+                        "surface-container": "#e5eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "margin-desktop": "40px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+<div class="font-headline-md text-headline-md font-bold tracking-tight text-primary">ChooseMyLab</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-high rounded-lg transition-all active:scale-95 duration-100 ease-in-out">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-lg transition-all active:scale-95 duration-100 ease-in-out">
+<span class="material-symbols-outlined text-on-surface-variant">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-16 pb-32">
+<!-- Hero Section -->
+<section class="px-margin-mobile pt-stack-lg pb-stack-lg bg-gradient-to-b from-surface-container-low to-surface">
+<div class="flex flex-col gap-stack-md">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+                    Compare Health Checkup Packages Across Top Labs
+                </h1>
+<div class="relative mt-stack-sm">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">medical_services</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 bg-surface transition-all outline-none" placeholder="Search tests or health concerns..." type="text"/>
+</div>
+<div class="flex flex-col gap-stack-sm mt-stack-sm">
+<button class="w-full bg-primary-container text-on-primary py-4 rounded-xl font-label-md text-label-md active:scale-95 transition-transform">
+                        Explore All Packages
+                    </button>
+<button class="w-full bg-surface border border-outline-variant text-on-surface py-4 rounded-xl font-label-md text-label-md active:scale-95 transition-transform">
+                        Find Nearby Labs
+                    </button>
+</div>
+<!-- Trust Badges -->
+<div class="flex flex-wrap items-center justify-center gap-4 mt-stack-md opacity-70 grayscale">
+<div class="flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span> NABL Accredited
+                    </div>
+<div class="flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[18px]">security</span> Secure Data
+                    </div>
+<div class="flex items-center gap-1 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[18px]">star</span> 1M+ Users
+                    </div>
+</div>
+</div>
+</section>
+<!-- Package Categories -->
+<section class="px-margin-mobile py-stack-lg">
+<h2 class="font-headline-sm text-headline-sm mb-stack-md">Categories</h2>
+<div class="grid grid-cols-2 gap-stack-sm">
+<div class="bg-surface-container p-stack-md rounded-[16px] flex flex-col items-center gap-2 border border-outline-variant/30 active:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Full Body Check</span>
+</div>
+<div class="bg-surface-container p-stack-md rounded-[16px] flex flex-col items-center gap-2 border border-outline-variant/30 active:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-secondary-container/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">favorite</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Heart Health</span>
+</div>
+<div class="bg-surface-container p-stack-md rounded-[16px] flex flex-col items-center gap-2 border border-outline-variant/30 active:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-tertiary-fixed/30 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">glucose</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Diabetes</span>
+</div>
+<div class="bg-surface-container p-stack-md rounded-[16px] flex flex-col items-center gap-2 border border-outline-variant/30 active:bg-surface-container-high transition-colors">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">female</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Women Care</span>
+</div>
+</div>
+</section>
+<!-- Popular Packages Carousel -->
+<section class="py-stack-lg">
+<div class="px-margin-mobile flex justify-between items-end mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm">Popular Packages</h2>
+<button class="text-primary font-label-md text-label-md">View All</button>
+</div>
+<div class="flex overflow-x-auto px-margin-mobile gap-stack-md no-scrollbar snap-x">
+<!-- Package Card 1 -->
+<div class="snap-center shrink-0 w-[280px] bg-white rounded-[16px] border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container overflow-hidden relative">
+<img alt="Health checkup" class="w-full h-full object-cover" data-alt="A bright clinical laboratory interior with modern diagnostic equipment in a clean white setting. The lighting is soft and professional, emphasizing high-end healthcare precision. Soft blue accents reflect the brand's primary color, creating a trustworthy and calm medical environment with a focus on advanced technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGwkRmdbde-KbCdMB3EF1Ktfy608RktuEEP_D5jh5o1QeAUXLG79rNRuIz5zfIowvpbuWnp9sSLPhoB16SBFlQ9RnqXpGqqvyImFz4uaQEcF4auH2pILqp0mV2N_jB9jNKY5TDeTDNzSyxi_N3B0Lwv5Fj4MyjCjEWao9IK5ZrcB74islZbACRG0UpFrnZOKdjMTxz4RRRxIoqmIbkpMd77iyXbmCPN9GIV6vJDVVtQWUQE6btX8mE8A9vmEL_ILEA6tmp3uTNHSA"/>
+<div class="absolute top-2 right-2 bg-secondary-container/90 text-on-secondary-container text-label-sm font-label-sm px-2 py-1 rounded-full">
+                            Save 40%
+                        </div>
+</div>
+<div class="p-stack-md flex flex-col gap-2">
+<div class="flex items-center gap-1 text-primary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]">lab_research</span> Metropolis Labs
+                        </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-lg">Essential Body Care</h3>
+<p class="text-body-sm text-on-surface-variant">60+ Vital Parameters included</p>
+<div class="mt-stack-sm flex items-end gap-2">
+<span class="text-headline-sm font-bold">₹1,999</span>
+<span class="text-body-sm line-through text-outline">₹3,499</span>
+</div>
+<button class="w-full mt-stack-sm py-2 border border-primary text-primary rounded-xl font-label-md text-label-md hover:bg-primary/5 active:scale-95 transition-all">
+                            Compare Now
+                        </button>
+</div>
+</div>
+<!-- Package Card 2 -->
+<div class="snap-center shrink-0 w-[280px] bg-white rounded-[16px] border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="h-32 bg-surface-container overflow-hidden relative">
+<img alt="Advanced checkup" class="w-full h-full object-cover" data-alt="Close up of a professional doctor's workspace with a high-end stethoscope resting on a tablet displaying medical data. The scene is illuminated by natural soft light from a nearby window, creating a serene and clinical professional atmosphere. The color palette consists of crisp whites and deep medical blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBseJeQJRx-fhfWB4S7CUkCBK4I-9dsC8mskqkNeiJGW6cY35JuuX99EswF7ZSu80_CFphWydt52rQfzIPBDy6q34-tbYMay4nCf6W5KLTz8FWSiQJTbcfQTXj3vjyyIl6WFA-tYICjy3L0HY3JR4nnTU3uYf96EhYxyeN-tMINPvQottJLc-t0SYolmAwKrI2hrWTlEqPHpxPP2eJps04SxapAop9hNPCnsBi8BYhBLYJlx5rif8BTmNSq5mHaLmdcN9NHAzg3n0E"/>
+<div class="absolute top-2 right-2 bg-secondary-container/90 text-on-secondary-container text-label-sm font-label-sm px-2 py-1 rounded-full">
+                            Best Value
+                        </div>
+</div>
+<div class="p-stack-md flex flex-col gap-2">
+<div class="flex items-center gap-1 text-primary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]">lab_research</span> Apollo Diagnostics
+                        </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface text-lg">Senior Citizen Gold</h3>
+<p class="text-body-sm text-on-surface-variant">85+ Vital Parameters included</p>
+<div class="mt-stack-sm flex items-end gap-2">
+<span class="text-headline-sm font-bold">₹2,499</span>
+<span class="text-body-sm line-through text-outline">₹4,999</span>
+</div>
+<button class="w-full mt-stack-sm py-2 border border-primary text-primary rounded-xl font-label-md text-label-md hover:bg-primary/5 active:scale-95 transition-all">
+                            Compare Now
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="px-margin-mobile py-stack-lg bg-surface-container-low/50">
+<h2 class="font-headline-sm text-headline-sm mb-stack-lg">How It Works</h2>
+<div class="relative">
+<div class="absolute left-[15px] top-4 bottom-4 w-0.5 bg-outline-variant/30"></div>
+<div class="flex flex-col gap-stack-lg">
+<!-- Step 1 -->
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-sm shrink-0">1</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-label-md text-label-md text-on-surface">Select Package</h4>
+<p class="text-body-sm text-on-surface-variant">Browse through curated health packages from top-rated laboratories.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-sm shrink-0">2</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-label-md text-label-md text-on-surface">Compare &amp; Book</h4>
+<p class="text-body-sm text-on-surface-variant">Compare prices and transparency ratings. Book a home collection in 2 minutes.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-sm shrink-0">3</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-label-md text-label-md text-on-surface">Get Results</h4>
+<p class="text-body-sm text-on-surface-variant">Access your digital reports on ChooseMyLab dashboard within 24 hours.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden border-t border-outline-variant bg-surface/95 backdrop-blur-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex justify-around items-center h-16 px-4">
+<button class="flex flex-col items-center justify-center text-primary bg-primary-container/20 rounded-xl px-4 py-1">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">compare_arrows</span>
+<span class="font-label-sm text-label-sm">Compare</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-sm text-label-sm">Book</span>
+</button>
+</div>
+</nav>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-20 left-0 w-full px-margin-mobile z-40 transform transition-transform duration-300 translate-y-0" id="sticky-cta">
+<button class="w-full bg-primary-container text-on-primary py-4 rounded-full font-label-md text-label-md shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">explore</span>
+            Explore Packages
+        </button>
+</div>
+<script>
+        // Simple scroll detection for showing/hiding sticky CTA
+        let lastScrollY = window.scrollY;
+        const cta = document.getElementById('sticky-cta');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) {
+                if (window.scrollY > lastScrollY) {
+                    cta.style.transform = 'translateY(150%)';
+                } else {
+                    cta.style.transform = 'translateY(0)';
+                }
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // Interactive micro-effects for cards
+        document.querySelectorAll('.snap-center').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.classList.add('scale-[0.98]');
+            });
+            card.addEventListener('touchend', () => {
+                card.classList.remove('scale-[0.98]');
+            });
+        });
+    </script>
+</body></html>

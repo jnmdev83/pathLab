@@ -63,71 +63,259 @@ exports.get_api_tests = async (req, res) => {
 };
 
 // ─── GET /api/tests/:testId/prices ───────────────────────────────────────────
-// Returns all labs offering a specific test (looked up by test ID).
-// Supports optional location filtering (radius in km) and city filtering.
+// Enhanced: supports pagination, sort, and filters for the search results page.
+// Backwards compatible: when ?page is absent, returns a flat array as before.
 exports.get_api_tests_testId_prices = async (req, res) => {
+  const isPaginated = req.query.page !== undefined;
+  const page   = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit  = Math.max(1, Math.min(20, parseInt(req.query.limit, 10) || 8));
+  const offset = (page - 1) * limit;
+
   const city    = (req.query.city || '').trim();
   const userLat = validCoordinate(req.query.latitude ?? req.query.lat, -90, 90);
   const userLng = validCoordinate(req.query.longitude ?? req.query.lng, -180, 180);
-  const radius  = Number(req.query.radius || 10);
+
+  // New filter params
+  const maxPrice   = parseInt(req.query.max_price, 10) || null;
+  const collection = req.query.collection || null; // 'home' | 'lab'
+  const nablOnly   = req.query.nabl === 'true';
+  const turnaround = req.query.turnaround || null; // '6' | 'same_day' | 'next_day'
+  const sortParam  = req.query.sort || 'popularity';
 
   try {
-    // First confirm the test exists
-    const testRow = await db.query('SELECT name FROM tests WHERE id = $1', [req.params.testId]);
+    const testRow = await db.query('SELECT id, name FROM tests WHERE id = $1', [req.params.testId]);
     if (testRow.rows.length === 0) return res.status(404).json({ error: 'Test not found' });
 
-    const params = [testRow.rows[0].name];
-    let distanceSelect = 'NULL::numeric AS distance_km';
-    let distanceFilter = '';
-    let orderBy = 'ltb.price ASC';
+    // Build count query parameters first (which doesn't require userLat/userLng)
+    const countParams = [req.params.testId];
+    let whereExtra = '';
 
-    // Add location-based distance expression and radius filter if coordinates provided
-    if (userLat !== null && userLng !== null) {
-      params.push(userLat, userLng);
-      const safeRadius = Number.isFinite(radius) && radius > 0 ? radius : 10;
-      distanceSelect = `round((${haversineSql('$2', '$3')})::numeric, 2) AS distance_km`;
-      distanceFilter = `AND (${haversineSql('$2', '$3')}) <= $${params.length + 1}`;
-      params.push(safeRadius);
-      orderBy = 'distance_km ASC, ltb.price ASC';
+    if (maxPrice) {
+      countParams.push(maxPrice);
+      whereExtra += ` AND ltb.price <= $${countParams.length}`;
+    }
+    if (collection === 'home') whereExtra += ` AND lb.home_collection = true`;
+    if (collection === 'lab')  whereExtra += ` AND lb.home_collection = false`;
+    if (nablOnly)              whereExtra += ` AND l.is_verified = true`;
+    if (turnaround === '6') {
+      whereExtra += ` AND (NULLIF(regexp_replace(ltb.reporting_time, '[^0-9]', '', 'g'), ''))::int <= 6`;
+    } else if (turnaround === 'same_day') {
+      whereExtra += ` AND (NULLIF(regexp_replace(ltb.reporting_time, '[^0-9]', '', 'g'), ''))::int <= 24`;
+    }
+    if (city) {
+      countParams.push(city);
+      whereExtra += ` AND lower(lb.city) = lower($${countParams.length})`;
     }
 
-    // Add optional city filter
-    if (city) params.push(city);
-    const cityFilter = city ? `AND lower(lb.city) = lower($${params.length})` : '';
+    // Now build parameters for the main query
+    let distanceSelect = 'NULL::numeric AS distance_km';
+    const mainParams = [...countParams];
 
-    const result = await db.query(`
-      SELECT
-        l.id   AS lab_id,
-        l.name AS lab_name,
-        lb.id  AS branch_id,
-        lb.branch_name,
-        lb.address,
-        lb.city,
-        lb.phone,
-        lb.latitude,
-        lb.longitude,
-        ltb.price,
-        ltb.reporting_time,
-        ltb.is_available,
-        t.id AS test_id,
-        ${distanceSelect}
+    if (userLat !== null && userLng !== null) {
+      mainParams.push(userLat, userLng);
+      const latIdx = mainParams.length - 1;
+      const lngIdx = mainParams.length;
+      distanceSelect = `round((${haversineSql(`$${latIdx}`, `$${lngIdx}`)})::numeric, 2) AS distance_km`;
+    }
+
+    // Sort order
+    let orderBy;
+    switch (sortParam) {
+      case 'price_asc':  orderBy = 'ltb.price ASC'; break;
+      case 'price_desc': orderBy = 'ltb.price DESC'; break;
+      case 'rating':     orderBy = 'l.rating DESC NULLS LAST, l.booking_count DESC'; break;
+      case 'distance':   orderBy = userLat ? 'distance_km ASC NULLS LAST, ltb.price ASC' : 'ltb.price ASC'; break;
+      default:           orderBy = 'l.booking_count DESC, l.rating DESC NULLS LAST, ltb.price ASC';
+    }
+
+    const selectCols = `
+      l.id             AS lab_id,
+      l.name           AS lab_name,
+      l.is_verified,
+      COALESCE(l.rating, 4.0)        AS rating,
+      COALESCE(l.booking_count, 0)   AS booking_count,
+      lb.id            AS branch_id,
+      lb.branch_name,
+      lb.address,
+      lb.city,
+      lb.phone,
+      lb.latitude,
+      lb.longitude,
+      lb.home_collection,
+      lb.operating_hours,
+      ltb.price,
+      ltb.original_price,
+      COALESCE(ltb.discount_percent, 0) AS discount_percent,
+      ltb.reporting_time,
+      ltb.is_available,
+      t.id  AS test_id,
+      t.name AS test_name,
+      ${distanceSelect}
+    `;
+
+    const baseWhere = `
+      WHERE ltb.test_id = $1
+        AND ltb.is_available = true
+        AND l.is_active  = true
+        AND lb.is_active = true
+        ${whereExtra}
+    `;
+
+    const joins = `
       FROM lab_test_branches ltb
       JOIN tests        t  ON t.id  = ltb.test_id
       JOIN labs         l  ON l.id  = ltb.lab_id
       JOIN lab_branches lb ON lb.id = ltb.lab_branch_id
-      WHERE t.name = $1
-        AND ltb.is_available = true
-        AND l.is_active = true
-        AND lb.is_active = true
-        ${cityFilter}
-        ${distanceFilter}
-      ORDER BY ${orderBy}
-    `, params);
+    `;
 
+    if (isPaginated) {
+      const countRes = await db.query(
+        `SELECT COUNT(*) AS total ${joins} ${baseWhere}`,
+        countParams
+      );
+      const total = parseInt(countRes.rows[0].total, 10);
+
+      const queryParams = [...mainParams, limit, offset];
+      const limitIdx = queryParams.length - 1;
+      const offsetIdx = queryParams.length;
+
+      const result = await db.query(
+        `SELECT ${selectCols} ${joins} ${baseWhere} ORDER BY ${orderBy} LIMIT $${limitIdx} OFFSET $${offsetIdx}`,
+        queryParams
+      );
+
+      return res.json({
+        results:    result.rows,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+        hasMore:    page * limit < total,
+      });
+    }
+
+    // ── Backwards-compat: no ?page param → return flat array ──
+    const result = await db.query(
+      `SELECT ${selectCols} ${joins} ${baseWhere} ORDER BY ${orderBy}`,
+      mainParams
+    );
     res.json(result.rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not fetch test prices' });
+  }
+};
+
+// ─── GET /api/tests/search?q=<name> ──────────────────────────────────────────
+// Resolves a test name string → { id, name, cat, description, total_labs }.
+exports.get_api_tests_search = async (req, res) => {
+  const q = (req.query.q || '').trim();
+  if (!q) return res.status(400).json({ error: 'Query parameter q is required' });
+
+  try {
+    // Exact match first
+    let { rows } = await db.query(`
+      SELECT
+        t.id,
+        t.name,
+        t.cat,
+        COALESCE(t.description, '') AS description,
+        COALESCE(t.short_description, '') AS short_description,
+        COUNT(DISTINCT ltb.lab_branch_id)::int AS total_labs
+      FROM tests t
+      LEFT JOIN lab_test_branches ltb
+        ON ltb.test_id = t.id AND ltb.is_available = true
+      WHERE lower(t.name) = lower($1)
+      GROUP BY t.id
+      ORDER BY COUNT(DISTINCT ltb.lab_branch_id) DESC
+      LIMIT 1
+    `, [q]);
+
+    // Fallback: partial match
+    if (rows.length === 0) {
+      ({ rows } = await db.query(`
+        SELECT
+          t.id,
+          t.name,
+          t.cat,
+          COALESCE(t.description, '') AS description,
+          COALESCE(t.short_description, '') AS short_description,
+          COUNT(DISTINCT ltb.lab_branch_id)::int AS total_labs
+        FROM tests t
+        LEFT JOIN lab_test_branches ltb
+          ON ltb.test_id = t.id AND ltb.is_available = true
+        WHERE lower(t.name) LIKE lower($1)
+        GROUP BY t.id
+        ORDER BY COUNT(DISTINCT ltb.lab_branch_id) DESC
+        LIMIT 1
+      `, [`%${q}%`]));
+    }
+
+    if (rows.length === 0) return res.status(404).json({ error: 'Test not found' });
+    res.json(rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not search tests' });
+  }
+};
+
+// ─── GET /api/tests/:testId/top-picks ────────────────────────────────────────
+// Returns the 3 hero picks: cheapest, fastest, best-rated for a given test.
+exports.get_api_tests_testId_top_picks = async (req, res) => {
+  const testId = req.params.testId;
+  try {
+    const testRow = await db.query('SELECT id FROM tests WHERE id = $1', [testId]);
+    if (testRow.rows.length === 0) return res.status(404).json({ error: 'Test not found' });
+
+    const cols = `
+      l.id              AS lab_id,
+      l.name            AS lab_name,
+      COALESCE(l.rating, 4.0)        AS rating,
+      COALESCE(l.booking_count, 0)   AS booking_count,
+      l.is_verified,
+      lb.id             AS branch_id,
+      lb.branch_name,
+      lb.city,
+      lb.home_collection,
+      ltb.price,
+      ltb.original_price,
+      COALESCE(ltb.discount_percent, 0) AS discount_percent,
+      ltb.reporting_time
+    `;
+    const base = `
+      FROM lab_test_branches ltb
+      JOIN tests        t  ON t.id  = ltb.test_id
+      JOIN labs         l  ON l.id  = ltb.lab_id
+      JOIN lab_branches lb ON lb.id = ltb.lab_branch_id
+      WHERE ltb.test_id    = $1
+        AND ltb.is_available = true
+        AND l.is_active     = true
+        AND lb.is_active    = true
+    `;
+
+    const [cheapest, fastest, bestRated] = await Promise.all([
+      db.query(`SELECT ${cols} ${base} ORDER BY ltb.price ASC  LIMIT 1`, [testId]),
+      db.query(
+        `SELECT ${cols} ${base}
+         ORDER BY (NULLIF(regexp_replace(ltb.reporting_time, '[^0-9]', '', 'g'), ''))::int ASC NULLS LAST, ltb.price ASC
+         LIMIT 1`,
+        [testId]
+      ),
+      db.query(
+        `SELECT ${cols} ${base}
+         ORDER BY l.rating DESC NULLS LAST, l.booking_count DESC, ltb.price ASC
+         LIMIT 1`,
+        [testId]
+      ),
+    ]);
+
+    res.json({
+      cheapest:   cheapest.rows[0]   || null,
+      fastest:    fastest.rows[0]    || null,
+      best_rated: bestRated.rows[0]  || null,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch top picks' });
   }
 };
 
@@ -261,3 +449,158 @@ exports.get_api_admin_tests_id_branches = async (req, res) => {
     res.status(500).json({ error: 'Could not fetch test branches' });
   }
 };
+
+// ─── GET /api/category-previews ─────────────────────────────────────────────
+exports.get_api_category_previews = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        cp.id as preview_row_id,
+        cp.category_name,
+        cp.is_pkg,
+        COALESCE(cp.test_id, cp.package_id) as id,
+        COALESCE(t.name, p.name) as name,
+        COALESCE(
+          t.price, 
+          (SELECT MIN(price) FROM lab_package_branches lpb WHERE lpb.package_id = p.id), 
+          999
+        ) as price,
+        COALESCE(t.description, p.description, 'Premium clinical audit parameter.') as description,
+        COALESCE(t.rep, '12 Hours') as rep,
+        COALESCE(t.cat, 'blood') as cat,
+        COALESCE(t.preparations, p.preparations, 'No special preparation required.') as preparations,
+        COALESCE(t.samples_required, p.samples_required, 'Blood') as samples_required
+      FROM category_previews cp
+      LEFT JOIN tests t ON cp.test_id = t.id AND cp.is_pkg = false
+      LEFT JOIN packages p ON cp.package_id = p.id AND cp.is_pkg = true
+      ORDER BY cp.category_name ASC, cp.display_order ASC, cp.id ASC
+    `;
+    const result = await db.query(query);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch category previews' });
+  }
+};
+
+// ─── GET /api/categories/:categoryName/metadata ──────────────────────────────
+exports.get_api_category_metadata = async (req, res) => {
+  const { categoryName } = req.params;
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM categories_metadata WHERE lower(category_name) = lower($1)',
+      [categoryName.trim()]
+    );
+    if (rows.length > 0) {
+      res.json(rows[0]);
+    } else {
+      // Fallback default metadata
+      res.json({
+        category_name: categoryName,
+        icon: 'science',
+        description: `Explore diagnostic tests under ${categoryName} care.`,
+        long_description: `Explore comprehensive diagnostic tests and health packages under ${categoryName} care. Compare prices across certified NABL labs and book with free home collection.`,
+        medically_reviewed: true,
+        stats_labs: '128+ certified labs',
+        stats_bookings: '10k+ monthly bookings',
+        stats_patients: '56k+ patients',
+        tags: ['Blood Tests', 'Health Panel', 'Screening', 'Home Collection']
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch category metadata' });
+  }
+};
+
+
+// ─── GET /api/tests/:testId ──────────────────────────────────────────────────
+exports.get_api_test_by_id = async (req, res) => {
+  const { testId } = req.params;
+  try {
+    const { rows } = await db.query('SELECT * FROM tests WHERE id = $1', [testId]);
+    if (rows.length === 0) return res.status(404).json({ error: 'Test not found' });
+    res.json(rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch test details' });
+  }
+};
+
+// ─── GET /api/labs/:labId/profile ────────────────────────────────────────────
+// Returns rich lab profile from lab_profiles joined with labs.
+// Falls back gracefully to labs data if no profile row exists.
+exports.get_api_labs_labId_profile = async (req, res) => {
+  const { labId } = req.params;
+  try {
+    // Try joining lab_profiles with labs
+    const { rows } = await db.query(`
+      SELECT
+        l.id               AS lab_id,
+        l.name             AS lab_name,
+        l.phone,
+        l.email,
+        l.website,
+        l.is_verified,
+        COALESCE(l.rating, 4.0)        AS rating,
+        COALESCE(l.booking_count, 0)   AS booking_count,
+        lp.tagline,
+        lp.about,
+        lp.established_year,
+        lp.accreditations,
+        lp.lab_type,
+        lp.total_branches,
+        lp.tests_offered,
+        lp.images,
+        lp.speciality_tags,
+        lp.home_collection,
+        lp.report_time_hours,
+        COALESCE(lp.rating, l.rating, 4.0) AS profile_rating,
+        COALESCE(lp.review_count, 500)     AS review_count
+      FROM labs l
+      LEFT JOIN lab_profiles lp ON lp.lab_id = l.id
+      WHERE l.id = $1
+    `, [labId]);
+
+    if (rows.length === 0) return res.status(404).json({ error: 'Lab not found' });
+
+    const row = rows[0];
+
+    // Ensure arrays are proper JS arrays (PG driver may already parse them)
+    const normalize = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'string') {
+        try { return JSON.parse(val); } catch { return []; }
+      }
+      return [];
+    };
+
+    res.json({
+      lab_id:          row.lab_id,
+      lab_name:        row.lab_name,
+      phone:           row.phone,
+      email:           row.email,
+      website:         row.website,
+      is_verified:     row.is_verified,
+      rating:          parseFloat(row.profile_rating) || 4.0,
+      review_count:    parseInt(row.review_count) || 500,
+      booking_count:   parseInt(row.booking_count) || 0,
+      tagline:         row.tagline || 'Trusted Diagnostic Partner',
+      about:           row.about || 'A NABL-certified diagnostic laboratory delivering accurate clinical test results.',
+      established_year: row.established_year || 2005,
+      accreditations:  normalize(row.accreditations).length > 0 ? normalize(row.accreditations) : ['NABL'],
+      lab_type:        row.lab_type || 'pathology',
+      total_branches:  parseInt(row.total_branches) || 1,
+      tests_offered:   parseInt(row.tests_offered) || 100,
+      images:          normalize(row.images),
+      speciality_tags: normalize(row.speciality_tags),
+      home_collection: row.home_collection !== false,
+      report_time_hours: parseInt(row.report_time_hours) || 24,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch lab profile' });
+  }
+};
+

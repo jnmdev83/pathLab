@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comprehensive Full Body Checkup | LabLink Medical</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d9dadb",
+                      "surface": "#f8f9fa",
+                      "on-tertiary-container": "#ffcfbe",
+                      "on-tertiary-fixed-variant": "#7f2b00",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed-variant": "#0040a1",
+                      "on-tertiary-fixed": "#370e00",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#86f898",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#0b57d0",
+                      "surface-container-highest": "#e1e3e4",
+                      "primary": "#0041a2",
+                      "inverse-on-surface": "#f0f1f2",
+                      "inverse-surface": "#2e3132",
+                      "tertiary-fixed-dim": "#ffb599",
+                      "secondary-fixed": "#89fa9b",
+                      "tertiary": "#802b00",
+                      "on-background": "#191c1d",
+                      "tertiary-fixed": "#ffdbce",
+                      "outline": "#737785",
+                      "secondary-fixed-dim": "#6ddd81",
+                      "outline-variant": "#c3c6d6",
+                      "on-surface-variant": "#424654",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#191c1d",
+                      "surface-variant": "#e1e3e4",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#a83b00",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "surface-tint": "#0856cf",
+                      "surface-container": "#edeeef",
+                      "secondary": "#006e2c",
+                      "on-secondary-container": "#00722f",
+                      "surface-container-low": "#f3f4f5",
+                      "surface-container-high": "#e7e8e9",
+                      "on-primary-container": "#ced9ff",
+                      "on-secondary-fixed-variant": "#005320",
+                      "on-primary-fixed": "#001847",
+                      "primary-fixed": "#dae2ff",
+                      "on-secondary-fixed": "#002108",
+                      "inverse-primary": "#b2c5ff",
+                      "background": "#f8f9fa"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-gap": "80px",
+                      "margin-desktop": "64px",
+                      "gutter-mobile": "16px",
+                      "unit": "8px",
+                      "margin-mobile": "20px",
+                      "gutter-desktop": "32px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Atkinson Hyperlegible Next"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "body-lg": ["Atkinson Hyperlegible Next"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "body-md": ["Atkinson Hyperlegible Next"],
+                      "label-sm": ["Atkinson Hyperlegible Next"]
+              },
+              "fontSize": {
+                      "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface/90 backdrop-blur-md shadow-[0px_4px_20px_rgba(11,87,208,0.05)]">
+<div class="flex items-center gap-12">
+<span class="text-headline-md font-headline-lg text-primary">LabLink Medical</span>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200" href="#">Tests</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200" href="#">Labs</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md" href="#">Reports</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors duration-200" href="#">Education</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant font-label-md hover:text-primary transition-colors">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-label-md shadow-sm hover:opacity-90 active:scale-95 transition-all">Book Now</button>
+</div>
+</header>
+<main class="pt-24 pb-section-gap">
+<!-- Breadcrumb -->
+<div class="max-w-[1280px] mx-auto px-margin-desktop mb-8">
+<nav class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<a class="hover:text-primary" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Packages</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Full Body</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-semibold">Comprehensive Full Body Checkup</span>
+</nav>
+</div>
+<!-- Hero Section -->
+<section class="max-w-[1280px] mx-auto px-margin-desktop mb-16">
+<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0px_4px_20px_rgba(11,87,208,0.05)] grid grid-cols-1 md:grid-cols-2">
+<div class="p-12 flex flex-col justify-center">
+<div class="flex items-center gap-3 mb-4">
+<div class="flex items-center bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-sm">
+<span class="material-symbols-outlined text-[18px] mr-1" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+                            4.9 (2,400+ Reviews)
+                        </div>
+<span class="text-on-surface-variant font-label-sm">NABL &amp; CAP Certified</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-6">Comprehensive Full Body Checkup</h1>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="flex items-center gap-3 bg-surface-container rounded-2xl p-4">
+<span class="material-symbols-outlined text-primary text-[32px]">biotech</span>
+<div>
+<p class="text-label-sm text-on-surface-variant">Parameters</p>
+<p class="font-bold text-on-surface">88 Markers</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-surface-container rounded-2xl p-4">
+<span class="material-symbols-outlined text-primary text-[32px]">schedule</span>
+<div>
+<p class="text-label-sm text-on-surface-variant">Reports in</p>
+<p class="font-bold text-on-surface">12 Hours</p>
+</div>
+</div>
+</div>
+<div class="flex items-end gap-4 mb-8">
+<div>
+<p class="text-label-sm text-on-surface-variant line-through">₹5,998</p>
+<p class="text-headline-md font-bold text-primary">₹2,999</p>
+</div>
+<div class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-lg text-label-sm font-bold mb-1">
+                            50% OFF
+                        </div>
+</div>
+<button class="bg-primary text-on-primary text-label-md px-10 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group w-full md:w-fit">
+                        Book Appointment Now
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="relative bg-primary-container/5 min-h-[400px]">
+<img class="w-full h-full object-cover" data-alt="A bright, modern medical laboratory setting with clean white surfaces and high-end diagnostic equipment. The lighting is soft and clinical, reflecting a sense of precision and advanced technology. The color palette features whites, surgical blues, and subtle steel accents, creating a calm yet authoritative atmosphere. A focused professional in a white lab coat is visible in the soft-focus background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrUcx-rubqP0lZdoyfkBitB6hhDcWsnMt6kNCxcwFEL6iCGhR8IdWF4QPmnTGBWF9XUvwRlfKFcantI9D_kgGLJsoh8esCT0md4kCUUQZIuSQwsSuaudMmpwwqRbjWXQ6xu6RNworthAgYvJBn964WS1TJwSLe-nDo1UZePdMzCfm4-zZ5-rm839YnPgdrSl15mEyeODM8F39461U6rR4XR89R6FYQaNgfxJ9-9yXAZh7aOIAfJZ3BS81KGoZyphxI9PIHAZXW-yg"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- Overview Section -->
+<section class="max-w-[1280px] mx-auto px-margin-desktop mb-20">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+<div class="lg:col-span-2">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Why this screening is essential for you</h2>
+<p class="text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+                        Modern lifestyles often mask underlying health conditions. This comprehensive screen acts as an early-warning system, detecting clinical shifts in blood chemistry, liver function, and kidney efficiency long before symptoms appear. It is the gold standard for annual health monitoring.
+                    </p>
+<div class="grid grid-cols-2 gap-6">
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">verified</span>
+</div>
+<p class="text-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Clinical Precision:</span> All tests processed in ISO-certified robotic labs.</p>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">home_health</span>
+</div>
+<p class="text-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Home Collection:</span> Trained phlebotomists arrive in 60 mins.</p>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 p-8 rounded-3xl border border-primary/10">
+<h3 class="font-label-md text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">info</span>
+                        Pre-test Instructions
+                    </h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">check_circle</span>
+                            10-12 hours fasting required.
+                        </li>
+<li class="flex items-start gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">check_circle</span>
+                            Water is allowed during fasting.
+                        </li>
+<li class="flex items-start gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">check_circle</span>
+                            Avoid alcohol 24h prior to sample.
+                        </li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Parameter Detail Section -->
+<section class="max-w-[1280px] mx-auto px-margin-desktop mb-20">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-8">What's Included in This Package?</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- CBC Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col h-full group">
+<div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[32px]">bloodtype</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">CBC</h3>
+<p class="text-label-sm text-primary mb-6">Complete Blood Count (24 parameters)</p>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Hemoglobin</p>
+<p class="text-label-sm text-on-surface-variant">Detects anemia and blood oxygen capacity.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">WBC Count</p>
+<p class="text-label-sm text-on-surface-variant">Identifies active infections or immunity issues.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Platelets</p>
+<p class="text-label-sm text-on-surface-variant">Monitors blood clotting and recovery ability.</p>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold text-label-sm mt-auto hover:gap-3 transition-all">
+                        Read more about these markers <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+<!-- LFT Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col h-full group">
+<div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[32px]">genetics</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">LFT</h3>
+<p class="text-label-sm text-primary mb-6">Liver Function Test (12 parameters)</p>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">SGOT &amp; SGPT</p>
+<p class="text-label-sm text-on-surface-variant">Enzymes indicating liver cell health/damage.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Bilirubin</p>
+<p class="text-label-sm text-on-surface-variant">Measures bile flow and potential jaundice.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Albumin</p>
+<p class="text-label-sm text-on-surface-variant">Key protein for fluid balance and transport.</p>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold text-label-sm mt-auto hover:gap-3 transition-all">
+                        Read more about these markers <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+<!-- KFT Card -->
+<div class="bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col h-full group">
+<div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[32px]">ecg</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-2">KFT</h3>
+<p class="text-label-sm text-primary mb-6">Kidney Function Test (10 parameters)</p>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Creatinine</p>
+<p class="text-label-sm text-on-surface-variant">Critical waste product indicating filtration rate.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Urea</p>
+<p class="text-label-sm text-on-surface-variant">Proteins breakdown marker for kidney health.</p>
+</div>
+<div class="p-3 bg-surface-container rounded-xl">
+<p class="font-bold text-on-surface text-label-md">Uric Acid</p>
+<p class="text-label-sm text-on-surface-variant">Screening for gout and metabolic efficiency.</p>
+</div>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold text-label-sm mt-auto hover:gap-3 transition-all">
+                        Read more about these markers <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Metropolis Section -->
+<section class="max-w-[1280px] mx-auto px-margin-desktop mb-20 overflow-hidden">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">More Packages by Metropolis Diagnostics</h2>
+<p class="text-on-surface-variant">Curated screenings from our premium partner lab.</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="flex gap-6 overflow-x-auto scroll-hide pb-4">
+<!-- Package 1 -->
+<div class="min-w-[320px] bg-surface-container-lowest p-6 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold w-fit mb-4">Elite Series</span>
+<h4 class="font-bold text-label-md mb-2">Vitamin Profile Plus</h4>
+<p class="text-label-sm text-on-surface-variant mb-4">Includes Vitamin D, B12, and Ionized Calcium.</p>
+<div class="mt-auto pt-4 flex justify-between items-center border-t border-outline-variant/20">
+<span class="font-bold text-primary">₹1,499</span>
+<button class="text-primary font-bold text-label-sm">View Details</button>
+</div>
+</div>
+<!-- Package 2 -->
+<div class="min-w-[320px] bg-surface-container-lowest p-6 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold w-fit mb-4">Metabolic</span>
+<h4 class="font-bold text-label-md mb-2">Advanced Diabetes Care</h4>
+<p class="text-label-sm text-on-surface-variant mb-4">HbA1c, Fasting Blood Sugar, &amp; Microalbuminuria.</p>
+<div class="mt-auto pt-4 flex justify-between items-center border-t border-outline-variant/20">
+<span class="font-bold text-primary">₹1,299</span>
+<button class="text-primary font-bold text-label-sm">View Details</button>
+</div>
+</div>
+<!-- Package 3 -->
+<div class="min-w-[320px] bg-surface-container-lowest p-6 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold w-fit mb-4">Cardiac</span>
+<h4 class="font-bold text-label-md mb-2">Lipid &amp; Heart Profile</h4>
+<p class="text-label-sm text-on-surface-variant mb-4">Total Cholesterol, HDL, LDL, and Triglycerides.</p>
+<div class="mt-auto pt-4 flex justify-between items-center border-t border-outline-variant/20">
+<span class="font-bold text-primary">₹999</span>
+<button class="text-primary font-bold text-label-sm">View Details</button>
+</div>
+</div>
+<!-- Package 4 -->
+<div class="min-w-[320px] bg-surface-container-lowest p-6 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold w-fit mb-4">Women's Health</span>
+<h4 class="font-bold text-label-md mb-2">PCOS Screening Basic</h4>
+<p class="text-label-sm text-on-surface-variant mb-4">Hormonal balance markers and thyroid screen.</p>
+<div class="mt-auto pt-4 flex justify-between items-center border-t border-outline-variant/20">
+<span class="font-bold text-primary">₹1,899</span>
+<button class="text-primary font-bold text-label-sm">View Details</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Similar Packages Section -->
+<section class="max-w-[1280px] mx-auto px-margin-desktop mb-20 overflow-hidden">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-8">Compare with Similar Packages</h2>
+<div class="flex gap-6 overflow-x-auto scroll-hide pb-4">
+<!-- Dr Lal PathLabs -->
+<div class="min-w-[380px] bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col relative">
+<div class="absolute top-6 right-8">
+<label class="flex items-center gap-2 cursor-pointer">
+<span class="text-label-sm text-on-surface-variant">Compare</span>
+<input class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">apartment</span>
+</div>
+<span class="font-bold text-on-surface">Dr Lal PathLabs</span>
+</div>
+<h4 class="font-headline-md text-[20px] mb-4">Swasthfit Full Body Check</h4>
+<ul class="space-y-2 mb-8 flex-grow">
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 92 Parameters</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 24h Turnaround</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> Free Home Collection</li>
+</ul>
+<div class="flex justify-between items-end">
+<p class="font-bold text-primary text-[24px]">₹3,200</p>
+<button class="bg-primary/5 text-primary border border-primary/20 px-6 py-2 rounded-xl text-label-sm font-bold hover:bg-primary hover:text-white transition-all">Book This</button>
+</div>
+</div>
+<!-- Thyrocare -->
+<div class="min-w-[380px] bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col relative">
+<div class="absolute top-6 right-8">
+<label class="flex items-center gap-2 cursor-pointer">
+<span class="text-label-sm text-on-surface-variant">Compare</span>
+<input class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">apartment</span>
+</div>
+<span class="font-bold text-on-surface">Thyrocare</span>
+</div>
+<h4 class="font-headline-md text-[20px] mb-4">Aarogyam 1.3 Profile</h4>
+<ul class="space-y-2 mb-8 flex-grow">
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 84 Parameters</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 18h Turnaround</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> Digital Reports Only</li>
+</ul>
+<div class="flex justify-between items-end">
+<p class="font-bold text-primary text-[24px]">₹2,499</p>
+<button class="bg-primary/5 text-primary border border-primary/20 px-6 py-2 rounded-xl text-label-sm font-bold hover:bg-primary hover:text-white transition-all">Book This</button>
+</div>
+</div>
+<!-- SRL -->
+<div class="min-w-[380px] bg-surface-container-lowest p-8 rounded-[16px] shadow-sm border border-outline-variant/30 flex flex-col relative border-primary shadow-md">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</div>
+<div class="absolute top-6 right-8">
+<label class="flex items-center gap-2 cursor-pointer">
+<span class="text-label-sm text-on-surface-variant">Compare</span>
+<input checked="" class="w-6 h-6 rounded border-outline text-primary focus:ring-primary" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">apartment</span>
+</div>
+<span class="font-bold text-on-surface">SRL Diagnostics</span>
+</div>
+<h4 class="font-headline-md text-[20px] mb-4">SRL Full Body Plus</h4>
+<ul class="space-y-2 mb-8 flex-grow">
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 90 Parameters</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> 12h Turnaround</li>
+<li class="flex items-center gap-2 text-on-surface-variant text-label-sm"><span class="material-symbols-outlined text-secondary text-[18px]">check</span> Smart Trend Analysis</li>
+</ul>
+<div class="flex justify-between items-end">
+<p class="font-bold text-primary text-[24px]">₹3,099</p>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-xl text-label-sm font-bold hover:opacity-90 transition-all">Book This</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-container-low border-t border-outline-variant mt-section-gap">
+<div>
+<span class="font-headline-md text-on-surface block mb-4">LabLink Medical</span>
+<p class="text-body-md text-on-surface-variant mb-6 max-w-md">Dedicated to democratizing healthcare through precision diagnostics and home-first medical services. Your health, our laboratory standard.</p>
+<p class="font-label-sm text-secondary">© 2024 LabLink Medical Systems. Clinical Accuracy Guaranteed.</p>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<h4 class="font-bold text-on-surface mb-4">Company</h4>
+<ul class="space-y-2">
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Clinical Standards</a></li>
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-4">Support</h4>
+<ul class="space-y-2">
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Contact Support</a></li>
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Partner Labs</a></li>
+<li><a class="text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Lab Locations</a></li>
+</ul>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for comparison checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('div.min-w-\\[380px\\]');
+                if (this.checked) {
+                    card.classList.add('border-primary', 'shadow-md');
+                } else {
+                    card.classList.remove('border-primary', 'shadow-md');
+                }
+            });
+        });
+
+        // Simple smooth scroll for the package lists
+        const scrollContainers = document.querySelectorAll('.scroll-hide');
+        scrollContainers.forEach(container => {
+            container.addEventListener('wheel', (evt) => {
+                evt.preventDefault();
+                container.scrollLeft += evt.deltaY;
+            });
+        });
+    </script>
+</body></html>

@@ -2,21 +2,21 @@ const path = require('path');
 const dotenv = require('dotenv');
 const { execSync } = require('child_process');
 
-// Dynamically detect environment from Git branch if NODE_ENV is not set
-let nodeEnv = process.env.NODE_ENV;
-if (!nodeEnv) {
-  try {
-    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-    if (branch === 'main') {
-      nodeEnv = 'production';
-    } else if (branch === 'stg') {
-      nodeEnv = 'stg';
-    } else {
-      nodeEnv = 'development';
-    }
-  } catch (e) {
-    nodeEnv = 'development';
+// Dynamically detect environment from Git branch (main always runs production, stg runs stg)
+let nodeEnv;
+try {
+  const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+  if (branch === 'main') {
+    nodeEnv = 'production';
+  } else if (branch === 'stg') {
+    nodeEnv = 'stg';
   }
+} catch (e) {
+  // Ignore git error
+}
+
+if (!nodeEnv) {
+  nodeEnv = process.env.NODE_ENV || 'development';
 }
 
 dotenv.config({ path: path.resolve(__dirname, `.env.${nodeEnv}`) });
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 });
 
 
-// Setup Database
+// Setup Database (Relational Previews, Packages, ratings, and short_description columns, dynamic package mappings)
 setupDatabase();
 
 

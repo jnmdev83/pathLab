@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lipid Profile Test Detail - PathoChoice</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-pill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#191c1d",
+                      "error-container": "#ffdad6",
+                      "primary": "#0041a2",
+                      "on-primary-fixed": "#001847",
+                      "surface-dim": "#d9dadb",
+                      "surface-tint": "#0856cf",
+                      "primary-fixed": "#dae2ff",
+                      "on-tertiary-container": "#ffcfbe",
+                      "on-tertiary-fixed": "#370e00",
+                      "on-secondary-fixed-variant": "#005320",
+                      "tertiary": "#802b00",
+                      "secondary-fixed": "#89fa9b",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#b2c5ff",
+                      "secondary": "#006e2c",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#edeeef",
+                      "tertiary-fixed": "#ffdbce",
+                      "outline-variant": "#c3c6d6",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#002108",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed-dim": "#ffb599",
+                      "secondary-container": "#86f898",
+                      "primary-container": "#0b57d0",
+                      "surface-container-highest": "#e1e3e4",
+                      "secondary-fixed-dim": "#6ddd81",
+                      "on-secondary-container": "#00722f",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#7f2b00",
+                      "inverse-primary": "#b2c5ff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "on-surface-variant": "#424654",
+                      "tertiary-container": "#a83b00",
+                      "on-surface": "#191c1d",
+                      "on-primary-fixed-variant": "#0040a1",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#ced9ff",
+                      "surface-container-high": "#e7e8e9",
+                      "outline": "#737785"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter-mobile": "16px",
+                      "unit": "8px",
+                      "section-gap": "80px",
+                      "gutter-desktop": "32px",
+                      "margin-desktop": "64px"
+              },
+              "fontFamily": {
+                      "label-md": ["Atkinson Hyperlegible Next"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "body-lg": ["Atkinson Hyperlegible Next"],
+                      "label-sm": ["Atkinson Hyperlegible Next"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Atkinson Hyperlegible Next"]
+              },
+              "fontSize": {
+                      "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+                      "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md">
+<!-- Mobile Top Header (Minimal) -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md px-margin-mobile h-16 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<button class="p-2 -ml-2 text-primary">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-primary font-bold text-lg">PathoChoice</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<main class="pb-24">
+<!-- Breadcrumb -->
+<nav class="px-margin-mobile py-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-xs">
+<span>Home</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Heart</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Tests</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Lipid Profile</span>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="px-margin-mobile mb-8">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/30">
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[10px] font-bold uppercase tracking-wider">Reports in 12h</span>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-[10px] font-bold uppercase tracking-wider">Fasting Required</span>
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-[10px] font-bold uppercase tracking-wider">Home Collection</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background mb-3">Lipid Profile Test</h2>
+<p class="text-on-surface-variant font-body-md text-sm mb-6 leading-relaxed">Comprehensive screening to assess cardiovascular health by measuring cholesterol levels and fatty substances in the blood.</p>
+<div class="flex items-end justify-between border-t border-outline-variant/30 pt-6">
+<div>
+<p class="text-on-surface-variant text-xs mb-1">Starting from</p>
+<p class="text-primary font-headline-md text-2xl">₹699</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-primary text-primary rounded-lg font-label-sm text-xs transition-active active:scale-95">Compare Labs</button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-label-sm text-xs shadow-md transition-active active:scale-95">Book Now</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Test Info Bento Section -->
+<section class="px-margin-mobile space-y-gutter-mobile mb-10">
+<h3 class="font-headline-md text-xl px-1">What this test measures</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 bg-primary-container/20 text-primary rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined" data-icon="bloodtype">bloodtype</span>
+</div>
+<span class="font-label-md text-sm">Total Cholesterol</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 bg-secondary-container/20 text-secondary rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</div>
+<span class="font-label-md text-sm">HDL (Good)</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 bg-tertiary-fixed/40 text-tertiary rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<span class="font-label-md text-sm">LDL (Bad)</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center text-center">
+<div class="w-10 h-10 bg-surface-variant text-on-surface-variant rounded-full flex items-center justify-center mb-2">
+<span class="material-symbols-outlined" data-icon="nutrition">nutrition</span>
+</div>
+<span class="font-label-md text-sm">Triglycerides</span>
+</div>
+</div>
+<div class="bg-primary/5 border border-primary/10 rounded-xl p-5 mt-4">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+<h4 class="font-label-md text-primary">Preparation Requirements</h4>
+</div>
+<ul class="space-y-2 text-on-surface-variant font-body-md text-sm">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-1 text-secondary">check_circle</span>
+                        10-12 hours fasting is mandatory (only water allowed).
+                    </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-1 text-secondary">check_circle</span>
+                        Avoid alcohol consumption for 24 hours prior.
+                    </li>
+</ul>
+</div>
+</section>
+<!-- Lab Comparison Section -->
+<section class="bg-surface-container-low pt-8 pb-12">
+<div class="px-margin-mobile">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-md text-xl">Compare Labs in Gurgaon</h3>
+<button class="text-primary font-label-sm text-xs flex items-center gap-1">
+                        Change <span class="material-symbols-outlined text-[16px]">edit_location</span>
+</button>
+</div>
+<!-- Mobile Filter/Sort Bar -->
+<div class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
+<button class="flex items-center gap-1 px-4 py-2 bg-surface-container-highest rounded-full font-label-sm text-xs whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">tune</span> Filter
+                    </button>
+<button class="flex items-center gap-1 px-4 py-2 bg-surface-container-highest rounded-full font-label-sm text-xs whitespace-nowrap">
+                        Sort: Popularity <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="flex items-center gap-1 px-4 py-2 bg-primary-container text-on-primary-container rounded-full font-label-sm text-xs whitespace-nowrap">
+                        NABL Certified
+                    </button>
+<button class="flex items-center gap-1 px-4 py-2 bg-surface-container-highest rounded-full font-label-sm text-xs whitespace-nowrap">
+                        Nearest
+                    </button>
+</div>
+<!-- Lab Listing -->
+<div class="space-y-4">
+<!-- Lab Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/20 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center p-2">
+<img alt="Apollo" class="w-full h-full object-contain" data-alt="Apollo Diagnostics corporate medical logo with clean professional branding and medical symbols in primary blue and white, set against a minimalist clinical studio background with soft overhead lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgCithqJafL9qlkgdMJR_uTBbDyGhQI7RC-WVUyTaIwq5QC_lC6oRbBRAkfaVQeS1aLW1FwzjrvvmbZgeAcLk9mANyywHmQlit1H0pEpAGi2uTxHF-8HRhWWT1AMSlvbOk6_ZduD_WJ1h8Xy8oFW05LuVs7st-WK3Q_lCrvU_w27SYu3VVAQRSvTSFjt8FN9yRI5AP29QzEQVyOpNLC5GEWhLKa0sp4cBtSOB20Yaxh2RdvEfrqGib-IZP2XqlSRij8nctz9y3yLM"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-background">Apollo Diagnostics</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-secondary active-pill">star</span>
+<span class="text-xs font-bold">4.8</span>
+<span class="text-[10px] text-on-surface-variant">(1.2k+ reviews)</span>
+</div>
+<span class="inline-block mt-1 px-2 py-0.5 bg-secondary-container/30 text-on-secondary-container rounded text-[9px] font-bold uppercase">ISO &amp; NABL Accredited</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="compare_arrows">compare_arrows</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface-variant text-[10px] line-through">₹950</p>
+<p class="font-headline-md text-lg text-primary">₹699 <span class="text-[10px] font-bold text-secondary">26% OFF</span></p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-label-sm text-xs transition-active active:scale-95 shadow-md">Book Now</button>
+</div>
+</div>
+<!-- Lab Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/20 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center p-2">
+<img alt="Dr Lal" class="w-full h-full object-contain" data-alt="Dr Lal PathLabs professional brand logo featuring clinical identity colors on a clean geometric background, conveying trust and long-standing medical authority in a modern corporate medical style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAfOEUwM92VLcJJZfOJj8eOwjhPFPAq7oKiNtwI4EtG7oIoZjWM5MI4A9IHksgNebUjtKJQ5Ps6EBa2okukSYTirlgY_ttZqswBy-VLu61BX238r97AT1rYnYE2xS6Jlp0cAi31_XUXru3RdoddIaT2z3RwkdRqZV-szTV_XuS9sPjSk1fN8jUvLAPWN9onqqHge155qXJGT6QrsPWv_22GB-dtqTLVnSxFuGBahObJCabXiMlWI3QiNbG5FXG3TSt2hAVROjtMwA"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-background">Dr Lal PathLabs</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-secondary active-pill">star</span>
+<span class="text-xs font-bold">4.6</span>
+<span class="text-[10px] text-on-surface-variant">(2.5k+ reviews)</span>
+</div>
+<span class="inline-block mt-1 px-2 py-0.5 bg-secondary-container/30 text-on-secondary-container rounded text-[9px] font-bold uppercase">NABL Accredited</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="compare_arrows">compare_arrows</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface-variant text-[10px] line-through">₹1,100</p>
+<p class="font-headline-md text-lg text-primary">₹849 <span class="text-[10px] font-bold text-secondary">22% OFF</span></p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-label-sm text-xs transition-active active:scale-95 shadow-md">Book Now</button>
+</div>
+</div>
+<!-- Lab Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/20 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center p-2">
+<img alt="Thyrocare" class="w-full h-full object-contain" data-alt="Thyrocare laboratory corporate identity logo with vibrant green accents symbolizing health and accuracy, presented on a bright professional white background with high-quality clinical aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsDgDVmX_ZlMHGPMHNDqklGG45n9Wg9KpxS3ijVSF04t2DDoxaYm9-p0hzwz-7LHPm_jQYE489tZOP-Sl1rpLszRs7yKn-b864NS8ExQdYKeQ_CjBezfYXItoP3hWCcoQ_mY79jO91v_YNHRcMwUc7ZXxU3mhPaR-kgExXgtBmKmSb5FAG1TRNm5bFU82dZJQzNc5fL07OjZHGm2YgPu2RQYMTH3LBWSIcSMRTC6ARalqbBH3hSUmTdRmQEwi3Vf3gcVGAxoP6GJ0"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-background">Thyrocare</h4>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-secondary active-pill">star</span>
+<span class="text-xs font-bold">4.4</span>
+<span class="text-[10px] text-on-surface-variant">(900+ reviews)</span>
+</div>
+<span class="inline-block mt-1 px-2 py-0.5 bg-secondary-container/30 text-on-secondary-container rounded text-[9px] font-bold uppercase">ISO Certified</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="compare_arrows">compare_arrows</span>
+</div>
+<div class="flex items-center justify-between mt-2 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface-variant text-[10px] line-through">₹850</p>
+<p class="font-headline-md text-lg text-primary">₹599 <span class="text-[10px] font-bold text-secondary">29% OFF</span></p>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-label-sm text-xs transition-active active:scale-95 shadow-md">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="px-margin-mobile py-10">
+<h3 class="font-headline-md text-xl mb-6">Frequently Asked Questions</h3>
+<div class="space-y-4">
+<div class="border-b border-outline-variant/30 pb-4">
+<button class="w-full flex justify-between items-center text-left" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')">
+<span class="font-label-md text-sm pr-4">How long does the report take?</span>
+<span class="material-symbols-outlined arrow transition-transform">expand_more</span>
+</button>
+<p class="mt-3 text-on-surface-variant font-body-md text-sm hidden">Usually, Lipid Profile reports are generated within 12-24 hours after the sample reaches the laboratory. You will receive a digital copy via WhatsApp and email.</p>
+</div>
+<div class="border-b border-outline-variant/30 pb-4">
+<button class="w-full flex justify-between items-center text-left" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')">
+<span class="font-label-md text-sm pr-4">Can I drink tea before the test?</span>
+<span class="material-symbols-outlined arrow transition-transform">expand_more</span>
+</button>
+<p class="mt-3 text-on-surface-variant font-body-md text-sm hidden">No, tea or coffee (even without sugar or milk) can interfere with your results. Only plain water is allowed during the 10-12 hour fasting period.</p>
+</div>
+<div class="border-b border-outline-variant/30 pb-4">
+<button class="w-full flex justify-between items-center text-left" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow').classList.toggle('rotate-180')">
+<span class="font-label-md text-sm pr-4">Is home collection free?</span>
+<span class="material-symbols-outlined arrow transition-transform">expand_more</span>
+</button>
+<p class="mt-3 text-on-surface-variant font-body-md text-sm hidden">Many of our partner labs offer free home sample collection for orders above ₹500. Specific charges, if any, will be shown at the checkout.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-low py-10 px-margin-mobile border-t border-outline-variant/30 text-center">
+<h4 class="font-headline-md text-primary font-bold text-xl mb-4">PathoChoice</h4>
+<div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8">
+<a class="text-on-surface-variant font-label-sm text-xs hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-sm text-xs hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-sm text-xs hover:text-primary transition-colors" href="#">Lab Partnership</a>
+<a class="text-on-surface-variant font-label-sm text-xs hover:text-primary transition-colors" href="#">Help Center</a>
+</div>
+<p class="text-on-surface-variant font-body-md text-[10px] leading-relaxed max-w-xs mx-auto">
+                © 2024 PathoChoice. All Diagnostic Labs are ISO &amp; NABL Certified. Providing clinical precision and transparent health data.
+            </p>
+</footer>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-surface shadow-[0px_-4px_20px_rgba(11,87,208,0.05)] border-t border-outline-variant/10">
+<button class="flex flex-col items-center justify-center text-on-surface-variant transition-colors group">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<span class="text-[10px] font-bold mt-1">Search</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-active active:scale-90">
+<span class="material-symbols-outlined text-[24px] active-pill">compare_arrows</span>
+<span class="text-[10px] font-bold mt-1">Compare</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant transition-colors group">
+<span class="material-symbols-outlined text-[24px]">receipt_long</span>
+<span class="text-[10px] font-bold mt-1">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant transition-colors group">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-bold mt-1">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for tap feedback
+        document.querySelectorAll('.transition-active').forEach(btn => {
+            btn.addEventListener('touchstart', () => btn.classList.add('scale-95'));
+            btn.addEventListener('touchend', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

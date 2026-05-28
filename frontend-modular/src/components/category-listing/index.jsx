@@ -1,0 +1,203 @@
+import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '../../utils/useIsMobile';
+import { WebLayout } from './WebLayout';
+import { MobileLayout } from './MobileLayout';
+import { API_BASE_URL } from '../../config';
+
+export function CategoryListing({ 
+  categoryName, 
+  setPage, 
+  setTest, 
+  setSelectedPackage, 
+  user, 
+  userLocation 
+}) {
+  const isMobile = useIsMobile();
+
+  // Category tests/packages items
+  const [items, setItems] = useState([]);
+  const [displayTests, setDisplayTests] = useState([]);
+  const [loadingItems, setLoadingItems] = useState(true);
+  const [categoryMeta, setCategoryMeta] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Sorting & Filtering states for tests list
+  const [sort, setSort] = useState('popularity');
+  const [filters, setFilters] = useState({
+    maxPrice: 15000,
+    type: 'all',
+    searchQuery: '',
+    turnaround: 'all', // 'all' | '12' | '24'
+    preparation: 'all' // 'all' | 'fasting' | 'no-fasting'
+  });
+
+  const [visibleCount, setVisibleCount] = useState(8);
+
+  // Reset visible items count when any filter or sorting changes
+  useEffect(() => {
+    setVisibleCount(8);
+  }, [filters, sort]);
+
+  // 1. Fetch category previews list on mount / categoryName change
+  useEffect(() => {
+    if (!categoryName) return;
+    setLoadingItems(true);
+    setError(null);
+    setItems([]);
+    setDisplayTests([]);
+    setCategoryMeta(null);
+    setVisibleCount(8);
+
+    // Fetch category previews
+    fetch(`${API_BASE_URL}/api/category-previews`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Normalize and filter category mappings
+          const matched = data.filter(
+            (x) => x.category_name.toLowerCase().trim() === categoryName.toLowerCase().trim()
+          );
+          setItems(matched);
+          if (matched.length === 0) {
+            setError(`No active tests mapped under category: ${categoryName}.`);
+          }
+        } else {
+          throw new Error('Invalid previews payload format');
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching category previews:', err);
+        setError('Could not load category diagnostics. Please try again.');
+      })
+      .finally(() => setLoadingItems(false));
+
+    // Fetch category metadata dynamically from DB
+    fetch(`${API_BASE_URL}/api/categories/${encodeURIComponent(categoryName)}/metadata`)
+      .then((r) => r.json())
+      .then((data) => {
+        setCategoryMeta(data);
+      })
+      .catch((err) => {
+        console.error('Error fetching category metadata:', err);
+      });
+  }, [categoryName]);
+
+  // 2. Filter and sort items dynamically on the frontend
+  useEffect(() => {
+    let result = [...items];
+
+    // Filter by type
+    if (filters.type === 'diagnostic') {
+      result = result.filter(x => !x.is_pkg);
+    } else if (filters.type === 'package') {
+      result = result.filter(x => x.is_pkg);
+    }
+
+    // Filter by price
+    if (filters.maxPrice < 15000) {
+      result = result.filter(x => x.price <= filters.maxPrice);
+    }
+
+    // Filter by search query
+    if (filters.searchQuery.trim()) {
+      const q = filters.searchQuery.toLowerCase().trim();
+      result = result.filter(x => x.name.toLowerCase().includes(q));
+    }
+
+    // Filter by turnaround
+    if (filters.turnaround !== 'all') {
+      const targetHours = parseInt(filters.turnaround, 10);
+      result = result.filter(x => {
+        const repStr = (x.rep || '').toLowerCase();
+        const matches = repStr.match(/(\d+)/);
+        if (matches) {
+          const hrs = parseInt(matches[1], 10);
+          return hrs <= targetHours;
+        }
+        return targetHours >= 24;
+      });
+    }
+
+    // Filter by preparation
+    if (filters.preparation !== 'all') {
+      result = result.filter(x => {
+        const prepStr = (x.preparations || '').toLowerCase();
+        const descStr = (x.description || '').toLowerCase();
+        const nameStr = (x.name || '').toLowerCase();
+        const isFasting = prepStr.includes('fasting') || descStr.includes('fasting') || nameStr.includes('fasting');
+        return filters.preparation === 'fasting' ? isFasting : !isFasting;
+      });
+    }
+
+    // Sort
+    if (sort === 'price_asc') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sort === 'price_desc') {
+      result.sort((a, b) => b.price - a.price);
+    }
+
+    setDisplayTests(result);
+  }, [items, filters, sort]);
+
+  const handleDetails = (item) => {
+    if (item.is_pkg) {
+      if (setSelectedPackage) {
+        setSelectedPackage(item);
+      }
+      setPage('package-compare');
+    } else {
+      setTest(item);
+      setPage('detail');
+    }
+  };
+
+  const handleBook = (item) => {
+    handleDetails(item);
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      maxPrice: 15000,
+      type: 'all',
+      searchQuery: '',
+      turnaround: 'all',
+      preparation: 'all'
+    });
+    setSort('popularity');
+    setVisibleCount(8);
+  };
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-8 py-24 text-center">
+        <span className="material-symbols-outlined text-5xl text-outline/40 block mb-4">search_off</span>
+        <p className="text-on-surface-variant mb-4">{error}</p>
+        <button onClick={() => setPage('home')} className="text-primary font-bold hover:underline">
+          ← Back to Home
+        </button>
+      </div>
+    );
+  }
+
+  const viewProps = {
+    categoryName,
+    items,
+    displayTests,
+    loadingItems,
+    categoryMeta,
+    sort,
+    setSort,
+    filters,
+    setFilters,
+    handleBook,
+    handleDetails,
+    resetFilters,
+    setPage,
+    userLocation,
+    visibleCount,
+    setVisibleCount
+  };
+
+  if (isMobile) return <MobileLayout {...viewProps} />;
+  return <WebLayout {...viewProps} />;
+}

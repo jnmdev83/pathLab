@@ -1,0 +1,81 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: "#0041a2",
+        "inverse-on-surface": "#f0f1f2",
+        "surface-container-lowest": "#ffffff",
+        "on-error-container": "#93000a",
+        "on-primary-fixed-variant": "#0040a1",
+        "on-primary": "#ffffff",
+        "on-background": "#191c1d",
+        "inverse-primary": "#b2c5ff",
+        "primary-container": "#0b57d0",
+        "outline-variant": "#c3c6d6",
+        "surface-bright": "#f8f9fa",
+        "surface-container-low": "#f3f4f5",
+        "on-tertiary-fixed-variant": "#7f2b00",
+        "inverse-surface": "#2e3132",
+        "on-tertiary-container": "#ffcfbe",
+        error: "#ba1a1a",
+        "on-primary-fixed": "#001847",
+        "tertiary-container": "#a83b00",
+        "surface-container-high": "#e7e8e9",
+        "primary-fixed": "#dae2ff",
+        "surface-container-highest": "#e1e3e4",
+        "on-secondary-fixed": "#002108",
+        outline: "#737785",
+        secondary: "#006e2c",
+        "on-tertiary": "#ffffff",
+        "surface-tint": "#0856cf",
+        "secondary-fixed": "#89fa9b",
+        tertiary: "#802b00",
+        "error-container": "#ffdad6",
+        "surface-variant": "#e1e3e4",
+        surface: "#f8f9fa",
+        "secondary-fixed-dim": "#6ddd81",
+        "tertiary-fixed": "#ffdbce",
+        "surface-dim": "#d9dadb",
+        "surface-container": "#edeeef",
+        "on-tertiary-fixed": "#370e00",
+        "secondary-container": "#86f898",
+        "on-surface": "#191c1d",
+        "on-error": "#ffffff",
+        "on-secondary": "#ffffff",
+        "on-surface-variant": "#424654",
+        "on-secondary-container": "#00722f",
+        "on-primary-container": "#ced9ff",
+        "tertiary-fixed-dim": "#ffb599",
+        "primary-fixed-dim": "#b2c5ff",
+        "on-secondary-fixed-variant": "#005320",
+        background: "#f8f9fa"
+      },
+      borderRadius: {
+        DEFAULT: "0.5rem",
+        sm: "0.25rem",
+        md: "0.75rem",
+        lg: "1rem",
+        xl: "1.5rem",
+        full: "9999px"
+      },
+      spacing: {
+        unit: "8px",
+        "gutter-desktop": "32px",
+        "margin-desktop": "64px",
+        "gutter-mobile": "16px",
+        "margin-mobile": "20px",
+        "section-gap": "80px"
+      },
+      fontFamily: {
+        headline: ["Plus Jakarta Sans", "sans-serif"],
+        body: ["Atkinson Hyperlegible Next", "sans-serif"]
+      }
+    },
+  },
+  plugins: [],
+}
