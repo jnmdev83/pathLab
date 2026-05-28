@@ -272,8 +272,6 @@ exports.post_api_firebase_phone_login = async (req, res) => {
 // Instead of trusting just any badge, we scan the barcode securely with Google's servers.
 // If your badge is verified, we say "Come on in!" (Log in).
 // If you are new, we make you a brand new club card automatically!
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 exports.post_api_google = async (req, res) => {
   const { credential } = req.body;
 
@@ -281,11 +279,14 @@ exports.post_api_google = async (req, res) => {
     return res.status(400).json({ error: 'No Google credential token provided.' });
   }
 
+  // 🛡️ SECURE VERIFICATION: We load Google Client ID dynamically to prevent dotenv race conditions
+  const activeClientId = process.env.GOOGLE_CLIENT_ID || "1000282059656-c9fjaeo9m292dnf95t9fbjnm7mkmumsl.apps.googleusercontent.com";
+  
   try {
-    // 🛡️ SECURE VERIFICATION: We ask Google's official library to verify the token
-    const ticket = await googleClient.verifyIdToken({
+    const dynamicClient = new OAuth2Client(activeClientId);
+    const ticket = await dynamicClient.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID, 
+      audience: activeClientId, 
     });
 
     // Extract the secure, verified user information from the payload
@@ -328,8 +329,11 @@ exports.post_api_google = async (req, res) => {
       user: newUser[0]
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to authenticate with Google. Please try again.' });
+    console.error("⛔ [GOOGLE OAUTH VERIFICATION ERROR]:", error);
+    res.status(500).json({ 
+      error: 'Failed to authenticate with Google. Please try again.',
+      details: error.message 
+    });
   }
 };
 

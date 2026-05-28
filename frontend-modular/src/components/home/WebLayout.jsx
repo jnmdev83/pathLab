@@ -190,16 +190,18 @@ export function WebLayout({
       price: "7999",
       mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3pN88HIjziN8XMIL3cEovAbKrWnGK9ncgJQN5NOA0Tv5nn7yzyQlc0NRaOtmjinMIEuNoon1fYuxu_-dFfbtP3DLngXNlo87tesl6RKyffbxIDPAsp2jx0DKTJSTtpWcK0XFQ0ammaItqSTRsn15EBGUMSeeok0qIh2byzSSQ7nCZOTh02rvS-mLB3h6EEqFl2MO3VYNRtSGX6Sv1xfUaST20XwCW6XEf8fmFLlaPVskCALmwomyDAKG58IHZ8YTvjQGD8hOOtwo",
-      bgColor: "from-[#1a120b] via-[#100b05] to-[#040201]",
-      titleGradient: "from-white via-[#fcf8e3] to-[#e5c158]",
-      badgeStyle: "bg-amber-500/10 border border-amber-500/30 text-amber-300",
-      line1Color: "border-l-amber-500",
-      line1Text: "text-amber-400",
-      line2Color: "border-l-amber-500",
-      line2Text: "text-amber-400",
-      btnTextColor: "text-[#b89528]",
-      btnHoverBg: "hover:bg-amber-50",
-      glowOverlay: "bg-amber-500/5"
+      bgColor: "from-[#ecfdf5] via-[#f0fdfa] to-[#ccfbf1]",
+      textColor: "text-[#065f46]",
+      taglineColor: "text-[#047857]",
+      titleColor: "text-[#064e3b]",
+      titleGradient: "from-[#064e3b] via-[#047857] to-[#0f172a]",
+      badgeStyle: "bg-emerald-100 border border-emerald-300 text-emerald-800",
+      line1Color: "border-l-emerald-600",
+      line1Text: "text-emerald-700",
+      line2Color: "border-l-teal-600",
+      line2Text: "text-teal-700",
+      btnClass: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md",
+      glowOverlay: "bg-emerald-500/10"
     },
     {
       badge: "⚡ PREMIUM ACTIVE AUDITING",
@@ -209,16 +211,18 @@ export function WebLayout({
       price: "1499",
       mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCQu5pIuR0Ldjv4YKmjU4VYMp5SMtFx7hezaEpiQjxu7ZMsit_H-cJMpHXSf6kxWuO6I_ph85TssJR8VEOU2h8ECBs1G2A_cLAPRNFda6k8YCCWGGOzOls28EfP-5Lu0YPy1-IZVJNvsSEnSEsLzNLLOUnRNjkjbjN9v3to7rrUnHHcGVVxRwY3a-Ga34zGCDsl3An2Lt8X61C0rYaQssRtN0S-QhVaFRXscG_o_5KBWpyOYxBUVlrERlZLiU3fM3eejAw4H_uAk64",
-      bgColor: "from-[#080d1c] via-[#040712] to-[#010206]",
-      titleGradient: "from-white via-[#e0f2fe] to-[#38bdf8]",
-      badgeStyle: "bg-sky-500/10 border border-sky-500/30 text-sky-300",
-      line1Color: "border-l-sky-400",
-      line1Text: "text-sky-400",
-      line2Color: "border-l-emerald-400",
-      line2Text: "text-emerald-400",
-      btnTextColor: "text-blue-600",
-      btnHoverBg: "hover:bg-slate-100",
-      glowOverlay: "bg-sky-500/5"
+      bgColor: "from-[#eff6ff] via-[#f0f9ff] to-[#e0f2fe]",
+      textColor: "text-[#1e40af]",
+      taglineColor: "text-[#1d4ed8]",
+      titleColor: "text-[#1e3a8a]",
+      titleGradient: "from-[#1e3a8a] via-[#1d4ed8] to-[#0f172a]",
+      badgeStyle: "bg-blue-100 border border-blue-300 text-blue-800",
+      line1Color: "border-l-blue-600",
+      line1Text: "text-blue-700",
+      line2Color: "border-l-indigo-600",
+      line2Text: "text-indigo-700",
+      btnClass: "bg-blue-600 text-white hover:bg-blue-700 shadow-md",
+      glowOverlay: "bg-blue-500/10"
     },
     {
       badge: "👴 CARING GERIATRIC EXCELLENCE",
@@ -228,18 +232,42 @@ export function WebLayout({
       price: "2199",
       mockPackage: { id: 2, name: "Senior Citizen Package", price: 1800 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGtb-_r_RM-FsnGSBH-b-OXmhyYF-dQ_Mzq8pNWbkT3AwYtekvUYB26GmXLkuiTVW5NEHUTmnpuEt1kxxtZfLKQLlJeRTNxHmwRPE_FkEF5DL1z2_bAVUz8h7uSn_X6KMMrwGUVi3nr2dChj7xBzPTCbXRb6XGxNVSLZ5cdI2Qd644tmV_WhoTxzOKYHgqV15UC_Gd3n_t74CC86HXn0LkSQiNka6GdnWgszezgV9lMJ-TAMVwDTB8tdru8r7SZtgLsD2miRIZ7P4",
-      bgColor: "from-[#040e0b] via-[#020806] to-[#000302]",
-      titleGradient: "from-white via-[#d1fae5] to-[#34d399]",
-      badgeStyle: "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300",
-      line1Color: "border-l-emerald-500",
-      line1Text: "text-emerald-400",
-      line2Color: "border-l-emerald-500",
-      line2Text: "text-emerald-400",
-      btnTextColor: "text-emerald-600",
-      btnHoverBg: "hover:bg-emerald-50",
-      glowOverlay: "bg-emerald-500/5"
+      bgColor: "from-[#fffbeb] via-[#fffbeb] to-[#fef3c7]",
+      textColor: "text-[#92400e]",
+      taglineColor: "text-[#b45309]",
+      titleColor: "text-[#78350f]",
+      titleGradient: "from-[#78350f] via-[#b45309] to-[#0f172a]",
+      badgeStyle: "bg-amber-100 border border-amber-300 text-amber-800",
+      line1Color: "border-l-amber-600",
+      line1Text: "text-amber-700",
+      line2Color: "border-l-orange-600",
+      line2Text: "text-orange-700",
+      btnClass: "bg-amber-600 text-white hover:bg-amber-700 shadow-md",
+      glowOverlay: "bg-amber-500/10"
     }
   ];
+
+  // Swipe Touch Gesture Handlers for Web/Tablet Hero Carousel
+  const [heroTouchStart, setHeroTouchStart] = useState(0);
+  const [heroTouchEnd, setHeroTouchEnd] = useState(0);
+
+  const handleHeroTouchStart = (e) => {
+    setHeroTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleHeroTouchMove = (e) => {
+    setHeroTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleHeroTouchEnd = () => {
+    if (!heroTouchStart || !heroTouchEnd) return;
+    const distance = heroTouchStart - heroTouchEnd;
+    if (distance > 50) {
+      setCurrentSlide(prev => (prev + 1) % carouselSlides.length);
+    } else if (distance < -50) {
+      setCurrentSlide(prev => (prev - 1 + carouselSlides.length) % carouselSlides.length);
+    }
+    setHeroTouchStart(0);
+    setHeroTouchEnd(0);
+  };
 
   // Auto cycle slides every 5 seconds
   useEffect(() => {
@@ -345,14 +373,19 @@ export function WebLayout({
         <section className="pt-8 pb-4 px-6 md:px-8 relative overflow-hidden bg-slate-50/50">
           <div className="max-w-7xl mx-auto relative z-10">
             {/* Active Carousel Slide Container with Glassmorphism and Uniform Sizing */}
-            <div className={`w-full rounded-[2.5rem] bg-gradient-to-br ${carouselSlides[currentSlide].bgColor} p-8 lg:p-12 relative overflow-hidden shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 h-[490px] md:h-[450px] lg:h-[420px] py-8 transition-all duration-500 ease-in-out border border-white/10`}>
+            <div 
+              onTouchStart={handleHeroTouchStart}
+              onTouchMove={handleHeroTouchMove}
+              onTouchEnd={handleHeroTouchEnd}
+              className={`w-full rounded-[2.5rem] bg-gradient-to-br ${carouselSlides[currentSlide].bgColor} p-8 lg:p-12 relative overflow-hidden shadow-lg flex flex-col lg:flex-row items-center justify-between gap-8 h-[490px] md:h-[450px] lg:h-[420px] py-8 transition-all duration-500 ease-in-out border border-slate-200/60`}
+            >
               
               {/* Dynamic Backdrop Glow matching each active slide */}
               <div className={`absolute top-0 right-0 w-80 h-80 rounded-full blur-[100px] -z-0 opacity-70 transition-all duration-500 ${carouselSlides[currentSlide].glowOverlay}`} />
               <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
 
               {/* Left Column: Clinical Copy & Stats */}
-              <div className="w-full lg:w-3/5 text-left text-white z-10 space-y-4">
+              <div className="w-full lg:w-3/5 text-left text-slate-800 z-10 space-y-4">
                 
                 {/* Badge indicator with dynamic active glow styles */}
                 <span className={`inline-block border text-[9px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest font-headline shadow-sm transition-all duration-300 ${carouselSlides[currentSlide].badgeStyle}`}>
@@ -365,7 +398,7 @@ export function WebLayout({
                 </h1>
 
                 {/* Sub-tagline */}
-                <p className="text-white/70 text-xs md:text-sm max-w-xl opacity-90 leading-relaxed font-body font-medium">
+                <p className={`${carouselSlides[currentSlide].taglineColor} text-xs md:text-sm max-w-xl opacity-90 leading-relaxed font-body font-medium`}>
                   {carouselSlides[currentSlide].tagline}
                 </p>
 
@@ -374,14 +407,14 @@ export function WebLayout({
                   <div className={`flex items-center gap-3 border-l-2 ${carouselSlides[currentSlide].line1Color} pl-4 h-10`}>
                     <div>
                       <div className={`text-[9px] font-bold ${carouselSlides[currentSlide].line1Text} tracking-wider uppercase font-headline`}>Clinical Coverage</div>
-                      <div className="text-lg md:text-xl font-black text-white font-headline leading-none mt-1">{carouselSlides[currentSlide].totalTests}</div>
+                      <div className="text-lg md:text-xl font-black text-slate-800 font-headline leading-none mt-1">{carouselSlides[currentSlide].totalTests}</div>
                     </div>
                   </div>
                   
                   <div className={`flex items-center gap-3 border-l-2 ${carouselSlides[currentSlide].line2Color} pl-4 h-10`}>
                     <div>
                       <div className={`text-[9px] font-bold ${carouselSlides[currentSlide].line2Text} tracking-wider uppercase font-headline`}>Special Price</div>
-                      <div className="text-lg md:text-xl font-black text-white font-headline leading-none mt-1">₹{carouselSlides[currentSlide].price}</div>
+                      <div className="text-lg md:text-xl font-black text-slate-800 font-headline leading-none mt-1">₹{carouselSlides[currentSlide].price}</div>
                     </div>
                   </div>
                 </div>
@@ -390,7 +423,7 @@ export function WebLayout({
                 <div className="pt-2">
                   <button 
                     onClick={() => handleCarouselBook(carouselSlides[currentSlide].mockPackage)}
-                    className={`bg-white ${carouselSlides[currentSlide].btnTextColor} ${carouselSlides[currentSlide].btnHoverBg} px-8 py-3 rounded-full font-black text-xs font-headline transition-all duration-150 active:scale-95 shadow-lg flex items-center justify-center uppercase tracking-wider cursor-pointer w-fit`}
+                    className={`${carouselSlides[currentSlide].btnClass} px-8 py-3 rounded-full font-black text-xs font-headline transition-all duration-150 active:scale-95 shadow-lg flex items-center justify-center uppercase tracking-wider cursor-pointer w-fit`}
                   >
                     Book Now
                     <span className="material-symbols-outlined text-sm ml-1.5 font-black">arrow_forward</span>
@@ -398,10 +431,10 @@ export function WebLayout({
                 </div>
 
                 {/* Slide features bar underneath search */}
-                <div className="flex flex-wrap gap-5 text-white/70 text-[9.5px] uppercase font-bold tracking-widest font-headline pt-2">
-                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-500">check_circle</span> Free collection in 60 Mins</span>
-                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-500">check_circle</span> Smart Dynamic Reports</span>
-                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-500">check_circle</span> Doctor Consultations</span>
+                <div className="flex flex-wrap gap-5 text-slate-500 text-[9.5px] uppercase font-bold tracking-widest font-headline pt-2">
+                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span> Free collection in 60 Mins</span>
+                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span> Smart Dynamic Reports</span>
+                  <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span> Doctor Consultations</span>
                 </div>
 
               </div>

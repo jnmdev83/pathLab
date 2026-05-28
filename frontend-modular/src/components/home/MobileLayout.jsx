@@ -190,15 +190,17 @@ export function MobileLayout({
       price: "7999",
       mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3pN88HIjziN8XMIL3cEovAbKrWnGK9ncgJQN5NOA0Tv5nn7yzyQlc0NRaOtmjinMIEuNoon1fYuxu_-dFfbtP3DLngXNlo87tesl6RKyffbxIDPAsp2jx0DKTJSTtpWcK0XFQ0ammaItqSTRsn15EBGUMSeeok0qIh2byzSSQ7nCZOTh02rvS-mLB3h6EEqFl2MO3VYNRtSGX6Sv1xfUaST20XwCW6XEf8fmFLlaPVskCALmwomyDAKG58IHZ8YTvjQGD8hOOtwo",
-      bgColor: "from-[#1a120b] via-[#100b05] to-[#040201]",
-      badgeStyle: "bg-amber-500/10 border border-amber-500/30 text-amber-300",
-      line1Color: "border-l-amber-500",
-      line1Text: "text-amber-400",
-      line2Color: "border-l-amber-500",
-      line2Text: "text-amber-400",
-      btnTextColor: "text-[#b89528]",
-      btnHoverBg: "hover:bg-amber-50",
-      glowOverlay: "bg-amber-500/5"
+      bgColor: "from-[#ecfdf5] via-[#f0fdfa] to-[#ccfbf1]",
+      textColor: "text-[#065f46]",
+      titleColor: "text-[#064e3b]",
+      taglineColor: "text-[#047857]",
+      badgeStyle: "bg-emerald-100 border border-emerald-300 text-emerald-800",
+      line1Color: "border-l-emerald-600",
+      line1Text: "text-emerald-700",
+      line2Color: "border-l-teal-600",
+      line2Text: "text-teal-700",
+      btnClass: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md",
+      glowOverlay: "bg-emerald-500/10"
     },
     {
       badge: "⚡ PREMIUM ACTIVE AUDITING",
@@ -208,15 +210,17 @@ export function MobileLayout({
       price: "1499",
       mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCQu5pIuR0Ldjv4YKmjU4VYMp5SMtFx7hezaEpiQjxu7ZMsit_H-cJMpHXSf6kxWuO6I_ph85TssJR8VEOU2h8ECBs1G2A_cLAPRNFda6k8YCCWGGOzOls28EfP-5Lu0YPy1-IZVJNvsSEnSEsLzNLLOUnRNjkjbjN9v3to7rrUnHHcGVVxRwY3a-Ga34zGCDsl3An2Lt8X61C0rYaQssRtN0S-QhVaFRXscG_o_5KBWpyOYxBUVlrERlZLiU3fM3eejAw4H_uAk64",
-      bgColor: "from-[#080d1c] via-[#040712] to-[#010206]",
-      badgeStyle: "bg-sky-500/10 border border-sky-500/30 text-sky-300",
-      line1Color: "border-l-sky-400",
-      line1Text: "text-sky-400",
-      line2Color: "border-l-emerald-400",
-      line2Text: "text-emerald-400",
-      btnTextColor: "text-blue-600",
-      btnHoverBg: "hover:bg-slate-100",
-      glowOverlay: "bg-sky-500/5"
+      bgColor: "from-[#eff6ff] via-[#f0f9ff] to-[#e0f2fe]",
+      textColor: "text-[#1e40af]",
+      titleColor: "text-[#1e3a8a]",
+      taglineColor: "text-[#1d4ed8]",
+      badgeStyle: "bg-blue-100 border border-blue-300 text-blue-800",
+      line1Color: "border-l-blue-600",
+      line1Text: "text-blue-700",
+      line2Color: "border-l-indigo-600",
+      line2Text: "text-indigo-700",
+      btnClass: "bg-blue-600 text-white hover:bg-blue-700 shadow-md",
+      glowOverlay: "bg-blue-500/10"
     },
     {
       badge: "👴 CARING GERIATRIC CARE",
@@ -226,17 +230,41 @@ export function MobileLayout({
       price: "2199",
       mockPackage: { id: 2, name: "Senior Citizen Package", price: 1800 },
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGtb-_r_RM-FsnGSBH-b-OXmhyYF-dQ_Mzq8pNWbkT3AwYtekvUYB26GmXLkuiTVW5NEHUTmnpuEt1kxxtZfLKQLlJeRTNxHmwRPE_FkEF5DL1z2_bAVUz8h7uSn_X6KMMrwGUVi3nr2dChj7xBzPTCbXRb6XGxNVSLZ5cdI2Qd644tmV_WhoTxzOKYHgqV15UC_Gd3n_t74CC86HXn0LkSQiNka6GdnWgszezgV9lMJ-TAMVwDTB8tdru8r7SZtgLsD2miRIZ7P4",
-      bgColor: "from-[#040e0b] via-[#020806] to-[#000302]",
-      badgeStyle: "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300",
-      line1Color: "border-l-emerald-500",
-      line1Text: "text-emerald-400",
-      line2Color: "border-l-emerald-500",
-      line2Text: "text-emerald-400",
-      btnTextColor: "text-emerald-600",
-      btnHoverBg: "hover:bg-emerald-50",
-      glowOverlay: "bg-emerald-500/5"
+      bgColor: "from-[#fffbeb] via-[#fffbeb] to-[#fef3c7]",
+      textColor: "text-[#92400e]",
+      titleColor: "text-[#78350f]",
+      taglineColor: "text-[#b45309]",
+      badgeStyle: "bg-amber-100 border border-amber-300 text-amber-800",
+      line1Color: "border-l-amber-600",
+      line1Text: "text-amber-700",
+      line2Color: "border-l-orange-600",
+      line2Text: "text-orange-700",
+      btnClass: "bg-amber-600 text-white hover:bg-amber-700 shadow-md",
+      glowOverlay: "bg-amber-500/10"
     }
   ];
+
+  // Swipe Touch Gesture Handlers for Mobile Hero Carousel
+  const [heroTouchStart, setHeroTouchStart] = useState(0);
+  const [heroTouchEnd, setHeroTouchEnd] = useState(0);
+
+  const handleHeroTouchStart = (e) => {
+    setHeroTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleHeroTouchMove = (e) => {
+    setHeroTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleHeroTouchEnd = () => {
+    if (!heroTouchStart || !heroTouchEnd) return;
+    const distance = heroTouchStart - heroTouchEnd;
+    if (distance > 50) {
+      setCurrentSlide(prev => (prev + 1) % carouselSlides.length);
+    } else if (distance < -50) {
+      setCurrentSlide(prev => (prev - 1 + carouselSlides.length) % carouselSlides.length);
+    }
+    setHeroTouchStart(0);
+    setHeroTouchEnd(0);
+  };
 
   // Auto cycle slides every 5 seconds
   useEffect(() => {
@@ -335,7 +363,12 @@ export function MobileLayout({
         
         {/* ── MOBILE REVAMPED CAROUSEL HERO SECTION (Tuned with small font and text) ── */}
         <section className="mt-4 mb-8">
-          <div className={`w-full rounded-[1.8rem] bg-gradient-to-br ${carouselSlides[currentSlide].bgColor} p-5 relative overflow-hidden shadow-2xl h-[330px] flex flex-col justify-between transition-all duration-500 ease-in-out border border-white/10`}>
+          <div 
+            onTouchStart={handleHeroTouchStart}
+            onTouchMove={handleHeroTouchMove}
+            onTouchEnd={handleHeroTouchEnd}
+            className={`w-full rounded-[1.8rem] bg-gradient-to-br ${carouselSlides[currentSlide].bgColor} p-5 relative overflow-hidden shadow-lg h-[330px] flex flex-col justify-between transition-all duration-500 ease-in-out border border-slate-200/60`}
+          >
             
             {/* Dynamic Backdrop Glow matching each active slide */}
             <div className={`absolute top-0 right-0 w-48 h-48 rounded-full blur-[60px] -z-0 opacity-70 transition-all duration-500 ${carouselSlides[currentSlide].glowOverlay}`} />
@@ -346,28 +379,28 @@ export function MobileLayout({
                 {carouselSlides[currentSlide].badge}
               </span>
               
-              <h1 className="font-headline text-[17px] font-black text-white leading-tight uppercase tracking-tight">
+              <h1 className={`font-headline text-[17px] font-black ${carouselSlides[currentSlide].titleColor} leading-tight uppercase tracking-tight`}>
                 {carouselSlides[currentSlide].title}
               </h1>
               
-              <p className="text-white/75 text-[10px] leading-relaxed font-body font-medium">
+              <p className={`${carouselSlides[currentSlide].taglineColor} text-[10px] leading-relaxed font-body font-medium`}>
                 {carouselSlides[currentSlide].tagline}
               </p>
             </div>
 
             {/* Middle row info: parameters and price aligned with a vertical border */}
-            <div className="flex items-center justify-start gap-8 py-3 border-y border-white/10 my-3 z-10">
-              <div className={`flex items-center gap-2 border-l border-sky-400 pl-2 h-7`}>
+            <div className="flex items-center justify-start gap-8 py-3 border-y border-slate-200/60 my-3 z-10">
+              <div className={`flex items-center gap-2 border-l border-sky-600 pl-2 h-7`}>
                 <div>
-                  <span className="text-[7.5px] uppercase font-bold tracking-wider text-sky-400 block font-headline">Coverage</span>
-                  <span className="text-[11px] font-black font-headline text-white leading-none mt-0.5">{carouselSlides[currentSlide].totalTests}</span>
+                  <span className="text-[7.5px] uppercase font-bold tracking-wider text-sky-700 block font-headline">Coverage</span>
+                  <span className="text-[11px] font-black font-headline text-slate-800 leading-none mt-0.5">{carouselSlides[currentSlide].totalTests}</span>
                 </div>
               </div>
               
-              <div className={`flex items-center gap-2 border-l border-emerald-400 pl-2 h-7`}>
+              <div className={`flex items-center gap-2 border-l border-emerald-600 pl-2 h-7`}>
                 <div>
-                  <span className="text-[7.5px] uppercase font-bold tracking-wider text-emerald-400 block font-headline">Price</span>
-                  <span className="text-[12px] font-black font-headline text-white leading-none mt-0.5">₹{carouselSlides[currentSlide].price}</span>
+                  <span className="text-[7.5px] uppercase font-bold tracking-wider text-emerald-700 block font-headline">Price</span>
+                  <span className="text-[12px] font-black font-headline text-slate-800 leading-none mt-0.5">₹{carouselSlides[currentSlide].price}</span>
                 </div>
               </div>
             </div>
@@ -376,7 +409,7 @@ export function MobileLayout({
             <div className="pt-2">
               <button 
                 onClick={() => handleCarouselBook(carouselSlides[currentSlide].mockPackage)}
-                className={`w-full bg-white ${carouselSlides[currentSlide].btnTextColor} ${carouselSlides[currentSlide].btnHoverBg} py-2.5 rounded-full font-black text-[10px] font-headline transition-all duration-150 active:scale-95 shadow-md flex items-center justify-center uppercase tracking-wider cursor-pointer`}
+                className={`w-full ${carouselSlides[currentSlide].btnClass} py-2.5 rounded-full font-black text-[10px] font-headline transition-all duration-150 active:scale-95 shadow-md flex items-center justify-center uppercase tracking-wider cursor-pointer`}
               >
                 Book Now
                 <span className="material-symbols-outlined text-xs ml-1 font-black">arrow_forward</span>
@@ -436,7 +469,7 @@ export function MobileLayout({
             Categories
           </h2>
           <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
-            {CATEGORIES.slice(0, 5).map((cat) => (
+            {CATEGORIES.map((cat) => (
               <div 
                 key={cat.id} 
                 onClick={() => {
