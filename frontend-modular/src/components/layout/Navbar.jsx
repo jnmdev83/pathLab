@@ -413,14 +413,6 @@ export function Navbar({
               </button>
             )}
 
-            {/* Book Now primary CTA */}
-            <button
-              onClick={() => { setPage("package-listing"); if (setActiveCategoryFilter) setActiveCategoryFilter("Full Body Checkup"); }}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#0c4ca6] to-[#0a3e87] text-white hover:from-[#0a3e87] hover:to-[#082f66] font-bold text-xs rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
-            >
-              Book Now
-            </button>
-
           </div>
         </div>
       </div>
