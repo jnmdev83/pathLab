@@ -2,21 +2,24 @@ const path = require('path');
 const dotenv = require('dotenv');
 const { execSync } = require('child_process');
 
-// Dynamically detect environment from Git branch (main always runs production, stg runs stg)
-let nodeEnv;
-try {
-  const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-  if (branch === 'main') {
-    nodeEnv = 'production';
-  } else if (branch === 'stg') {
-    nodeEnv = 'stg';
+// Enforce process.env.NODE_ENV first if explicitly defined
+let nodeEnv = process.env.NODE_ENV;
+
+if (!nodeEnv) {
+  try {
+    const branch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+    if (branch === 'main') {
+      nodeEnv = 'production';
+    } else if (branch === 'stg') {
+      nodeEnv = 'stg';
+    }
+  } catch (e) {
+    // Ignore git error
   }
-} catch (e) {
-  // Ignore git error
 }
 
 if (!nodeEnv) {
-  nodeEnv = process.env.NODE_ENV || 'development';
+  nodeEnv = 'development';
 }
 
 dotenv.config({ path: path.resolve(__dirname, `.env.${nodeEnv}`) });

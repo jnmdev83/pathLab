@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { API_BASE_URL } from '../../config';
 
 export function Navbar({ 
@@ -16,16 +17,81 @@ export function Navbar({
   allTests,
   packages,
   setTest,
-  setSelectedPackage
+  setSelectedPackage,
+  setTestName
 }) {
   const [showLocMenu, setShowLocMenu] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [hoveredTestIndex, setHoveredTestIndex] = useState(0);
-  const [categoryPreviews, setCategoryPreviews] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [pincodeInput, setPincodeInput] = useState("");
   const [pincodeError, setPincodeError] = useState("");
+  
+  // New States for Navigation Redesign
+  const [navMenu, setNavMenu] = useState({ tests: [], packages: [] });
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'tests' | 'packages' | null
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [mobileActiveAccordion, setMobileActiveAccordion] = useState(null); // 'tests' | 'packages' | null
+  const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
+  const dropdownRef = useRef(null);
+
+  // Default fallback navigation structure in case of network issue
+  const defaultMenu = {
+    tests: [
+      { name: "Heart", category: "Heart", page: "category-listing" },
+      { name: "Cancer", category: "Cancer", page: "category-listing" },
+      { name: "Thyroid", category: "Thyroid", page: "category-listing" },
+      { name: "Diabetes", category: "Diabetes", page: "category-listing" }
+    ],
+    packages: [
+      { name: "Full Body", category: "Full Body Checkup", page: "package-listing" },
+      { name: "Preventive", category: "Full Body Checkup", page: "package-listing" },
+      { name: "Women", category: "Pregnancy", page: "package-listing" },
+      { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
+    ]
+  };
+
+  // 1. Fetch dynamic navigation menu from backend
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/nav-menu`)
+      .then(res => {
+        if (!res.ok) throw new Error("Could not load navigation menu");
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.tests && data.packages) {
+          setNavMenu(data);
+        } else {
+          setNavMenu(defaultMenu);
+        }
+      })
+      .catch(err => {
+        console.warn("Navigation API warning, using dynamic seeds fallback:", err);
+        setNavMenu(defaultMenu);
+      });
+  }, []);
+
+  // 2. Track window resize for responsive determination
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024); // Use 1024px for cleaner desktop transition
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close dropdowns on outside clicks
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Pincode Search handling
   const handlePincodeSearch = (e) => {
     if (e) e.preventDefault();
     setPincodeError("");
@@ -40,7 +106,6 @@ export function Navbar({
     let lng = 77.2090;
     let locationLabel = `Pincode ${pin}`;
     
-    // Dictionary of common Delhi NCR pincodes for high-precision local matching
     const pinMap = {
       "110092": { lat: 28.6314, lng: 77.2789, label: "Laxmi Nagar, Delhi" },
       "110091": { lat: 28.6150, lng: 77.3000, label: "Mayur Vihar, Delhi" },
@@ -75,49 +140,12 @@ export function Navbar({
     }
     
     if (setUserLocation) {
-      setUserLocation({
-        lat,
-        lng,
-        label: locationLabel
-      });
+      setUserLocation({ lat, lng, label: locationLabel });
     }
     
     setShowLocMenu(false);
     setPincodeInput("");
   };
-
-  // Load category previews dynamically from database API!
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/category-previews`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setCategoryPreviews(data);
-        }
-      })
-      .catch(err => console.error("Error loading category previews from API:", err));
-  }, []);
-
-  // Track window resizing for reliable layout determinations
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const categories = [
-    { name: "Full Body Checkup", page: "package" },
-    { name: "Heart", page: "category-listing" },
-    { name: "Cancer", page: "category-listing" },
-    { name: "Thyroid", page: "category-listing" },
-    { name: "Diabetes", page: "category-listing" },
-    { name: "Pregnancy", page: "category-listing" },
-    { name: "Allergy/Intolerance", page: "category-listing" },
-    { name: "Hormone", page: "category-listing" },
-    { name: "DNA Test", page: "category-listing" }
-  ];
 
   const handleLocationClick = () => {
     if (requestGeolocation) {
@@ -126,114 +154,191 @@ export function Navbar({
     setShowLocMenu(false);
   };
 
-  const handleCategoryClick = (catName, catPage) => {
-    if (setActiveCategoryFilter) {
-      setActiveCategoryFilter(catName);
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!searchText.trim()) return;
+    
+    if (setTestName) {
+      setTestName(searchText.trim());
     }
-    setPage(catPage);
+    setPage("lab-listing");
+    setSearchBarOpen(false);
+    setSearchText("");
   };
 
-  // Fuel mega-menu with DBPreviews filtering
-  const getHoveredTests = () => {
-    if (!hoveredCategory) return [];
-    
-    const filterKey = hoveredCategory.toLowerCase();
-    
-    // Filter matches from db loaded preview table
-    const filtered = categoryPreviews.filter(t => t.category_name.toLowerCase() === filterKey);
-    return filtered.map(t => ({
-      id: t.id,
-      name: t.name,
-      description: t.description || "Clinical laboratory diagnostic test mapped to accredited pathology parameters.",
-      price: t.price,
-      rep: t.rep || "12 Hours",
-      cat: t.cat || "blood",
-      isPkg: !!t.is_pkg
-    }));
-  };
-
-  const handleMenuTrigger = (catName) => {
-    setHoveredCategory(catName);
-    setHoveredTestIndex(0);
+  const handleItemNavigation = (item) => {
+    if (setActiveCategoryFilter) {
+      setActiveCategoryFilter(item.category);
+    }
+    setPage(item.page);
+    setActiveDropdown(null);
+    setMobileDrawerOpen(false);
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white w-full border-b border-outline-variant/20 shadow-[0_4px_30px_rgba(0,65,162,0.02)] relative">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md w-full border-b border-slate-100 shadow-[0_2px_20px_rgba(0,0,0,0.02)] font-headline">
       
-      {/* ── TOP NAVIGATION ROW (Highly compact on mobile with small text) ── */}
-      <div className="border-b border-outline-variant/10">
-        <nav className="flex justify-between items-center h-14 md:h-20 px-3 md:px-8 w-full max-w-7xl mx-auto font-headline">
+      {/* ─── DESKTOP HEADER (Large viewports) ─── */}
+      <div className="hidden lg:block max-w-7xl mx-auto px-6 py-4">
+        <div className="flex justify-between items-center h-12 w-full gap-4">
           
-          {/* Brand Logo */}
-          <div className="flex items-center">
+          {/* Logo */}
+          <div className="flex items-center flex-shrink-0">
             <a 
-              onClick={() => handleCategoryClick("Home", "home")} 
-              className="text-base md:text-2xl font-extrabold text-primary cursor-pointer hover:opacity-85 transition-opacity tracking-tight"
+              onClick={() => { setPage("home"); if (setActiveCategoryFilter) setActiveCategoryFilter("Home"); }} 
+              className="text-2xl font-black text-[#0c4ca6] cursor-pointer hover:opacity-85 transition-opacity tracking-tight"
             >
               ChooseMyLab
             </a>
           </div>
 
-          {/* User Profile & Location selectors */}
-          <div className="flex items-center gap-2 md:gap-4">
+          {/* Dynamic Dropdown Navigation links */}
+          <div className="flex items-center gap-6 xl:gap-8 font-extrabold text-[13px] text-[#4d515a]" ref={dropdownRef}>
             
-            {/* User Actions */}
-            {user ? (
-              <div className="flex items-center gap-1.5 md:gap-3">
-                <button 
-                  onClick={() => setPage("profile-page")}
-                  className="flex items-center gap-1 px-2.5 py-1.5 md:px-4 md:py-2.5 bg-primary/5 hover:bg-primary/10 text-primary rounded-xl transition-all active:scale-95 font-semibold text-[10px] md:text-xs"
-                >
-                  <span className="material-symbols-outlined text-sm md:text-lg leading-none">account_circle</span>
-                  <span className="max-w-[50px] md:max-w-[80px] truncate">{user.name.split(" ")[0]}</span>
-                </button>
-                <button 
-                  onClick={() => {
-                    setUser(null);
-                    handleCategoryClick("Home", "home");
-                  }}
-                  className="px-1 py-1 text-on-surface-variant/60 hover:text-error text-[10px] md:text-xs font-semibold transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <button 
-                onClick={() => setPage("signup")}
-                className="px-3 py-1.5 md:px-5 md:py-2.5 font-bold text-primary border border-primary/20 hover:border-primary rounded-xl hover:bg-primary/5 transition-all active:scale-95 text-[10px] md:text-xs uppercase tracking-wide"
+            {/* Tests Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'tests' ? null : 'tests')}
+                onMouseEnter={() => setActiveDropdown('tests')}
+                className={`flex items-center gap-1 hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer ${
+                  activeDropdown === 'tests' ? 'text-[#0c4ca6]' : ''
+                }`}
               >
-                Login
+                <span>Tests</span>
+                <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
+                  activeDropdown === 'tests' ? 'rotate-180' : ''
+                }`}>keyboard_arrow_down</span>
               </button>
-            )}
 
-            {/* Relocated Location Selector bar */}
+              {activeDropdown === 'tests' && (
+                <div 
+                  className="absolute top-[42px] left-0 w-48 bg-white border border-slate-100 rounded-2xl shadow-xl py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  {navMenu.tests.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleItemNavigation(item)}
+                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#0c4ca6] transition-colors"
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Packages Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'packages' ? null : 'packages')}
+                onMouseEnter={() => setActiveDropdown('packages')}
+                className={`flex items-center gap-1 hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer ${
+                  activeDropdown === 'packages' ? 'text-[#0c4ca6]' : ''
+                }`}
+              >
+                <span>Packages</span>
+                <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
+                  activeDropdown === 'packages' ? 'rotate-180' : ''
+                }`}>keyboard_arrow_down</span>
+              </button>
+
+              {activeDropdown === 'packages' && (
+                <div 
+                  className="absolute top-[42px] left-0 w-48 bg-white border border-slate-100 rounded-2xl shadow-xl py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  {navMenu.packages.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleItemNavigation(item)}
+                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#0c4ca6] transition-colors"
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Labs Direct Link */}
+            <button
+              onClick={() => setPage("lab-listing")}
+              className="hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer"
+            >
+              Labs
+            </button>
+
+            {/* Cyan Compare Pill */}
+            <button
+              onClick={() => setPage("package-compare")}
+              className="flex items-center gap-1 px-4 py-2 bg-[#d1f8ff] text-[#006073] rounded-full hover:shadow-md transition-all active:scale-95 text-[11px] font-black uppercase tracking-wider outline-none select-none cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[14px] leading-none">swap_horiz</span>
+              <span>Compare</span>
+            </button>
+
+          </div>
+
+          {/* Right Compact Actions */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            
+            {/* Dynamic Search Bar Toggle */}
+            <div className="relative flex items-center">
+              {searchBarOpen ? (
+                <form onSubmit={handleSearchSubmit} className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 animate-in slide-in-from-right-3 duration-250">
+                  <input 
+                    type="text"
+                    placeholder="Search tests or packages..."
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="w-48 bg-transparent text-xs font-bold text-[#202124] outline-none placeholder:text-slate-400"
+                    autoFocus
+                  />
+                  <button type="submit" className="text-slate-500 hover:text-[#0c4ca6] leading-none">
+                    <span className="material-symbols-outlined text-[16px]">search</span>
+                  </button>
+                  <button type="button" onClick={() => { setSearchBarOpen(false); setSearchText(""); }} className="text-slate-400 hover:text-red-500 leading-none">
+                    <span className="material-symbols-outlined text-[16px]">close</span>
+                  </button>
+                </form>
+              ) : (
+                <button 
+                  onClick={() => setSearchBarOpen(true)}
+                  className="w-10 h-10 rounded-full hover:bg-slate-50 text-[#4d515a] hover:text-[#0c4ca6] flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[20px] font-bold">search</span>
+                </button>
+              )}
+            </div>
+
+            {/* Location selector */}
             <div className="relative">
               <button 
                 onClick={() => setShowLocMenu(!showLocMenu)}
-                className="flex items-center gap-1 px-2.5 py-1.5 md:px-4 md:py-2.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 rounded-xl transition-all cursor-pointer font-headline text-[10px] md:text-xs font-bold uppercase tracking-wider shadow-sm select-none"
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-[#4d515a] rounded-xl transition-all cursor-pointer font-extrabold text-[12px] uppercase select-none"
               >
-                <span className="material-symbols-outlined text-primary text-xs md:text-base leading-none">location_on</span>
-                <span className="max-w-[60px] md:max-w-[120px] truncate leading-none">
-                  {userLocation ? userLocation.label.replace("Delhi Pincode 110092 (Shakarpur)", "Delhi").replace("Delhi Pincode 110092", "Delhi") : "Location"}
+                <span className="material-symbols-outlined text-[#0c4ca6] text-[16px] leading-none">location_on</span>
+                <span className="max-w-[100px] truncate leading-none">
+                  {userLocation ? userLocation.label.split("(")[0].trim() : "Location"}
                 </span>
-                <span className="material-symbols-outlined text-primary text-[10px] md:text-sm leading-none">keyboard_arrow_down</span>
+                <span className="material-symbols-outlined text-slate-400 text-[14px] leading-none">keyboard_arrow_down</span>
               </button>
 
-              {/* Dropdown Options */}
               {showLocMenu && (
-                <div className="absolute top-10 md:top-12 right-0 w-56 md:w-64 bg-white border border-outline-variant/30 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 font-body">
+                <div className="absolute top-[44px] right-0 w-64 bg-white border border-slate-200/60 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 font-body text-left">
                   <button 
                     onClick={handleLocationClick}
-                    className="w-full px-4 py-2.5 hover:bg-slate-50 text-left font-semibold text-[10px] md:text-xs text-primary flex items-center gap-2 outline-none"
+                    className="w-full px-4 py-2.5 hover:bg-slate-50 text-left font-bold text-xs text-[#0c4ca6] flex items-center gap-2 outline-none"
                   >
-                    <span className="material-symbols-outlined text-sm md:text-base">my_location</span>
+                    <span className="material-symbols-outlined text-sm">my_location</span>
                     GPS Detect
                   </button>
-                  <div className="h-[1px] bg-outline-variant/10 my-1" />
+                  <div className="h-[1px] bg-slate-100 my-1" />
 
-                  {/* Pincode Search Input */}
-                  <form onSubmit={handlePincodeSearch} className="px-4 py-2.5 border-b border-outline-variant/5">
-                    <div className="text-[9px] uppercase font-extrabold text-on-surface-variant/40 tracking-wider mb-2 font-headline">
+                  {/* Pincode Search */}
+                  <form onSubmit={handlePincodeSearch} className="px-4 py-2.5">
+                    <div className="text-[9px] uppercase font-extrabold text-slate-400 tracking-wider mb-2 font-headline">
                       Search by Pincode
                     </div>
                     <div className="flex gap-1.5 items-center">
@@ -244,41 +349,37 @@ export function Navbar({
                           placeholder="Enter 6-digit PIN"
                           value={pincodeInput}
                           onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, "");
-                            setPincodeInput(val);
+                            setPincodeInput(e.target.value.replace(/\D/g, ""));
                             if (pincodeError) setPincodeError("");
                           }}
-                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-outline-variant/20 focus:border-primary/50 focus:bg-white rounded-lg text-[11px] font-bold text-on-surface outline-none transition-all placeholder:text-on-surface-variant/40"
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#0c4ca6]/50 focus:bg-white rounded-lg text-xs font-bold text-slate-800 outline-none transition-all placeholder:text-slate-400"
                         />
-                        {pincodeInput.length === 6 && (
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-primary font-black uppercase">✓</span>
-                        )}
                       </div>
                       <button
                         type="submit"
-                        className="h-7 w-7 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-white flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0"
+                        className="h-7 w-7 rounded-lg bg-[#0c4ca6]/10 hover:bg-[#0c4ca6] text-[#0c4ca6] hover:text-white flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0"
                       >
                         <span className="material-symbols-outlined text-xs">arrow_forward</span>
                       </button>
                     </div>
                     {pincodeError && (
-                      <div className="text-[8px] text-error font-bold mt-1 leading-none">
+                      <div className="text-[9px] text-red-500 font-bold mt-1.5 leading-none">
                         ⚠️ {pincodeError}
                       </div>
                     )}
                   </form>
-                  <div className="px-4 py-1.5 text-[9px] uppercase font-bold text-on-surface-variant/40 font-headline tracking-wider">
+                  <div className="px-4 py-1 text-[9px] uppercase font-bold text-slate-400 font-headline tracking-wider">
                     Cities
                   </div>
                   <button 
-                    onClick={() => setShowLocMenu(false)}
-                    className="w-full px-4 py-2 hover:bg-slate-50 text-left font-medium text-[10px] md:text-xs text-on-surface-variant/90 flex items-center gap-2"
+                    onClick={() => { setUserLocation({ lat: 28.6139, lng: 77.2090, label: "Delhi NCR" }); setShowLocMenu(false); }}
+                    className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-slate-600 flex items-center gap-2"
                   >
                     📍 Delhi NCR
                   </button>
                   <button 
-                    onClick={() => setShowLocMenu(false)}
-                    className="w-full px-4 py-2 hover:bg-slate-50 text-left font-medium text-[10px] md:text-xs text-on-surface-variant/90 flex items-center gap-2"
+                    onClick={() => { setUserLocation({ lat: 28.4595, lng: 77.0266, label: "Gurgaon" }); setShowLocMenu(false); }}
+                    className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-slate-600 flex items-center gap-2"
                   >
                     📍 Gurgaon
                   </button>
@@ -286,284 +387,329 @@ export function Navbar({
               )}
             </div>
 
-          </div>
-        </nav>
-      </div>
-
-      {/* ── BOTTOM DYNAMICS CATEGORY MENU BAR ── */}
-      <div 
-        className="bg-slate-50/50 w-full overflow-x-auto hide-scrollbar scroll-smooth"
-        onMouseLeave={() => {
-          if (!isMobile) {
-            setHoveredCategory(null);
-          }
-        }}
-      >
-        <div className="flex items-center gap-4 md:gap-8 h-10 md:h-12 px-4 md:px-8 w-full max-w-7xl mx-auto font-headline text-[10px] md:text-xs font-extrabold text-on-surface-variant relative">
-          {/* Home Nav Item (Uniquely styled & slightly smaller premium pill) */}
-          <button 
-            onClick={() => handleCategoryClick("Home", "home")}
-            className={`flex items-center gap-1.5 rounded-full h-[33px] px-4 flex-shrink-0 cursor-pointer transition-all duration-200 select-none shadow-md active:scale-95 border ${
-              activeCategoryFilter === "Home" 
-                ? "bg-gradient-to-r from-primary to-blue-700 text-white border-transparent font-black shadow-primary/25 shadow-lg scale-[1.01] ring-2 ring-primary/30" 
-                : "bg-white hover:bg-slate-50 border-outline-variant/20 text-on-surface-variant/90 font-extrabold hover:text-primary hover:border-primary/30"
-            }`}
-          >
-            <span className="material-symbols-outlined text-[10px] md:text-sm leading-none">home</span>
-            <span className="font-extrabold text-[10px] md:text-[11px] tracking-wide pt-0.5">Home</span>
-          </button>
-          
-          {/* Category List */}
-          {categories.map((cat, idx) => {
-            const isActive = activeCategoryFilter === cat.name;
-            
-            return (
-              <button
-                key={idx}
-                onClick={() => {
-                  // Mobile: navigate directly to listing page
-                  // Desktop: navigate too (hover triggers mega-menu)
-                  handleCategoryClick(cat.name, cat.page);
-                }}
-                onMouseEnter={() => {
-                  if (!isMobile) {
-                    handleMenuTrigger(cat.name);
-                  }
-                }}
-                className={`relative flex items-center gap-1 hover:text-primary transition-all duration-150 py-2.5 md:py-3.5 border-b-2 h-full flex-shrink-0 cursor-pointer text-[10px] md:text-[11px] lg:text-xs ${
-                  isActive ? "text-primary border-primary font-bold" : "border-transparent text-on-surface-variant/80"
-                }`}
+            {/* Authentication Widget */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setPage("profile-page")}
+                  className="flex items-center gap-1 px-3.5 py-2 bg-[#0c4ca6]/5 hover:bg-[#0c4ca6]/10 text-[#0c4ca6] rounded-xl transition-all active:scale-95 font-extrabold text-xs"
+                >
+                  <span className="material-symbols-outlined text-base leading-none">account_circle</span>
+                  <span className="max-w-[70px] truncate">{user.name.split(" ")[0]}</span>
+                </button>
+                <button 
+                  onClick={() => { setUser(null); setPage("home"); }}
+                  className="text-[#4d515a] hover:text-red-500 text-[11px] font-black uppercase transition-colors px-1"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => setPage("signup")}
+                className="px-4 py-2 font-black text-[#0c4ca6] hover:text-[#0a3e87] hover:underline transition-all text-xs uppercase tracking-wide cursor-pointer"
               >
-                <span>{cat.name}</span>
+                Login/Signup
               </button>
-            );
-          })}
+            )}
+
+            {/* Book Now primary CTA */}
+            <button
+              onClick={() => { setPage("package-listing"); if (setActiveCategoryFilter) setActiveCategoryFilter("Full Body Checkup"); }}
+              className="px-6 py-2.5 bg-gradient-to-r from-[#0c4ca6] to-[#0a3e87] text-white hover:from-[#0a3e87] hover:to-[#082f66] font-bold text-xs rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
+            >
+              Book Now
+            </button>
+
+          </div>
         </div>
       </div>
 
-      {/* ── 4. DESKTOP HOVER MEGA-MENU WITH DYNAMIC RIGHT-EXPANSION (Strict Keying & Width Controls) ── */}
-      {hoveredCategory && (!isMobile) && (
-        <div 
-          className="hidden md:block absolute left-0 right-0 top-full bg-white/95 backdrop-blur-xl border-t border-b border-outline-variant/15 shadow-2xl z-50 animate-in fade-in slide-in-from-top-3 duration-200 w-full overflow-hidden"
-          onMouseEnter={() => setHoveredCategory(hoveredCategory)}
-          onMouseLeave={() => setHoveredCategory(null)}
-        >
-          <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-6 items-start w-full">
-            
-            {/* Left Column: Interactive Pre-filtered diagnostic list (Key collisions solved) */}
-            <div className="w-full">
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="text-[10px] uppercase font-extrabold tracking-wider text-primary font-headline">
-                  Popular Diagnostics under {hoveredCategory}
-                </h4>
-                <span className="text-[10px] font-bold text-on-surface-variant/60 font-headline">
-                  {getHoveredTests().length} Available
-                </span>
-              </div>
-              
-              {categoryPreviews.length === 0 ? (
-                <div className="space-y-2 py-4">
-                  {[1, 2, 3].map(n => (
-                    <div key={n} className="border border-outline-variant/10 rounded-xl p-3 h-12 w-full pulse-shimmer bg-slate-50" />
-                  ))}
-                </div>
-              ) : getHoveredTests().length === 0 ? (
-                <div className="text-xs text-on-surface-variant py-4">No diagnostic tests loaded for this segment.</div>
-              ) : (
-                <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-outline-variant scrollbar-track-transparent">
-                  {getHoveredTests().map((t, idx) => {
-                    const isHovered = hoveredTestIndex === idx;
-                    return (
-                      <div
-                        key={`${t.id}-${idx}`}
-                        onMouseEnter={() => setHoveredTestIndex(idx)}
-                        onClick={() => {
-                          if (t.isPkg) {
-                            setSelectedPackage(t);
-                            setPage("package-compare");
-                          } else {
-                            setTest(t);
-                            setPage("detail");
-                          }
-                          setHoveredCategory(null);
-                        }}
-                        className={`border rounded-xl p-3 flex items-center justify-between gap-4 cursor-pointer transition-all duration-150 w-full ${
-                          isHovered 
-                            ? "border-primary bg-primary/[0.03] translate-x-1" 
-                            : "border-outline-variant/10 bg-transparent hover:bg-slate-50"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs ${isHovered ? "text-primary font-bold" : "text-on-surface-variant/60"}`}>✓</span>
-                          <span className={`text-xs font-bold font-headline ${isHovered ? "text-primary" : "text-on-surface"}`}>
-                            {t.name}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex flex-col items-end">
-                            <span className="text-[8px] uppercase tracking-wider text-on-surface-variant/50 font-bold font-headline leading-none">starts at</span>
-                            <span className="text-xs font-extrabold text-primary font-headline mt-0.5">₹{t.price}</span>
-                          </div>
-                          <span className={`material-symbols-outlined text-xs transition-transform ${isHovered ? "text-primary translate-x-0.5" : "text-on-surface-variant/30"}`}>chevron_right</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+      {/* ─── MOBILE HEADER (Touch viewports) ─── */}
+      <div className="lg:hidden w-full max-w-7xl mx-auto px-4 py-3 flex justify-between items-center h-14">
+        
+        {/* Left Side Hamburger + Brand */}
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setMobileDrawerOpen(true)}
+            className="w-10 h-10 flex items-center justify-center text-slate-800 hover:bg-slate-50 rounded-xl transition-colors cursor-pointer outline-none"
+          >
+            <span className="material-symbols-outlined text-[24px]">menu</span>
+          </button>
+          <a 
+            onClick={() => { setPage("home"); if (setActiveCategoryFilter) setActiveCategoryFilter("Home"); }} 
+            className="text-lg font-black text-[#0c4ca6] cursor-pointer hover:opacity-85 tracking-tight pt-0.5"
+          >
+            ChooseMyLab
+          </a>
+        </div>
+
+        {/* Right Side Widgets */}
+        <div className="flex items-center gap-1">
+          
+          {/* Location button */}
+          <button 
+            onClick={() => setShowLocMenu(!showLocMenu)}
+            className="w-9 h-9 flex items-center justify-center text-[#0c4ca6] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[20px]">location_on</span>
+          </button>
+
+          {/* Search Toggle icon */}
+          <button 
+            onClick={() => setSearchBarOpen(!searchBarOpen)}
+            className="w-9 h-9 flex items-center justify-center text-[#4d515a] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[20px]">search</span>
+          </button>
+
+          {/* Profile widget */}
+          <button 
+            onClick={() => setPage(user ? "profile-page" : "signup")}
+            className="w-9 h-9 flex items-center justify-center text-[#4d515a] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[20px]">account_circle</span>
+          </button>
+
+        </div>
+      </div>
+
+      {/* Mobile Inline Search Bar Row */}
+      {searchBarOpen && isMobile && (
+        <div className="lg:hidden px-4 pb-3 w-full border-t border-slate-50 pt-2 bg-white animate-in slide-in-from-top-2 duration-150">
+          <form onSubmit={handleSearchSubmit} className="flex gap-2 w-full">
+            <input 
+              type="text"
+              placeholder="Search tests or checkup packages..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold outline-none text-[#202124] placeholder:text-slate-400 focus:bg-white focus:border-[#0c4ca6]/40 transition-all"
+              autoFocus
+            />
+            <button 
+              type="submit" 
+              className="bg-[#0c4ca6] text-white px-4 rounded-xl flex items-center justify-center active:scale-95 transition-all text-xs font-bold uppercase cursor-pointer"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Mobile Location Search Dropdown panel */}
+      {showLocMenu && isMobile && (
+        <div className="lg:hidden absolute top-14 left-0 right-0 bg-white border-b border-slate-200 shadow-xl py-3 px-4 z-50 animate-in fade-in slide-in-from-top duration-150 text-left">
+          <div className="flex justify-between items-center mb-2.5">
+            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Select Location</span>
+            <button onClick={() => setShowLocMenu(false)} className="text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-base">close</span>
+            </button>
+          </div>
+          <button 
+            onClick={handleLocationClick}
+            className="w-full px-3 py-2 bg-[#0c4ca6]/5 hover:bg-[#0c4ca6]/10 text-[#0c4ca6] font-bold text-xs rounded-xl flex items-center justify-center gap-2 mb-3 transition-all"
+          >
+            <span className="material-symbols-outlined text-base">my_location</span>
+            Detect GPS Location
+          </button>
+          <form onSubmit={handlePincodeSearch} className="flex gap-1.5 items-center mb-3">
+            <input
+              type="text"
+              maxLength={6}
+              placeholder="Enter 6-digit PIN"
+              value={pincodeInput}
+              onChange={(e) => {
+                setPincodeInput(e.target.value.replace(/\D/g, ""));
+                if (pincodeError) setPincodeError("");
+              }}
+              className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#0c4ca6]/50 focus:bg-white rounded-xl text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+            />
+            <button
+              type="submit"
+              className="bg-[#0c4ca6] text-white px-3.5 py-2 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0 font-bold text-xs"
+            >
+              Set PIN
+            </button>
+          </form>
+          {pincodeError && (
+            <div className="text-[9px] text-red-500 font-bold mb-3 leading-none">
+              ⚠️ {pincodeError}
             </div>
-
-            {/* Right Column: Dynamic Right-Expansion clinical significance card (Responsive widths, no cutting!) */}
-            {(() => {
-              const tests = getHoveredTests();
-              const activeTest = tests[hoveredTestIndex] || tests[0];
-              if (!activeTest) return null;
-
-              return (
-                <div className="bg-slate-50 border border-outline-variant/20 rounded-2xl p-5 relative overflow-hidden min-h-[240px] flex flex-col justify-between shadow-sm w-full max-w-full">
-                  {/* Glowing micro-blobs */}
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
-                  
-                  <div className="relative z-10 text-left">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="bg-primary/5 text-primary text-[9px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider font-headline border border-primary/10">
-                        {activeTest.isPkg ? "Accredited Health Package" : "Accredited Blood Parameter"}
-                      </span>
-                      <span className="text-[9px] text-secondary font-bold font-headline flex items-center gap-1">
-                        ⏱ Reports: {activeTest.rep || "12 Hours"}
-                      </span>
-                    </div>
-                    
-                    <h5 className="font-headline font-extrabold text-sm text-on-surface leading-tight mb-2">
-                      {activeTest.name}
-                    </h5>
-                    
-                    <p className="text-on-surface-variant text-[11px] leading-relaxed opacity-95">
-                      {activeTest.description}
-                    </p>
-                  </div>
-
-                  <div className="relative z-10 flex items-center justify-between border-t border-outline-variant/10 pt-4 mt-4 w-full">
-                    <div className="text-left">
-                      <span className="text-[9px] uppercase font-bold tracking-wider text-on-surface-variant/50 block font-headline">starts at</span>
-                      <span className="text-primary font-headline text-lg font-extrabold">₹{activeTest.price}</span>
-                    </div>
-                    
-                    <button
-                      onClick={() => {
-                        if (activeTest.isPkg) {
-                          setSelectedPackage(activeTest);
-                          setPage("package-compare");
-                        } else {
-                          setTest(activeTest);
-                          setPage("detail");
-                        }
-                        setHoveredCategory(null);
-                      }}
-                      className="px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-[10px] font-bold rounded-xl uppercase tracking-wider font-headline active:scale-95 transition-all cursor-pointer shadow-sm"
-                    >
-                      Book Diagnostic
-                    </button>
-                  </div>
-                </div>
-              );
-            })()}
-
+          )}
+          <div className="flex gap-2">
+            <button 
+              onClick={() => { setUserLocation({ lat: 28.6139, lng: 77.2090, label: "Delhi NCR" }); setShowLocMenu(false); }}
+              className="flex-1 py-1.5 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-center font-bold text-xs text-slate-700 rounded-lg"
+            >
+              Delhi NCR
+            </button>
+            <button 
+              onClick={() => { setUserLocation({ lat: 28.4595, lng: 77.0266, label: "Gurgaon" }); setShowLocMenu(false); }}
+              className="flex-1 py-1.5 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-center font-bold text-xs text-slate-700 rounded-lg"
+            >
+              Gurgaon
+            </button>
           </div>
         </div>
       )}
 
-      {/* ── 5. MOBILE DYNAMIC TOUCH-DRAWER BOTTOM SHEET (Zero cuts, vertical stack) ── */}
-      {hoveredCategory && isMobile && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex flex-col justify-end animate-in fade-in duration-200">
-          {/* Tap backdrop to dismiss */}
-          <div className="flex-1" onClick={() => setHoveredCategory(null)} />
+      {/* ─── MOBILE NAVIGATION SIDEBAR DRAWER (React Portal to break out of z-50 parent stacking contexts) ─── */}
+      {mobileDrawerOpen && createPortal(
+        <>
+          {/* Dark blurred background overlay */}
+          <div 
+            onClick={() => setMobileDrawerOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden animate-in fade-in duration-200"
+            style={{ zIndex: 999998 }}
+          />
           
-          <div className="bg-white rounded-t-[2rem] max-h-[80vh] overflow-y-auto p-5 shadow-2xl flex flex-col justify-between animate-in slide-in-from-bottom duration-300 relative text-left">
-            
-            {/* Header row */}
-            <div className="flex justify-between items-center pb-4 border-b border-outline-variant/10 mb-4">
-              <div>
-                <h4 className="font-headline font-extrabold text-xs text-primary uppercase tracking-wide">
-                  {hoveredCategory} Preview
-                </h4>
-                <p className="text-[9px] text-on-surface-variant opacity-80 mt-0.5">Tapping parameters expands their clinical metrics</p>
+          {/* Slide-out Panel */}
+          <div 
+            className="fixed top-0 left-0 bottom-0 w-[85%] max-w-[300px] bg-white h-full shadow-[5px_0_25px_rgba(0,0,0,0.15)] flex flex-col justify-between animate-in slide-in-from-left duration-300 text-left"
+            style={{ zIndex: 999999 }}
+          >
+            <div>
+              {/* Drawer Header */}
+              <div className="flex justify-between items-center p-4 border-b border-slate-100">
+                <span className="text-[#0c4ca6] font-black text-lg tracking-tight">ChooseMyLab</span>
+                <button 
+                  onClick={() => setMobileDrawerOpen(false)}
+                  className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 active:scale-95 transition-all outline-none"
+                >
+                  <span className="material-symbols-outlined text-base">close</span>
+                </button>
               </div>
-              <button 
-                onClick={() => setHoveredCategory(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-on-surface-variant hover:bg-slate-200 active:scale-95 transition-all outline-none"
-              >
-                <span className="material-symbols-outlined text-base">close</span>
-              </button>
+
+              {/* Drawer Links Navigation */}
+              <div className="p-4 space-y-2 font-bold text-sm text-[#4d515a]">
+                
+                {/* Home shortcut */}
+                <button
+                  onClick={() => { setPage("home"); if (setActiveCategoryFilter) setActiveCategoryFilter("Home"); setMobileDrawerOpen(false); }}
+                  className="w-full flex items-center gap-2 py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all"
+                >
+                  <span className="material-symbols-outlined text-base text-slate-400">home</span>
+                  <span>Home</span>
+                </button>
+
+                {/* Tests Accordion Link */}
+                <div className="border border-slate-100 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setMobileActiveAccordion(mobileActiveAccordion === 'tests' ? null : 'tests')}
+                    className="w-full flex items-center justify-between py-2.5 px-3 bg-slate-50/50 hover:bg-slate-50 transition-all outline-none"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base text-slate-400">science</span>
+                      <span>Tests</span>
+                    </div>
+                    <span className={`material-symbols-outlined text-base transition-transform ${
+                      mobileActiveAccordion === 'tests' ? 'rotate-180' : ''
+                    }`}>keyboard_arrow_down</span>
+                  </button>
+
+                  {mobileActiveAccordion === 'tests' && (
+                    <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
+                      {navMenu.tests.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleItemNavigation(item)}
+                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#0c4ca6] block"
+                        >
+                          {item.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Packages Accordion Link */}
+                <div className="border border-slate-100 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setMobileActiveAccordion(mobileActiveAccordion === 'packages' ? null : 'packages')}
+                    className="w-full flex items-center justify-between py-2.5 px-3 bg-slate-50/50 hover:bg-slate-50 transition-all outline-none"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base text-slate-400">health_and_safety</span>
+                      <span>Packages</span>
+                    </div>
+                    <span className={`material-symbols-outlined text-base transition-transform ${
+                      mobileActiveAccordion === 'packages' ? 'rotate-180' : ''
+                    }`}>keyboard_arrow_down</span>
+                  </button>
+
+                  {mobileActiveAccordion === 'packages' && (
+                    <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
+                      {navMenu.packages.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleItemNavigation(item)}
+                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#0c4ca6] block"
+                        >
+                          {item.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Labs Direct link */}
+                <button
+                  onClick={() => { setPage("lab-listing"); setMobileDrawerOpen(false); }}
+                  className="w-full flex items-center gap-2 py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all"
+                >
+                  <span className="material-symbols-outlined text-base text-slate-400">labs</span>
+                  <span>Labs</span>
+                </button>
+
+                {/* Compare Link */}
+                <button
+                  onClick={() => { setPage("package-compare"); setMobileDrawerOpen(false); }}
+                  className="w-full flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all text-[#006073]"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base">swap_horiz</span>
+                    <span>Compare Diagnostics</span>
+                  </div>
+                  <span className="bg-[#d1f8ff] text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Compare</span>
+                </button>
+
+              </div>
             </div>
 
-            {/* Previews vertical stacking list */}
-            {getHoveredTests().length === 0 ? (
-              <div className="text-xs text-on-surface-variant py-6 text-center">No active diagnostics available.</div>
-            ) : (
-              <div className="space-y-2.5 overflow-y-auto max-h-[50vh] pr-1 scrollbar-thin">
-                {getHoveredTests().map((t, idx) => {
-                  const isExpanded = hoveredTestIndex === idx;
-                  return (
-                    <div 
-                      key={`${t.id}-${idx}`}
-                      onClick={() => setHoveredTestIndex(idx)}
-                      className={`border rounded-xl p-3 transition-all duration-200 cursor-pointer ${
-                        isExpanded ? "border-primary bg-primary/[0.02]" : "border-outline-variant/10 bg-surface"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-[9px] font-bold ${isExpanded ? "text-primary" : "text-on-surface-variant/40"}`}>✓</span>
-                          <span className={`text-[11px] font-bold font-headline ${isExpanded ? "text-primary" : "text-on-surface"}`}>
-                            {t.name}
-                          </span>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="text-[8px] uppercase tracking-wider text-on-surface-variant/50 font-bold font-headline leading-none">starts at</span>
-                          <span className="text-[11px] font-bold text-primary font-headline mt-0.5">₹{t.price}</span>
-                        </div>
-                      </div>
+            {/* Drawer bottom Actions */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-3">
+              {user ? (
+                <div className="flex items-center justify-between px-2">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-slate-400">account_circle</span>
+                    <span className="text-xs font-bold text-slate-700">{user.name}</span>
+                  </div>
+                  <button 
+                    onClick={() => { setUser(null); setPage("home"); setMobileDrawerOpen(false); }}
+                    className="text-xs font-black uppercase text-red-500"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setPage("signup"); setMobileDrawerOpen(false); }}
+                  className="w-full py-2.5 bg-white border border-slate-200 text-[#0c4ca6] font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
+                >
+                  Login / Register
+                </button>
+              )}
 
-                      {/* Inline Collapsible details for Mobile viewport stack */}
-                      {isExpanded && (
-                        <div className="mt-3 pt-3 border-t border-outline-variant/10 space-y-3 animate-in fade-in duration-200">
-                          <div className="flex justify-between items-center text-[9px] text-on-surface-variant/80">
-                            <span className="bg-primary/5 text-primary px-2 py-0.5 rounded-md font-bold uppercase border border-primary/10">
-                              {t.isPkg ? "Health Package" : "Accredited Check"}
-                            </span>
-                            <span className="font-bold">⏱ Reports: {t.rep || "12 Hours"}</span>
-                          </div>
-                          
-                          <p className="text-on-surface-variant text-[10px] leading-relaxed opacity-95">
-                            {t.description}
-                          </p>
-                          
-                          <button
-                            onClick={() => {
-                              if (t.isPkg) {
-                                setSelectedPackage(t);
-                                setPage("package-compare");
-                              } else {
-                                setTest(t);
-                                setPage("detail");
-                              }
-                              setHoveredCategory(null);
-                            }}
-                            className="w-full py-2.5 bg-primary hover:bg-primary-container text-on-primary text-[10px] font-bold rounded-xl uppercase tracking-wider font-headline active:scale-95 transition-all shadow-md cursor-pointer"
-                          >
-                            Book Dynamic Diagnostic
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
+              <button
+                onClick={() => { setPage("package-listing"); if (setActiveCategoryFilter) setActiveCategoryFilter("Full Body Checkup"); setMobileDrawerOpen(false); }}
+                className="w-full py-3 bg-[#0c4ca6] hover:bg-[#0a3e87] text-white font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
+              >
+                Book checkup Now
+              </button>
+            </div>
           </div>
-        </div>
+        </>
+        , document.body
       )}
 
     </header>

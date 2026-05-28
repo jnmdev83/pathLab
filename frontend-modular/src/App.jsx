@@ -476,6 +476,7 @@ export default function App() {
           packages={packages}
           setTest={setTest}
           setSelectedPackage={setSelectedPackage}
+          setTestName={setTestName}
         />
         <main className="w-full">
           {renderPage()}

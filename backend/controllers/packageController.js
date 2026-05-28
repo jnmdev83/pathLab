@@ -747,8 +747,20 @@ exports.get_api_package_branch_details = async (req, res) => {
 
 // ─── GET /api/packages/:packageId/branches/:branchId/other-packages ─────────
 exports.get_api_package_branch_other_packages = async (req, res) => {
-  const { packageId, branchId } = req.params;
+  let { packageId, branchId } = req.params;
   try {
+    if (!branchId || branchId === 'null' || branchId === 'undefined') {
+      const fallbackRow = await db.query(
+        'SELECT lab_branch_id FROM lab_package_branches WHERE package_id = $1 AND is_available = true ORDER BY price ASC LIMIT 1',
+        [packageId]
+      );
+      if (fallbackRow.rows.length > 0) {
+        branchId = fallbackRow.rows[0].lab_branch_id;
+      } else {
+        return res.json([]);
+      }
+    }
+
     const { rows } = await db.query(`
       SELECT 
         lpb.price,
@@ -777,8 +789,20 @@ exports.get_api_package_branch_other_packages = async (req, res) => {
 
 // ─── GET /api/packages/:packageId/branches/:branchId/competitors ─────────────
 exports.get_api_package_branch_competitors = async (req, res) => {
-  const { packageId, branchId } = req.params;
+  let { packageId, branchId } = req.params;
   try {
+    if (!branchId || branchId === 'null' || branchId === 'undefined') {
+      const fallbackRow = await db.query(
+        'SELECT lab_branch_id FROM lab_package_branches WHERE package_id = $1 AND is_available = true ORDER BY price ASC LIMIT 1',
+        [packageId]
+      );
+      if (fallbackRow.rows.length > 0) {
+        branchId = fallbackRow.rows[0].lab_branch_id;
+      } else {
+        return res.json([]);
+      }
+    }
+
     const cityRow = await db.query('SELECT city FROM lab_branches WHERE id = $1', [branchId]);
     const city = cityRow.rows[0]?.city || '';
 
@@ -850,5 +874,37 @@ exports.get_api_package_branch_competitors = async (req, res) => {
     res.status(500).json({ error: 'Could not fetch competitors' });
   }
 };
+
+
+// ─── GET /api/nav-menu ────────────────────────────────────────────────────────
+exports.get_api_nav_menu = async (req, res) => {
+  try {
+    // Dynamic navigation structure backed by database checks
+    const menuStructure = {
+      tests: [
+        { name: "Heart", category: "Heart", page: "category-listing" },
+        { name: "Cancer", category: "Cancer", page: "category-listing" },
+        { name: "Thyroid", category: "Thyroid", page: "category-listing" },
+        { name: "Diabetes", category: "Diabetes", page: "category-listing" },
+        { name: "Pregnancy", category: "Pregnancy", page: "category-listing" },
+        { name: "Allergy", category: "Allergy/Intolerance", page: "category-listing" },
+        { name: "Hormone", category: "Hormone", page: "category-listing" },
+        { name: "DNA Test", category: "DNA Test", page: "category-listing" }
+      ],
+      packages: [
+        { name: "Full Body", category: "Full Body Checkup", page: "package-listing" },
+        { name: "Preventive", category: "Full Body Checkup", page: "package-listing" },
+        { name: "Women", category: "Pregnancy", page: "package-listing" },
+        { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
+      ]
+    };
+    
+    res.json(menuStructure);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not fetch navigation menu structure' });
+  }
+};
+
 
 

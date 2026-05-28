@@ -13,6 +13,8 @@ router.get('/packages-listing/offers', controller.get_api_packages_listing_offer
 router.get('/packages/:packageId/branches/:branchId', controller.get_api_package_branch_details); // NEW
 router.get('/packages/:packageId/branches/:branchId/other-packages', controller.get_api_package_branch_other_packages); // NEW
 router.get('/packages/:packageId/branches/:branchId/competitors', controller.get_api_package_branch_competitors); // NEW
+router.get('/nav-menu', controller.get_api_nav_menu); // NEW
+
 
 // Admin Routes
 router.get('/admin/packages', controller.get_api_admin_packages);
