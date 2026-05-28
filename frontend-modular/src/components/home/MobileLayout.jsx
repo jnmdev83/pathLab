@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CATEGORIES } from '../../utils/data';
 import { API_BASE_URL } from '../../config';
+import { MobileSearchOverlay } from '../layout/MobileSearchOverlay';
 
 export function MobileLayout({ 
   setPage, 
@@ -15,6 +16,7 @@ export function MobileLayout({
   setActiveCategoryFilter
 }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [packages, setPackages] = useState([]);
   const [labs, setLabs] = useState([]);
   const [loadingLabs, setLoadingLabs] = useState(true);
@@ -124,19 +126,22 @@ export function MobileLayout({
       }
     ];
 
-    return popularPkgs.map(p => {
+    return popularPkgs.map((p, index) => {
       const match = packages.find(pkg => (pkg.name || pkg.package_name || "").toLowerCase().includes(p.key));
+      const fallbackPkg = packages.length > 0 ? packages[index % packages.length] : null;
       return match ? {
         id: match.id || match.package_id,
         name: match.name || match.package_name,
-        price: match.price,
-        originalPrice: Math.floor(match.price * 1.5),
+        price: match.price || match.min_price || p.fallback.price,
+        originalPrice: Math.floor((match.price || match.min_price || p.fallback.price) * 1.5),
         icon: p.icon,
         iconColor: p.iconColor,
         bulletPoints: p.bulletPoints
       } : {
-        id: Math.floor(Math.random() * 1000) + 200,
-        ...p.fallback,
+        id: fallbackPkg ? (fallbackPkg.id || fallbackPkg.package_id) : (Math.floor(Math.random() * 1000) + 200),
+        name: fallbackPkg ? (fallbackPkg.name || fallbackPkg.package_name) : p.fallback.name,
+        price: fallbackPkg ? (fallbackPkg.price || fallbackPkg.min_price || p.fallback.price) : p.fallback.price,
+        originalPrice: fallbackPkg ? Math.floor((fallbackPkg.price || fallbackPkg.min_price || p.fallback.price) * 1.5) : p.fallback.originalPrice,
         icon: p.icon,
         iconColor: p.iconColor,
         bulletPoints: p.bulletPoints
@@ -188,7 +193,8 @@ export function MobileLayout({
       tagline: "Comprehensive full body checks curated for executive wellness.",
       totalTests: "320 Mapped",
       price: "7999",
-      mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
+      packageId: 132,
+      searchKeys: ["executive", "120 tests", "platinum"],
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3pN88HIjziN8XMIL3cEovAbKrWnGK9ncgJQN5NOA0Tv5nn7yzyQlc0NRaOtmjinMIEuNoon1fYuxu_-dFfbtP3DLngXNlo87tesl6RKyffbxIDPAsp2jx0DKTJSTtpWcK0XFQ0ammaItqSTRsn15EBGUMSeeok0qIh2byzSSQ7nCZOTh02rvS-mLB3h6EEqFl2MO3VYNRtSGX6Sv1xfUaST20XwCW6XEf8fmFLlaPVskCALmwomyDAKG58IHZ8YTvjQGD8hOOtwo",
       bgColor: "from-[#ecfdf5] via-[#f0fdfa] to-[#ccfbf1]",
       textColor: "text-[#065f46]",
@@ -208,7 +214,8 @@ export function MobileLayout({
       tagline: "Uncover hidden clinical risks and track 84 biomarkers.",
       totalTests: "84 Biomarkers",
       price: "1499",
-      mockPackage: { id: 1, name: "Full Body Health Checkup (64 Tests)", price: 899 },
+      packageId: 131,
+      searchKeys: ["advanced", "85 tests", "full body"],
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCQu5pIuR0Ldjv4YKmjU4VYMp5SMtFx7hezaEpiQjxu7ZMsit_H-cJMpHXSf6kxWuO6I_ph85TssJR8VEOU2h8ECBs1G2A_cLAPRNFda6k8YCCWGGOzOls28EfP-5Lu0YPy1-IZVJNvsSEnSEsLzNLLOUnRNjkjbjN9v3to7rrUnHHcGVVxRwY3a-Ga34zGCDsl3An2Lt8X61C0rYaQssRtN0S-QhVaFRXscG_o_5KBWpyOYxBUVlrERlZLiU3fM3eejAw4H_uAk64",
       bgColor: "from-[#eff6ff] via-[#f0f9ff] to-[#e0f2fe]",
       textColor: "text-[#1e40af]",
@@ -228,7 +235,8 @@ export function MobileLayout({
       tagline: "Tracks bone density, kidneys, and geriatric risks.",
       totalTests: "68 Markers",
       price: "2199",
-      mockPackage: { id: 2, name: "Senior Citizen Package", price: 1800 },
+      packageId: 2,
+      searchKeys: ["senior", "citizen", "geriatric"],
       image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGtb-_r_RM-FsnGSBH-b-OXmhyYF-dQ_Mzq8pNWbkT3AwYtekvUYB26GmXLkuiTVW5NEHUTmnpuEt1kxxtZfLKQLlJeRTNxHmwRPE_FkEF5DL1z2_bAVUz8h7uSn_X6KMMrwGUVi3nr2dChj7xBzPTCbXRb6XGxNVSLZ5cdI2Qd644tmV_WhoTxzOKYHgqV15UC_Gd3n_t74CC86HXn0LkSQiNka6GdnWgszezgV9lMJ-TAMVwDTB8tdru8r7SZtgLsD2miRIZ7P4",
       bgColor: "from-[#fffbeb] via-[#fffbeb] to-[#fef3c7]",
       textColor: "text-[#92400e]",
@@ -276,11 +284,27 @@ export function MobileLayout({
 
 
 
-  const handleCarouselBook = (mockPkg) => {
-    const actualPkg = packages.find(p => p.name.toLowerCase().includes("senior") && mockPkg.name.toLowerCase().includes("senior")) ||
-                      packages.find(p => p.name.toLowerCase().includes("full body") && mockPkg.name.toLowerCase().includes("full body")) ||
-                      packages[0] || mockPkg;
-    handleBookPackage(actualPkg);
+  const handleCarouselBook = (slide) => {
+    // 1. Try exact packageId match first (most reliable)
+    let matched = null;
+    if (slide.packageId) {
+      matched = packages.find(p => (p.id || p.package_id) === slide.packageId);
+    }
+    // 2. Fallback: try searchKeys in priority order
+    if (!matched) {
+      const keys = slide.searchKeys || [];
+      for (const key of keys) {
+        matched = packages.find(p => (p.name || p.package_name || "").toLowerCase().includes(key));
+        if (matched) break;
+      }
+    }
+    // 3. Last resort: first package or package listing
+    const target = matched || packages[0];
+    if (target) {
+      handleBookPackage(target);
+    } else {
+      setPage("package-listing");
+    }
   };
 
   const handleCallbackSubmit = (e) => {
@@ -300,7 +324,7 @@ export function MobileLayout({
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          setPackages(data.slice(0, 2)); // Show top 2 packages
+          setPackages(data);
         }
       })
       .catch((err) => console.error("Error fetching packages:", err))
@@ -334,10 +358,13 @@ export function MobileLayout({
 
   const handleBookPackage = (pkg) => {
     if (setSelectedPackage) {
-      setSelectedPackage(pkg);
-      setPage("package-compare");
+      setSelectedPackage({ id: pkg.id || pkg.package_id, name: pkg.name || pkg.package_name });
+      if (setSelectedBranch) {
+        setSelectedBranch(null); // Clear previous branch to trigger lowest price fallback in package detail
+      }
+      setPage("package-detail");
     } else {
-      setPage("package");
+      setPage("package-listing");
     }
   };
 
@@ -408,7 +435,7 @@ export function MobileLayout({
             {/* Book Now Button */}
             <div className="pt-2">
               <button 
-                onClick={() => handleCarouselBook(carouselSlides[currentSlide].mockPackage)}
+                onClick={() => handleCarouselBook(carouselSlides[currentSlide])}
                 className={`w-full ${carouselSlides[currentSlide].btnClass} py-2.5 rounded-full font-black text-[10px] font-headline transition-all duration-150 active:scale-95 shadow-md flex items-center justify-center uppercase tracking-wider cursor-pointer`}
               >
                 Book Now
@@ -431,36 +458,6 @@ export function MobileLayout({
             ))}
           </div>
 
-          {/* Standalone Search Bar below Mobile Hero Carousel */}
-          <div className="mt-4 px-1">
-            <div className="flex items-center bg-white p-1 rounded-full shadow-md border border-slate-200 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
-              <span className="material-symbols-outlined pl-3 text-slate-500 text-[16px] flex items-center justify-center">search</span>
-              <input 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && searchQuery.trim()) {
-                    setTestName(searchQuery.trim());
-                    setPage("lab-listing");
-                  }
-                }}
-                className="flex-grow pl-2 pr-2 py-2 bg-transparent text-[10px] text-slate-800 placeholder:text-slate-400 font-body outline-none border-none"
-                placeholder="Search packages, scans or blood tests..." 
-                type="text"
-              />
-              <button 
-                onClick={() => {
-                  if (searchQuery.trim()) {
-                    setTestName(searchQuery.trim());
-                    setPage("lab-listing");
-                  }
-                }}
-                className="bg-primary hover:bg-primary-container text-white px-4 py-1.5 rounded-full font-black text-[9px] font-headline transition-all duration-150 active:scale-95 uppercase tracking-wider cursor-pointer"
-              >
-                Search
-              </button>
-            </div>
-          </div>
         </section>
 
         {/* Quick Categories (Rescaled for premium compact feel) */}
@@ -754,11 +751,12 @@ export function MobileLayout({
 
           <div className="text-center mt-5">
             <button 
-              onClick={() => setPage("blood")}
-              className="bg-gradient-to-r from-primary/5 to-blue-600/5 hover:from-primary hover:to-blue-600 border border-primary/20 hover:border-transparent text-primary hover:text-white text-[11px] font-black px-7 py-3 rounded-full inline-flex items-center gap-2 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-primary/25 active:scale-95 cursor-pointer group"
+              onClick={() => { setActiveCategoryFilter("Blood"); setPage("category-listing"); }}
+              className="bg-gradient-to-r from-[#00828a] to-emerald-600 hover:from-[#006f75] hover:to-emerald-700 text-white text-[11px] font-black px-7 py-3.5 rounded-full inline-flex items-center gap-2.5 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#00828a]/30 active:scale-95 cursor-pointer group relative overflow-hidden"
             >
-              <span>View All 500+ Tests</span>
-              <span className="material-symbols-outlined text-xs leading-none group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">open_in_new</span>
+              <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+              <span className="relative z-10">Explore All 500+ Tests</span>
+              <span className="material-symbols-outlined text-sm leading-none relative z-10 group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
             </button>
           </div>
         </section>
@@ -937,30 +935,41 @@ export function MobileLayout({
         </section>
       </main>
 
-      {/* Mobile Glass Bottom Nav Bar */}
-      <nav className="fixed bottom-4 left-4 right-4 z-50 flex justify-around items-center px-4 py-3 glass rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+      {/* Redesigned Premium Mobile Capsule Bottom Navbar */}
+      <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white/90 backdrop-blur-xl border border-slate-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-full px-4 py-2.5 flex justify-between items-center max-w-md mx-auto">
         <button 
-          onClick={() => setPage("home")} 
-          className="flex flex-col items-center justify-center bg-primary text-on-primary rounded-2xl px-6 py-2 transition-all shadow-lg shadow-primary/20 active:scale-95"
+          onClick={() => setSearchOpen(true)} 
+          className="flex flex-col items-center justify-center bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] transition-all shadow-lg shadow-blue-600/15 active:scale-95 duration-200"
         >
-          <span className="material-symbols-outlined text-[24px]">search</span>
-          <span className="font-bold text-[10px] uppercase mt-0.5">Search</span>
+          <span className="material-symbols-outlined text-[20px] font-bold">search</span>
+          <span className="font-headline font-black text-[9px] uppercase tracking-wider mt-0.5">Search</span>
         </button>
+        
         <button 
           onClick={() => setPage("package")} 
-          className="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all p-3 rounded-2xl active:scale-90"
+          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
         >
-          <span className="material-symbols-outlined text-[24px]">compare_arrows</span>
-          <span className="font-bold text-[10px] uppercase mt-0.5">Compare</span>
+          <span className="material-symbols-outlined text-[22px]">swap_horiz</span>
+          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Compare</span>
         </button>
+        
         <button 
           onClick={() => setPage("profile-page")} 
-          className="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all p-3 rounded-2xl active:scale-90"
+          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
         >
-          <span className="material-symbols-outlined text-[24px]">account_circle</span>
-          <span className="font-bold text-[10px] uppercase mt-0.5">Profile</span>
+          <span className="material-symbols-outlined text-[22px]">account_circle</span>
+          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Profile</span>
         </button>
       </nav>
+
+      {/* WORKABLE SEARCH OVERLAY DRAWER */}
+      <MobileSearchOverlay 
+        isOpen={searchOpen} 
+        onClose={() => setSearchOpen(false)} 
+        setPage={setPage} 
+        setTestName={setTestName} 
+        setActiveCategoryFilter={setActiveCategoryFilter} 
+      />
     </div>
   );
 }

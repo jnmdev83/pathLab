@@ -6,7 +6,7 @@ import { API_BASE_URL } from '../../config';
 
 const PAGE_LIMIT = 8;
 
-export function Search({ testName, setPage, setTest, user, userLocation }) {
+export function Search({ testName, setTestName, setPage, setTest, user, userLocation, setActiveCategoryFilter }) {
   const isMobile = useIsMobile();
 
   const [testMeta, setTestMeta]     = useState(null);
@@ -174,6 +174,8 @@ export function Search({ testName, setPage, setTest, user, userLocation }) {
     resetFilters,
     setPage,
     user,
+    setTestName,
+    setActiveCategoryFilter
   };
 
   if (isMobile) return <MobileLayout {...viewProps} />;

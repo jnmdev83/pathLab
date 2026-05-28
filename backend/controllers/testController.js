@@ -495,11 +495,12 @@ exports.get_api_category_metadata = async (req, res) => {
       res.json(rows[0]);
     } else {
       // Fallback default metadata
+      const isAll = categoryName.toLowerCase() === 'all' || categoryName.toLowerCase() === 'blood';
       res.json({
-        category_name: categoryName,
+        category_name: isAll ? 'All Tests' : categoryName,
         icon: 'science',
-        description: `Explore diagnostic tests under ${categoryName} care.`,
-        long_description: `Explore comprehensive diagnostic tests and health packages under ${categoryName} care. Compare prices across certified NABL labs and book with free home collection.`,
+        description: isAll ? 'Explore our complete range of diagnostic tests and health packages.' : `Explore diagnostic tests under ${categoryName} care.`,
+        long_description: isAll ? 'Explore comprehensive diagnostic tests and health packages. Compare prices across certified NABL labs and book with free home collection.' : `Explore comprehensive diagnostic tests and health packages under ${categoryName} care. Compare prices across certified NABL labs and book with free home collection.`,
         medically_reviewed: true,
         stats_labs: '128+ certified labs',
         stats_bookings: '10k+ monthly bookings',

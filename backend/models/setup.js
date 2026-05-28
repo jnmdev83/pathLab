@@ -120,6 +120,8 @@ async function setupDatabase() {
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_latitude DECIMAL(10, 7)`);
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_longitude DECIMAL(10, 7)`);
     await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_location VARCHAR(255)`);
+    await db.query(`ALTER TABLE bookings ADD COLUMN IF NOT EXISTS package_id INTEGER REFERENCES packages(id)`);
+    await db.query(`CREATE INDEX IF NOT EXISTS idx_bookings_package_id ON bookings (package_id)`);
     await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true`);
     await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP`);
     await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`);

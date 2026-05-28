@@ -10,7 +10,9 @@ export function CategoryListing({
   setTest, 
   setSelectedPackage, 
   user, 
-  userLocation 
+  userLocation,
+  setTestName,
+  setActiveCategoryFilter
 }) {
   const isMobile = useIsMobile();
 
@@ -54,9 +56,24 @@ export function CategoryListing({
       .then((data) => {
         if (Array.isArray(data)) {
           // Normalize and filter category mappings
-          const matched = data.filter(
-            (x) => x.category_name.toLowerCase().trim() === categoryName.toLowerCase().trim()
-          );
+          const isAll = categoryName.toLowerCase() === 'all' || categoryName.toLowerCase() === 'blood';
+          let matched = data;
+          
+          if (!isAll) {
+            matched = data.filter(
+              (x) => x.category_name.toLowerCase().trim() === categoryName.toLowerCase().trim()
+            );
+          } else {
+            // Remove duplicates if showing all
+            const unique = new Map();
+            matched.forEach(item => {
+              if (!unique.has(item.id)) {
+                unique.set(item.id, item);
+              }
+            });
+            matched = Array.from(unique.values());
+          }
+
           setItems(matched);
           if (matched.length === 0) {
             setError(`No active tests mapped under category: ${categoryName}.`);
@@ -194,8 +211,9 @@ export function CategoryListing({
     resetFilters,
     setPage,
     userLocation,
-    visibleCount,
-    setVisibleCount
+    setVisibleCount,
+    setTestName,
+    setActiveCategoryFilter
   };
 
   if (isMobile) return <MobileLayout {...viewProps} />;

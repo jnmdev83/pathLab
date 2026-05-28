@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { MobileSearchOverlay } from '../layout/MobileSearchOverlay';
 
 // ─── Category-specific metadata ───────────────────────────────────────────────
 const CATEGORY_META = {
@@ -341,10 +342,13 @@ export function MobileLayout({
   userLocation,
   visibleCount,
   setVisibleCount,
+  setTestName,
+  setActiveCategoryFilter,
 }) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const sentinelRef = useRef(null);
   const meta = getCategoryMeta(categoryName);
 
@@ -718,28 +722,41 @@ export function MobileLayout({
         />
       )}
 
-      {/* ── FIXED BOTTOM NAV ─────────────────────────────────────────────── */}
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#e8eaed] flex justify-around items-center"
-        style={{ height: 60, boxShadow: '0 -2px 12px rgba(0,0,0,0.06)' }}
-      >
-        <button
-          onClick={() => setPage('home')}
-          className="flex flex-col items-center justify-center py-1.5 px-4 rounded-full"
-          style={{ background: '#e8f0fe' }}
+      {/* Redesigned Premium Mobile Capsule Bottom Navbar */}
+      <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white/90 backdrop-blur-xl border border-slate-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-full px-4 py-2.5 flex justify-between items-center max-w-md mx-auto">
+        <button 
+          onClick={() => setSearchOpen(true)} 
+          className="flex flex-col items-center justify-center bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] transition-all shadow-lg shadow-blue-600/15 active:scale-95 duration-200"
         >
-          <span className="material-symbols-outlined text-[20px] text-[#0b57d0]" style={{ fontVariationSettings: "'FILL' 1" }}>search</span>
-          <span className="text-[9px] font-black mt-0.5 text-[#0b57d0]">Search</span>
+          <span className="material-symbols-outlined text-[20px] font-bold">search</span>
+          <span className="font-headline font-black text-[9px] uppercase tracking-wider mt-0.5">Search</span>
         </button>
-        <button onClick={() => setPage('package')} className="flex flex-col items-center justify-center py-1.5 px-4">
-          <span className="material-symbols-outlined text-[22px] text-[#9ca3af]">compare_arrows</span>
-          <span className="text-[9px] font-black mt-0.5 text-[#9ca3af]">Compare</span>
+        
+        <button 
+          onClick={() => setPage("package")} 
+          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
+        >
+          <span className="material-symbols-outlined text-[22px]">swap_horiz</span>
+          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Compare</span>
         </button>
-        <button onClick={() => setPage('profile-page')} className="flex flex-col items-center justify-center py-1.5 px-4">
-          <span className="material-symbols-outlined text-[22px] text-[#9ca3af]">account_circle</span>
-          <span className="text-[9px] font-black mt-0.5 text-[#9ca3af]">Profile</span>
+        
+        <button 
+          onClick={() => setPage("profile-page")} 
+          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
+        >
+          <span className="material-symbols-outlined text-[22px]">account_circle</span>
+          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Profile</span>
         </button>
       </nav>
+
+      {/* WORKABLE SEARCH OVERLAY DRAWER */}
+      <MobileSearchOverlay 
+        isOpen={searchOpen} 
+        onClose={() => setSearchOpen(false)} 
+        setPage={setPage} 
+        setTestName={setTestName} 
+        setActiveCategoryFilter={setActiveCategoryFilter} 
+      />
     </div>
   );
 }

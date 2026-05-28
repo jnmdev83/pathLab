@@ -54,6 +54,7 @@ export function Detail({ test, setPage, setTest, user }) {
 
   // 1. Fetch complete clinical metadata on mount / test.id change
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (!test?.id) return;
     setLoadingDetails(true);
     fetch(`${API_BASE_URL}/api/tests/${test.id}`)

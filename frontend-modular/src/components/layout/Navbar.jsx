@@ -397,12 +397,7 @@ export function Navbar({
                   <span className="material-symbols-outlined text-base leading-none">account_circle</span>
                   <span className="max-w-[70px] truncate">{user.name.split(" ")[0]}</span>
                 </button>
-                <button 
-                  onClick={() => { setUser(null); setPage("home"); }}
-                  className="text-[#4d515a] hover:text-red-500 text-[11px] font-black uppercase transition-colors px-1"
-                >
-                  Logout
-                </button>
+
               </div>
             ) : (
               <button 
@@ -445,14 +440,6 @@ export function Navbar({
             className="w-9 h-9 flex items-center justify-center text-[#0c4ca6] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">location_on</span>
-          </button>
-
-          {/* Search Toggle icon */}
-          <button 
-            onClick={() => setSearchBarOpen(!searchBarOpen)}
-            className="w-9 h-9 flex items-center justify-center text-[#4d515a] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">search</span>
           </button>
 
           {/* Profile widget */}

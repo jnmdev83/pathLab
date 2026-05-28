@@ -377,26 +377,29 @@ exports.get_api_user_id_dashboard = async (req, res) => {
     const { rows: bookings } = await db.query(`
       SELECT
         b.*,
-        t.name                         AS test_name,
+        COALESCE(t.name, pkg.name)     AS test_name,
         COALESCE(l.name, t.lab)        AS lab,
         lb.branch_name,
         lb.address                     AS branch_address,
-        COALESCE(ltb.price, t.price)   AS price
+        COALESCE(ltb.price, lpb.price, t.price) AS price
       FROM bookings b
-      JOIN  tests            t   ON t.id  = b.test_id
+      LEFT JOIN tests        t   ON t.id  = b.test_id
+      LEFT JOIN packages     pkg ON pkg.id = b.package_id
       LEFT JOIN lab_branches lb  ON lb.id = b.lab_branch_id
       LEFT JOIN labs         l   ON l.id  = lb.lab_id
       LEFT JOIN lab_test_branches ltb ON ltb.test_id = t.id AND ltb.lab_branch_id = b.lab_branch_id
+      LEFT JOIN lab_package_branches lpb ON lpb.package_id = pkg.id AND lpb.lab_branch_id = b.lab_branch_id
       WHERE b.user_id = $1
       ORDER BY b.booking_date DESC
     `, [id]);
 
     // Fetch any lab reports linked to this user's bookings
     const { rows: reports } = await db.query(`
-      SELECT r.*, t.name AS test_name, COALESCE(l.name, t.lab) AS lab
+      SELECT r.*, COALESCE(t.name, pkg.name) AS test_name, COALESCE(l.name, t.lab) AS lab
       FROM reports r
       JOIN  bookings      b  ON b.id  = r.booking_id
-      JOIN  tests         t  ON t.id  = b.test_id
+      LEFT JOIN tests     t  ON t.id  = b.test_id
+      LEFT JOIN packages  pkg ON pkg.id = b.package_id
       LEFT JOIN lab_branches lb ON lb.id = b.lab_branch_id
       LEFT JOIN labs         l  ON l.id  = lb.lab_id
       WHERE r.user_id = $1

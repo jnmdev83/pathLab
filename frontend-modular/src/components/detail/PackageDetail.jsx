@@ -60,6 +60,7 @@ export function PackageDetail({
 
   // 1. Fetch package branch details, tests, alternative packages, and competitors
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     setError(null);
     

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { Home } from './components/home';
-import { Listing } from './components/listing';
 import { Detail, BranchTests, PackageCompare, PackageDetail } from './components/detail';
 import { Booking } from './components/booking';
 import { Signup } from './components/auth';
@@ -299,22 +298,10 @@ export default function App() {
             user={user}
             allTests={allTests}
             setActiveCategoryFilter={setActiveCategoryFilter}
+            setTest={setTest}
           />
         );
-      case "blood": 
-        return (
-          <Listing
-            cat="blood"
-            title="Blood Tests"
-            setPage={setPage}
-            setTestName={setTestName}
-            allTests={allTests}
-            loading={loading}
-            userLocation={userLocation}
-            requestGeolocation={requestGeolocation}
-            activeCategoryFilter={activeCategoryFilter}
-          />
-        );
+
       case "package":
         return (
           <PackagesLanding
@@ -350,19 +337,7 @@ export default function App() {
             requestGeolocation={requestGeolocation}
           />
         );
-      case "scanning":
-        return (
-          <Listing
-            cat="scanning"
-            title="Scanning Tests"
-            setPage={setPage}
-            setTestName={setTestName}
-            allTests={allTests}
-            loading={loading}
-            userLocation={userLocation}
-            requestGeolocation={requestGeolocation}
-          />
-        );
+
       case "detail":
         return <Detail test={test} setPage={setPage} user={user} />;
       case "package-detail":
@@ -381,10 +356,12 @@ export default function App() {
         return (
           <Search
             testName={testName}
+            setTestName={setTestName}
             setPage={setPage}
             setTest={setTest}
             user={user}
             userLocation={userLocation}
+            setActiveCategoryFilter={setActiveCategoryFilter}
           />
         );
 
@@ -397,6 +374,8 @@ export default function App() {
             setSelectedPackage={setSelectedPackage}
             user={user}
             userLocation={userLocation}
+            setTestName={setTestName}
+            setActiveCategoryFilter={setActiveCategoryFilter}
           />
         );
 
@@ -440,6 +419,7 @@ export default function App() {
             user={user}
             allTests={allTests}
             setActiveCategoryFilter={setActiveCategoryFilter}
+            setTest={setTest}
           />
         );
     }

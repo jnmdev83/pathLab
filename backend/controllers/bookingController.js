@@ -13,15 +13,27 @@ exports.post_api_bookings = async (req, res) => {
   const bookingLat = validCoordinate(user_latitude, -90, 90);
   const bookingLng = validCoordinate(user_longitude, -180, 180);
 
+  let finalTestId = null;
+  let finalPackageId = null;
+
+  if (test_id) {
+    const testIdStr = String(test_id);
+    if (testIdStr.startsWith('pkg-')) {
+      finalPackageId = parseInt(testIdStr.replace('pkg-', ''), 10);
+    } else {
+      finalTestId = parseInt(testIdStr, 10);
+    }
+  }
+
   try {
     const { rows } = await db.query(
       `INSERT INTO bookings
-         (user_id, test_id, lab_branch_id, patient_name, patient_phone,
+         (user_id, test_id, package_id, lab_branch_id, patient_name, patient_phone,
           booking_date, time_slot, user_latitude, user_longitude, user_location, notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
        RETURNING *`,
       [
-        user_id, test_id, lab_branch_id || null,
+        user_id, finalTestId, finalPackageId, lab_branch_id || null,
         patient_name, patient_phone, booking_date, time_slot,
         bookingLat, bookingLng, user_location || null, notes,
       ]
@@ -62,8 +74,23 @@ exports.get_api_bookings_stats = async (req, res) => {
     const { rows } = await db.query(`
       SELECT
         (SELECT COUNT(*)                         FROM bookings)::INT          AS total_bookings,
-        (SELECT COALESCE(SUM(t.price), 0)
-           FROM bookings b JOIN tests t ON t.id = b.test_id)::INT            AS total_revenue,
+        (
+          SELECT COALESCE(
+            (
+              SELECT SUM(COALESCE(ltb.price, t.price))
+              FROM bookings b
+              JOIN tests t ON t.id = b.test_id
+              LEFT JOIN lab_test_branches ltb ON ltb.test_id = b.test_id AND ltb.lab_branch_id = b.lab_branch_id
+            ), 0
+          ) + COALESCE(
+            (
+              SELECT SUM(COALESCE(lpb.price, p.price))
+              FROM bookings b
+              JOIN packages p ON p.id = b.package_id
+              LEFT JOIN lab_package_branches lpb ON lpb.package_id = b.package_id AND lpb.lab_branch_id = b.lab_branch_id
+            ), 0
+          )
+        )::INT AS total_revenue,
         (SELECT COUNT(*) FROM labs     WHERE is_active = true)::INT          AS active_labs,
         (SELECT COUNT(*) FROM bookings WHERE status = 'pending')::INT        AS pending_bookings
     `);
@@ -107,9 +134,10 @@ exports.get_api_bookings_recent = async (req, res) => {
   try {
     const limit = Math.max(1, Math.min(50, parseInt(req.query.limit, 10) || 10));
     const { rows } = await db.query(
-      `SELECT b.id, b.patient_name, t.name AS test_name, lb.branch_name, b.booking_date, b.status
+      `SELECT b.id, b.patient_name, COALESCE(t.name, p.name) AS test_name, lb.branch_name, b.booking_date, b.status
        FROM bookings b
        LEFT JOIN tests        t  ON t.id  = b.test_id
+       LEFT JOIN packages     p  ON p.id  = b.package_id
        LEFT JOIN lab_branches lb ON lb.id = b.lab_branch_id
        ORDER BY b.booking_date DESC, b.id DESC
        LIMIT $1`,
@@ -140,9 +168,10 @@ exports.get_api_bookings = async (req, res) => {
     }
 
     const { rows } = await db.query(`
-      SELECT b.*, t.name AS test_name, lb.branch_name, l.name AS lab_name
+      SELECT b.*, COALESCE(t.name, p.name) AS test_name, lb.branch_name, l.name AS lab_name
       FROM bookings b
       LEFT JOIN tests        t  ON t.id  = b.test_id
+      LEFT JOIN packages     p  ON p.id  = b.package_id
       LEFT JOIN lab_branches lb ON lb.id = b.lab_branch_id
       LEFT JOIN labs         l  ON l.id  = lb.lab_id
       WHERE 1=1 ${filters}
