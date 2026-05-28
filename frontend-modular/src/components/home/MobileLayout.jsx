@@ -770,18 +770,18 @@ export function MobileLayout({
             <div className="absolute top-0 left-0 w-36 h-36 bg-white/5 rounded-full blur-2xl" />
             <div className="absolute bottom-0 right-0 w-36 h-36 bg-blue-900/40 rounded-full blur-2xl" />
 
-            <div className="w-3/5 relative z-10 space-y-2">
-              <h3 className="font-headline text-[13px] font-black leading-tight text-white tracking-tight">
+            <div className="w-3/5 relative z-10 space-y-1.5">
+              <h3 className="font-headline text-[11.5px] font-black leading-tight text-white tracking-tight">
                 Can't decide which package is right for you?
               </h3>
-              <p className="text-white/80 text-[9px] font-medium leading-relaxed font-body">
+              <p className="text-white/80 text-[8.5px] font-medium leading-relaxed font-body">
                 Our experts help you choose the best diagnostic path for your symptoms.
               </p>
               
-              <div className="pt-1">
+              <div className="pt-0.5">
                 <a 
                   href="tel:1800123456"
-                  className="bg-white hover:bg-slate-100 text-blue-700 text-[10px] font-black px-3.5 py-2 rounded-xl transition-all shadow-sm active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block text-center"
+                  className="bg-white hover:bg-slate-100 text-blue-700 text-[9px] font-black px-3 py-1.5 rounded-xl transition-all shadow-sm active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block text-center"
                 >
                   Free Consult
                 </a>

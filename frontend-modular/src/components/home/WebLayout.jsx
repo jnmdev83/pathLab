@@ -928,18 +928,18 @@ export function WebLayout({
             <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
             <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-900/40 rounded-full blur-2xl" />
 
-            <div className="w-full md:w-3/5 relative z-10 space-y-2.5">
-              <h3 className="font-headline text-lg md:text-xl font-black leading-tight text-white tracking-tight">
+            <div className="w-full md:w-3/5 relative z-10 space-y-2">
+              <h3 className="font-headline text-sm md:text-base font-black leading-tight text-white tracking-tight">
                 Can't decide which package is right for you?
               </h3>
-              <p className="text-white/80 text-[10px] md:text-[11px] max-w-md font-medium leading-relaxed font-body">
+              <p className="text-white/80 text-[9px] md:text-[10px] max-w-md font-medium leading-relaxed font-body">
                 Our clinical experts are available for a free consultation to help you choose the best diagnostic path based on your symptoms and history.
               </p>
               
               <div className="flex flex-wrap gap-3 pt-0.5">
                 <a 
                   href="tel:1800123456"
-                  className="bg-white hover:bg-slate-100 text-blue-700 text-[10px] font-black px-4.5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block"
+                  className="bg-white hover:bg-slate-100 text-blue-700 text-[9px] font-black px-3.5 py-2 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block"
                 >
                   Free Expert Consult
                 </a>
