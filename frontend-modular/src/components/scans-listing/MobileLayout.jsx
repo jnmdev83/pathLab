@@ -31,6 +31,45 @@ export function MobileLayout({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const categoriesList = ['Imaging', 'Endoscopy & Screening', 'Cardiac Diagnostics'];
 
+  const [selectedCompare, setSelectedCompare] = useState([]);
+
+  const getAvatarBg = (labName) => {
+    if (!labName) return 'bg-[#a9ece5]/30 text-[#00535b]';
+    const colors = [
+      'bg-[#a9ece5]/20 text-[#286d67]',
+      'bg-pink-100 text-pink-700',
+      'bg-blue-100 text-blue-700',
+      'bg-orange-100 text-orange-700',
+      'bg-purple-100 text-purple-700',
+      'bg-emerald-100 text-emerald-700'
+    ];
+    const index = labName.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const handleCompareToggle = (proc) => {
+    if (selectedCompare.some(p => p.id === proc.id)) {
+      setSelectedCompare(selectedCompare.filter(p => p.id !== proc.id));
+    } else {
+      if (selectedCompare.length >= 3) {
+        alert("You can compare up to 3 scans at a time.");
+        return;
+      }
+      setSelectedCompare([...selectedCompare, proc]);
+    }
+  };
+
+  const handleCompareClick = () => {
+    if (selectedCompare.length < 2) {
+      alert("Please select at least 2 procedures to compare.");
+      return;
+    }
+    if (setTestName) {
+      setTestName(selectedCompare.map(p => p.name).join(" vs "));
+    }
+    setPage("lab-listing");
+  };
+
   const handleBookNow = (t) => {
     if (setTestName) {
       setTestName(t.name);
@@ -139,52 +178,87 @@ export function MobileLayout({
           <div className="space-y-4">
             {tests.map((test) => {
               const hasDiscount = test.discount_percent > 0;
+              const labChar = test.lab ? test.lab.charAt(0) : 'L';
+              const avatarBg = getAvatarBg(test.lab);
+              const rating = (4.2 + (test.id % 8) * 0.1).toFixed(1);
+              const reviews = (45 + (test.id * 89) % 250);
+              const distance = (1.2 + (test.id * 1.7) % 8.5).toFixed(2);
+              const isChecked = selectedCompare.some(p => p.id === test.id);
+
               return (
                 <div 
                   key={test.id} 
-                  className="bg-white rounded-2xl p-5 border border-[#bec8ca]/30 shadow-sm flex flex-col justify-between gap-4"
+                  className={`bg-white rounded-2xl p-5 border transition-all duration-300 flex flex-col justify-between gap-4 text-left ${
+                    isChecked 
+                      ? 'border-[#00535b] ring-2 ring-[#00535b]/10 shadow-md' 
+                      : 'border-[#bec8ca]/30 shadow-sm'
+                  }`}
                 >
                   <div>
-                    {/* Header: Badges */}
-                    <div className="flex justify-between items-start mb-2.5">
-                      <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider flex items-center gap-0.5 ${
-                        test.is_trending 
-                          ? 'bg-[#a9ece5]/50 text-[#286d67]' 
-                          : 'bg-[#00535b]/5 text-[#00535b]'
-                      }`}>
-                        <span className="material-symbols-outlined text-[10px]">verified</span>
-                        <span>{test.is_trending ? 'Top Choice' : 'NABL Accredited'}</span>
-                      </div>
-                    </div>
-
-                    {/* Test Name & Description */}
-                    <h3 className="text-sm font-black text-[#121c2c] mb-1">{test.name}</h3>
-                    <p className="text-[11px] text-[#3e494a] leading-relaxed line-clamp-2 mb-3">
-                      {test.short_description || test.description || 'Clinical diagnostics & screening service.'}
-                    </p>
-
-                    {/* Quick Metadata Info */}
-                    <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-slate-50 pt-2.5">
-                      <div className="flex items-center gap-1 text-[10px] text-[#3e494a] font-bold">
-                        <span className="material-symbols-outlined text-[#00535b] text-sm">schedule</span>
-                        <span>{test.rep || 'Same Day'}</span>
-                      </div>
-                      {test.body_part && (
-                        <div className="flex items-center gap-1 text-[10px] text-[#3e494a] font-bold">
-                          <span className="material-symbols-outlined text-[#00535b] text-sm">body_system</span>
-                          <span>{test.body_part}</span>
+                    {/* Top Row: Lab Avatar & Name & Rating + Compare */}
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex items-center gap-3.5">
+                        <div className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center font-black text-xs uppercase shadow-sm ${avatarBg}`}>
+                          {labChar}
                         </div>
-                      )}
+                        <div className="text-left">
+                          <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide leading-none mb-1">
+                            {test.lab || 'Partner Lab'}
+                          </span>
+                          <div className="flex items-center gap-1 text-[10px] text-slate-400 font-bold leading-none">
+                            <span className="material-symbols-outlined text-orange-400 text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                            <span className="text-slate-700">{rating}</span>
+                            <span>({reviews})</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Compare Checkbox */}
+                      <label className="flex items-center gap-1 cursor-pointer select-none mt-0.5">
+                        <span className="text-[9px] font-black text-[#6f797a] uppercase tracking-wider">Compare</span>
+                        <input 
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleCompareToggle(test)}
+                          className="w-4 h-4 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/15"
+                        />
+                      </label>
                     </div>
+
+                    {/* Scan test name */}
+                    <h3 className="text-sm font-black text-[#121c2c] mt-3 leading-tight text-left">{test.name}</h3>
+
+                    {/* Location/Distance */}
+                    <div className="flex items-center gap-1 text-[10px] text-[#6f797a] font-bold mt-1 text-left">
+                      <span className="material-symbols-outlined text-[#00535b] text-sm">location_on</span>
+                      <span>{distance} km away in Delhi</span>
+                    </div>
+
+                    {/* Compact clinical details badges */}
+                    <div className="flex flex-wrap gap-x-3.5 gap-y-1.5 border-t border-slate-50 pt-2.5 mt-3">
+                      <div className="flex items-center gap-1 text-[10px] text-[#3e494a] font-black">
+                        <span className="material-symbols-outlined text-[#00535b] text-xs font-bold">schedule</span>
+                        <span>Report in {test.rep || 'Same Day'}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px] text-[#3e494a] font-black">
+                        <span className="material-symbols-outlined text-[#00535b] text-xs font-bold">home_health</span>
+                        <span>Center Visit Required</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px] text-[#3e494a] font-black">
+                        <span className="material-symbols-outlined text-emerald-600 text-xs font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                        <span>NABL Accredited</span>
+                      </div>
+                    </div>
+
                   </div>
 
-                  {/* Pricing and Action Buttons */}
-                  <div className="border-t border-slate-100/60 pt-3">
-                    <div className="flex items-center justify-between mb-4">
+                  {/* Pricing and split Actions */}
+                  <div className="border-t border-slate-100/60 pt-3 mt-1">
+                    <div className="flex items-center justify-between mb-3.5">
                       <div>
-                        <span className="block text-[8px] font-bold text-[#6f797a] uppercase tracking-wider">Starting from</span>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-lg font-black text-[#00535b]">₹{test.price}</span>
+                        <span className="block text-[8px] font-bold text-[#6f797a] uppercase tracking-wider">Starting From</span>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-base font-black text-[#00535b]">₹{test.price}</span>
                           {hasDiscount && (
                             <span className="text-[10px] line-through text-[#6f797a]">₹{test.original_price}</span>
                           )}
@@ -197,20 +271,30 @@ export function MobileLayout({
                       )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col gap-2 w-full">
                       <button 
                         onClick={() => handleViewDetails(test)}
-                        className="h-10 border border-[#bec8ca] hover:bg-[#edf6f9] text-[#121c2c] rounded-xl text-[10px] font-black uppercase tracking-wider transition-all"
+                        className="h-9.5 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm"
                       >
-                        Details
+                        View Detail
                       </button>
-                      <button 
-                        onClick={() => handleBookNow(test)}
-                        className="h-10 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all shadow-sm shadow-[#00535b]/10"
-                      >
-                        Compare Labs
-                      </button>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button 
+                          onClick={() => handleBookNow(test)}
+                          className="h-9 border border-[#00535b] text-[#00535b] rounded-xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95"
+                        >
+                          Book Now
+                        </button>
+                        <button 
+                          onClick={() => handleBookNow(test)}
+                          className="h-9 border border-[#bec8ca] text-[#3e494a] rounded-xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-0.5"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">labs</span>
+                          <span>View Lab</span>
+                        </button>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               );
@@ -423,6 +507,40 @@ export function MobileLayout({
             </div>
           </div>
         </>
+      )}
+
+      {/* ── Mobile Floating Comparison Bar ── */}
+      {selectedCompare.length > 0 && (
+        <div className="fixed bottom-24 left-4 right-4 z-40 bg-[#00535b] text-white py-3.5 px-4 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-center gap-2">
+            <span className="bg-white text-[#00535b] text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+              {selectedCompare.length}
+            </span>
+            <span className="text-[10px] font-bold truncate max-w-[130px] text-left">
+              {selectedCompare.map(p => p.name).join(", ")}
+            </span>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <button 
+              onClick={() => setSelectedCompare([])}
+              className="text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors px-1"
+            >
+              Clear
+            </button>
+            <button 
+              onClick={handleCompareClick}
+              disabled={selectedCompare.length < 2}
+              className={`px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors duration-150 ${
+                selectedCompare.length >= 2 
+                  ? 'bg-white text-[#00535b] active:scale-95' 
+                  : 'bg-white/25 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
       )}
 
     </div>

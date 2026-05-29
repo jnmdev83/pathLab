@@ -30,6 +30,45 @@ export function WebLayout({
 }) {
   const categoriesList = ['Imaging', 'Endoscopy & Screening', 'Cardiac Diagnostics'];
 
+  const [selectedCompare, setSelectedCompare] = React.useState([]);
+
+  const getAvatarBg = (labName) => {
+    if (!labName) return 'bg-[#a9ece5]/30 text-[#00535b]';
+    const colors = [
+      'bg-[#a9ece5]/20 text-[#286d67]',
+      'bg-pink-100 text-pink-700',
+      'bg-blue-100 text-blue-700',
+      'bg-orange-100 text-orange-700',
+      'bg-purple-100 text-purple-700',
+      'bg-emerald-100 text-emerald-700'
+    ];
+    const index = labName.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const handleCompareToggle = (proc) => {
+    if (selectedCompare.some(p => p.id === proc.id)) {
+      setSelectedCompare(selectedCompare.filter(p => p.id !== proc.id));
+    } else {
+      if (selectedCompare.length >= 3) {
+        alert("You can compare up to 3 scans at a time.");
+        return;
+      }
+      setSelectedCompare([...selectedCompare, proc]);
+    }
+  };
+
+  const handleCompareClick = () => {
+    if (selectedCompare.length < 2) {
+      alert("Please select at least 2 procedures to compare.");
+      return;
+    }
+    if (setTestName) {
+      setTestName(selectedCompare.map(p => p.name).join(" vs "));
+    }
+    setPage("lab-listing");
+  };
+
   const handleBookNow = (t) => {
     if (setTestName) {
       setTestName(t.name);
@@ -246,50 +285,85 @@ export function WebLayout({
                 </p>
               </div>
             ) : (
-              /* Test Cards Grid */
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              /* Test Cards List (Horizontal revamps matching 2nd image layout) */
+              <div className="flex flex-col gap-5">
                 {tests.map((test) => {
                   const hasDiscount = test.discount_percent > 0;
+                  const labChar = test.lab ? test.lab.charAt(0) : 'L';
+                  const avatarBg = getAvatarBg(test.lab);
+                  const rating = (4.2 + (test.id % 8) * 0.1).toFixed(1);
+                  const reviews = (45 + (test.id * 89) % 250);
+                  const distance = (1.2 + (test.id * 1.7) % 8.5).toFixed(2);
+                  const isChecked = selectedCompare.some(p => p.id === test.id);
+
                   return (
                     <div 
                       key={test.id} 
-                      className="bg-white rounded-3xl p-6 border border-[#bec8ca]/40 hover:border-[#00535b]/20 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                      className={`bg-white rounded-3xl p-5 border transition-all duration-300 flex flex-col lg:flex-row justify-between items-stretch gap-6 relative text-left ${
+                        isChecked 
+                          ? 'border-[#00535b] ring-2 ring-[#00535b]/5 shadow-md' 
+                          : 'border-[#bec8ca]/30 hover:border-[#00535b]/20 hover:shadow-lg'
+                      }`}
                     >
-                      <div>
-                        <div className="flex justify-between items-start mb-4">
-                          <div className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider flex items-center gap-1 ${
-                            test.is_trending 
-                              ? 'bg-[#a9ece5]/50 text-[#286d67]' 
-                              : 'bg-[#00535b]/5 text-[#00535b]'
-                          }`}>
-                            <span className="material-symbols-outlined text-xs">verified</span>
-                            <span>{test.is_trending ? 'Top Booked' : 'NABL Accredited'}</span>
-                          </div>
+                      {/* Left and Center Content Grid */}
+                      <div className="flex-grow flex flex-col sm:flex-row gap-5 items-start">
+                        
+                        {/* Circle Avatar (Pink/Teal dynamic background) */}
+                        <div className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center font-black text-base uppercase shadow-sm ${avatarBg}`}>
+                          {labChar}
                         </div>
 
-                        <h3 className="text-lg font-black text-[#121c2c] mb-2 text-left">{test.name}</h3>
-                        <p className="text-xs text-[#3e494a] leading-relaxed mb-4 text-left line-clamp-2">
-                          {test.short_description || test.description || 'Premium clinical diagnostic scanning procedure.'}
-                        </p>
-
-                        <div className="flex items-center gap-4 mb-6 border-y border-slate-50 py-3 text-left">
-                          <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-bold">
-                            <span className="material-symbols-outlined text-[#00535b] text-base">schedule</span>
-                            <span>{test.rep || 'Same Day'}</span>
-                          </div>
-                          {test.body_part && (
-                            <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-bold">
-                              <span className="material-symbols-outlined text-[#00535b] text-base">body_system</span>
-                              <span>{test.body_part}</span>
+                        {/* Text Content */}
+                        <div className="space-y-2.5 text-left flex-grow">
+                          {/* Lab & Rating row */}
+                          <div className="flex flex-wrap items-center gap-3.5">
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                              {test.lab || 'Certified Partner Lab'}
+                            </span>
+                            <div className="flex items-center gap-1 text-[11px] text-slate-400 font-bold">
+                              <span className="material-symbols-outlined text-orange-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                              <span className="text-slate-700">{rating}</span>
+                              <span>({reviews})</span>
                             </div>
-                          )}
+                          </div>
+
+                          {/* Scan Title Name */}
+                          <h3 className="text-xl font-black text-[#121c2c] tracking-tight leading-snug">
+                            {test.name}
+                          </h3>
+
+                          {/* Distance & Location */}
+                          <div className="flex items-center gap-1.5 text-xs text-[#6f797a] font-bold">
+                            <span className="material-symbols-outlined text-[#00535b] text-base">location_on</span>
+                            <span>{distance} km away in Delhi</span>
+                          </div>
+
+                          {/* Bottom Badges row (Report Time, Center Visit, NABL) */}
+                          <div className="flex flex-wrap gap-x-5 gap-y-2 pt-3 border-t border-slate-50 mt-4">
+                            <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-black">
+                              <span className="material-symbols-outlined text-[#00535b] text-sm font-bold">schedule</span>
+                              <span>Report in {test.rep || 'Same Day'}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-black">
+                              <span className="material-symbols-outlined text-[#00535b] text-sm font-bold">home_health</span>
+                              <span>Center Visit Required</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-xs text-[#3e494a] font-black">
+                              <span className="material-symbols-outlined text-emerald-600 text-sm font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                              <span>NABL Accredited</span>
+                            </div>
+                          </div>
+
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-slate-100/60">
-                        <div className="flex items-end justify-between mb-5">
+                      {/* Right Section (Divider + Price + Actions) */}
+                      <div className="flex flex-row lg:flex-col justify-between items-end lg:items-stretch pl-0 lg:pl-6 border-t lg:border-t-0 lg:border-l border-slate-100 pt-4 lg:pt-0 w-full lg:w-56 shrink-0 gap-4">
+                        
+                        {/* Price & Compare Top Bar */}
+                        <div className="flex justify-between items-start w-full gap-2">
                           <div className="text-left">
-                            <span className="block text-[10px] font-bold text-[#6f797a] uppercase tracking-wider mb-0.5">Starting from</span>
+                            <span className="block text-[9px] font-black text-[#6f797a] uppercase tracking-wider mb-0.5">Starting From</span>
                             <div className="flex items-baseline gap-1.5">
                               <span className="text-2xl font-black text-[#00535b]">₹{test.price}</span>
                               {hasDiscount && (
@@ -297,27 +371,54 @@ export function WebLayout({
                               )}
                             </div>
                           </div>
-                          {hasDiscount && (
-                            <span className="text-[10px] font-black text-[#286d67] bg-[#a9ece5]/30 px-2 py-0.5 rounded uppercase tracking-wider">
-                              {test.discount_percent}% OFF
-                            </span>
-                          )}
+
+                          {/* Compare checkbox */}
+                          <label className="flex items-center gap-1.5 cursor-pointer group select-none mt-1">
+                            <span className="text-[10px] font-black text-[#6f797a] group-hover:text-[#00535b] uppercase tracking-wider transition-colors">Compare</span>
+                            <input 
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleCompareToggle(test)}
+                              className="w-4.5 h-4.5 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
+                            />
+                          </label>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        {/* Dynamic Discount Tag */}
+                        {hasDiscount && (
+                          <div className="hidden lg:block text-left">
+                            <span className="text-[9px] font-black text-[#286d67] bg-[#a9ece5]/30 px-2 py-0.5 rounded uppercase tracking-wider inline-block">
+                              {test.discount_percent}% OFF
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Action buttons (View Detail, Book Now, View Lab) */}
+                        <div className="flex flex-col gap-2 w-full mt-auto">
                           <button 
                             onClick={() => handleViewDetails(test)}
-                            className="h-11 border border-[#bec8ca] hover:bg-[#edf6f9] text-[#121c2c] rounded-xl text-xs font-black uppercase tracking-wider transition-all"
+                            className="h-9.5 bg-[#00535b] hover:bg-[#00393f] text-white rounded-full text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm shadow-[#00535b]/10"
                           >
-                            Details
+                            View Detail
                           </button>
-                          <button 
-                            onClick={() => handleBookNow(test)}
-                            className="h-11 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm shadow-[#00535b]/10"
-                          >
-                            Compare Labs
-                          </button>
+                          
+                          <div className="grid grid-cols-2 gap-2">
+                            <button 
+                              onClick={() => handleBookNow(test)}
+                              className="h-9 border border-[#00535b] text-[#00535b] hover:bg-[#edf6f9] rounded-full text-[9px] font-black uppercase tracking-wider transition-all active:scale-95"
+                            >
+                              Book Now
+                            </button>
+                            <button 
+                              onClick={() => handleBookNow(test)}
+                              className="h-9 border border-[#bec8ca] text-[#3e494a] hover:bg-slate-50 rounded-full text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-0.5"
+                            >
+                              <span className="material-symbols-outlined text-xs">labs</span>
+                              <span>View Lab</span>
+                            </button>
+                          </div>
                         </div>
+
                       </div>
                     </div>
                   );
@@ -362,6 +463,41 @@ export function WebLayout({
 
         </div>
       </div>
+
+      {/* ── Bottom Floating Comparison Tray ── */}
+      {selectedCompare.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#00535b] text-white py-4 px-6 md:px-8 rounded-full shadow-2xl flex items-center gap-6 border border-white/10 max-w-lg w-full justify-between animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-center gap-3">
+            <span className="bg-white text-[#00535b] text-xs font-black w-6 h-6 rounded-full flex items-center justify-center animate-pulse">
+              {selectedCompare.length}
+            </span>
+            <span className="text-xs font-bold truncate max-w-[180px] md:max-w-xs text-left">
+              {selectedCompare.map(p => p.name).join(", ")}
+            </span>
+          </div>
+
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setSelectedCompare([])}
+              className="text-white/70 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors px-2 py-1"
+            >
+              Clear
+            </button>
+            <button 
+              onClick={handleCompareClick}
+              disabled={selectedCompare.length < 2}
+              className={`px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-wider transition-colors duration-150 shadow-sm ${
+                selectedCompare.length >= 2 
+                  ? 'bg-white text-[#00535b] hover:bg-slate-100 active:scale-95' 
+                  : 'bg-white/20 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
