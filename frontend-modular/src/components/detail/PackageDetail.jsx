@@ -220,7 +220,7 @@ export function PackageDetail({
   // ──────────────────────────────────────────────────────────────────────────
   if (!isMobile) {
     return (
-      <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-24 text-left" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+      <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-24 text-left" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
         
         {/* 1. BREADCRUMBS NAVIGATION */}
         <div className="max-w-[1280px] mx-auto px-8 py-5">
@@ -647,7 +647,7 @@ export function PackageDetail({
   // MOBILE / TOUCH VIEWPORT (TOUCH LAYOUT)
   // ──────────────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-32 text-left" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-32 text-left" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
       
       {/* 1. STICKY TOP APP BAR */}
       <header className="fixed top-0 left-0 w-full z-50 h-14 bg-white/95 backdrop-blur-md flex items-center px-4 justify-between border-b border-[#c3c6d6]/10 shadow-[0px_4px_20px_rgba(11,87,208,0.03)]">

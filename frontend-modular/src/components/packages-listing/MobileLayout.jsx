@@ -129,7 +129,7 @@ export function MobileLayout({
   };
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-32" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-32" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
       
       {/* ── 1. HERO HEADER BLOCK ── */}
       <header className="px-5 pt-6 pb-4 text-left">

@@ -130,7 +130,7 @@ export function WebLayout({
   };
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-24" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+    <div className="bg-[#f8f9fa] min-h-screen text-[#191c1d] pb-24" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
       
       {/* ── 1. BREADCRUMBS & NAVIGATION HEADER ── */}
       <div className="max-w-7xl mx-auto px-8 py-6">

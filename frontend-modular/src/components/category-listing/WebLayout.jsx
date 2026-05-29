@@ -269,7 +269,7 @@ export function WebLayout({
   return (
     <div
       className="min-h-screen text-left"
-      style={{ background: '#f8f9fa', fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}
+      style={{ background: '#f8f9fa', fontFamily: 'Plus Jakarta Sans, sans-serif' }}
     >
       {/* ── HERO HEADER ───────────────────────────────────────────────────── */}
       <div className="bg-gradient-to-r from-white to-[#f0f4f9] border-b border-[#e8eaed]">

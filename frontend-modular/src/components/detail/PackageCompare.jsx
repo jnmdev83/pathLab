@@ -207,7 +207,7 @@ export function PackageCompare({
     const categories = ["All", "Full Body Checkup", "Diabetes", "Heart", "Thyroid", "Women Health"];
 
     return (
-      <div className="min-h-screen bg-[#f8f9fa] pb-16 text-left" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+      <div className="min-h-screen bg-[#f8f9fa] pb-16 text-left" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
         {/* Breadcrumbs */}
         <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5">
           <nav className="flex items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
@@ -382,7 +382,7 @@ export function PackageCompare({
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] pb-16" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+    <div className="min-h-screen bg-[#f8f9fa] pb-16" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
       
       {/* ── BREADCRUMB ────────────────────────────────────────────────────── */}
       <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5 flex justify-between items-center flex-wrap gap-3">

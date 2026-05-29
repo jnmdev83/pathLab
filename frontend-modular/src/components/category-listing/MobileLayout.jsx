@@ -423,7 +423,7 @@ export function MobileLayout({
   return (
     <div
       className="min-h-screen pb-24 text-left"
-      style={{ background: '#f8f9fa', fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}
+      style={{ background: '#f8f9fa', fontFamily: 'Plus Jakarta Sans, sans-serif' }}
     >
       {/* ── STICKY TOP BAR ─────────────────────────────────────────────────── */}
       <header
