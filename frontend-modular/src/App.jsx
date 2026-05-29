@@ -16,11 +16,90 @@ import { API_BASE_URL } from './config';
 import { useIsMobile } from './utils/useIsMobile';
 import { MobileSearchOverlay } from './components/layout/MobileSearchOverlay';
 
+const PAGE_TO_PATH = {
+  "home": "/",
+  "package": "/packages",
+  "scans-landing": "/scans",
+  "lab-listing": "/labs",
+  "package-listing": "/package-listing",
+  "scans-listing": "/scans-listing",
+  "detail": "/test-detail",
+  "package-detail": "/package-detail",
+  "category-listing": "/category-listing",
+  "branch-tests": "/branch-tests",
+  "booking": "/booking",
+  "signup": "/auth",
+  "bookings-page": "/bookings",
+  "reports-page": "/reports",
+  "profile-page": "/profile",
+  "package-compare": "/compare"
+};
 
+const PATH_TO_PAGE = Object.entries(PAGE_TO_PATH).reduce((acc, [pg, path]) => {
+  acc[path] = pg;
+  return acc;
+}, {});
+
+const parseStateFromUrl = () => {
+  try {
+    const path = window.location.pathname;
+    const searchParams = new URLSearchParams(window.location.search);
+    const matchedPage = PATH_TO_PAGE[path] || "home";
+
+    const state = {
+      page: matchedPage,
+      test: null,
+      testName: null,
+      selectedPackage: null,
+      selectedBranch: null,
+      activeCategoryFilter: "Home"
+    };
+
+    if (matchedPage === "lab-listing") {
+      state.testName = searchParams.get("q") || searchParams.get("testName") || null;
+    } else if (matchedPage === "detail") {
+      const id = searchParams.get("id");
+      const name = searchParams.get("name");
+      if (id) {
+        state.test = { id: parseInt(id, 10), name: name || "" };
+      }
+    } else if (matchedPage === "package-detail") {
+      const id = searchParams.get("id");
+      const branchId = searchParams.get("branchId");
+      if (id) {
+        state.selectedPackage = { id: parseInt(id, 10) };
+      }
+      if (branchId) {
+        state.selectedBranch = { id: parseInt(branchId, 10) };
+      }
+    } else if (matchedPage === "category-listing" || matchedPage === "scans-listing" || matchedPage === "package-listing") {
+      const category = searchParams.get("category");
+      if (category) {
+        state.activeCategoryFilter = category;
+      }
+    }
+
+    return state;
+  } catch (e) {
+    console.error("Error parsing state from URL:", e);
+    return {
+      page: "home",
+      test: null,
+      testName: null,
+      selectedPackage: null,
+      selectedBranch: null,
+      activeCategoryFilter: "Home"
+    };
+  }
+};
 
 export default function App() {
   const isMobileViewport = useIsMobile();
   const [page, _setPage] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.page !== "home" || window.location.pathname !== "/") {
+      return parsed.page;
+    }
     try {
       return sessionStorage.getItem("choosemylab_page") || "home";
     } catch {
@@ -29,6 +108,8 @@ export default function App() {
   });
 
   const [test, _setTest] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.test) return parsed.test;
     try {
       return JSON.parse(sessionStorage.getItem("choosemylab_test")) || null;
     } catch {
@@ -37,6 +118,8 @@ export default function App() {
   });
 
   const [testName, _setTestName] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.testName) return parsed.testName;
     try {
       return sessionStorage.getItem("choosemylab_testName") || null;
     } catch {
@@ -74,6 +157,8 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const [selectedPackage, _setSelectedPackage] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.selectedPackage) return parsed.selectedPackage;
     try {
       return JSON.parse(sessionStorage.getItem("choosemylab_selectedPackage")) || null;
     } catch {
@@ -88,6 +173,8 @@ export default function App() {
   });
 
   const [selectedBranch, _setSelectedBranch] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.selectedBranch) return parsed.selectedBranch;
     try {
       return JSON.parse(sessionStorage.getItem("choosemylab_selectedBranch")) || null;
     } catch {
@@ -98,6 +185,10 @@ export default function App() {
   const [branchTests, setBranchTests] = useState([]);
 
   const [activeCategoryFilter, _setActiveCategoryFilter] = useState(() => {
+    const parsed = parseStateFromUrl();
+    if (parsed.activeCategoryFilter && parsed.activeCategoryFilter !== "Home") {
+      return parsed.activeCategoryFilter;
+    }
     try {
       return sessionStorage.getItem("choosemylab_activeCategoryFilter") || "Home";
     } catch {
@@ -140,19 +231,7 @@ export default function App() {
     else localStorage.removeItem("choosemylab_user");
   };
 
-  const stateRef = useRef({ test: null, testName: null });
-
-  useEffect(() => {
-    try {
-      stateRef.current.test = JSON.parse(sessionStorage.getItem("choosemylab_test"));
-      stateRef.current.testName = sessionStorage.getItem("choosemylab_testName");
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
   const setTest = (t) => {
-    stateRef.current.test = t;
     _setTest(t);
     try {
       if (t) sessionStorage.setItem("choosemylab_test", JSON.stringify(t));
@@ -163,7 +242,6 @@ export default function App() {
   };
 
   const setTestName = (tn) => {
-    stateRef.current.testName = tn;
     _setTestName(tn);
     try {
       if (tn) sessionStorage.setItem("choosemylab_testName", tn);
@@ -180,37 +258,73 @@ export default function App() {
     } catch (e) {
       console.error(e);
     }
-    window.history.pushState(
-      {
-        page: newPage,
-        test: stateRef.current.test,
-        testName: stateRef.current.testName,
-      },
-      "",
-      "",
-    );
   };
 
+  // Centralized URL synchronizer to push state changes to the browser history
   useEffect(() => {
-    window.history.replaceState(
-      { page: "home", test: null, testName: null },
-      "",
-      "",
-    );
+    const pathBase = PAGE_TO_PATH[page] || "/";
+    const params = new URLSearchParams();
 
+    if (page === "lab-listing" && testName) {
+      params.set("q", testName);
+    } else if (page === "detail" && test?.id) {
+      params.set("id", test.id);
+      if (test.name) params.set("name", test.name);
+    } else if (page === "package-detail" && selectedPackage?.id) {
+      params.set("id", selectedPackage.id);
+      if (selectedBranch?.id) params.set("branchId", selectedBranch.id);
+    } else if ((page === "category-listing" || page === "scans-listing" || page === "package-listing") && activeCategoryFilter) {
+      params.set("category", activeCategoryFilter);
+    }
+
+    const queryString = params.toString();
+    const fullPath = queryString ? `${pathBase}?${queryString}` : pathBase;
+
+    // Check if the current URL matches what we've computed
+    const currentFullPath = window.location.pathname + window.location.search;
+    if (currentFullPath !== fullPath) {
+      window.history.pushState(
+        {
+          page,
+          testId: test?.id,
+          testName,
+          packageId: selectedPackage?.id,
+          branchId: selectedBranch?.id,
+          category: activeCategoryFilter
+        },
+        "",
+        fullPath
+      );
+    }
+  }, [page, test?.id, testName, selectedPackage?.id, selectedBranch?.id, activeCategoryFilter]);
+
+  useEffect(() => {
     const handlePopState = (e) => {
-      if (e.state && e.state.page) {
-        _setPage(e.state.page);
-        try {
-          sessionStorage.setItem("choosemylab_page", e.state.page);
-        } catch {}
-        if (e.state.test !== undefined) setTest(e.state.test);
-        if (e.state.testName !== undefined) setTestName(e.state.testName);
-      } else {
-        _setPage("home");
-        try {
-          sessionStorage.setItem("choosemylab_page", "home");
-        } catch {}
+      const parsed = parseStateFromUrl();
+      _setPage(parsed.page);
+      _setTest(parsed.test);
+      _setTestName(parsed.testName);
+      _setSelectedPackage(parsed.selectedPackage);
+      _setSelectedBranch(parsed.selectedBranch);
+      _setActiveCategoryFilter(parsed.activeCategoryFilter || "Home");
+      
+      try {
+        sessionStorage.setItem("choosemylab_page", parsed.page);
+        if (parsed.test) sessionStorage.setItem("choosemylab_test", JSON.stringify(parsed.test));
+        else sessionStorage.removeItem("choosemylab_test");
+        
+        if (parsed.testName) sessionStorage.setItem("choosemylab_testName", parsed.testName);
+        else sessionStorage.removeItem("choosemylab_testName");
+        
+        if (parsed.selectedPackage) sessionStorage.setItem("choosemylab_selectedPackage", JSON.stringify(parsed.selectedPackage));
+        else sessionStorage.removeItem("choosemylab_selectedPackage");
+        
+        if (parsed.selectedBranch) sessionStorage.setItem("choosemylab_selectedBranch", JSON.stringify(parsed.selectedBranch));
+        else sessionStorage.removeItem("choosemylab_selectedBranch");
+        
+        sessionStorage.setItem("choosemylab_activeCategoryFilter", parsed.activeCategoryFilter || "Home");
+      } catch (err) {
+        console.error(err);
       }
     };
     window.addEventListener("popstate", handlePopState);
