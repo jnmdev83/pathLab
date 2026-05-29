@@ -798,146 +798,165 @@ async function setupDatabase() {
       `);
 
     // Seed Category Previews (Relational mapping lookup-and-seed)
-    const categoryCount = await db.query('SELECT COUNT(*) FROM category_previews');
-    if (parseInt(categoryCount.rows[0].count) === 0) {
-      console.log("Seeding category previews relationally...");
+    // Truncate and re-seed on every run to ensure missing categories are loaded dynamically immediately
+    await db.query('TRUNCATE category_previews RESTART IDENTITY');
+    console.log("Seeding category previews relationally...");
+    
+    const seedItems = [
+      // Heart
+      { category_name: 'Heart', name: 'Lipid Profile (Cholesterol)', price: 499, description: 'Screens cholesterol levels, HDL, LDL, and cardiovascular risks to identify systemic heart conditions.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Lipid Profile%' },
+      { category_name: 'Heart', name: 'Cardiac Risk Panel', price: 1299, description: 'Evaluates biochemical markers and inflammatory risk levels for early warning signs of coronary disease.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%Cardiac Risk%' },
+      { category_name: 'Heart', name: 'ECG (Heart Rhythm)', price: 390, description: 'Records electrical heart signals to detect irregularities, rhythm disorders, or past cardiac muscle stress.', rep: '6 Hours', cat: 'scanning', is_pkg: false, search_name: '%ECG%' },
+      { category_name: 'Heart', name: 'Apolipoprotein A1', price: 650, description: 'Measures Apolipoprotein A1 to evaluate anti-atherogenic cardiovascular protection capabilities.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Apolipoprotein A1%' },
+      { category_name: 'Heart', name: 'Apolipoprotein B', price: 700, description: 'Evaluates atherogenic particles to audit risk factors for coronary artery blockages.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Apolipoprotein B%' },
+      { category_name: 'Heart', name: 'High Sensitivity CRP (hs-CRP)', price: 550, description: 'Highly sensitive C-reactive protein screen assessing baseline arterial inflammation parameters.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%hs-CRP%' },
+      { category_name: 'Heart', name: 'Lipoprotein (a) [Lp(a)]', price: 900, description: 'Measures Lipoprotein (a) levels to evaluate genetically determined coronary risk variables.', rep: '16 Hours', cat: 'blood', is_pkg: false, search_name: '%Lipoprotein (a)%' },
+      { category_name: 'Heart', name: 'Homocysteine Cardio', price: 1100, description: 'Assesses blood Homocysteine to screen for early arterial tissue damage and stroke markers.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Homocysteine%' },
+      { category_name: 'Heart', name: 'Cardio Myoglobin', price: 1200, description: 'Measures myoglobin levels to audit acute cardiac cellular integrity.', rep: '4 Hours', cat: 'blood', is_pkg: false, search_name: '%Cardio Myoglobin%' },
+      { category_name: 'Heart', name: 'Heart CK-MB Isoenzyme', price: 800, description: 'Evaluates CK-MB levels to track enzyme releases specific to cardiovascular systems.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%CK-MB%' },
       
-      const seedItems = [
-        // Heart
-        { category_name: 'Heart', name: 'Lipid Profile (Cholesterol)', price: 499, description: 'Screens cholesterol levels, HDL, LDL, and cardiovascular risks to identify systemic heart conditions.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Lipid Profile%' },
-        { category_name: 'Heart', name: 'Cardiac Risk Panel', price: 1299, description: 'Evaluates biochemical markers and inflammatory risk levels for early warning signs of coronary disease.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%Cardiac Risk%' },
-        { category_name: 'Heart', name: 'ECG (Heart Rhythm)', price: 390, description: 'Records electrical heart signals to detect irregularities, rhythm disorders, or past cardiac muscle stress.', rep: '6 Hours', cat: 'scanning', is_pkg: false, search_name: '%ECG%' },
-        { category_name: 'Heart', name: 'Apolipoprotein A1', price: 650, description: 'Measures Apolipoprotein A1 to evaluate anti-atherogenic cardiovascular protection capabilities.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Apolipoprotein A1%' },
-        { category_name: 'Heart', name: 'Apolipoprotein B', price: 700, description: 'Evaluates atherogenic particles to audit risk factors for coronary artery blockages.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Apolipoprotein B%' },
-        { category_name: 'Heart', name: 'High Sensitivity CRP (hs-CRP)', price: 550, description: 'Highly sensitive C-reactive protein screen assessing baseline arterial inflammation parameters.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%hs-CRP%' },
-        { category_name: 'Heart', name: 'Lipoprotein (a) [Lp(a)]', price: 900, description: 'Measures Lipoprotein (a) levels to evaluate genetically determined coronary risk variables.', rep: '16 Hours', cat: 'blood', is_pkg: false, search_name: '%Lipoprotein (a)%' },
-        { category_name: 'Heart', name: 'Homocysteine Cardio', price: 1100, description: 'Assesses blood Homocysteine to screen for early arterial tissue damage and stroke markers.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Homocysteine%' },
-        { category_name: 'Heart', name: 'Cardio Myoglobin', price: 1200, description: 'Measures myoglobin levels to audit acute cardiac cellular integrity.', rep: '4 Hours', cat: 'blood', is_pkg: false, search_name: '%Cardio Myoglobin%' },
-        { category_name: 'Heart', name: 'Heart CK-MB Isoenzyme', price: 800, description: 'Evaluates CK-MB levels to track enzyme releases specific to cardiovascular systems.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%CK-MB%' },
-        
-        // Cancer
-        { category_name: 'Cancer', name: 'Tumor Marker - PSA (Prostate Screening)', price: 699, description: 'Measures Prostate Specific Antigen to screen for cellular changes, hypertrophy, or early warning signs.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%PSA%' },
-        { category_name: 'Cancer', name: 'Pap Smear (Cervical Health)', price: 950, description: 'Analyzes cervical cells to check for abnormalities, chronic infections, or cellular adjustments.', rep: '48 Hours', cat: 'blood', is_pkg: false, search_name: '%Pap Smear%' },
-        { category_name: 'Cancer', name: 'Tumor Marker - CA 125 (Ovarian Marker)', price: 1499, description: 'Tracks protein levels commonly associated with maternal cellular wellness and reproductive system tracking.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%CA 125%' },
-        
-        // Thyroid
-        { category_name: 'Thyroid', name: 'Thyroid Profile (T3, T4, TSH)', price: 349, description: 'Standard screening test evaluating essential hormone levels to audit metabolism speeds.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Thyroid Profile%' },
-        { category_name: 'Thyroid', name: 'TSH (Ultrasensitive)', price: 199, description: 'Measures Thyroid Stimulating Hormone specifically to screen for hyper/hypoactive metabolic states.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%TSH%' },
-        
-        // Diabetes
-        { category_name: 'Diabetes', name: 'HbA1c (Average Sugar)', price: 349, description: 'Evaluates average blood sugar levels over the past 3 months to monitor insulin control.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HbA1c%' },
-        { category_name: 'Diabetes', name: 'Blood Sugar Fasting', price: 149, description: 'Checks glucose levels in blood after an 8-12 hour fast to screen for pre-diabetes risks.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%Fasting%' },
-        { category_name: 'Diabetes', name: 'Post-Prandial Blood Sugar', price: 149, description: 'Measures glucose levels exactly 2 hours after a meal to track active body sugar clearances.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%Post-Prandial%' },
-        { category_name: 'Diabetes', name: 'Random Blood Sugar (RBS)', price: 99, description: 'Checks glucose values at a random point in time to screen for immediate systemic spikes.', rep: '4 Hours', cat: 'blood', is_pkg: false, search_name: '%Random Blood Sugar%' },
-        { category_name: 'Diabetes', name: 'Fructosamine Sugar Index', price: 800, description: 'Tracks glycated proteins to audit intermediate glucose changes over the past 2-3 weeks.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Fructosamine%' },
-        { category_name: 'Diabetes', name: 'Urine Microalbumin Screen', price: 450, description: 'Evaluates trace albumin in urine to audit early renal filtration changes due to sugar levels.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%Microalbumin%' },
-        { category_name: 'Diabetes', name: 'Oral Glucose Tolerance (OGTT)', price: 350, description: 'Tracks active glucose clearance speeds after administering a calibrated sugar loading dose.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Oral Glucose%' },
-        { category_name: 'Diabetes', name: 'C-Peptide Insulin Release', price: 950, description: 'Measures C-peptide to audit endogenous insulin secretion capability in pancreatic islet cells.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%C-Peptide%' },
-        { category_name: 'Diabetes', name: 'Insulin Resistance (HOMA-IR)', price: 1499, description: 'Calculates baseline insulin resistance indices to screen metabolic sensitivities.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HOMA-IR%' },
-        
-        // Pregnancy
-        { category_name: 'Pregnancy', name: 'Beta HCG (Quantitative)', price: 549, description: 'Measures exact hormone levels to confirm early pregnancy and track gestational timelines.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HCG%' },
-        { category_name: 'Pregnancy', name: 'Dual Marker Screening', price: 2499, description: 'Comprehensive biochemical maternal screen assessing fetal genetic timelines during the first trimester.', rep: '36 Hours', cat: 'blood', is_pkg: false, search_name: '%Dual Marker%' },
-        
-        // Allergy/Intolerance
-        { category_name: 'Allergy/Intolerance', name: 'IgE Total (Allergy)', price: 599, description: 'Checks immunoglobulin E stores to identify hypersensitive triggers or basic environmental allergies.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%IgE Total%' },
-        { category_name: 'Allergy/Intolerance', name: 'Food Intolerance Panel (Primary)', price: 3490, description: 'Comprehensive mapping of bodily responses to various primary dietary antigens and food profiles.', rep: '48 Hours', cat: 'blood', is_pkg: false, search_name: '%Food Intolerance%' },
-        
-        // Hormone
-        { category_name: 'Hormone', name: 'Testosterone (Total)', price: 499, description: 'Measures primary androgen levels to evaluate muscle wellness, vitality, and hormonal pathways.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Testosterone%' },
-        { category_name: 'Hormone', name: 'Prolactin Profile', price: 399, description: 'Hormonal check tracking reproductive organ system balance and stress biomarker parameters.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Prolactin%' },
-        
-        // DNA Test
-        { category_name: 'DNA Test', name: 'Genetic Wellness Mapping', price: 6999, description: 'Unlocks personalized insights on diet, fitness, and inherent physiological predispositions via DNA.', rep: '7 Days', cat: 'blood', is_pkg: false, search_name: '%Genetic%' },
-        { category_name: 'DNA Test', name: 'Carrier Screening (Basic)', price: 12499, description: 'Advanced molecular sequencing to evaluate hereditary genes for clinical planning.', rep: '10 Days', cat: 'blood', is_pkg: false, search_name: '%Carrier%' },
-        
-        // Full Body Checkup
-        { category_name: 'Full Body Checkup', name: 'Full Body Health Checkup (64 Tests)', price: 899, description: 'Includes Liver, Kidney, Lipid, Sugar, and Urine metrics under certified lab setups.', rep: '24 Hours', cat: 'package', is_pkg: true, search_name: '%Health Checkup%' },
-        { category_name: 'Full Body Checkup', name: 'Senior Citizen Wellness Panel', price: 1800, description: 'Specifically curated for geriatric health, tracking bones, clearances, and artery conditions.', rep: '24 Hours', cat: 'package', is_pkg: true, search_name: '%Senior%' }
-      ];
+      // Cancer
+      { category_name: 'Cancer', name: 'Tumor Marker - PSA (Prostate Screening)', price: 699, description: 'Measures Prostate Specific Antigen to screen for cellular changes, hypertrophy, or early warning signs.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%PSA%' },
+      { category_name: 'Cancer', name: 'Pap Smear (Cervical Health)', price: 950, description: 'Analyzes cervical cells to check for abnormalities, chronic infections, or cellular adjustments.', rep: '48 Hours', cat: 'blood', is_pkg: false, search_name: '%Pap Smear%' },
+      { category_name: 'Cancer', name: 'Tumor Marker - CA 125 (Ovarian Marker)', price: 1499, description: 'Tracks protein levels commonly associated with maternal cellular wellness and reproductive system tracking.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%CA 125%' },
+      
+      // Thyroid
+      { category_name: 'Thyroid', name: 'Thyroid Profile (T3, T4, TSH)', price: 349, description: 'Standard screening test evaluating essential hormone levels to audit metabolism speeds.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Thyroid Profile%' },
+      { category_name: 'Thyroid', name: 'TSH (Ultrasensitive)', price: 199, description: 'Measures Thyroid Stimulating Hormone specifically to screen for hyper/hypoactive metabolic states.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%TSH%' },
+      
+      // Diabetes
+      { category_name: 'Diabetes', name: 'HbA1c (Average Sugar)', price: 349, description: 'Evaluates average blood sugar levels over the past 3 months to monitor insulin control.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HbA1c%' },
+      { category_name: 'Diabetes', name: 'Blood Sugar Fasting', price: 149, description: 'Checks glucose levels in blood after an 8-12 hour fast to screen for pre-diabetes risks.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%Fasting%' },
+      { category_name: 'Diabetes', name: 'Post-Prandial Blood Sugar', price: 149, description: 'Measures glucose levels exactly 2 hours after a meal to track active body sugar clearances.', rep: '6 Hours', cat: 'blood', is_pkg: false, search_name: '%Post-Prandial%' },
+      { category_name: 'Diabetes', name: 'Random Blood Sugar (RBS)', price: 99, description: 'Checks glucose values at a random point in time to screen for immediate systemic spikes.', rep: '4 Hours', cat: 'blood', is_pkg: false, search_name: '%Random Blood Sugar%' },
+      { category_name: 'Diabetes', name: 'Fructosamine Sugar Index', price: 800, description: 'Tracks glycated proteins to audit intermediate glucose changes over the past 2-3 weeks.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Fructosamine%' },
+      { category_name: 'Diabetes', name: 'Urine Microalbumin Screen', price: 450, description: 'Evaluates trace albumin in urine to audit early renal filtration changes due to sugar levels.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%Microalbumin%' },
+      { category_name: 'Diabetes', name: 'Oral Glucose Tolerance (OGTT)', price: 350, description: 'Tracks active glucose clearance speeds after administering a calibrated sugar loading dose.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Oral Glucose%' },
+      { category_name: 'Diabetes', name: 'C-Peptide Insulin Release', price: 950, description: 'Measures C-peptide to audit endogenous insulin secretion capability in pancreatic islet cells.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%C-Peptide%' },
+      { category_name: 'Diabetes', name: 'Insulin Resistance (HOMA-IR)', price: 1499, description: 'Calculates baseline insulin resistance indices to screen metabolic sensitivities.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HOMA-IR%' },
+      
+      // Pregnancy
+      { category_name: 'Pregnancy', name: 'Beta HCG (Quantitative)', price: 549, description: 'Measures exact hormone levels to confirm early pregnancy and track gestational timelines.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%HCG%' },
+      { category_name: 'Pregnancy', name: 'Dual Marker Screening', price: 2499, description: 'Comprehensive biochemical maternal screen assessing fetal genetic timelines during the first trimester.', rep: '36 Hours', cat: 'blood', is_pkg: false, search_name: '%Dual Marker%' },
+      
+      // Allergy/Intolerance
+      { category_name: 'Allergy/Intolerance', name: 'IgE Total (Allergy)', price: 599, description: 'Checks immunoglobulin E stores to identify hypersensitive triggers or basic environmental allergies.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%IgE Total%' },
+      { category_name: 'Allergy/Intolerance', name: 'Food Intolerance Panel (Primary)', price: 3490, description: 'Comprehensive mapping of bodily responses to various primary dietary antigens and food profiles.', rep: '48 Hours', cat: 'blood', is_pkg: false, search_name: '%Food Intolerance%' },
+      
+      // Hormone
+      { category_name: 'Hormone', name: 'Testosterone (Total)', price: 499, description: 'Measures primary androgen levels to evaluate muscle wellness, vitality, and hormonal pathways.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Testosterone%' },
+      { category_name: 'Hormone', name: 'Prolactin Profile', price: 399, description: 'Hormonal check tracking reproductive organ system balance and stress biomarker parameters.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Prolactin%' },
+      
+      // DNA Test
+      { category_name: 'DNA Test', name: 'Genetic Wellness Mapping', price: 6999, description: 'Unlocks personalized insights on diet, fitness, and inherent physiological predispositions via DNA.', rep: '7 Days', cat: 'blood', is_pkg: false, search_name: '%Genetic%' },
+      { category_name: 'DNA Test', name: 'Carrier Screening (Basic)', price: 12499, description: 'Advanced molecular sequencing to evaluate hereditary genes for clinical planning.', rep: '10 Days', cat: 'blood', is_pkg: false, search_name: '%Carrier%' },
+      
+      // Kidney Care
+      { category_name: 'Kidney Care', name: 'Kidney Function Test (KFT)', price: 499, description: 'Comprehensive assessment of renal filtration, creatinine, urea, and electrolytes.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%KFT%' },
+      { category_name: 'Kidney Care', name: 'Serum Creatinine', price: 199, description: 'Evaluates waste filtration rate to audit kidney performance and dehydration markers.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%Creatinine%' },
 
-      for (let i = 0; i < seedItems.length; i++) {
-        const item = seedItems[i];
-        let testId = null;
-        let packageId = null;
-        
-        if (item.is_pkg) {
-          // Lookup package in database
-          const pkgRes = await db.query('SELECT id FROM packages WHERE name ILIKE $1', [item.search_name]);
-          if (pkgRes.rows.length > 0) {
-            packageId = pkgRes.rows[0].id;
-          } else {
-            // Create a package
-            const newPkg = await db.query(
-              'INSERT INTO packages (name, description, category) VALUES ($1, $2, $3) RETURNING id',
-              [item.name, item.description, item.category_name]
-            );
-            packageId = newPkg.rows[0].id;
-          }
+      // Liver Wellness
+      { category_name: 'Liver Wellness', name: 'Liver Function Test (LFT)', price: 499, description: 'Measures key hepatic enzymes SGOT, SGPT, and Bilirubin to assess liver health.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%LFT%' },
+      { category_name: 'Liver Wellness', name: 'Albumin Serum', price: 299, description: 'Evaluates synthetic capacity and nutritional proteins manufactured by the liver.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%Albumin%' },
+
+      // Vitamin Panel
+      { category_name: 'Vitamin Panel', name: 'Vitamin D3 Checkup', price: 699, description: 'Measures Vitamin D levels crucial for bone retention, immunity, and cell speeds.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%Vitamin D%' },
+      { category_name: 'Vitamin Panel', name: 'Vitamin B12 Checkup', price: 499, description: 'Measures Vitamin B12 levels essential for nerve performance and red blood cells.', rep: '24 Hours', cat: 'blood', is_pkg: false, search_name: '%Vitamin B12%' },
+
+      // Bone & Joint
+      { category_name: 'Bone & Joint', name: 'Calcium Test (Bone Health)', price: 249, description: 'Checks calcium levels in blood, crucial for bones, teeth, and muscle performance.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Calcium%' },
+      { category_name: 'Bone & Joint', name: 'Alkaline Phosphatase (ALP)', price: 199, description: 'Evaluates bone mineral enzymes to screen for joint or skeletal activity.', rep: '12 Hours', cat: 'blood', is_pkg: false, search_name: '%Alkaline Phosphatase%' },
+
+      // Fever & Infection
+      { category_name: 'Fever & Infection', name: 'Complete Blood Count (CBC)', price: 299, description: 'Screens red/white blood counts and platelets to identify active infections or fevers.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%Complete Blood Count%' },
+      { category_name: 'Fever & Infection', name: 'CRP (C-Reactive Protein)', price: 399, description: 'Highly sensitive marker reflecting acute bodily inflammation or bacterial infection.', rep: '8 Hours', cat: 'blood', is_pkg: false, search_name: '%CRP%' },
+
+      // Full Body Checkup
+      { category_name: 'Full Body Checkup', name: 'Full Body Health Checkup (64 Tests)', price: 899, description: 'Includes Liver, Kidney, Lipid, Sugar, and Urine metrics under certified lab setups.', rep: '24 Hours', cat: 'package', is_pkg: true, search_name: '%Health Checkup%' },
+      { category_name: 'Full Body Checkup', name: 'Senior Citizen Wellness Panel', price: 1800, description: 'Specifically curated for geriatric health, tracking bones, clearances, and artery conditions.', rep: '24 Hours', cat: 'package', is_pkg: true, search_name: '%Senior%' }
+    ];
+
+    for (let i = 0; i < seedItems.length; i++) {
+      const item = seedItems[i];
+      let testId = null;
+      let packageId = null;
+      
+      if (item.is_pkg) {
+        // Lookup package in database
+        const pkgRes = await db.query('SELECT id FROM packages WHERE name ILIKE $1', [item.search_name]);
+        if (pkgRes.rows.length > 0) {
+          packageId = pkgRes.rows[0].id;
         } else {
-          // Lookup test in database
-          const testRes = await db.query('SELECT id FROM tests WHERE name ILIKE $1', [item.search_name]);
-          if (testRes.rows.length > 0) {
-            testId = testRes.rows[0].id;
-          } else {
-            // Create a test
-            const newTest = await db.query(
-              'INSERT INTO tests (name, description, price, rep, cat) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-              [item.name, item.description, item.price, item.rep, item.cat]
-            );
-            testId = newTest.rows[0].id;
-          }
+          // Create a package
+          const newPkg = await db.query(
+            'INSERT INTO packages (name, description, category) VALUES ($1, $2, $3) RETURNING id',
+            [item.name, item.description, item.category_name]
+          );
+          packageId = newPkg.rows[0].id;
         }
-        
-        // Insert into category_previews
-        await db.query(
-          'INSERT INTO category_previews (category_name, test_id, package_id, is_pkg, display_order) VALUES ($1, $2, $3, $4, $5)',
-          [item.category_name, testId, packageId, item.is_pkg, i]
-        );
+      } else {
+        // Lookup test in database
+        const testRes = await db.query('SELECT id FROM tests WHERE name ILIKE $1', [item.search_name]);
+        if (testRes.rows.length > 0) {
+          testId = testRes.rows[0].id;
+        } else {
+          // Create a test
+          const newTest = await db.query(
+            'INSERT INTO tests (name, description, price, rep, cat) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+            [item.name, item.description, item.price, item.rep, item.cat]
+          );
+          testId = newTest.rows[0].id;
+        }
       }
-      // Ensure EVERY test mapped in category_previews has active mappings in lab_test_branches
-      await db.query(`
-        INSERT INTO lab_test_branches (lab_id, lab_branch_id, test_id, price, reporting_time, is_available)
-        SELECT 
-          lb.lab_id,
-          lb.id AS lab_branch_id,
-          cp.test_id,
-          COALESCE(t.price, 499) AS price,
-          COALESCE(t.rep, '12 Hours') AS reporting_time,
-          true AS is_available
-        FROM category_previews cp
-        JOIN tests t ON t.id = cp.test_id
-        CROSS JOIN (
-          SELECT id, lab_id FROM lab_branches WHERE is_active = true LIMIT 5
-        ) lb
-        WHERE cp.is_pkg = false AND cp.test_id IS NOT NULL
-        ON CONFLICT (lab_branch_id, test_id) DO NOTHING
-      `);
-
-      // Ensure EVERY package mapped in category_previews has active mappings in lab_package_branches
-      await db.query(`
-        INSERT INTO lab_package_branches (lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes, is_available)
-        SELECT 
-          lb.lab_id,
-          lb.id AS lab_branch_id,
-          cp.package_id,
-          899 AS price,
-          '24 Hours' AS reporting_time,
-          true AS home_collection,
-          '15% OFF' AS discount_label,
-          'Premium health panel mapping.' AS notes,
-          true AS is_available
-        FROM category_previews cp
-        JOIN packages p ON p.id = cp.package_id
-        CROSS JOIN (
-          SELECT id, lab_id FROM lab_branches WHERE is_active = true LIMIT 5
-        ) lb
-        WHERE cp.is_pkg = true AND cp.package_id IS NOT NULL
-        ON CONFLICT (lab_branch_id, package_id) DO NOTHING
-      `);
-
-      console.log("✅ Successfully completed relational category previews seeding and lab mapping!");
+      
+      // Insert into category_previews
+      await db.query(
+        'INSERT INTO category_previews (category_name, test_id, package_id, is_pkg, display_order) VALUES ($1, $2, $3, $4, $5)',
+        [item.category_name, testId, packageId, item.is_pkg, i]
+      );
     }
+    // Ensure EVERY test mapped in category_previews has active mappings in lab_test_branches
+    await db.query(`
+      INSERT INTO lab_test_branches (lab_id, lab_branch_id, test_id, price, reporting_time, is_available)
+      SELECT 
+        lb.lab_id,
+        lb.id AS lab_branch_id,
+        cp.test_id,
+        COALESCE(t.price, 499) AS price,
+        COALESCE(t.rep, '12 Hours') AS reporting_time,
+        true AS is_available
+      FROM category_previews cp
+      JOIN tests t ON t.id = cp.test_id
+      CROSS JOIN (
+        SELECT id, lab_id FROM lab_branches WHERE is_active = true LIMIT 5
+      ) lb
+      WHERE cp.is_pkg = false AND cp.test_id IS NOT NULL
+      ON CONFLICT (lab_branch_id, test_id) DO NOTHING
+    `);
+
+    // Ensure EVERY package mapped in category_previews has active mappings in lab_package_branches
+    await db.query(`
+      INSERT INTO lab_package_branches (lab_id, lab_branch_id, package_id, price, reporting_time, home_collection, discount_label, notes, is_available)
+      SELECT 
+        lb.lab_id,
+        lb.id AS lab_branch_id,
+        cp.package_id,
+        899 AS price,
+        '24 Hours' AS reporting_time,
+        true AS home_collection,
+        '15% OFF' AS discount_label,
+        'Premium health panel mapping.' AS notes,
+        true AS is_available
+      FROM category_previews cp
+      JOIN packages p ON p.id = cp.package_id
+      CROSS JOIN (
+        SELECT id, lab_id FROM lab_branches WHERE is_active = true LIMIT 5
+      ) lb
+      WHERE cp.is_pkg = true AND cp.package_id IS NOT NULL
+      ON CONFLICT (lab_branch_id, package_id) DO NOTHING
+    `);
+
+    console.log("✅ Successfully completed relational category previews seeding and lab mapping!");
 
     // ─── Create categories_metadata Table ───
     await db.query(`
@@ -1045,6 +1064,61 @@ async function setupDatabase() {
         '2k+ monthly bookings', 
         '10k+ patients', 
         ARRAY['Carrier Status', 'BRCA Gene', 'Wellness DNA', 'Hereditary Risk']
+      ),
+      (
+        'Kidney Care', 
+        'medical_services', 
+        'Kidney health tests assess renal function, filtration rate, and electrolyte balance.', 
+        'Kidney health tests assess renal function, filtration rate, and electrolyte balance. Early detection of renal filtration indices helps prevent chronic kidney disease.', 
+        true, 
+        '110+ certified labs', 
+        '4k+ monthly bookings', 
+        '18k+ patients', 
+        ARRAY['KFT', 'Creatinine', 'Urea', 'BUN', 'Electrolytes']
+      ),
+      (
+        'Liver Wellness', 
+        'science', 
+        'Liver function tests evaluate crucial liver enzymes, proteins, and bilirubin.', 
+        'Liver function tests evaluate crucial liver enzymes, proteins, and bilirubin. Regular screening tracks liver speed and helps identify early fatty liver or metabolic shifts.', 
+        true, 
+        '115+ certified labs', 
+        '5k+ monthly bookings', 
+        '22k+ patients', 
+        ARRAY['LFT', 'SGPT', 'SGOT', 'Bilirubin', 'Albumin']
+      ),
+      (
+        'Vitamin Panel', 
+        'wb_sunny', 
+        'Vitamin tests evaluate essential D3, B12, and mineral markers.', 
+        'Vitamin tests evaluate essential D3, B12, and mineral markers crucial for bone retention, immunity, and cognitive energy speeds.', 
+        true, 
+        '125+ certified labs', 
+        '6k+ monthly bookings', 
+        '25k+ patients', 
+        ARRAY['Vitamin D3', 'Vitamin B12', 'Deficiencies', 'Active Absorption']
+      ),
+      (
+        'Bone & Joint', 
+        'healing', 
+        'Bone and joint panels monitor calcium, skeletal enzymes, and joint health.', 
+        'Bone and joint panels monitor calcium, skeletal enzymes, and joint health to prevent osteopenia, osteoporosis, or structural joint irritation early.', 
+        true, 
+        '100+ certified labs', 
+        '3k+ monthly bookings', 
+        '12k+ patients', 
+        ARRAY['Calcium', 'ALP', 'Joint Pain', 'Skeletal Screen']
+      ),
+      (
+        'Fever & Infection', 
+        'thermostat', 
+        'Inflammatory tests screen for active infections, white cell counts, and fevers.', 
+        'Inflammatory tests screen for active infections, white cell counts, and fevers. Highly specific CRP and CBC parameters assist in rapid viral/bacterial diagnostic audits.', 
+        true, 
+        '130+ certified labs', 
+        '8k+ monthly bookings', 
+        '35k+ patients', 
+        ARRAY['CBC Test', 'CRP', 'Infection Screen', 'Acute Fever']
       )
       ON CONFLICT (category_name) DO UPDATE SET
         icon = EXCLUDED.icon,

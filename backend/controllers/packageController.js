@@ -883,13 +883,18 @@ exports.get_api_nav_menu = async (req, res) => {
     const menuStructure = {
       tests: [
         { name: "Heart", category: "Heart", page: "category-listing" },
-        { name: "Cancer", category: "Cancer", page: "category-listing" },
+        { name: "Cancer Care", category: "Cancer", page: "category-listing" },
         { name: "Thyroid", category: "Thyroid", page: "category-listing" },
         { name: "Diabetes", category: "Diabetes", page: "category-listing" },
         { name: "Pregnancy", category: "Pregnancy", page: "category-listing" },
         { name: "Allergy", category: "Allergy/Intolerance", page: "category-listing" },
         { name: "Hormone", category: "Hormone", page: "category-listing" },
-        { name: "DNA Test", category: "DNA Test", page: "category-listing" }
+        { name: "DNA Test", category: "DNA Test", page: "category-listing" },
+        { name: "Kidney Care", category: "Kidney Care", page: "category-listing" },
+        { name: "Liver Wellness", category: "Liver Wellness", page: "category-listing" },
+        { name: "Vitamin Panel", category: "Vitamin Panel", page: "category-listing" },
+        { name: "Bone & Joint", category: "Bone & Joint", page: "category-listing" },
+        { name: "Fever & Infection", category: "Fever & Infection", page: "category-listing" }
       ],
       packages: [
         { name: "Full Body", category: "Full Body Checkup", page: "package-listing" },
