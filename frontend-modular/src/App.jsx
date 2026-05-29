@@ -40,6 +40,54 @@ const PATH_TO_PAGE = Object.entries(PAGE_TO_PATH).reduce((acc, [pg, path]) => {
   return acc;
 }, {});
 
+const categoryToSlug = (cat) => {
+  if (!cat) return "";
+  return cat
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[&\/]/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+const slugToCategory = (slug) => {
+  if (!slug) return "Home";
+  
+  const knownCategories = [
+    "Heart",
+    "Cancer Care",
+    "Cancer",
+    "Thyroid",
+    "Diabetes",
+    "Pregnancy",
+    "Allergy/Intolerance",
+    "Hormone",
+    "DNA Test",
+    "Kidney Care",
+    "Liver Wellness",
+    "Vitamin Panel",
+    "Bone & Joint",
+    "Fever & Infection",
+    "Full Body Checkup",
+    "Senior Citizen",
+    "Imaging",
+    "Endoscopy & Screening",
+    "Cardiac Diagnostics",
+    "Home"
+  ];
+
+  const matched = knownCategories.find(cat => categoryToSlug(cat) === slug.toLowerCase().trim());
+  if (matched) return matched;
+
+  // Fallback: replace hyphens with spaces and capitalize
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const parseStateFromUrl = () => {
   try {
     const path = window.location.pathname;
@@ -75,7 +123,7 @@ const parseStateFromUrl = () => {
     } else if (matchedPage === "category-listing" || matchedPage === "scans-listing" || matchedPage === "package-listing") {
       const category = searchParams.get("category");
       if (category) {
-        state.activeCategoryFilter = category;
+        state.activeCategoryFilter = slugToCategory(category);
       }
     }
 
@@ -274,7 +322,7 @@ export default function App() {
       params.set("id", selectedPackage.id);
       if (selectedBranch?.id) params.set("branchId", selectedBranch.id);
     } else if ((page === "category-listing" || page === "scans-listing" || page === "package-listing") && activeCategoryFilter) {
-      params.set("category", activeCategoryFilter);
+      params.set("category", categoryToSlug(activeCategoryFilter));
     }
 
     const queryString = params.toString();

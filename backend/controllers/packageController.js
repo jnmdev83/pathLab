@@ -887,6 +887,18 @@ exports.get_api_nav_menu = async (req, res) => {
       page: "scans-listing"
     }));
 
+    const toSlug = (cat) => {
+      if (!cat) return "";
+      return cat
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/[&\/]/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    };
+
     const menuStructure = {
       tests: [
         { name: "Heart", category: "Heart", page: "category-listing" },
@@ -915,6 +927,14 @@ exports.get_api_nav_menu = async (req, res) => {
         { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-listing" }
       ]
     };
+
+    // Attach category_url dynamically!
+    ['tests', 'packages', 'scans'].forEach(section => {
+      menuStructure[section] = menuStructure[section].map(item => ({
+        ...item,
+        category_url: toSlug(item.category)
+      }));
+    });
     
     res.json(menuStructure);
   } catch (error) {

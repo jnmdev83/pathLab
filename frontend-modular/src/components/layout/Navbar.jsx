@@ -67,6 +67,32 @@ export function Navbar({
 
   // 1. Fetch dynamic navigation menu from backend
   useEffect(() => {
+    const categoryToSlug = (cat) => {
+      if (!cat) return "";
+      return cat
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/[&\/]/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    };
+
+    const sanitizeMenu = (menu) => {
+      if (!menu) return menu;
+      const sanitized = { ...menu };
+      ['tests', 'packages', 'scans'].forEach(section => {
+        if (Array.isArray(sanitized[section])) {
+          sanitized[section] = sanitized[section].map(item => ({
+            ...item,
+            category_url: item.category_url || categoryToSlug(item.category)
+          }));
+        }
+      });
+      return sanitized;
+    };
+
     fetch(`${API_BASE_URL}/api/nav-menu`)
       .then(res => {
         if (!res.ok) throw new Error("Could not load navigation menu");
@@ -74,14 +100,14 @@ export function Navbar({
       })
       .then(data => {
         if (data && data.tests && data.packages) {
-          setNavMenu(data);
+          setNavMenu(sanitizeMenu(data));
         } else {
-          setNavMenu(defaultMenu);
+          setNavMenu(sanitizeMenu(defaultMenu));
         }
       })
       .catch(err => {
         console.warn("Navigation API warning, using dynamic seeds fallback:", err);
-        setNavMenu(defaultMenu);
+        setNavMenu(sanitizeMenu(defaultMenu));
       });
   }, []);
 
