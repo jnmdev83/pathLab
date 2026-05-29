@@ -1859,6 +1859,82 @@ async function setupDatabase() {
         display_order = EXCLUDED.display_order;
     `);
 
+    // ─── 9. SCANS & PROCEDURES SEEDING AND SCHEMA UPDATES ───
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS scanning_categories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) UNIQUE NOT NULL,
+        icon VARCHAR(100),
+        description TEXT,
+        display_order INTEGER DEFAULT 0
+      );
+    `);
+
+    await db.query(`
+      INSERT INTO scanning_categories (name, icon, description, display_order) VALUES
+      ('Imaging', 'biotech', 'Advanced diagnostic imaging to visualize internal structures with high clarity.', 1),
+      ('Endoscopy & Screening', 'visibility', 'Internal examinations and routine preventative screenings for early detection.', 2),
+      ('Cardiac Diagnostics', 'favorite', 'Comprehensive heart health assessments and monitoring procedures.', 3)
+      ON CONFLICT (name) DO UPDATE SET
+        icon = EXCLUDED.icon,
+        description = EXCLUDED.description,
+        display_order = EXCLUDED.display_order;
+    `);
+
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS sub_category VARCHAR(100)`);
+
+    // Update existing tests
+    await db.query(`UPDATE tests SET sub_category = 'Imaging', cat = 'scanning' WHERE lower(name) IN ('mri brain', 'ct scan chest', 'ultrasound abdomen', 'x-ray chest pa view')`);
+    await db.query(`UPDATE tests SET sub_category = 'Cardiac Diagnostics', cat = 'scanning' WHERE lower(name) LIKE '%ecg%' OR lower(name) LIKE '%electrocardiogram%'`);
+
+    // Seed new Scans/Procedures tests if they don't exist
+    const newScans = [
+      { name: 'Colonoscopy', sub_category: 'Endoscopy & Screening', description: 'Preventive screening for colon health and early detection of abnormalities.', rep: '24 Hours', price: 3500 },
+      { name: 'Gastroscopy', sub_category: 'Endoscopy & Screening', description: 'Visual examination of the upper digestive tract using a thin, flexible scope.', rep: '24 Hours', price: 2800 },
+      { name: 'TMT (Treadmill Test)', sub_category: 'Cardiac Diagnostics', description: 'Stress test to monitor heart activity during physical exertion on a treadmill.', rep: 'Same Day', price: 1500 },
+      { name: '2D Echo (Echocardiogram)', sub_category: 'Cardiac Diagnostics', description: 'Ultrasound imaging of the heart to examine heart valves, chambers, and muscle contraction.', rep: 'Same Day', price: 1800 }
+    ];
+
+    for (const scan of newScans) {
+      // Check if test exists, else insert it
+      const scanRes = await db.query('SELECT id FROM tests WHERE lower(name) = lower($1)', [scan.name]);
+      let scanId;
+      if (scanRes.rows.length > 0) {
+        scanId = scanRes.rows[0].id;
+        await db.query('UPDATE tests SET sub_category = $1, cat = \'scanning\', price = $2 WHERE id = $3', [scan.sub_category, scan.price, scanId]);
+      } else {
+        const ins = await db.query(
+          'INSERT INTO tests (name, description, price, rep, cat, sub_category) VALUES ($1, $2, $3, $4, \'scanning\', $5) RETURNING id',
+          [scan.name, scan.description, scan.price, scan.rep, scan.sub_category]
+        );
+        scanId = ins.rows[0].id;
+      }
+
+      // Map this scan to branches! Let's choose 5 active branches
+      for (const branch of branchesRes.rows.slice(0, 5)) {
+        const priceSalt = ((branch.id * 23) % 4) * 100 - 150; // -150 to +150
+        const price = Math.max(500, scan.price + priceSalt);
+        const originalPrice = Math.max(price + 100, Math.ceil(price / 0.8));
+        const discountPercent = Math.round(((originalPrice - price) / originalPrice) * 100);
+
+        await db.query(`
+          INSERT INTO lab_test_branches (
+            lab_id, lab_branch_id, test_id, price, original_price, discount_percent, 
+            reporting_time, is_available
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+          ON CONFLICT (lab_branch_id, test_id) DO NOTHING;
+        `, [
+          branch.lab_id,
+          branch.id,
+          scanId,
+          price,
+          originalPrice,
+          discountPercent,
+          scan.rep
+        ]);
+      }
+    }
+
     console.log("✅ Dynamic PostgreSQL dynamic package listings migrated and seeded successfully!");
     console.log("✅ PostgreSQL Database is ready with premium package specifications!");
   } catch (error) {

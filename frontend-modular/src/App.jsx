@@ -10,6 +10,7 @@ import { Search } from './components/search';
 import { CategoryListing } from './components/category-listing';
 import { PackagesLanding } from './components/packages-landing';
 import { PackagesListing } from './components/packages-listing';
+import { ScanningLanding } from './components/scanning-landing';
 import { API_BASE_URL } from './config';
 import { useIsMobile } from './utils/useIsMobile';
 import { MobileSearchOverlay } from './components/layout/MobileSearchOverlay';
@@ -311,6 +312,16 @@ export default function App() {
             setSelectedPackage={setSelectedPackage}
             setActiveCategoryFilter={setActiveCategoryFilter}
             user={user}
+          />
+        );
+      case "scans-landing":
+        return (
+          <ScanningLanding
+            setPage={setPage}
+            setSelectedPackage={setSelectedPackage}
+            setActiveCategoryFilter={setActiveCategoryFilter}
+            user={user}
+            setTestName={setTestName}
           />
         );
       case "package-listing":

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scans &amp; Procedures | PathoChoice</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffcfbe",
+                        "on-primary-container": "#ced9ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#00722f",
+                        "inverse-on-surface": "#f0f1f2",
+                        "outline": "#737785",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-fixed": "#89fa9b",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e7e8e9",
+                        "surface": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "primary-container": "#0b57d0",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-surface-variant": "#424654",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-surface": "#2e3132",
+                        "on-secondary-fixed-variant": "#005320",
+                        "inverse-primary": "#b2c5ff",
+                        "secondary-fixed-dim": "#6ddd81",
+                        "on-error": "#ffffff",
+                        "tertiary": "#802b00",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-primary-fixed": "#001847",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-container": "#a83b00",
+                        "surface-variant": "#e1e3e4",
+                        "on-primary-fixed-variant": "#0040a1",
+                        "outline-variant": "#c3c6d6",
+                        "surface-dim": "#d9dadb",
+                        "on-secondary-fixed": "#002108",
+                        "surface-container": "#edeeef",
+                        "secondary-container": "#86f898",
+                        "primary": "#0041a2",
+                        "surface-tint": "#0856cf",
+                        "on-background": "#191c1d",
+                        "background": "#f8f9fa",
+                        "secondary": "#006e2c",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dae2ff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "gutter-desktop": "32px",
+                        "unit": "8px",
+                        "section-gap": "80px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Atkinson Hyperlegible Next"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Atkinson Hyperlegible Next"],
+                        "label-sm": ["Atkinson Hyperlegible Next"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Atkinson Hyperlegible Next"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md shadow-[0px_4px_20px_rgba(11,87,208,0.05)] h-16 w-full">
+<div class="flex justify-between items-center h-full px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">
+                PathoChoice
+            </div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Tests</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Scans &amp; Procedures</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Packages</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Labs</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant md:hidden">search</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant text-primary font-label-sm text-label-sm hover:bg-surface-container-low transition-all active:scale-95">
+                    Sign In
+                </button>
+</div>
+</div>
+</header>
+<main class="pb-24">
+<!-- Hero Section -->
+<section class="px-margin-mobile pt-10 pb-section-gap max-w-7xl mx-auto">
+<div class="space-y-4 mb-8">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">
+                    Scans &amp; Procedures
+                </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg">
+                    Find and compare scans, screenings, and heart diagnostic procedures with clinical precision.
+                </p>
+</div>
+<!-- Hero Search Bar -->
+<div class="relative w-full">
+<div class="flex items-center w-full h-16 bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.08)] px-5 border border-outline-variant/30 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-primary mr-4 text-3xl">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md placeholder:text-on-surface-variant/50" placeholder="Search for MRI, CT Scan, ECG..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Category Section -->
+<section class="px-margin-mobile space-y-gutter-mobile mb-section-gap max-w-4xl mx-auto">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Explore by Category</h2>
+<!-- Imaging Card -->
+<div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 hover:shadow-lg transition-all duration-300">
+<div class="flex items-start gap-4">
+<div class="p-3 bg-primary-container/20 rounded-lg text-primary">
+<span class="material-symbols-outlined text-3xl">visibility</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-xl mb-2">Imaging</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Advanced diagnostic imaging to visualize internal structures with high clarity.</p>
+<ul class="space-y-2 mb-6 text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> MRI &amp; CT Scans</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> X-Ray &amp; Ultrasound</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Bone Densitometry</li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md active:scale-[0.98] transition-transform">Explore Imaging</button>
+</div>
+</div>
+</div>
+<!-- Endoscopy Card -->
+<div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 hover:shadow-lg transition-all duration-300">
+<div class="flex items-start gap-4">
+<div class="p-3 bg-tertiary-container/20 rounded-lg text-tertiary">
+<span class="material-symbols-outlined text-3xl">biotech</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-xl mb-2">Endoscopy &amp; Screening</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Internal examinations and routine preventative screenings for early detection.</p>
+<ul class="space-y-2 mb-6 text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Colonoscopy</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Gastroscopy</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Biopsy Screening</li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md active:scale-[0.98] transition-transform">Explore Screenings</button>
+</div>
+</div>
+</div>
+<!-- Cardiac Card -->
+<div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 hover:shadow-lg transition-all duration-300">
+<div class="flex items-start gap-4">
+<div class="p-3 bg-secondary-container/20 rounded-lg text-secondary">
+<span class="material-symbols-outlined text-3xl">favorite</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-xl mb-2">Cardiac Diagnostics</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Comprehensive heart health assessments and monitoring procedures.</p>
+<ul class="space-y-2 mb-6 text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> ECG &amp; Stress Tests</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> 2D Echo &amp; Doppler</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Holter Monitoring</li>
+</ul>
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md active:scale-[0.98] transition-transform">Explore Cardiac</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Popular Procedures -->
+<section class="bg-surface-container-highest/30 py-16 px-margin-mobile">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Popular Procedures</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Most booked diagnostic scans this week</p>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1">View All <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter-mobile">
+<!-- Procedure Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-lg">MRI Brain</h4>
+<span class="text-label-sm text-on-surface-variant/60 font-label-sm uppercase tracking-wider">Imaging</span>
+</div>
+<label class="flex items-center gap-1 cursor-pointer">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Compare</span>
+<input class="w-6 h-6 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-base">schedule</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">24-48 hrs Turnaround</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-primary font-bold text-2xl">$450</div>
+<button class="px-4 py-2 bg-primary-fixed text-on-primary-fixed rounded-lg font-label-sm text-label-sm hover:bg-primary-container hover:text-on-primary-container transition-colors">Book Now</button>
+</div>
+</div>
+<!-- Procedure Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-lg">CT Thorax</h4>
+<span class="text-label-sm text-on-surface-variant/60 font-label-sm uppercase tracking-wider">Imaging</span>
+</div>
+<label class="flex items-center gap-1 cursor-pointer">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Compare</span>
+<input class="w-6 h-6 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-base">schedule</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">12-24 hrs Turnaround</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-primary font-bold text-2xl">$280</div>
+<button class="px-4 py-2 bg-primary-fixed text-on-primary-fixed rounded-lg font-label-sm text-label-sm hover:bg-primary-container hover:text-on-primary-container transition-colors">Book Now</button>
+</div>
+</div>
+<!-- Procedure Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-md text-lg">2D Echo</h4>
+<span class="text-label-sm text-on-surface-variant/60 font-label-sm uppercase tracking-wider">Cardiac</span>
+</div>
+<label class="flex items-center gap-1 cursor-pointer">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Compare</span>
+<input checked="" class="w-6 h-6 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant text-base">schedule</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Same Day Reports</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-primary font-bold text-2xl">$120</div>
+<button class="px-4 py-2 bg-primary-fixed text-on-primary-fixed rounded-lg font-label-sm text-label-sm hover:bg-primary-container hover:text-on-primary-container transition-colors">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Section -->
+<section class="px-margin-mobile py-section-gap max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop items-center">
+<div class="order-2 md:order-1">
+<h2 class="font-headline-md text-headline-lg-mobile md:text-headline-md text-on-surface mb-8">Why Choose Us?</h2>
+<div class="space-y-8">
+<div class="flex gap-4">
+<div class="w-12 h-12 shrink-0 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">NABL &amp; CAP Certified Labs</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">We only partner with labs that maintain the highest global accuracy standards.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 shrink-0 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Best Price Guarantee</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Transparent pricing with no hidden costs. Save up to 40% on diagnostic scans.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-12 h-12 shrink-0 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">clinical_notes</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Expert Report Summary</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Receive a simplified summary of your medical reports from our in-house experts.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 md:order-2">
+<img alt="Clinical Precision" class="rounded-3xl shadow-2xl w-full h-[400px] object-cover" data-alt="A professional medical diagnostic environment featuring a clean, state-of-the-art MRI machine in a softly lit hospital room. The aesthetic is corporate modern with clinical precision, dominated by soft white and cool blue lighting. A healthcare professional is seen in the background, maintaining a calm and authoritative atmosphere. The composition emphasizes hygiene, technology, and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1AHPHolfWzcMoacGyGytt42WDYzytbCR24kIg7B5BSvVNbud5Xb9FwaQ9-KdLfHb-QcTGjBEEkl76MgntpA-FcKycqc9WFVXkUbugncuxgy9lJMWR9RUtq_H9AJgWQTXfmrsEzsR6zH376oaoWxfs5AEiD7sBySWigxlhWFSvcWxsM3zCQZH3A24FNFWhf1dp-eFMAi9IVSVq_fK9nKYSm-K5Vou9HPyuMOWN0usricg9y19PfL2gcAFJgr44rlrsjrjQH6d1tD0"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface w-full py-12">
+<div class="max-w-7xl mx-auto px-margin-desktop flex flex-col md:flex-row justify-between gap-8">
+<div class="space-y-4">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">PathoChoice</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant max-w-xs">Empowering patients through diagnostic transparency and clinical excellence.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+<div class="space-y-3">
+<h5 class="font-label-md text-label-md text-on-surface font-bold">Services</h5>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Tests</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Scans</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Packages</a></li>
+</ul>
+</div>
+<div class="space-y-3">
+<h5 class="font-label-md text-label-md text-on-surface font-bold">Company</h5>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Partner Labs</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a></li>
+</ul>
+</div>
+<div class="space-y-3">
+<h5 class="font-label-md text-label-md text-on-surface font-bold">Legal</h5>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-margin-desktop mt-12 pt-8 border-t border-outline-variant">
+<p class="font-label-sm text-label-sm text-on-surface-variant text-center md:text-left">
+                © 2024 PathoChoice Diagnostic Excellence. All rights reserved.
+            </p>
+</div>
+</footer>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-margin-mobile md:hidden bg-surface/90 backdrop-blur-xl shadow-[0_-4px_16px_rgba(0,0,0,0.04)] z-50 rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant touch-none select-none active:scale-90 transition-transform">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 touch-none select-none active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">compare_arrows</span>
+<span class="font-label-sm text-label-sm">Comparisons</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant touch-none select-none active:scale-90 transition-transform">
+<span class="material-symbols-outlined">biotech</span>
+<span class="font-label-sm text-label-sm">Labs</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant touch-none select-none active:scale-90 transition-transform">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for comparison checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const card = this.closest('div[class*="bg-surface-container-lowest"]');
+                    card.classList.add('ring-2', 'ring-primary');
+                } else {
+                    const card = this.closest('div[class*="bg-surface-container-lowest"]');
+                    card.classList.remove('ring-2', 'ring-primary');
+                }
+            });
+        });
+
+        // Simple scroll effect for top bar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('bg-surface/95', 'shadow-md');
+            } else {
+                header.classList.remove('bg-surface/95', 'shadow-md');
+            }
+        });
+    </script>
+</body></html>

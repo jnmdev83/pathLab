@@ -26,10 +26,10 @@ export function Navbar({
   const [pincodeError, setPincodeError] = useState("");
   
   // New States for Navigation Redesign
-  const [navMenu, setNavMenu] = useState({ tests: [], packages: [] });
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'tests' | 'packages' | null
+  const [navMenu, setNavMenu] = useState({ tests: [], packages: [], scans: [] });
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'tests' | 'packages' | 'scans' | null
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const [mobileActiveAccordion, setMobileActiveAccordion] = useState(null); // 'tests' | 'packages' | null
+  const [mobileActiveAccordion, setMobileActiveAccordion] = useState(null); // 'tests' | 'packages' | 'scans' | null
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
 
@@ -57,6 +57,11 @@ export function Navbar({
       { name: "Preventive", category: "Full Body Checkup", page: "package-listing" },
       { name: "Women", category: "Pregnancy", page: "package-listing" },
       { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
+    ],
+    scans: [
+      { name: "Imaging", category: "Imaging", page: "scans-landing" },
+      { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-landing" },
+      { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-landing" }
     ]
   };
 
@@ -225,6 +230,45 @@ export function Navbar({
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   {navMenu.tests.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleItemNavigation(item)}
+                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#006d77] transition-colors"
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Scans & Procedures Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'scans' ? null : 'scans')}
+                onMouseEnter={() => setActiveDropdown('scans')}
+                className={`flex items-center gap-1 hover:text-[#006d77] transition-colors py-2 outline-none select-none cursor-pointer ${
+                  activeDropdown === 'scans' ? 'text-[#006d77]' : ''
+                }`}
+              >
+                <span onClick={(e) => { e.stopPropagation(); setPage("scans-landing"); setActiveDropdown(null); }} className="hover:underline">Scans &amp; Procedures</span>
+                <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
+                  activeDropdown === 'scans' ? 'rotate-180' : ''
+                }`}>keyboard_arrow_down</span>
+              </button>
+
+              {activeDropdown === 'scans' && (
+                <div 
+                  className="absolute top-[42px] left-0 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button
+                    onClick={() => { setPage("scans-landing"); setActiveDropdown(null); }}
+                    className="w-full px-4 py-2 hover:bg-[#00535b]/5 text-left font-extrabold text-xs text-[#00535b] hover:text-[#006d77] transition-colors border-b border-slate-100/50 mb-1"
+                  >
+                    All Scans &amp; Procedures
+                  </button>
+                  {(navMenu.scans || []).map((item, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleItemNavigation(item)}
@@ -598,6 +642,42 @@ export function Navbar({
                   {mobileActiveAccordion === 'tests' && (
                     <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
                       {navMenu.tests.map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleItemNavigation(item)}
+                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#006d77] block"
+                        >
+                          {item.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Scans & Procedures Accordion Link */}
+                <div className="border border-slate-100 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setMobileActiveAccordion(mobileActiveAccordion === 'scans' ? null : 'scans')}
+                    className="w-full flex items-center justify-between py-2.5 px-3 bg-slate-50/50 hover:bg-slate-50 transition-all outline-none"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base text-slate-400">biotech</span>
+                      <span>Scans &amp; Procedures</span>
+                    </div>
+                    <span className={`material-symbols-outlined text-base transition-transform ${
+                      mobileActiveAccordion === 'scans' ? 'rotate-180' : ''
+                    }`}>keyboard_arrow_down</span>
+                  </button>
+
+                  {mobileActiveAccordion === 'scans' && (
+                    <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
+                      <button
+                        onClick={() => { setPage("scans-landing"); setMobileDrawerOpen(false); }}
+                        className="w-full py-2 text-left text-xs font-extrabold text-[#00535b] hover:text-[#006d77] block border-b border-slate-50"
+                      >
+                        All Scans &amp; Procedures
+                      </button>
+                      {(navMenu.scans || []).map((item, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleItemNavigation(item)}

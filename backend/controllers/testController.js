@@ -605,3 +605,66 @@ exports.get_api_labs_labId_profile = async (req, res) => {
   }
 };
 
+// ─── GET /api/scans-landing/data ─────────────────────────────────────────────
+exports.get_api_scans_landing_data = async (req, res) => {
+  try {
+    // 1. Fetch categories
+    const categoriesRes = await db.query('SELECT * FROM scanning_categories ORDER BY display_order ASC');
+    const categories = categoriesRes.rows;
+
+    // 2. Fetch tests to map into categories
+    const testsRes = await db.query('SELECT id, name, sub_category FROM tests WHERE cat = \'scanning\' AND sub_category IS NOT NULL ORDER BY id ASC');
+    const allScanTests = testsRes.rows;
+
+    // Nest tests inside categories
+    const categoriesWithTests = categories.map(cat => {
+      return {
+        ...cat,
+        starts_price: 350, // default starts_price fallback
+        labs_count: 5,
+        sub_label: cat.description,
+        tests: allScanTests.filter(t => t.sub_category === cat.name).map(t => t.name)
+      };
+    });
+
+    // 3. Fetch popular scans (minimum price from branches)
+    const popularRes = await db.query(`
+      SELECT 
+        t.id, 
+        t.name, 
+        t.sub_category, 
+        COALESCE(MIN(ltb.price), t.price, 450) AS price, 
+        COALESCE(MIN(ltb.reporting_time), t.rep, '24 Hours') AS rep 
+      FROM tests t
+      LEFT JOIN lab_test_branches ltb ON t.id = ltb.test_id AND ltb.is_available = true
+      WHERE t.cat = 'scanning' AND t.sub_category IS NOT NULL
+      GROUP BY t.id, t.name, t.sub_category, t.price, t.rep
+      ORDER BY t.id ASC
+      LIMIT 8
+    `);
+    const popular = popularRes.rows;
+
+    // 4. Return standard static/dynamic FAQs
+    const faqs = [
+      { id: 1, question: "What is the difference between an MRI and a CT scan?", answer: "An MRI uses magnetic fields and radio waves to create detailed images of soft tissues, ligaments, and organs. A CT scan uses X-rays to create cross-sectional images of bones, chest, and blood vessels, and is generally much faster." },
+      { id: 2, question: "How should I prepare for an Ultrasound Abdomen?", answer: "For an abdominal ultrasound, you generally need to fast (no food or drink except water) for 8 to 12 hours before your appointment to minimize gas in your stomach and intestines." },
+      { id: 3, question: "Are home collection options available for scans?", answer: "No, scans and imaging procedures (like MRI, CT, Ultrasound, and X-ray) must be performed at one of our certified partner laboratory branches or diagnostic centers due to the specialized equipment required." }
+    ];
+
+    // 5. Fetch partner labs
+    const partnersRes = await db.query('SELECT id, name FROM labs WHERE is_active = true LIMIT 5');
+    const partners = partnersRes.rows;
+
+    res.json({
+      categories: categoriesWithTests,
+      popular,
+      faqs,
+      partners
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load scans landing data' });
+  }
+};
+
+

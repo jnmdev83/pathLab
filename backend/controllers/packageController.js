@@ -880,6 +880,13 @@ exports.get_api_package_branch_competitors = async (req, res) => {
 exports.get_api_nav_menu = async (req, res) => {
   try {
     // Dynamic navigation structure backed by database checks
+    const scansRes = await db.query('SELECT name FROM scanning_categories ORDER BY display_order ASC');
+    const scansList = scansRes.rows.map(row => ({
+      name: row.name,
+      category: row.name,
+      page: "scans-landing"
+    }));
+
     const menuStructure = {
       tests: [
         { name: "Heart", category: "Heart", page: "category-listing" },
@@ -901,6 +908,11 @@ exports.get_api_nav_menu = async (req, res) => {
         { name: "Preventive", category: "Full Body Checkup", page: "package-listing" },
         { name: "Women", category: "Pregnancy", page: "package-listing" },
         { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
+      ],
+      scans: scansList.length > 0 ? scansList : [
+        { name: "Imaging", category: "Imaging", page: "scans-landing" },
+        { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-landing" },
+        { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-landing" }
       ]
     };
     
