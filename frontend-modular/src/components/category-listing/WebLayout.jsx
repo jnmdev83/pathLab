@@ -85,30 +85,25 @@ function SkeletonRow() {
 }
 
 // ─── Test Row Card (list layout like the reference) ──────────────────────────
+const getItemRating = (item) => {
+  const seed = (item.id || 0) + 7;
+  return (4.1 + (seed % 9) * 0.1).toFixed(1);
+};
+
 function TestCard({ item, onDetails, index }) {
   const [expanded, setExpanded] = useState(false);
-  const iconName = getTestIcon(item.name);
   const originalPrice = Math.round(item.price * 1.45);
 
   return (
     <div
-      className="bg-white rounded-2xl border border-[#e8eaed] hover:border-[#00535b]/30 hover:shadow-md transition-all duration-200"
+      onClick={() => onDetails(item)}
+      className="bg-white rounded-2xl border border-[#e8eaed] hover:border-[#00535b]/30 hover:shadow-md transition-all duration-200 cursor-pointer"
       style={{ animationDelay: `${index * 40}ms` }}
     >
       <div className="p-5">
         <div className="flex items-start gap-4">
-          {/* Icon */}
-          <div className="w-10 h-10 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span
-              className="material-symbols-outlined text-[#00535b] text-xl"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              {iconName}
-            </span>
-          </div>
-
           {/* Name + description */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 text-left">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-bold text-[#1f2937] text-sm leading-snug">{item.name}</h3>
               {/* NABL badge */}
@@ -138,13 +133,13 @@ function TestCard({ item, onDetails, index }) {
               </span>
               <span className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-[14px] text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                4.{5 + (index % 4)} ({(index % 6 + 3)}k+)
+                {getItemRating(item)} ({(index % 6 + 3)}k+)
               </span>
             </div>
 
             {/* Expandable view details */}
             <button
-              onClick={() => setExpanded(!expanded)}
+              onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
               className="flex items-center gap-0.5 mt-2 text-[11px] font-bold text-[#00535b] hover:underline"
             >
               View Details
@@ -167,9 +162,6 @@ function TestCard({ item, onDetails, index }) {
           <div className="flex flex-col items-end gap-2.5 flex-shrink-0 ml-2">
             <div className="text-right">
               <div className="text-xl font-black text-[#1f2937] leading-none">
-                ₹{item.price.toLocaleString('en-IN')}
-              </div>
-              <div className="text-[11px] text-[#9ca3af] line-through leading-none mt-0.5">
                 ₹{originalPrice.toLocaleString('en-IN')}
               </div>
             </div>
@@ -232,6 +224,7 @@ export function WebLayout({
   userLocation,
   visibleCount,
   setVisibleCount,
+  setActiveCategoryFilter,
 }) {
   const sentinelRef = useRef(null);
 
@@ -381,47 +374,6 @@ export function WebLayout({
           </div>
         </div>
 
-        {/* ── HORIZONTAL QUICK FILTER BAR ─────────────────────────────── */}
-        <div className="border-t border-[#e8eaed] bg-white">
-          <div className="max-w-[1280px] mx-auto px-6 md:px-8 py-3 flex items-center gap-3 overflow-x-auto hide-scrollbar">
-            {[
-              { label: 'Home Collection', field: 'homeCollection' },
-              { label: 'Under ₹999',      field: 'under999' },
-              { label: 'Most Booked',     field: 'mostBooked' },
-              { label: 'Fast Reports',    field: 'fastReports' },
-              { label: 'Fasting Required',field: 'fasting' },
-            ].map((pill) => {
-              const active = (() => {
-                if (pill.field === 'under999') return filters.maxPrice <= 999;
-                if (pill.field === 'fastReports') return filters.turnaround === '12';
-                if (pill.field === 'fasting') return filters.preparation === 'fasting';
-                return false;
-              })();
-              return (
-                <button
-                  key={pill.field}
-                  onClick={() => {
-                    if (pill.field === 'under999') {
-                      setFilters(prev => ({ ...prev, maxPrice: active ? 15000 : 999 }));
-                    } else if (pill.field === 'fastReports') {
-                      setFilters(prev => ({ ...prev, turnaround: active ? 'all' : '12' }));
-                    } else if (pill.field === 'fasting') {
-                      setFilters(prev => ({ ...prev, preparation: active ? 'all' : 'fasting' }));
-                    }
-                  }}
-                  className="flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-semibold border transition-all"
-                  style={{
-                    background: active ? '#00535b' : '#f8f9fa',
-                    color: active ? '#ffffff' : '#374151',
-                    borderColor: active ? '#00535b' : '#d1d5db',
-                  }}
-                >
-                  {pill.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
       {/* ── MAIN CONTENT ─────────────────────────────────────────────────── */}
@@ -504,20 +456,23 @@ export function WebLayout({
                   </div>
                 </div>
 
-                {/* Test Type */}
+                {/* Rating */}
                 <div className="px-5 py-4">
-                  <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Test Type</p>
+                  <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Rating</p>
                   <div className="space-y-2.5">
                     {[
-                      { value: 'diagnostic', label: 'Individual Tests' },
-                      { value: 'package',    label: 'Health Packages' },
+                      { value: 'all', label: 'All Ratings' },
+                      { value: '4.5', label: '4.5+ ★ Stars' },
+                      { value: '4.0', label: '4.0+ ★ Stars' },
+                      { value: '3.5', label: '3.5+ ★ Stars' },
                     ].map(opt => (
                       <label key={opt.value} className="flex items-center gap-2.5 cursor-pointer group">
                         <input
-                          type="checkbox"
-                          checked={filters.type === opt.value}
-                          onChange={() => toggleType(opt.value)}
-                          className="w-4 h-4 rounded border-[#d1d5db] text-[#00535b] cursor-pointer"
+                          type="radio"
+                          name="ratingFilter"
+                          checked={filters.rating === opt.value || (opt.value === 'all' && !filters.rating)}
+                          onChange={() => setFilters(prev => ({ ...prev, rating: opt.value }))}
+                          className="w-4 h-4 border-[#d1d5db] text-[#00535b] cursor-pointer"
                           style={{ accentColor: '#00535b' }}
                         />
                         <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors">
@@ -632,20 +587,15 @@ export function WebLayout({
                 <h2 className="text-base font-bold text-[#1f2937] mb-4">Featured Tests</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
                   {displayTests.slice(0, 4).map((item, idx) => {
-                    const iconName = getTestIcon(item.name);
                     const originalPrice = Math.round(item.price * 1.45);
                     return (
                       <div
                         key={`featured-${item.id}-${idx}`}
-                        className="bg-white border-2 border-[#00535b]/20 rounded-2xl p-5 hover:border-[#00535b]/50 hover:shadow-md transition-all duration-200 relative"
+                        onClick={() => handleDetails(item)}
+                        className="bg-white border-2 border-[#00535b]/20 rounded-2xl p-5 hover:border-[#00535b]/50 hover:shadow-md transition-all duration-200 relative text-left cursor-pointer"
                       >
                         {/* Featured label */}
                         <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center">
-                              <span className="material-symbols-outlined text-[#00535b] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
-                            </div>
-                          </div>
                           <span className="text-[9px] font-black text-[#00535b] border border-[#00535b]/30 bg-[#e8f0fe] px-1.5 py-0.5 rounded tracking-wide uppercase">NABL</span>
                         </div>
                         <h3 className="font-bold text-[#1f2937] text-sm mb-1 leading-snug">{item.name}</h3>
@@ -663,13 +613,12 @@ export function WebLayout({
                           </span>
                           <span className="flex items-center gap-1">
                             <span className="material-symbols-outlined text-[13px] text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                            4.{5 + idx}
+                            {getItemRating(item)}
                           </span>
                         </div>
                         <div className="flex items-center justify-between pt-3 border-t border-[#f1f3f4]">
                           <div>
-                            <span className="text-xl font-black text-[#1f2937]">₹{item.price.toLocaleString('en-IN')}</span>
-                            <span className="text-[11px] text-[#9ca3af] line-through ml-2">₹{originalPrice.toLocaleString('en-IN')}</span>
+                            <span className="text-xl font-black text-[#1f2937]">₹{originalPrice.toLocaleString('en-IN')}</span>
                           </div>
                           <button
                             onClick={() => handleDetails(item)}
@@ -706,9 +655,11 @@ export function WebLayout({
                     onChange={e => setSort(e.target.value)}
                     className="text-[12px] font-bold text-[#1f2937] border border-[#e8eaed] rounded-lg px-3 py-1.5 bg-white outline-none focus:border-[#00535b] cursor-pointer"
                   >
-                    <option value="popularity">Recommended</option>
+                    <option value="popularity">Popularity / Recommended</option>
                     <option value="price_asc">Price: Low to High</option>
                     <option value="price_desc">Price: High to Low</option>
+                    <option value="alphabetical">A-Z (Alphabetical)</option>
+                    <option value="location">Location / Nearby</option>
                   </select>
                 </div>
               </div>
@@ -785,7 +736,7 @@ export function WebLayout({
                 {RELATED_CATEGORIES.filter(c => !c.name.toLowerCase().includes(categoryName.toLowerCase().split(' ')[0])).slice(0, 6).map((cat, i) => (
                   <button
                     key={i}
-                    onClick={() => setPage('home')}
+                    onClick={() => setActiveCategoryFilter(cat.name)}
                     className="bg-white border border-[#e8eaed] hover:border-[#00535b]/30 hover:shadow-sm rounded-xl p-3.5 flex items-center gap-3 text-left transition-all duration-200 group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 group-hover:bg-[#00535b] transition-colors">

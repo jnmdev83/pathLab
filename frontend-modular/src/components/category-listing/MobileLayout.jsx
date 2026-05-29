@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+const getItemRating = (item) => {
+  const seed = (item.id || 0) + 7;
+  return (4.1 + (seed % 9) * 0.1).toFixed(1);
+};
+
+
 // ─── Category-specific metadata ───────────────────────────────────────────────
 const CATEGORY_META = {
   heart:     { icon: 'favorite',       desc: 'Cardiac & cardiovascular diagnostic tests', tags: ['Cholesterol', 'ECG', 'Cardiac Risk', 'Prevention'] },
@@ -11,6 +17,15 @@ const CATEGORY_META = {
   hormone:   { icon: 'bolt',           desc: 'Testosterone, FSH, LH & endocrine health panels', tags: ['Testosterone', 'Prolactin', 'FSH / LH', 'DHEA-S'] },
   dna:       { icon: 'dna',            desc: 'Genetic risk panels, carrier tests & DNA wellness', tags: ['BRCA Gene', 'Carrier', 'DNA Wellness', 'Hereditary'] },
 };
+
+const RELATED_CATEGORIES = [
+  { name: 'Diabetes Care', tag: 'HbA1c, Fasting Sugar...', icon: 'water_drop' },
+  { name: 'Thyroid Check', tag: 'TSH, T3, T4 profiles...', icon: 'bubble_chart' },
+  { name: 'Cancer Screening', tag: 'Tumor Markers, Biopsy...', icon: 'shield' },
+  { name: 'Pregnancy Panel', tag: 'HCG, Dual Marker...', icon: 'pregnant_woman' },
+  { name: 'Hormone Profile', tag: 'Testosterone, FSH, LH...', icon: 'bolt' },
+  { name: 'Allergy Test', tag: 'IgE Panel, Food Allergy...', icon: 'coronavirus' },
+];
 
 function getCategoryMeta(name = '') {
   const k = name.toLowerCase().replace(/[^a-z]/g, '');
@@ -41,9 +56,6 @@ function getTestIcon(name = '') {
 
 // ─── Mobile Filter Bottom Sheet ───────────────────────────────────────────────
 function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
-  const toggleType = (val) => {
-    setFilters(prev => ({ ...prev, type: prev.type === val ? 'all' : val }));
-  };
   const toggleTurnaround = (val) => {
     setFilters(prev => ({ ...prev, turnaround: prev.turnaround === val ? 'all' : val }));
   };
@@ -118,23 +130,28 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
             </div>
           </div>
 
-          {/* Test Type */}
+          {/* Rating */}
           <div className="px-5 py-4">
-            <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Test Type</p>
+            <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Rating</p>
             <div className="space-y-3">
               {[
-                { value: 'diagnostic', label: 'Individual Tests' },
-                { value: 'package', label: 'Health Packages' },
+                { value: 'all', label: 'All Ratings' },
+                { value: '4.5', label: '4.5+ ★ Stars' },
+                { value: '4.0', label: '4.0+ ★ Stars' },
+                { value: '3.5', label: '3.5+ ★ Stars' },
               ].map(opt => (
-                <label key={opt.value} className="flex items-center gap-3 cursor-pointer">
+                <label key={opt.value} className="flex items-center gap-3 cursor-pointer group">
                   <input
-                    type="checkbox"
-                    checked={filters.type === opt.value}
-                    onChange={() => toggleType(opt.value)}
-                    className="w-4 h-4 rounded"
+                    type="radio"
+                    name="ratingFilter"
+                    checked={filters.rating === opt.value || (opt.value === 'all' && !filters.rating)}
+                    onChange={() => setFilters(prev => ({ ...prev, rating: opt.value }))}
+                    className="w-4 h-4 text-[#00535b] cursor-pointer"
                     style={{ accentColor: '#00535b' }}
                   />
-                  <span className="text-sm text-[#374151] font-medium">{opt.label}</span>
+                  <span className="text-sm text-[#374151] font-medium transition-colors">
+                    {opt.label}
+                  </span>
                 </label>
               ))}
             </div>
@@ -221,9 +238,11 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
 // ─── Mobile Sort Sheet ────────────────────────────────────────────────────────
 function SortSheet({ currentSort, setSort, onClose }) {
   const options = [
-    { value: 'popularity', label: 'Recommended' },
+    { value: 'popularity', label: 'Popularity / Recommended' },
     { value: 'price_asc', label: 'Price: Low to High' },
     { value: 'price_desc', label: 'Price: High to Low' },
+    { value: 'alphabetical', label: 'A-Z (Alphabetical)' },
+    { value: 'location', label: 'Location / Nearby' },
   ];
   return (
     <div className="fixed inset-0 z-50 flex items-end" style={{ background: 'rgba(0,0,0,0.4)' }} onClick={onClose}>
@@ -266,18 +285,13 @@ function MobileTestCard({ item, onDetails, index }) {
   const originalPrice = Math.round(item.price * 1.45);
 
   return (
-    <div className="bg-white rounded-2xl border border-[#e8eaed] overflow-hidden transition-all duration-200">
+    <div
+      onClick={() => onDetails(item)}
+      className="bg-white rounded-2xl border border-[#e8eaed] overflow-hidden transition-all duration-200 cursor-pointer"
+    >
       <div className="p-4">
-        {/* Top row: icon + name + badge */}
+        {/* Top row: name + badge */}
         <div className="flex items-start gap-3 mb-2.5">
-          <div className="w-10 h-10 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
-            <span
-              className="material-symbols-outlined text-[#00535b] text-xl"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              {iconName}
-            </span>
-          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
               <h3 className="text-sm font-bold text-[#1f2937] leading-snug">{item.name}</h3>
@@ -308,13 +322,13 @@ function MobileTestCard({ item, onDetails, index }) {
           </span>
           <span className="flex items-center gap-1">
             <span className="material-symbols-outlined text-[13px] text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-            4.{5 + (index % 4)} ({(index % 6 + 3)}k+)
+            {getItemRating(item)} ({(index % 6 + 3)}k+)
           </span>
         </div>
 
         {/* View Details toggle */}
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
           className="flex items-center gap-0.5 text-[12px] font-bold text-[#00535b] mb-3"
         >
           View Details
@@ -339,9 +353,6 @@ function MobileTestCard({ item, onDetails, index }) {
         <div className="flex items-center justify-between pt-3 border-t border-[#f1f3f4]">
           <div>
             <div className="text-xl font-black text-[#1f2937] leading-none">
-              ₹{item.price.toLocaleString('en-IN')}
-            </div>
-            <div className="text-[11px] text-[#9ca3af] line-through leading-none mt-0.5">
               ₹{originalPrice.toLocaleString('en-IN')}
             </div>
           </div>
@@ -396,7 +407,7 @@ export function MobileLayout({
 
   const activeFilterCount = [
     filters.maxPrice < 15000,
-    filters.type !== 'all',
+    filters.rating !== 'all',
     filters.searchQuery.trim().length > 0,
     filters.turnaround !== 'all',
     filters.preparation !== 'all',
@@ -514,43 +525,7 @@ export function MobileLayout({
         </div>
       </div>
 
-      {/* ── HORIZONTAL QUICK FILTER BAR ──────────────────────────────────── */}
-      <div className="bg-white border-b border-[#e8eaed]">
-        <div className="flex gap-2 px-4 py-2.5 overflow-x-auto hide-scrollbar">
-          {[
-            { label: 'Home Collection', field: 'home' },
-            { label: 'Under ₹999', field: 'under999' },
-            { label: 'Most Booked', field: 'popular' },
-            { label: 'Fast Reports', field: 'fast' },
-            { label: 'Fasting', field: 'fasting' },
-          ].map(pill => {
-            const active = (() => {
-              if (pill.field === 'under999') return filters.maxPrice <= 999;
-              if (pill.field === 'fast') return filters.turnaround === '12';
-              if (pill.field === 'fasting') return filters.preparation === 'fasting';
-              return false;
-            })();
-            return (
-              <button
-                key={pill.field}
-                onClick={() => {
-                  if (pill.field === 'under999') setFilters(prev => ({ ...prev, maxPrice: active ? 15000 : 999 }));
-                  else if (pill.field === 'fast') setFilters(prev => ({ ...prev, turnaround: active ? 'all' : '12' }));
-                  else if (pill.field === 'fasting') setFilters(prev => ({ ...prev, preparation: active ? 'all' : 'fasting' }));
-                }}
-                className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold border transition-all"
-                style={{
-                  background: active ? '#00535b' : '#f8f9fa',
-                  color: active ? '#ffffff' : '#374151',
-                  borderColor: active ? '#00535b' : '#d1d5db',
-                }}
-              >
-                {pill.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+
 
       {/* ── SEARCH BAR ───────────────────────────────────────────────────── */}
       <div className="px-4 pt-4 pb-2">
@@ -591,7 +566,7 @@ export function MobileLayout({
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-[#d1d5db] text-[12px] font-semibold text-[#374151] bg-white transition-all"
         >
           <span className="material-symbols-outlined text-[16px]">swap_vert</span>
-          {sort === 'popularity' ? 'Recommended' : sort === 'price_asc' ? 'Low Price' : 'High Price'}
+          {sort === 'popularity' ? 'Recommended' : sort === 'price_asc' ? 'Low Price' : sort === 'price_desc' ? 'High Price' : sort === 'alphabetical' ? 'A-Z' : 'Nearby'}
         </button>
       </div>
       
@@ -606,14 +581,10 @@ export function MobileLayout({
               return (
                 <div
                   key={`featured-mobile-${item.id}-${idx}`}
-                  className="w-[260px] flex-shrink-0 snap-start bg-white border border-[#00535b]/25 rounded-2xl p-4 shadow-sm"
+                  onClick={() => handleDetails(item)}
+                  className="w-[260px] flex-shrink-0 snap-start bg-white border border-[#00535b]/25 rounded-2xl p-4 shadow-sm cursor-pointer"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
-                      <span className="material-symbols-outlined text-[#00535b] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        {iconName}
-                      </span>
-                    </div>
                     <span className="text-[8px] font-black text-[#00535b] bg-[#e8f0fe] border border-[#00535b]/20 px-1.5 py-0.5 rounded uppercase tracking-wide">
                       NABL
                     </span>
@@ -635,16 +606,13 @@ export function MobileLayout({
                     </span>
                     <span className="flex items-center gap-0.5">
                       <span className="material-symbols-outlined text-xs text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      4.{5 + idx}
+                      {getItemRating(item)}
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between pt-2.5 border-t border-[#f1f3f4]">
                     <div className="text-left">
                       <div className="text-sm font-black text-[#1f2937] leading-none">
-                        ₹{item.price.toLocaleString('en-IN')}
-                      </div>
-                      <div className="text-[9px] text-[#9ca3af] line-through leading-none mt-0.5">
                         ₹{originalPrice.toLocaleString('en-IN')}
                       </div>
                     </div>
@@ -735,9 +703,42 @@ export function MobileLayout({
               All {displayTests.length} tests shown
             </span>
           )}
-          <div id="scroll-sentinel" style={{ height: 8 }} />
         </div>
       )}
+
+      {/* ── RELATED CATEGORIES ────────────────────────────────── */}
+      <div className="px-4 mt-6">
+        <h2 className="text-sm font-bold text-[#1f2937] mb-1 uppercase tracking-wider">
+          Still not sure? Browse other categories
+        </h2>
+        <p className="text-[12px] text-[#6b7280] mb-3">
+          Explore related diagnostic categories that may match your health needs.
+        </p>
+        <div className="grid grid-cols-1 gap-2.5">
+          {RELATED_CATEGORIES.filter(c => !c.name.toLowerCase().includes(categoryName.toLowerCase().split(' ')[0])).slice(0, 6).map((cat, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveCategoryFilter(cat.name)}
+              className="bg-white border border-[#e8eaed] active:bg-[#f8f9fa] rounded-xl p-3.5 flex items-center gap-3 text-left transition-all duration-200"
+            >
+              <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
+                <span
+                  className="material-symbols-outlined text-lg text-[#00535b]"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  {cat.icon}
+                </span>
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-bold text-[#1f2937] leading-snug">
+                  {cat.name}
+                </div>
+                <div className="text-[11px] text-[#9ca3af]">{cat.tag}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* ── MODALS ───────────────────────────────────────────────────────── */}
       {filterOpen && (

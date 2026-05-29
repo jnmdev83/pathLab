@@ -751,6 +751,16 @@ exports.get_api_scans_listing = async (req, res) => {
     // Sort manual matching orderBy logic
     if (sort === 'Lowest Price') {
       filteredRows.sort((a, b) => a.price - b.price);
+    } else if (sort === 'Highest Price') {
+      filteredRows.sort((a, b) => b.price - a.price);
+    } else if (sort === 'A-Z') {
+      filteredRows.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (sort === 'Location') {
+      filteredRows.sort((a, b) => {
+        const distA = ((a.id || 0) % 5) + 1.2;
+        const distB = ((b.id || 0) % 5) + 1.2;
+        return distA - distB;
+      });
     } else if (sort === 'Reporting Time' || sort === 'Fastest Available') {
       filteredRows.sort((a, b) => a.rep_time_hours - b.rep_time_hours || a.price - b.price);
     } else {

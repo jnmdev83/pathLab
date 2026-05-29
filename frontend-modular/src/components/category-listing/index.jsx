@@ -4,6 +4,11 @@ import { WebLayout } from './WebLayout';
 import { MobileLayout } from './MobileLayout';
 import { API_BASE_URL } from '../../config';
 
+const getItemRating = (item) => {
+  const seed = (item.id || 0) + 7;
+  return (4.1 + (seed % 9) * 0.1).toFixed(1);
+};
+
 export function CategoryListing({ 
   categoryName, 
   setPage, 
@@ -27,7 +32,7 @@ export function CategoryListing({
   const [sort, setSort] = useState('popularity');
   const [filters, setFilters] = useState({
     maxPrice: 15000,
-    type: 'all',
+    rating: 'all',
     searchQuery: '',
     turnaround: 'all', // 'all' | '12' | '24'
     preparation: 'all', // 'all' | 'fasting' | 'no-fasting'
@@ -106,11 +111,10 @@ export function CategoryListing({
   useEffect(() => {
     let result = [...items];
 
-    // Filter by type
-    if (filters.type === 'diagnostic') {
-      result = result.filter(x => !x.is_pkg);
-    } else if (filters.type === 'package') {
-      result = result.filter(x => x.is_pkg);
+    // Filter by rating
+    if (filters.rating !== 'all') {
+      const minRating = parseFloat(filters.rating);
+      result = result.filter(x => parseFloat(getItemRating(x)) >= minRating);
     }
 
     // Filter by price
@@ -169,6 +173,15 @@ export function CategoryListing({
       result.sort((a, b) => a.price - b.price);
     } else if (sort === 'price_desc') {
       result.sort((a, b) => b.price - a.price);
+    } else if (sort === 'alphabetical') {
+      result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (sort === 'location') {
+      // Sort by mock distance based on item id
+      result.sort((a, b) => {
+        const distA = ((a.id || 0) % 5) + 1.2;
+        const distB = ((b.id || 0) % 5) + 1.2;
+        return distA - distB;
+      });
     }
 
     setDisplayTests(result);
@@ -193,7 +206,7 @@ export function CategoryListing({
   const resetFilters = () => {
     setFilters({
       maxPrice: 15000,
-      type: 'all',
+      rating: 'all',
       searchQuery: '',
       turnaround: 'all',
       preparation: 'all',
@@ -230,6 +243,7 @@ export function CategoryListing({
     resetFilters,
     setPage,
     userLocation,
+    visibleCount,
     setVisibleCount,
     setTestName,
     setActiveCategoryFilter

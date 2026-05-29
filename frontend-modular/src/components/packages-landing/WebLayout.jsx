@@ -146,7 +146,7 @@ export function WebLayout({
             <img 
               alt="Comparison Diagnostic Dashboard" 
               className="rounded-3xl shadow-2xl relative z-10 border border-white max-h-[380px] w-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuEnczBLJgFmSsDQaP55axVS-6ATNYvYcFibfEpWNLuCjItmtRLLxz864piOzZBOuhyEk76gce9yDnujIF-iEcboFvMCTlloLieGDkuakzQBEkpOG8q12MMrDLnf-w0U8xMfpyg4EnIfdOKMSkRhfU6HFjEj11FbsCnoALoOxkLQNlnGD1kSIiuIDmH84LpjpIf5K52wOLFgRzWAHXrtu0DRMJ1tCsTH13DNsyULWCsN9t9T2BJ-y4l-myN27FnaSb5Nt2rwR0C0d8"
+              src="/diagnostic_dashboard.png"
             />
             {/* Floating Data Card */}
             <div className="absolute bottom-6 -left-8 bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-xl z-20 border border-[#c3c6d6]/20 flex items-center gap-3.5 transition-all hover:scale-105 select-none">

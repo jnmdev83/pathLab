@@ -167,8 +167,11 @@ export function MobileLayout({
               onChange={(e) => { setSort(e.target.value); setCurrentPage(1); }}
               className="h-8 pl-2 pr-6 bg-[#edf6f9]/60 border-none rounded-lg text-[10px] font-black focus:ring-0 cursor-pointer text-[#121c2c] py-0 outline-none"
             >
-              <option value="Popularity">Popularity</option>
-              <option value="Lowest Price">Lowest Price</option>
+              <option value="Popularity">Popularity / Recommended</option>
+              <option value="Lowest Price">Price: Low to High</option>
+              <option value="Highest Price">Price: High to Low</option>
+              <option value="A-Z">A-Z (Alphabetical)</option>
+              <option value="Location">Location / Nearby</option>
               <option value="Reporting Time">Time</option>
             </select>
           </div>

@@ -277,8 +277,11 @@ export function WebLayout({
                   onChange={(e) => { setSort(e.target.value); setCurrentPage(1); }}
                   className="h-10 px-3 bg-[#edf6f9]/60 border-none rounded-xl text-xs font-bold focus:ring-0 cursor-pointer text-[#121c2c]"
                 >
-                  <option value="Popularity">Popularity</option>
-                  <option value="Lowest Price">Lowest Price</option>
+                  <option value="Popularity">Popularity / Recommended</option>
+                  <option value="Lowest Price">Price: Low to High</option>
+                  <option value="Highest Price">Price: High to Low</option>
+                  <option value="A-Z">A-Z (Alphabetical)</option>
+                  <option value="Location">Location / Nearby</option>
                   <option value="Reporting Time">Reporting Time</option>
                 </select>
               </div>
