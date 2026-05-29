@@ -46,6 +46,11 @@ export function ScansListing({
     }
   }, [categoryName]);
 
+  // Reset page to 1 when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, search, maxPrice, bodyPart, equipmentType, anesthesia, sort]);
+
   // Fetch scans listing data
   useEffect(() => {
     setLoading(true);
@@ -69,7 +74,16 @@ export function ScansListing({
         return res.json();
       })
       .then(json => {
-        setData(json);
+        if (currentPage === 1) {
+          setData(json);
+        } else {
+          setData(prev => ({
+            ...prev,
+            tests: [...prev.tests, ...(json.tests || [])],
+            currentPage: json.currentPage,
+            totalPages: json.totalPages
+          }));
+        }
         setLoading(false);
       })
       .catch(err => {

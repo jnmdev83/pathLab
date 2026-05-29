@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 // Maps lab name to modern brand color and visual icon placeholder
 function getLabLogoStyle(labName = "") {
@@ -38,8 +38,26 @@ export function WebLayout({
   userLocation,
   requestGeolocation,
   setSelectedLab,
-  setMultiCompareOpen
+  setMultiCompareOpen,
 }) {
+  const sentinelRef = useRef(null);
+
+  // ── Infinite scroll via IntersectionObserver ──────────────────────────────
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore || loadingOffers) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setPageNum(prev => prev + 1);
+        }
+      },
+      { threshold: 0.1, rootMargin: '150px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, loadingOffers, setPageNum]);
   const [readMoreOpen, setReadMoreOpen] = useState(false);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
 
@@ -557,16 +575,23 @@ export function WebLayout({
             )}
           </div>
 
-          {/* D. PAGINATION LOAD MORE */}
-          {hasMore && (
-            <div className="pt-4 flex justify-center">
-              <button 
-                onClick={() => setPageNum(prev => prev + 1)}
-                className="px-8 py-4 border-2 border-[#00535b] text-[#00535b] font-black text-xs rounded-full hover:bg-[#00535b]/5 transition-all uppercase tracking-wider active:scale-95 font-headline"
-              >
-                Load More Dynamic Packages
-              </button>
+          {/* Infinite Scroll Sentinel */}
+          <div ref={sentinelRef} className="h-2" />
+
+          {/* Loading More Indicator */}
+          {loadingOffers && (
+            <div className="flex justify-center py-6">
+              <div className="flex items-center gap-2 text-primary text-sm font-medium">
+                <span className="material-symbols-outlined animate-spin text-lg">refresh</span>
+                Loading more packages…
+              </div>
             </div>
+          )}
+
+          {!hasMore && offers.length > 0 && (
+            <p className="text-center text-slate-400 text-xs mt-8 py-4">
+              — All {totalOffers} packages shown —
+            </p>
           )}
 
         </div>

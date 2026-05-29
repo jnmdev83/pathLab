@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const LAB_ICONS = ['biotech', 'science', 'medication', 'health_metrics', 'clinical_notes', 'fluid', 'labs', 'biotech'];
 
@@ -265,7 +265,6 @@ function FilterSidebar({ filters, setFilters, resetFilters }) {
   );
 }
 
-// ─── Main Desktop Layout ──────────────────────────────────────────────────────
 export function WebLayout({
   testMeta, topPicks, results, total, hasMore,
   loading, loadingMore,
@@ -274,6 +273,23 @@ export function WebLayout({
   loadMore, handleBook, handleDetails, resetFilters,
   setPage,
 }) {
+  const sentinelRef = useRef(null);
+
+  // ── Infinite scroll via IntersectionObserver ──────────────────────────────
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore || loadingMore) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { threshold: 0.1, rootMargin: '150px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, loadingMore, loadMore]);
+
   const hasTopPicks = topPicks && (topPicks.cheapest || topPicks.fastest || topPicks.best_rated);
 
   return (
@@ -387,26 +403,16 @@ export function WebLayout({
               )}
             </div>
 
-            {/* Load More */}
-            {hasMore && (
-              <div className="flex justify-center pt-10">
-                <button
-                  onClick={loadMore}
-                  disabled={loadingMore}
-                  className="px-8 py-3 bg-surface-container-high text-primary font-bold rounded-full hover:bg-primary-container hover:text-on-primary-container transition-all flex items-center gap-2 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {loadingMore ? (
-                    <>
-                      <span className="material-symbols-outlined animate-spin text-lg">refresh</span>
-                      Loading…
-                    </>
-                  ) : (
-                    <>
-                      Load More Results
-                      <span className="material-symbols-outlined">expand_more</span>
-                    </>
-                  )}
-                </button>
+            {/* Infinite Scroll Sentinel */}
+            <div ref={sentinelRef} className="h-2" />
+
+            {/* Loading More Indicator */}
+            {loadingMore && (
+              <div className="flex justify-center py-6">
+                <div className="flex items-center gap-2 text-primary text-sm font-medium">
+                  <span className="material-symbols-outlined animate-spin text-lg">refresh</span>
+                  Loading more results…
+                </div>
               </div>
             )}
 

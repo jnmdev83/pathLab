@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export function MobileLayout({
   category,
@@ -29,6 +29,25 @@ export function MobileLayout({
   error,
   setSelectedLab
 }) {
+  const sentinelRef = useRef(null);
+
+  // ── Infinite scroll via IntersectionObserver ──────────────────────────────
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || currentPage >= totalPages || loading) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage(prev => prev + 1);
+        }
+      },
+      { threshold: 0.1, rootMargin: '150px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [currentPage, totalPages, loading, setCurrentPage]);
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const categoriesList = ['Imaging', 'Endoscopy & Screening', 'Cardiac Diagnostics'];
 
@@ -267,37 +286,23 @@ export function MobileLayout({
           </div>
         )}
 
-        {/* PAGINATION CONTROLS */}
-        {!loading && !error && totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 pt-6">
-            <button 
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-              disabled={currentPage === 1}
-              className="w-9 h-9 rounded-lg flex items-center justify-center border border-[#bec8ca] text-[#3e494a] hover:bg-[#edf6f9] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-sm">chevron_left</span>
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pNum => (
-              <button 
-                key={pNum}
-                onClick={() => setCurrentPage(pNum)}
-                className={`w-9 h-9 rounded-lg flex items-center justify-center text-[10px] font-black transition-all ${
-                  currentPage === pNum
-                    ? 'bg-[#00535b] text-white'
-                    : 'border border-[#bec8ca]/60 text-[#3e494a]'
-                }`}
-              >
-                {pNum}
-              </button>
-            ))}
-            <button 
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-              disabled={currentPage === totalPages}
-              className="w-9 h-9 rounded-lg flex items-center justify-center border border-[#bec8ca] text-[#3e494a] hover:bg-[#edf6f9] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-sm">chevron_right</span>
-            </button>
+        {/* Infinite Scroll Sentinel */}
+        <div ref={sentinelRef} className="h-2" />
+
+        {/* Loading More Indicator */}
+        {loading && currentPage > 1 && (
+          <div className="flex justify-center py-6">
+            <div className="flex items-center gap-2 text-primary text-sm font-medium">
+              <span className="material-symbols-outlined animate-spin text-lg">refresh</span>
+              Loading more scans…
+            </div>
           </div>
+        )}
+
+        {currentPage >= totalPages && tests.length > 0 && !loading && (
+          <p className="text-center text-slate-400 text-xs mt-8 py-4">
+            — All {totalCount} scans shown —
+          </p>
         )}
 
       </main>
