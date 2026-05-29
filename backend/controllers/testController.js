@@ -667,4 +667,123 @@ exports.get_api_scans_landing_data = async (req, res) => {
   }
 };
 
+// ─── GET /api/scans/listing ──────────────────────────────────────────────────
+exports.get_api_scans_listing = async (req, res) => {
+  try {
+    const category = req.query.category || 'Imaging';
+    const search = req.query.search || '';
+    const maxPrice = parseInt(req.query.max_price, 10) || null;
+    const bodyPart = req.query.body_part || null;
+    const equipmentType = req.query.equipment_type || null;
+    const anesthesia = req.query.anesthesia === 'true';
+    const sort = req.query.sort || 'Popularity';
+
+    // Pagination
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.max(1, Math.min(20, parseInt(req.query.limit, 10) || 8));
+    const offset = (page - 1) * limit;
+
+    // 1. Fetch listing tests dynamically
+    const params = [category];
+    let queryExtra = '';
+
+    if (search.trim()) {
+      params.push(`%${search.trim()}%`);
+      queryExtra += ` AND t.name ILIKE $${params.length}`;
+    }
+    if (bodyPart && bodyPart !== 'All Body Parts') {
+      params.push(bodyPart);
+      queryExtra += ` AND t.body_part = $${params.length}`;
+    }
+    if (equipmentType) {
+      params.push(equipmentType);
+      queryExtra += ` AND t.equipment_type = $${params.length}`;
+    }
+    if (anesthesia) {
+      queryExtra += ` AND t.anesthesia_required = true`;
+    }
+
+    const query = `
+      SELECT 
+        t.id, 
+        t.name, 
+        t.description,
+        t.short_description,
+        t.rep, 
+        t.cat, 
+        t.sub_category, 
+        t.body_part, 
+        t.equipment_type, 
+        t.procedure_prep, 
+        t.anesthesia_required, 
+        t.is_trending,
+        COALESCE(MIN(ltb.price), t.price, 450) AS price,
+        COALESCE(MIN(ltb.original_price), CEIL(COALESCE(MIN(ltb.price), t.price, 450) / 0.8)) AS original_price,
+        COALESCE(MIN(ltb.discount_percent), 20) AS discount_percent,
+        CASE 
+          WHEN lower(t.rep) LIKE '%same day%' OR lower(t.rep) LIKE '%6 hour%' THEN 6
+          WHEN lower(t.rep) LIKE '%12%' THEN 12
+          WHEN lower(t.rep) LIKE '%24%' THEN 24
+          ELSE 48
+        END AS rep_time_hours
+      FROM tests t
+      LEFT JOIN lab_test_branches ltb ON t.id = ltb.test_id AND ltb.is_available = true
+      WHERE t.cat = 'scanning' AND t.sub_category = $1 ${queryExtra}
+      GROUP BY t.id, t.name, t.description, t.short_description, t.rep, t.cat, t.sub_category, t.body_part, t.equipment_type, t.procedure_prep, t.anesthesia_required, t.is_trending
+    `;
+
+    // Fetch total count before pagination
+    const allRows = await db.query(query, params);
+    
+    // Apply price filter on the grouped rows if maxPrice is supplied (since price is minimum from ltb)
+    let filteredRows = allRows.rows;
+    if (maxPrice) {
+      filteredRows = filteredRows.filter(row => row.price <= maxPrice);
+    }
+
+    const totalFiltered = filteredRows.length;
+
+    // Sort manual matching orderBy logic
+    if (sort === 'Lowest Price') {
+      filteredRows.sort((a, b) => a.price - b.price);
+    } else if (sort === 'Reporting Time' || sort === 'Fastest Available') {
+      filteredRows.sort((a, b) => a.rep_time_hours - b.rep_time_hours || a.price - b.price);
+    } else {
+      // Popularity
+      filteredRows.sort((a, b) => (b.is_trending ? 1 : 0) - (a.is_trending ? 1 : 0) || a.price - b.price);
+    }
+
+    // Apply pagination
+    const paginatedRows = filteredRows.slice(offset, offset + limit);
+
+    // 2. Fetch dynamic metadata filters for this category
+    const bodyPartsRes = await db.query(
+      'SELECT DISTINCT body_part FROM tests WHERE cat = \'scanning\' AND sub_category = $1 AND body_part IS NOT NULL',
+      [category]
+    );
+    const bodyParts = bodyPartsRes.rows.map(r => r.body_part);
+
+    const equipmentRes = await db.query(
+      'SELECT DISTINCT equipment_type FROM tests WHERE cat = \'scanning\' AND sub_category = $1 AND equipment_type IS NOT NULL',
+      [category]
+    );
+    const equipmentTypes = equipmentRes.rows.map(r => r.equipment_type);
+
+    res.json({
+      tests: paginatedRows,
+      totalCount: totalFiltered,
+      currentPage: page,
+      totalPages: Math.ceil(totalFiltered / limit),
+      filters: {
+        body_parts: bodyParts,
+        equipment_types: equipmentTypes
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load scans listing data' });
+  }
+};
+
+
 

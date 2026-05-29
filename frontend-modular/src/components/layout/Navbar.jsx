@@ -59,9 +59,9 @@ export function Navbar({
       { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
     ],
     scans: [
-      { name: "Imaging", category: "Imaging", page: "scans-landing" },
-      { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-landing" },
-      { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-landing" }
+      { name: "Imaging", category: "Imaging", page: "scans-listing" },
+      { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-listing" },
+      { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-listing" }
     ]
   };
 

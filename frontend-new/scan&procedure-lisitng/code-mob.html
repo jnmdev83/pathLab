@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>PathoChoice | Imaging Scans</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Atkinson+Hyperlegible+Next:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            position: relative;
+        }
+        .active-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #0041a2;
+            border-radius: 99px;
+        }
+        /* Custom scrollbar hide for horizontal tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "on-secondary-fixed-variant": "#005320",
+                        "secondary-container": "#86f898",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-surface-variant": "#424654",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#001847",
+                        "inverse-surface": "#2e3132",
+                        "outline": "#737785",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#b2c5ff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-tint": "#0856cf",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#ffcfbe",
+                        "surface-container-high": "#e7e8e9",
+                        "background": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-fixed": "#dae2ff",
+                        "outline-variant": "#c3c6d6",
+                        "on-secondary-fixed": "#002108",
+                        "on-primary-container": "#ced9ff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "primary-container": "#0b57d0",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbce",
+                        "surface-bright": "#f8f9fa",
+                        "secondary": "#006e2c",
+                        "on-background": "#191c1d",
+                        "surface-container": "#edeeef",
+                        "primary": "#0041a2",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#00722f",
+                        "secondary-fixed": "#89fa9b",
+                        "tertiary": "#802b00",
+                        "on-primary-fixed-variant": "#0040a1",
+                        "on-surface": "#191c1d",
+                        "surface": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#6ddd81",
+                        "tertiary-container": "#a83b00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "80px",
+                        "gutter-mobile": "16px",
+                        "unit": "8px",
+                        "gutter-desktop": "32px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Atkinson Hyperlegible Next"],
+                        "label-md": ["Atkinson Hyperlegible Next"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Atkinson Hyperlegible Next"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Atkinson Hyperlegible Next"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+                        "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-margin-mobile h-16 bg-surface/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center gap-4">
+<button class="text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full" onclick="toggleDrawer()">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">PathoChoice</h1>
+</div>
+<div class="flex items-center">
+<button class="text-primary hover:bg-surface-container-high transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</header>
+<!-- Navigation Drawer (Hidden by default) -->
+<div class="fixed inset-0 bg-black/40 z-[55] opacity-0 pointer-events-none transition-opacity duration-300" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<aside class="fixed inset-y-0 left-0 z-[60] flex flex-col p-6 h-full w-80 rounded-r-xl bg-surface shadow-2xl -translate-x-full transition-transform duration-300" id="nav-drawer">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline-md text-headline-md text-primary font-bold">PathoChoice Menu</h2>
+<button class="text-on-surface-variant" onclick="toggleDrawer()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center gap-4 p-4 bg-primary-container text-on-primary-container font-bold rounded-lg transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="font-label-md text-label-md">Cancer Screening</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="font-label-md text-label-md">Lab Partners</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Educational Resources</span>
+</a>
+<a class="flex items-center gap-4 p-4 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</nav>
+</aside>
+<main class="pt-20 pb-24 px-margin-mobile">
+<!-- Hero Section -->
+<section class="mb-8">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2">Imaging Scans</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">
+                Find and book high-precision diagnostic imaging with accredited partners. All procedures are reviewed by board-certified radiologists.
+            </p>
+</section>
+<!-- Sticky Filter & Tabs -->
+<div class="sticky top-16 bg-background z-40 py-4 -mx-margin-mobile px-margin-mobile space-y-4">
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1 overflow-x-auto no-scrollbar flex items-center gap-6 border-b border-outline-variant">
+<button class="font-label-md text-label-md py-2 text-primary active-tab whitespace-nowrap" onclick="switchTab('imaging', this)">Imaging</button>
+<button class="font-label-md text-label-md py-2 text-on-surface-variant whitespace-nowrap" onclick="switchTab('endoscopy', this)">Endoscopy</button>
+<button class="font-label-md text-label-md py-2 text-on-surface-variant whitespace-nowrap" onclick="switchTab('cardiac', this)">Cardiac</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full hover:bg-surface-container-highest transition-colors active:scale-95" onclick="toggleFilter()">
+<span class="material-symbols-outlined text-primary" data-icon="filter_list">filter_list</span>
+<span class="font-label-sm text-label-sm">Filter</span>
+</button>
+</div>
+</div>
+<!-- Cards Container -->
+<div class="space-y-6 mt-4" id="test-list">
+<!-- Test Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/30 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="bg-primary px-3 py-1 rounded-full text-white font-label-sm text-[10px] inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="sell" style="font-variation-settings: 'FILL' 1;">sell</span>
+                            BEST PRICE
+                        </span>
+<h3 class="font-headline-md text-headline-md text-on-surface">MRI Whole Brain</h3>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary">$450</p>
+<p class="font-label-sm text-on-surface-variant">Estimated</p>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant line-clamp-2">High-resolution magnetic resonance imaging of the cranial structure. Includes specialized sequences for neuro-vascular assessment.</p>
+<div class="flex items-center gap-6 py-2 border-y border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-on-surface-variant">24-48 Hours</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-on-surface-variant">ISO Certified</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 active:scale-[0.98] transition-all">Book Now</button>
+<button class="flex-1 py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-surface-container-low active:scale-[0.98] transition-all">View Details</button>
+</div>
+</div>
+<!-- Test Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/30 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="bg-secondary px-3 py-1 rounded-full text-white font-label-sm text-[10px] inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            CERTIFIED LAB
+                        </span>
+<h3 class="font-headline-md text-headline-md text-on-surface">CT Chest Contrast</h3>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary">$320</p>
+<p class="font-label-sm text-on-surface-variant">Estimated</p>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant line-clamp-2">Contrast-enhanced computed tomography for detailed visualization of lungs, heart, and mediastinal structures.</p>
+<div class="flex items-center gap-6 py-2 border-y border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-on-surface-variant">12-24 Hours</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-on-surface-variant">JCI Accredited</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 active:scale-[0.98] transition-all">Book Now</button>
+<button class="flex-1 py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-surface-container-low active:scale-[0.98] transition-all">View Details</button>
+</div>
+</div>
+<!-- Test Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/30 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-on-surface">Ultrasound Pelvic</h3>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary">$180</p>
+<p class="font-label-sm text-on-surface-variant">Estimated</p>
+</div>
+</div>
+<p class="font-body-md text-on-surface-variant line-clamp-2">Non-invasive ultrasound imaging for evaluating reproductive organs and bladder health. Highly patient-comfortable.</p>
+<div class="flex items-center gap-6 py-2 border-y border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-on-surface-variant">Same Day</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-on-surface-variant">Clinical Excellence</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 active:scale-[0.98] transition-all">Book Now</button>
+<button class="flex-1 py-3 border border-primary text-primary rounded-lg font-label-md hover:bg-surface-container-low active:scale-[0.98] transition-all">View Details</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Filter Drawer (Right Side) -->
+<div class="fixed inset-0 bg-black/40 z-[70] hidden opacity-0 transition-opacity duration-300" id="filter-overlay" onclick="toggleFilter()"></div>
+<div class="fixed top-0 right-0 h-full w-[85%] bg-surface z-[80] translate-x-full transition-transform duration-300 rounded-l-2xl p-6 shadow-2xl overflow-y-auto" id="filter-drawer">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Filters</h3>
+<button class="p-2" onclick="toggleFilter()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="space-y-8">
+<div>
+<p class="font-label-md text-label-md mb-4">Price Range</p>
+<input class="w-full h-2 bg-surface-variant rounded-lg appearance-none cursor-pointer accent-primary" max="1000" min="0" type="range"/>
+<div class="flex justify-between mt-2 text-on-surface-variant font-label-sm">
+<span>$0</span>
+<span>$1000+</span>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md mb-4">Urgency</p>
+<div class="flex flex-wrap gap-3">
+<button class="px-4 py-2 border border-outline rounded-full font-label-sm hover:border-primary hover:text-primary transition-colors">Same Day</button>
+<button class="px-4 py-2 border border-primary bg-primary-container text-on-primary-container rounded-full font-label-sm">Next Day</button>
+<button class="px-4 py-2 border border-outline rounded-full font-label-sm hover:border-primary hover:text-primary transition-colors">72 Hours</button>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md mb-4">Accreditation</p>
+<div class="space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="w-5 h-5 border-outline rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-md text-on-surface">JCI Accredited</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="w-5 h-5 border-outline rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-md text-on-surface">ISO Certified</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="w-5 h-5 border-outline rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="font-body-md text-on-surface">NABL Verified</span>
+</label>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-10 grid grid-cols-2 gap-4">
+<button class="py-4 font-label-md text-primary hover:bg-surface-container-low transition-colors rounded-xl" onclick="toggleFilter()">Reset</button>
+<button class="py-4 font-label-md bg-primary text-on-primary rounded-xl shadow-lg active:scale-95 transition-transform" onclick="toggleFilter()">Apply</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface/90 dark:bg-inverse-surface/90 backdrop-blur-xl border-t border-outline-variant dark:border-outline shadow-[0px_-4px_20px_rgba(11,87,208,0.05)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-label-sm text-label-sm">Comparisons</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('nav-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            const isOpen = !drawer.classList.contains('-translate-x-full');
+            
+            if (isOpen) {
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function toggleFilter() {
+            const drawer = document.getElementById('filter-drawer');
+            const overlay = document.getElementById('filter-overlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-100');
+            } else {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            }
+        }
+
+        function switchTab(tab, element) {
+            // Update UI tabs
+            const tabs = element.parentElement.querySelectorAll('button');
+            tabs.forEach(t => {
+                t.classList.remove('active-tab', 'text-primary');
+                t.classList.add('text-on-surface-variant');
+            });
+            element.classList.add('active-tab', 'text-primary');
+            element.classList.remove('text-on-surface-variant');
+
+            // Simulate content change
+            const list = document.getElementById('test-list');
+            list.style.opacity = '0';
+            list.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                // In a real app, content would change here
+                list.style.transition = 'all 0.4s ease';
+                list.style.opacity = '1';
+                list.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // Handle scroll behavior for navigation
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const bottomNav = document.querySelector('nav.fixed.bottom-0');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                bottomNav.style.transform = 'translateY(100%)';
+            } else {
+                bottomNav.style.transform = 'translateY(0)';
+            }
+            bottomNav.style.transition = 'transform 0.3s ease-in-out';
+            lastScroll = currentScroll;
+        });
+    </script>
+</body></html>

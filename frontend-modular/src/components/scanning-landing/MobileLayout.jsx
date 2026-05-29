@@ -29,7 +29,7 @@ export function MobileLayout({
     if (setActiveCategoryFilter) {
       setActiveCategoryFilter(catName);
     }
-    setPage("category-listing");
+    setPage("scans-listing");
   };
 
   const handleProcedureBook = (proc) => {

@@ -881,10 +881,10 @@ exports.get_api_nav_menu = async (req, res) => {
   try {
     // Dynamic navigation structure backed by database checks
     const scansRes = await db.query('SELECT name FROM scanning_categories ORDER BY display_order ASC');
-    const scansList = scansRes.rows.map(row => ({
+    const scansList = scansRes.rows.rows ? [] : scansRes.rows.map(row => ({
       name: row.name,
       category: row.name,
-      page: "scans-landing"
+      page: "scans-listing"
     }));
 
     const menuStructure = {
@@ -910,9 +910,9 @@ exports.get_api_nav_menu = async (req, res) => {
         { name: "Senior Citizen", category: "Senior Citizen", page: "package-listing" }
       ],
       scans: scansList.length > 0 ? scansList : [
-        { name: "Imaging", category: "Imaging", page: "scans-landing" },
-        { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-landing" },
-        { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-landing" }
+        { name: "Imaging", category: "Imaging", page: "scans-listing" },
+        { name: "Endoscopy & Screening", category: "Endoscopy & Screening", page: "scans-listing" },
+        { name: "Cardiac Diagnostics", category: "Cardiac Diagnostics", page: "scans-listing" }
       ]
     };
     

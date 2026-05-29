@@ -1882,17 +1882,62 @@ async function setupDatabase() {
     `);
 
     await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS sub_category VARCHAR(100)`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS body_part VARCHAR(100)`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS equipment_type VARCHAR(100)`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS procedure_prep VARCHAR(255)`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS anesthesia_required BOOLEAN DEFAULT false`);
+    await db.query(`ALTER TABLE tests ADD COLUMN IF NOT EXISTS is_trending BOOLEAN DEFAULT false`);
 
     // Update existing tests
-    await db.query(`UPDATE tests SET sub_category = 'Imaging', cat = 'scanning' WHERE lower(name) IN ('mri brain', 'ct scan chest', 'ultrasound abdomen', 'x-ray chest pa view')`);
-    await db.query(`UPDATE tests SET sub_category = 'Cardiac Diagnostics', cat = 'scanning' WHERE lower(name) LIKE '%ecg%' OR lower(name) LIKE '%electrocardiogram%'`);
+    await db.query(`
+      UPDATE tests 
+      SET sub_category = 'Imaging', 
+          cat = 'scanning',
+          body_part = CASE
+            WHEN lower(name) = 'mri brain' THEN 'Head & Brain'
+            WHEN lower(name) = 'ct scan chest' THEN 'Chest & Lungs'
+            WHEN lower(name) = 'ultrasound abdomen' THEN 'Abdomen'
+            WHEN lower(name) = 'x-ray chest pa view' THEN 'Chest & Lungs'
+            ELSE body_part
+          END,
+          equipment_type = CASE
+            WHEN lower(name) = 'mri brain' THEN '3.0T MRI'
+            WHEN lower(name) = 'ct scan chest' THEN '64-Slice CT'
+            WHEN lower(name) = 'ultrasound abdomen' THEN 'Standard Ultrasound'
+            WHEN lower(name) = 'x-ray chest pa view' THEN 'Digital X-Ray'
+            ELSE equipment_type
+          END,
+          procedure_prep = CASE
+            WHEN lower(name) = 'mri brain' THEN 'No special preparation required'
+            WHEN lower(name) = 'ct scan chest' THEN 'Contrast fasting required'
+            WHEN lower(name) = 'ultrasound abdomen' THEN '8 hours fasting required'
+            WHEN lower(name) = 'x-ray chest pa view' THEN 'No special preparation required'
+            ELSE procedure_prep
+          END,
+          is_trending = CASE
+            WHEN lower(name) IN ('mri brain', 'ct scan chest', 'ultrasound abdomen') THEN true
+            ELSE is_trending
+          END
+      WHERE lower(name) IN ('mri brain', 'ct scan chest', 'ultrasound abdomen', 'x-ray chest pa view')
+    `);
+
+    await db.query(`
+      UPDATE tests 
+      SET sub_category = 'Cardiac Diagnostics', 
+          cat = 'scanning',
+          body_part = 'Chest & Lungs',
+          equipment_type = 'Standard ECG',
+          procedure_prep = 'No special preparation required',
+          is_trending = true
+      WHERE lower(name) LIKE '%ecg%' OR lower(name) LIKE '%electrocardiogram%'
+    `);
 
     // Seed new Scans/Procedures tests if they don't exist
     const newScans = [
-      { name: 'Colonoscopy', sub_category: 'Endoscopy & Screening', description: 'Preventive screening for colon health and early detection of abnormalities.', rep: '24 Hours', price: 3500 },
-      { name: 'Gastroscopy', sub_category: 'Endoscopy & Screening', description: 'Visual examination of the upper digestive tract using a thin, flexible scope.', rep: '24 Hours', price: 2800 },
-      { name: 'TMT (Treadmill Test)', sub_category: 'Cardiac Diagnostics', description: 'Stress test to monitor heart activity during physical exertion on a treadmill.', rep: 'Same Day', price: 1500 },
-      { name: '2D Echo (Echocardiogram)', sub_category: 'Cardiac Diagnostics', description: 'Ultrasound imaging of the heart to examine heart valves, chambers, and muscle contraction.', rep: 'Same Day', price: 1800 }
+      { name: 'Colonoscopy', sub_category: 'Endoscopy & Screening', description: 'Preventive screening for colon health and early detection of abnormalities.', rep: '24 Hours', price: 3500, body_part: 'Abdomen', equipment_type: 'High-Def Endoscope', procedure_prep: 'Bowel prep required', anesthesia_required: true, is_trending: true },
+      { name: 'Gastroscopy', sub_category: 'Endoscopy & Screening', description: 'Visual examination of the upper digestive tract using a thin, flexible scope.', rep: '24 Hours', price: 2800, body_part: 'Abdomen', equipment_type: 'Flexible Endoscope', procedure_prep: 'Fasting required', anesthesia_required: true, is_trending: false },
+      { name: 'TMT (Treadmill Test)', sub_category: 'Cardiac Diagnostics', description: 'Stress test to monitor heart activity during physical exertion on a treadmill.', rep: 'Same Day', price: 1500, body_part: 'Chest & Lungs', equipment_type: 'Treadmill TMT', procedure_prep: 'Light food only', anesthesia_required: false, is_trending: false },
+      { name: '2D Echo (Echocardiogram)', sub_category: 'Cardiac Diagnostics', description: 'Ultrasound imaging of the heart to examine heart valves, chambers, and muscle contraction.', rep: 'Same Day', price: 1800, body_part: 'Chest & Lungs', equipment_type: '2D Echo Machine', procedure_prep: 'No special preparation required', anesthesia_required: false, is_trending: false }
     ];
 
     for (const scan of newScans) {
@@ -1901,12 +1946,45 @@ async function setupDatabase() {
       let scanId;
       if (scanRes.rows.length > 0) {
         scanId = scanRes.rows[0].id;
-        await db.query('UPDATE tests SET sub_category = $1, cat = \'scanning\', price = $2 WHERE id = $3', [scan.sub_category, scan.price, scanId]);
+        await db.query(`
+          UPDATE tests 
+          SET sub_category = $1, 
+              cat = 'scanning', 
+              price = $2,
+              body_part = $3,
+              equipment_type = $4,
+              procedure_prep = $5,
+              anesthesia_required = $6,
+              is_trending = $7
+          WHERE id = $8
+        `, [
+          scan.sub_category, 
+          scan.price,
+          scan.body_part,
+          scan.equipment_type,
+          scan.procedure_prep,
+          scan.anesthesia_required,
+          scan.is_trending,
+          scanId
+        ]);
       } else {
-        const ins = await db.query(
-          'INSERT INTO tests (name, description, price, rep, cat, sub_category) VALUES ($1, $2, $3, $4, \'scanning\', $5) RETURNING id',
-          [scan.name, scan.description, scan.price, scan.rep, scan.sub_category]
-        );
+        const ins = await db.query(`
+          INSERT INTO tests (
+            name, description, price, rep, cat, sub_category, 
+            body_part, equipment_type, procedure_prep, anesthesia_required, is_trending
+          ) VALUES ($1, $2, $3, $4, 'scanning', $5, $6, $7, $8, $9, $10) RETURNING id
+        `, [
+          scan.name, 
+          scan.description, 
+          scan.price, 
+          scan.rep, 
+          scan.sub_category,
+          scan.body_part,
+          scan.equipment_type,
+          scan.procedure_prep,
+          scan.anesthesia_required,
+          scan.is_trending
+        ]);
         scanId = ins.rows[0].id;
       }
 

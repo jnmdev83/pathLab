@@ -11,6 +11,7 @@ import { CategoryListing } from './components/category-listing';
 import { PackagesLanding } from './components/packages-landing';
 import { PackagesListing } from './components/packages-listing';
 import { ScanningLanding } from './components/scanning-landing';
+import { ScansListing } from './components/scans-listing';
 import { API_BASE_URL } from './config';
 import { useIsMobile } from './utils/useIsMobile';
 import { MobileSearchOverlay } from './components/layout/MobileSearchOverlay';
@@ -393,6 +394,20 @@ export default function App() {
           />
         );
 
+      case "scans-listing":
+        return (
+          <ScansListing
+            categoryName={activeCategoryFilter}
+            setPage={setPage}
+            setTest={setTest}
+            setSelectedPackage={setSelectedPackage}
+            user={user}
+            userLocation={userLocation}
+            setTestName={setTestName}
+            setActiveCategoryFilter={setActiveCategoryFilter}
+          />
+        );
+
       case "branch-tests":
         return (
           <BranchTests
@@ -485,7 +500,7 @@ export default function App() {
     );
   }
 
-  const hideGlobalNavFooter = page === 'category-listing' && isMobileViewport;
+  const hideGlobalNavFooter = (page === 'category-listing' || page === 'scans-listing') && isMobileViewport;
 
   if (hideGlobalNavFooter) {
     return (

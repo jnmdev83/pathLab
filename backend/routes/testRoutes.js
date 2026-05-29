@@ -11,6 +11,7 @@ router.get('/tests/:testId', controller.get_api_test_by_id); // NEW
 router.get('/category-previews', controller.get_api_category_previews);
 router.get('/categories/:categoryName/metadata', controller.get_api_category_metadata);
 router.get('/scans-landing/data', controller.get_api_scans_landing_data);
+router.get('/scans/listing', controller.get_api_scans_listing);
 router.get('/labs/:labId/profile', controller.get_api_labs_labId_profile);
 
 
