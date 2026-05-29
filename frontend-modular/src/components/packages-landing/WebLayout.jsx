@@ -48,7 +48,7 @@ export function WebLayout({
   const getCategoryColorStyles = (theme) => {
     switch (theme) {
       case 'primary':
-        return { bg: 'bg-[#0b57d0]/10', text: 'text-[#0b57d0]', border: 'hover:border-[#0b57d0]' };
+        return { bg: 'bg-[#00535b]/10', text: 'text-[#00535b]', border: 'hover:border-[#00535b]' };
       case 'error':
         return { bg: 'bg-red-50', text: 'text-red-600', border: 'hover:border-red-500' };
       case 'secondary':
@@ -58,7 +58,7 @@ export function WebLayout({
       case 'surface-highest':
         return { bg: 'bg-purple-50', text: 'text-purple-600', border: 'hover:border-purple-500' };
       case 'surface-dim':
-        return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'hover:border-blue-500' };
+        return { bg: 'bg-[#edf6f9]', text: 'text-[#00535b]', border: 'hover:border-[#00535b]' };
       default:
         return { bg: 'bg-slate-50', text: 'text-slate-600', border: 'hover:border-slate-400' };
     }
@@ -68,9 +68,9 @@ export function WebLayout({
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] select-none" style={{ fontFamily: 'Inter, sans-serif' }}>
       
       {/* ── 1. HERO SECTION ── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#f8f9ff] via-[#f0f4ff] to-[#e5eeff] py-16 md:py-24 border-b border-[#c3c6d6]/20">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#f8f9ff] via-[#f9f9ff] to-[#edf6f9] py-16 md:py-24 border-b border-[#c3c6d6]/20">
         {/* Immersive mesh blobs */}
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#0b57d0]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#00535b]/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-[350px] h-[350px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-12 items-center text-left relative z-10">
@@ -81,7 +81,7 @@ export function WebLayout({
                 <span className="material-symbols-outlined text-sm font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span> 
                 NABL Certified
               </span>
-              <span className="px-3.5 py-1 rounded-full bg-[#0b57d0]/10 text-[#0b57d0] text-xs font-black uppercase tracking-wider">
+              <span className="px-3.5 py-1 rounded-full bg-[#00535b]/10 text-[#00535b] text-xs font-black uppercase tracking-wider">
                 Compare Over 500+ Labs
               </span>
             </div>
@@ -98,7 +98,7 @@ export function WebLayout({
             <form 
               onSubmit={handleSearchSubmit} 
               className={`relative max-w-xl transition-all duration-300 ${
-                searchFocused ? 'scale-[1.02] shadow-md shadow-[#0b57d0]/5' : ''
+                searchFocused ? 'scale-[1.02] shadow-md shadow-[#00535b]/5' : ''
               }`}
             >
               <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#737785] text-xl">search</span>
@@ -109,20 +109,20 @@ export function WebLayout({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
-                className="w-full pl-12 pr-4 py-4 rounded-2xl border border-[#c3c6d6] bg-white focus:ring-2 focus:ring-[#0b57d0] focus:border-transparent outline-none shadow-sm transition-all text-sm font-medium text-[#0b1c30]"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl border border-[#c3c6d6] bg-white focus:ring-2 focus:ring-[#00535b] focus:border-transparent outline-none shadow-sm transition-all text-sm font-medium text-[#0b1c30]"
               />
             </form>
 
             <div className="flex gap-4 pt-2">
               <button 
                 onClick={() => handleCategoryClick("Full Body")}
-                className="bg-[#0b57d0] hover:bg-[#0041a2] text-white text-sm font-bold px-8 py-4 rounded-xl shadow-lg shadow-[#0b57d0]/25 transition-all active:scale-95 uppercase tracking-wide font-headline"
+                className="bg-[#00535b] hover:bg-[#00393f] text-white text-sm font-bold px-8 py-4 rounded-xl shadow-lg shadow-[#00535b]/25 transition-all active:scale-95 uppercase tracking-wide font-headline"
               >
                 Explore Packages
               </button>
               <button 
                 onClick={() => setPage("package-listing")}
-                className="bg-white border border-[#c3c6d6] text-[#0b1c30] hover:bg-[#eff4ff] text-sm font-bold px-8 py-4 rounded-xl transition-all font-headline"
+                className="bg-white border border-[#c3c6d6] text-[#0b1c30] hover:bg-[#edf6f9] text-sm font-bold px-8 py-4 rounded-xl transition-all font-headline"
               >
                 Compare Labs
               </button>
@@ -142,7 +142,7 @@ export function WebLayout({
 
           {/* Right Hero Graphic */}
           <div className="relative hidden md:block w-full">
-            <div className="absolute -top-12 -left-12 w-64 h-64 bg-[#0b57d0]/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
+            <div className="absolute -top-12 -left-12 w-64 h-64 bg-[#00535b]/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
             <img 
               alt="Comparison Diagnostic Dashboard" 
               className="rounded-3xl shadow-2xl relative z-10 border border-white max-h-[380px] w-full object-cover"
@@ -184,12 +184,12 @@ export function WebLayout({
                     <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 duration-300 ${colors.bg} ${colors.text}`}>
                       <span className="material-symbols-outlined text-3xl font-bold">{cat.icon}</span>
                     </div>
-                    <h3 className="text-lg font-black text-[#0b1c30] mb-1 group-hover:text-[#0b57d0] transition-colors">{cat.name}</h3>
+                    <h3 className="text-lg font-black text-[#0b1c30] mb-1 group-hover:text-[#00535b] transition-colors">{cat.name}</h3>
                     <p className="text-xs text-[#737785] font-semibold">{cat.sub_label}</p>
                   </div>
                   
                   <div className="flex justify-between items-center mt-6 pt-4 border-t border-slate-100 text-xs font-bold">
-                    <span className="text-[#0b57d0] bg-[#0b57d0]/5 px-2.5 py-1 rounded-md">Starts @ ₹{cat.starts_price}</span>
+                    <span className="text-[#00535b] bg-[#00535b]/5 px-2.5 py-1 rounded-md">Starts @ ₹{cat.starts_price}</span>
                     <span className="text-[#737785]">{cat.labs_count} Certified Labs</span>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export function WebLayout({
       </section>
 
       {/* ── 3. WHY TRUST CHOOSEMYLAB ── */}
-      <section className="py-16 bg-[#eff4ff]">
+      <section className="py-16 bg-[#edf6f9]">
         <div className="max-w-7xl mx-auto px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black text-[#0b1c30] font-headline tracking-tight">Why People Trust ChooseMyLab</h2>
@@ -214,7 +214,7 @@ export function WebLayout({
               { icon: 'distance', title: 'Home Collection', desc: 'Book collection slots online and certified phlebotomists will visit your home at your convenience.' }
             ].map((item, idx) => (
               <div key={idx} className="flex flex-col items-center p-6 bg-white border border-[#c3c6d6]/20 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-16 h-16 rounded-2xl bg-[#0b57d0]/5 border border-[#0b57d0]/10 flex items-center justify-center text-[#0b57d0] mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-[#00535b]/5 border border-[#00535b]/10 flex items-center justify-center text-[#00535b] mb-4">
                   <span className="material-symbols-outlined text-3xl font-bold">{item.icon}</span>
                 </div>
                 <h4 className="text-base font-black text-[#0b1c30] mb-2">{item.title}</h4>
@@ -237,7 +237,7 @@ export function WebLayout({
             <div className="flex gap-2">
               <button 
                 onClick={() => setPage("package-listing")}
-                className="px-4 py-2 text-xs font-black text-[#0b57d0] bg-[#0b57d0]/5 rounded-xl border border-[#0b57d0]/15 hover:bg-[#0b57d0]/10 transition-colors uppercase tracking-wider font-headline"
+                className="px-4 py-2 text-xs font-black text-[#00535b] bg-[#00535b]/5 rounded-xl border border-[#00535b]/15 hover:bg-[#00535b]/10 transition-colors uppercase tracking-wider font-headline"
               >
                 View All Packages
               </button>
@@ -254,13 +254,13 @@ export function WebLayout({
                   key={pkg.id} 
                   className={`bg-white border rounded-2xl p-6 flex flex-col hover:shadow-xl transition-all duration-300 h-full relative text-left ${
                     isPremiumStyle 
-                      ? 'border-[#0b57d0] ring-2 ring-[#0b57d0]/20 shadow-md' 
+                      ? 'border-[#00535b] ring-2 ring-[#00535b]/20 shadow-md' 
                       : 'border-[#c3c6d6]/40'
                   }`}
                 >
                   {/* Premium Badge Tag */}
                   {isPremiumStyle && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0b57d0] text-white text-[9px] font-black uppercase px-3 py-1 rounded-full tracking-wider font-headline">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00535b] text-white text-[9px] font-black uppercase px-3 py-1 rounded-full tracking-wider font-headline">
                       Most Comprehensive
                     </div>
                   )}
@@ -283,7 +283,7 @@ export function WebLayout({
                     </div>
 
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#424654]">
-                      <span className="material-symbols-outlined text-[#0b57d0] text-lg">science</span>
+                      <span className="material-symbols-outlined text-[#00535b] text-lg">science</span>
                       <span>Available in {pkg.labs_count || 12} labs</span>
                     </div>
 
@@ -296,7 +296,7 @@ export function WebLayout({
                           setPage("package-listing");
                         }
                       }}
-                      className="w-full py-3 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-black rounded-xl text-xs uppercase tracking-wider font-headline transition-colors active:scale-95 duration-100 shadow-sm"
+                      className="w-full py-3 bg-[#00535b] hover:bg-[#00393f] text-white font-black rounded-xl text-xs uppercase tracking-wider font-headline transition-colors active:scale-95 duration-100 shadow-sm"
                     >
                       Compare Now
                     </button>
@@ -309,7 +309,7 @@ export function WebLayout({
       </section>
 
       {/* ── 5. HOW IT WORKS ── */}
-      <section className="py-16 bg-[#eff4ff]">
+      <section className="py-16 bg-[#edf6f9]">
         <div className="max-w-7xl mx-auto px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-black text-[#0b1c30] font-headline tracking-tight">How It Works</h2>
@@ -326,7 +326,7 @@ export function WebLayout({
               { num: 3, title: 'Book & Relax', body: 'Book a certified phlebotomist visit to collect your sample at home. Access reports on WhatsApp in 24 hours.' }
             ].map((step) => (
               <div key={step.num} className="relative z-10 flex flex-col items-center text-center max-w-xs mx-auto">
-                <div className="w-20 h-20 rounded-full bg-[#0b57d0] text-white font-black text-2xl flex items-center justify-center shadow-lg shadow-[#0b57d0]/20 mb-6 border-4 border-white">
+                <div className="w-20 h-20 rounded-full bg-[#00535b] text-white font-black text-2xl flex items-center justify-center shadow-lg shadow-[#00535b]/20 mb-6 border-4 border-white">
                   {step.num}
                 </div>
                 <h4 className="text-base font-black text-[#0b1c30] mb-2">{step.title}</h4>
@@ -343,7 +343,7 @@ export function WebLayout({
           <p className="text-center text-[10px] font-black uppercase tracking-widest text-[#737785] mb-8">Trusted Laboratory Partners</p>
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
             {partners.map((partner) => (
-              <span key={partner.id} className="text-lg font-black text-[#0b1c30] hover:text-[#0b57d0] transition-colors cursor-default">
+              <span key={partner.id} className="text-lg font-black text-[#0b1c30] hover:text-[#00535b] transition-colors cursor-default">
                 {partner.name}
               </span>
             ))}
@@ -371,7 +371,7 @@ export function WebLayout({
                     className="w-full flex justify-between items-center p-5 text-left outline-none font-headline font-bold text-sm text-[#0b1c30] hover:bg-slate-50 transition-colors"
                   >
                     <span>{faq.question}</span>
-                    <span className={`material-symbols-outlined text-[#737785] text-xl transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                    <span className={`material-symbols-outlined text-[#737785] text-xl transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                       expand_more
                     </span>
                   </button>
@@ -389,20 +389,20 @@ export function WebLayout({
 
       {/* ── 8. FINAL CTA ── */}
       <section className="py-16 max-w-7xl mx-auto px-8">
-        <div className="bg-[#0b57d0] rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-xl shadow-[#0b57d0]/15">
+        <div className="bg-[#00535b] rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-xl shadow-[#00535b]/15">
           {/* Glass mesh design */}
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-6">
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight font-headline">Ready to Compare?</h2>
-            <p className="text-sm md:text-base text-blue-100 max-w-2xl mx-auto font-medium">
+            <p className="text-sm md:text-base text-[#9becf7] max-w-2xl mx-auto font-medium">
               Join thousands of smart patients saving on their diagnostic checkups. Get started by exploring our dynamic packages catalog or running a location search.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <button 
                 onClick={() => handleCategoryClick("Full Body")}
-                className="bg-white text-[#0b57d0] hover:bg-[#eff4ff] px-10 py-4 rounded-xl text-xs font-black uppercase tracking-wider font-headline shadow-xl transition-all active:scale-95"
+                className="bg-white text-[#00535b] hover:bg-[#edf6f9] px-10 py-4 rounded-xl text-xs font-black uppercase tracking-wider font-headline shadow-xl transition-all active:scale-95"
               >
                 Get Started Now
               </button>

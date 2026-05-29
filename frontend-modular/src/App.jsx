@@ -439,8 +439,8 @@ export default function App() {
           onClick={() => setSearchOpen(true)} 
           className={`flex flex-col items-center justify-center transition-all duration-200 ${
             isSearchActive 
-              ? "bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-blue-600/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#0c4ca6] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
+              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
           }`}
         >
           <span className="material-symbols-outlined text-[20px] font-bold">search</span>
@@ -451,8 +451,8 @@ export default function App() {
           onClick={() => setPage("package-compare")} 
           className={`flex flex-col items-center justify-center transition-all duration-200 ${
             isCompareActive 
-              ? "bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-blue-600/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#0c4ca6] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
+              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">swap_horiz</span>
@@ -463,8 +463,8 @@ export default function App() {
           onClick={() => setPage("profile-page")} 
           className={`flex flex-col items-center justify-center transition-all duration-200 ${
             isProfileActive 
-              ? "bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-blue-600/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#0c4ca6] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
+              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">account_circle</span>

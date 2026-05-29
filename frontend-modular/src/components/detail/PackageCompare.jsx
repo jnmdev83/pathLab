@@ -211,18 +211,18 @@ export function PackageCompare({
         {/* Breadcrumbs */}
         <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5">
           <nav className="flex items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
-            <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+            <button onClick={() => setPage('home')} className="hover:text-[#00535b] transition-colors">Home</button>
             <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-            <span className="text-[#0b57d0] font-black">Compare Packages</span>
+            <span className="text-[#00535b] font-black">Compare Packages</span>
           </nav>
         </section>
 
         {/* Hero Card Banner */}
         <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-4">
-          <div className="bg-gradient-to-br from-[#0c4ca6] to-[#082f6b] rounded-3xl p-6 md:p-10 text-white relative overflow-hidden shadow-lg mb-8">
+          <div className="bg-gradient-to-br from-[#006d77] to-[#236863] rounded-3xl p-6 md:p-10 text-white relative overflow-hidden shadow-lg mb-8">
             <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 max-w-2xl space-y-3">
-              <span className="inline-flex items-center px-3 py-1 bg-[#86f898]/20 text-[#86f898] border border-[#86f898]/30 rounded-full text-xs font-black uppercase tracking-wider font-headline">
+              <span className="inline-flex items-center px-3 py-1 bg-[#a9ece5]/20 text-[#a9ece5] border border-[#a9ece5]/30 rounded-full text-xs font-black uppercase tracking-wider font-headline">
                 <span className="material-symbols-outlined text-[14px] mr-1">compare_arrows</span>
                 Side-by-Side Lab Rates
               </span>
@@ -247,7 +247,7 @@ export function PackageCompare({
                     onClick={() => setSelectedCategoryTab(tab)}
                     className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap outline-none ${
                       isActive 
-                        ? "bg-[#0b57d0] text-white shadow-sm shadow-[#0b57d0]/15" 
+                        ? "bg-[#00535b] text-white shadow-sm shadow-[#00535b]/15" 
                         : "bg-slate-50 border border-[#e1e3e4] text-[#424654] hover:bg-slate-100"
                     }`}
                   >
@@ -267,7 +267,7 @@ export function PackageCompare({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search packages by name or category..."
-                className="w-full pl-10 pr-4 py-2 border border-[#c3c6d6] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#0b57d0] bg-slate-50 focus:bg-white transition-colors"
+                className="w-full pl-10 pr-4 py-2 border border-[#c3c6d6] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#00535b] bg-slate-50 focus:bg-white transition-colors"
               />
               {searchQuery && (
                 <button 
@@ -301,7 +301,7 @@ export function PackageCompare({
               </p>
               <button 
                 onClick={() => { setSearchQuery(""); setSelectedCategoryTab("All"); }}
-                className="px-6 py-2.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm font-headline"
+                className="px-6 py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm font-headline"
               >
                 Clear Search & Filters
               </button>
@@ -315,23 +315,23 @@ export function PackageCompare({
                 return (
                   <div 
                     key={pkg.id} 
-                    className="bg-white border border-[#e1e3e4]/80 hover:border-[#0b57d0]/40 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group relative overflow-hidden text-left"
+                    className="bg-white border border-[#e1e3e4]/80 hover:border-[#00535b]/40 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group relative overflow-hidden text-left"
                   >
                     <div className="space-y-4">
                       {/* Top Row: Category & Badges */}
                       <div className="flex justify-between items-center gap-2">
-                        <span className="text-[10px] font-black uppercase text-[#0b57d0] bg-[#0b57d0]/5 px-2.5 py-1 rounded-full leading-none border border-[#0b57d0]/10">
+                        <span className="text-[10px] font-black uppercase text-[#00535b] bg-[#00535b]/5 px-2.5 py-1 rounded-full leading-none border border-[#00535b]/10">
                           {pkg.category || 'General Health'}
                         </span>
                         <span className="text-[10px] font-bold text-[#737785] flex items-center gap-1">
-                          <span className="material-symbols-outlined text-xs text-[#0b57d0]">science</span>
+                          <span className="material-symbols-outlined text-xs text-[#00535b]">science</span>
                           {pkg.test_count || 0} Parameters
                         </span>
                       </div>
 
                       {/* Package Name & Desc */}
                       <div className="space-y-1">
-                        <h3 className="font-headline font-black text-base text-[#191c1d] group-hover:text-[#0b57d0] transition-colors leading-tight">
+                        <h3 className="font-headline font-black text-base text-[#191c1d] group-hover:text-[#00535b] transition-colors leading-tight">
                           {pkg.name}
                         </h3>
                         <p className="text-xs text-[#424654] leading-relaxed line-clamp-2 opacity-90">
@@ -344,7 +344,7 @@ export function PackageCompare({
                         <span className="text-[10px] font-semibold text-[#424654] bg-slate-50 px-2 py-0.5 rounded border border-[#e1e3e4]/30">
                           🏠 Free Collection
                         </span>
-                        <span className="text-[10px] font-semibold text-[#006e2c] bg-[#86f898]/10 px-2 py-0.5 rounded border border-[#86f898]/20">
+                        <span className="text-[10px] font-semibold text-[#006e2c] bg-[#a9ece5]/10 px-2 py-0.5 rounded border border-[#a9ece5]/20">
                           🏥 {pkg.lab_count || 0} Labs Offered
                         </span>
                       </div>
@@ -364,7 +364,7 @@ export function PackageCompare({
                         onClick={() => {
                           setSelectedPackage({ id: pkg.id, name: pkg.name });
                         }}
-                        className="px-4 py-2 bg-[#0b57d0] hover:bg-[#0041a2] group-hover:bg-[#0041a2] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm shadow-[#0b57d0]/10 flex items-center gap-1.5 uppercase font-headline"
+                        className="px-4 py-2 bg-[#00535b] hover:bg-[#00393f] group-hover:bg-[#00393f] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm shadow-[#00535b]/10 flex items-center gap-1.5 uppercase font-headline"
                       >
                         Compare Rates
                         <span className="material-symbols-outlined text-xs leading-none">arrow_forward</span>
@@ -387,11 +387,11 @@ export function PackageCompare({
       {/* ── BREADCRUMB ────────────────────────────────────────────────────── */}
       <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5 flex justify-between items-center flex-wrap gap-3">
         <nav className="flex flex-wrap items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
-          <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+          <button onClick={() => setPage('home')} className="hover:text-[#00535b] transition-colors">Home</button>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-          <button onClick={() => setSelectedPackage(null)} className="hover:text-[#0b57d0] transition-colors">Compare</button>
+          <button onClick={() => setSelectedPackage(null)} className="hover:text-[#00535b] transition-colors">Compare</button>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-          <span className="text-[#0b57d0] font-black truncate max-w-[200px]">{pkgDetails?.name || selectedPackage.name}</span>
+          <span className="text-[#00535b] font-black truncate max-w-[200px]">{pkgDetails?.name || selectedPackage.name}</span>
         </nav>
 
         <button
@@ -409,7 +409,7 @@ export function PackageCompare({
           
           {/* Left Details Block */}
           <div className="flex-1 space-y-5 text-left">
-            <div className="inline-flex items-center px-3 py-1 bg-[#86f898] text-[#00722f] rounded-full text-xs font-black uppercase tracking-wider font-headline">
+            <div className="inline-flex items-center px-3 py-1 bg-[#a9ece5] text-[#286d67] rounded-full text-xs font-black uppercase tracking-wider font-headline">
               <span className="material-symbols-outlined text-[16px] mr-1" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
               Premium Health Package
             </div>
@@ -424,13 +424,13 @@ export function PackageCompare({
             
             <div className="flex flex-wrap gap-2.5 pt-1">
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">analytics</span> {includedTests.length} Diagnostics Mapped
+                <span className="material-symbols-outlined text-[#00535b] text-sm">analytics</span> {includedTests.length} Diagnostics Mapped
               </span>
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">restaurant_menu</span> Fasting Required (8-12h)
+                <span className="material-symbols-outlined text-[#00535b] text-sm">restaurant_menu</span> Fasting Required (8-12h)
               </span>
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">home</span> Free Home Collection
+                <span className="material-symbols-outlined text-[#00535b] text-sm">home</span> Free Home Collection
               </span>
             </div>
             
@@ -438,7 +438,7 @@ export function PackageCompare({
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest text-[#737785] block mb-1">Starting from</span>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl md:text-4xl font-black text-[#0b57d0] font-headline">₹{startPrice.toLocaleString('en-IN')}</span>
+                  <span className="text-3xl md:text-4xl font-black text-[#00535b] font-headline">₹{startPrice.toLocaleString('en-IN')}</span>
                   <span className="text-sm line-through text-[#737785]">₹{originalPrice.toLocaleString('en-IN')}</span>
                 </div>
               </div>
@@ -448,7 +448,7 @@ export function PackageCompare({
             </div>
 
             <div className="flex flex-wrap gap-3.5 pt-2">
-              <a href="#available-labs-section" className="bg-[#0b57d0] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-[#0041a2] transition-colors text-sm shadow-md shadow-[#0b57d0]/25 text-center">
+              <a href="#available-labs-section" className="bg-[#00535b] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-[#00393f] transition-colors text-sm shadow-md shadow-[#00535b]/25 text-center">
                 Compare {labs.length} Certified Labs
               </a>
             </div>
@@ -463,7 +463,7 @@ export function PackageCompare({
             />
             <div className="absolute -bottom-4 -left-4 bg-white p-5 rounded-2xl shadow-lg border border-[#e1e3e4] max-w-[250px] text-left">
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="w-8 h-8 bg-blue-50 text-[#0b57d0] rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="w-8 h-8 bg-[#edf6f9] text-[#00535b] rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="material-symbols-outlined text-base">verified_user</span>
                 </span>
                 <span className="font-extrabold text-sm text-[#191c1d] leading-none">NABL Certified Labs</span>
@@ -485,7 +485,7 @@ export function PackageCompare({
             {/* Specimen Type & Fasting Guidelines */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white border border-[#e1e3e4] rounded-2xl p-5 flex items-center gap-4 shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-[#0b57d0] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🧪</div>
+                <div className="w-12 h-12 bg-[#edf6f9] text-[#00535b] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🧪</div>
                 <div>
                   <span className="text-[10px] uppercase font-black tracking-wider text-[#737785] block font-headline">Specimen Type</span>
                   <span className="text-sm font-bold text-[#191c1d] mt-0.5 block">{pkgDetails?.samples_required || 'Blood & Urine Specimen'}</span>
@@ -493,7 +493,7 @@ export function PackageCompare({
               </div>
 
               <div className="bg-white border border-[#e1e3e4] rounded-2xl p-5 flex items-center gap-4 shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-[#0b57d0] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🍽️</div>
+                <div className="w-12 h-12 bg-[#edf6f9] text-[#00535b] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">🍽️</div>
                 <div>
                   <span className="text-[10px] uppercase font-black tracking-wider text-[#737785] block font-headline">Fasting Guidelines</span>
                   <span className="text-sm font-bold text-[#191c1d] mt-0.5 block leading-tight">{pkgDetails?.preparations || 'Requires overnight fasting for 8 to 12 hours'}</span>
@@ -511,7 +511,7 @@ export function PackageCompare({
               <div className="space-y-4">
                 {whyBooked.map((reason, idx) => (
                   <div key={idx} className="flex gap-4 bg-[#f8f9fa] border border-[#e1e3e4]/40 p-4 rounded-2xl">
-                    <div className="bg-white text-[#0b57d0] border border-[#e1e3e4] rounded-xl w-9 h-9 flex items-center justify-center font-bold text-xs flex-shrink-0 font-headline shadow-sm">
+                    <div className="bg-white text-[#00535b] border border-[#e1e3e4] rounded-xl w-9 h-9 flex items-center justify-center font-bold text-xs flex-shrink-0 font-headline shadow-sm">
                       0{idx + 1}
                     </div>
                     <div>
@@ -540,7 +540,7 @@ export function PackageCompare({
                     <div key={idx} className="p-4 bg-[#f8f9fa] border border-[#e1e3e4]/30 rounded-2xl flex flex-col justify-between">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-bold text-xs text-[#191c1d] leading-tight">{cat.name}</span>
-                        <span className="text-[9px] font-bold text-[#0b57d0] bg-[#0b57d0]/5 border border-[#0b57d0]/10 px-2 py-0.5 rounded font-headline uppercase">
+                        <span className="text-[9px] font-bold text-[#00535b] bg-[#00535b]/5 border border-[#00535b]/10 px-2 py-0.5 rounded font-headline uppercase">
                           {strengthPct} Mapped
                         </span>
                       </div>
@@ -548,7 +548,7 @@ export function PackageCompare({
                       <p className="text-[#424654] text-xs leading-relaxed mb-4 opacity-90">{cat.desc}</p>
                       
                       <div className="w-full h-1.5 bg-[#c3c6d6]/40 rounded-full overflow-hidden">
-                        <div style={{ width: strengthPct }} className="h-full bg-gradient-to-r from-[#0b57d0] to-[#0041a2] rounded-full" />
+                        <div style={{ width: strengthPct }} className="h-full bg-gradient-to-r from-[#00535b] to-[#00393f] rounded-full" />
                       </div>
                     </div>
                   );
@@ -565,7 +565,7 @@ export function PackageCompare({
                     {isMobile ? "Tap a parameter to read clinical information." : "Hover or click a parameter on the left to read clinical details on the right."}
                   </p>
                 </div>
-                <span className="bg-[#0b57d0]/5 text-[#0b57d0] text-[10px] font-bold px-3 py-1.5 rounded-full font-headline border border-[#0b57d0]/15">
+                <span className="bg-[#00535b]/5 text-[#00535b] text-[10px] font-bold px-3 py-1.5 rounded-full font-headline border border-[#00535b]/15">
                   {includedTests.length} Parameters
                 </span>
               </div>
@@ -585,7 +585,7 @@ export function PackageCompare({
                   {includedTests.map((t) => {
                     const isExpanded = !!expandedTests[t.id];
                     let catLabel = "🧪 Diagnostic";
-                    let catBg = "bg-[#0b57d0]/5 border-[#0b57d0]/15 text-[#0b57d0]";
+                    let catBg = "bg-[#00535b]/5 border-[#00535b]/15 text-[#00535b]";
                     
                     const category = (t.cat || '').toLowerCase();
                     if (category.includes("blood")) {
@@ -600,7 +600,7 @@ export function PackageCompare({
                       <div 
                         key={t.id} 
                         className={`border rounded-2xl transition-all duration-150 cursor-pointer overflow-hidden ${
-                          isExpanded ? 'border-[#0b57d0] bg-[#0b57d0]/[0.01]' : 'border-[#e1e3e4]/60 bg-white'
+                          isExpanded ? 'border-[#00535b] bg-[#00535b]/[0.01]' : 'border-[#e1e3e4]/60 bg-white'
                         }`}
                         onClick={() => toggleTestExpand(t.id)}
                       >
@@ -613,7 +613,7 @@ export function PackageCompare({
                               </span>
                             </div>
                           </div>
-                          <span className={`material-symbols-outlined text-[#737785] transition-transform duration-150 ${isExpanded ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                          <span className={`material-symbols-outlined text-[#737785] transition-transform duration-150 ${isExpanded ? 'rotate-180 text-[#00535b]' : ''}`}>
                             keyboard_arrow_down
                           </span>
                         </div>
@@ -635,7 +635,7 @@ export function PackageCompare({
                     {includedTests.map((t, index) => {
                       const isActive = activeParamIndex === index;
                       let catLabel = "🧪 Diagnostic";
-                      let catBg = "bg-[#0b57d0]/5 border-[#0b57d0]/15 text-[#0b57d0]";
+                      let catBg = "bg-[#00535b]/5 border-[#00535b]/15 text-[#00535b]";
                       
                       const category = (t.cat || '').toLowerCase();
                       if (category.includes("blood")) {
@@ -652,19 +652,19 @@ export function PackageCompare({
                           onClick={() => setActiveParamIndex(index)}
                           className={`border rounded-2xl p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 ${
                             isActive 
-                              ? "border-[#0b57d0] bg-[#0b57d0]/[0.03] shadow-sm translate-x-1" 
+                              ? "border-[#00535b] bg-[#00535b]/[0.03] shadow-sm translate-x-1" 
                               : "border-[#e1e3e4]/60 bg-white hover:bg-slate-50/60"
                           }`}
                         >
                           <div className="flex items-center gap-3">
                             <span className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 ${
-                              isActive ? "bg-[#0b57d0] text-white" : "bg-slate-100 text-[#424654]"
+                              isActive ? "bg-[#00535b] text-white" : "bg-slate-100 text-[#424654]"
                             }`}>
                               {index + 1}
                             </span>
                             <div className="flex flex-col gap-1">
                               <span className={`font-bold text-sm transition-colors duration-200 ${
-                                isActive ? "text-[#0b57d0]" : "text-[#191c1d]"
+                                isActive ? "text-[#00535b]" : "text-[#191c1d]"
                               }`}>
                                 {t.name}
                               </span>
@@ -676,7 +676,7 @@ export function PackageCompare({
                             </div>
                           </div>
                           <span className={`material-symbols-outlined text-sm transition-transform duration-200 ${
-                            isActive ? "text-[#0b57d0] translate-x-1 font-bold" : "text-[#737785]/60"
+                            isActive ? "text-[#00535b] translate-x-1 font-bold" : "text-[#737785]/60"
                           }`}>
                             chevron_right
                           </span>
@@ -686,15 +686,15 @@ export function PackageCompare({
                   </div>
 
                   {/* Right parameter details */}
-                  <div className="sticky top-24 bg-gradient-to-br from-white to-slate-50 border border-[#0b57d0]/20 rounded-3xl p-6 shadow-md min-h-[300px] flex flex-col justify-between overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#0b57d0]/5 rounded-full blur-3xl pointer-events-none" />
+                  <div className="sticky top-24 bg-gradient-to-br from-white to-slate-50 border border-[#00535b]/20 rounded-3xl p-6 shadow-md min-h-[300px] flex flex-col justify-between overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#00535b]/5 rounded-full blur-3xl pointer-events-none" />
                     
                     {(() => {
                       const activeTest = includedTests[activeParamIndex] || includedTests[0];
                       if (!activeTest) return null;
                       
                       let activeCatLabel = "🧪 Diagnostic";
-                      let activeCatBg = "bg-[#0b57d0]/5 border-[#0b57d0]/15 text-[#0b57d0]";
+                      let activeCatBg = "bg-[#00535b]/5 border-[#00535b]/15 text-[#00535b]";
                       const category = (activeTest.cat || '').toLowerCase();
                       if (category.includes("blood")) {
                         activeCatLabel = "🩸 Blood Specimen";
@@ -707,7 +707,7 @@ export function PackageCompare({
                         <>
                           <div className="relative z-10">
                             <div className="flex justify-between items-center mb-3">
-                              <div className="flex items-center gap-2 text-xs font-bold text-[#0b57d0] uppercase tracking-wider font-headline">
+                              <div className="flex items-center gap-2 text-xs font-bold text-[#00535b] uppercase tracking-wider font-headline">
                                 <span className="material-symbols-outlined text-base">analytics</span>
                                 Parameter Info
                               </div>
@@ -759,7 +759,7 @@ export function PackageCompare({
                           className="w-full px-5 py-4 flex justify-between items-center text-left outline-none font-headline font-bold text-sm text-[#191c1d]"
                         >
                           <span>{faq.q}</span>
-                          <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                          <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                             expand_more
                           </span>
                         </button>
@@ -808,10 +808,10 @@ export function PackageCompare({
                   return (
                     <div 
                       key={`${l.id}-${idx}`}
-                      className="bg-white border-2 border-transparent hover:border-[#0b57d0]/40 rounded-3xl p-5 shadow-sm transition-all duration-200 relative overflow-hidden"
+                      className="bg-white border-2 border-transparent hover:border-[#00535b]/40 rounded-3xl p-5 shadow-sm transition-all duration-200 relative overflow-hidden"
                       style={{ boxShadow: '0px 4px 20px rgba(11, 87, 208, 0.04)' }}
                     >
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#0b57d0]" />
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#00535b]" />
 
                       {/* Lab Identity */}
                       <div className="flex justify-between items-start gap-3 mb-4">
@@ -836,7 +836,7 @@ export function PackageCompare({
                           </div>
                         </div>
 
-                        <span className="bg-[#0b57d0]/5 text-[#0b57d0] border border-[#0b57d0]/10 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider font-headline flex-shrink-0">
+                        <span className="bg-[#00535b]/5 text-[#00535b] border border-[#00535b]/10 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider font-headline flex-shrink-0">
                           ✓ Certified
                         </span>
                       </div>
@@ -847,7 +847,7 @@ export function PackageCompare({
                           ⏱️ Report: {l.reporting_time}
                         </span>
                         {l.home_collection && (
-                          <span className="text-[10px] font-bold text-[#006e2c] bg-[#86f898]/20 border border-[#86f898]/45 px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-bold text-[#006e2c] bg-[#a9ece5]/20 border border-[#a9ece5]/45 px-2 py-0.5 rounded-md">
                             🏠 Free Collection
                           </span>
                         )}
@@ -865,7 +865,7 @@ export function PackageCompare({
 
                         <button 
                           onClick={() => handleBooking(l)}
-                          className="px-4 py-2 bg-[#0b57d0] hover:bg-[#0041a2] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm font-headline uppercase"
+                          className="px-4 py-2 bg-[#00535b] hover:bg-[#00393f] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm font-headline uppercase"
                         >
                           Book Package
                         </button>

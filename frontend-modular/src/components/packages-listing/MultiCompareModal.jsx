@@ -59,7 +59,7 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
                   </th>
                   {packages.map((pkg, idx) => (
                     <th key={pkg.id || idx} className="p-4 text-center border-b border-slate-100 w-1/4">
-                      <span className="text-[10px] font-black uppercase text-[#0b57d0] bg-[#0b57d0]/5 px-2 py-0.5 rounded-full block mb-2 w-max mx-auto leading-none">
+                      <span className="text-[10px] font-black uppercase text-[#00535b] bg-[#00535b]/5 px-2 py-0.5 rounded-full block mb-2 w-max mx-auto leading-none">
                         Option {idx + 1}
                       </span>
                       <h4 className="font-extrabold text-[13px] md:text-sm text-[#191c1d] font-headline line-clamp-2 leading-tight">
@@ -80,11 +80,11 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
                     const isLowest = pkg.price === minPrice && packages.length > 1;
                     return (
                       <td key={pkg.id || idx} className="p-4 text-center border-b border-slate-100">
-                        <span className="text-lg font-black text-[#0b57d0] font-headline block">
+                        <span className="text-lg font-black text-[#00535b] font-headline block">
                           {formatPrice(pkg.price)}
                         </span>
                         {isLowest && (
-                          <span className="inline-block text-[9px] font-black text-[#006e2c] bg-[#86f898]/20 px-2 py-0.5 rounded mt-1.5 leading-none">
+                          <span className="inline-block text-[9px] font-black text-[#006e2c] bg-[#a9ece5]/20 px-2 py-0.5 rounded mt-1.5 leading-none">
                             Lowest Price
                           </span>
                         )}
@@ -150,7 +150,7 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
                       return (
                         <td key={pkg.id || idx} className="p-4 text-center border-b border-slate-100 select-none">
                           {hasParam ? (
-                            <div className="w-5 h-5 rounded-full bg-[#0b57d0]/10 border border-[#0b57d0]/20 flex items-center justify-center text-[#0b57d0] text-xs font-black mx-auto leading-none">
+                            <div className="w-5 h-5 rounded-full bg-[#00535b]/10 border border-[#00535b]/20 flex items-center justify-center text-[#00535b] text-xs font-black mx-auto leading-none">
                               ✓
                             </div>
                           ) : (
@@ -182,7 +182,7 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
               onBook(packages[0]);
               onClose();
             }}
-            className="px-5 py-2.5 md:px-8 md:py-3 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline truncate flex-shrink-0 max-w-[180px] md:max-w-none text-center"
+            className="px-5 py-2.5 md:px-8 md:py-3 bg-[#00535b] hover:bg-[#00393f] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline truncate flex-shrink-0 max-w-[180px] md:max-w-none text-center"
           >
             <span className="hidden sm:inline">Book {packages[0]?.package_name}</span>
             <span className="sm:hidden">

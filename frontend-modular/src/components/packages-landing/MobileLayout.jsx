@@ -69,7 +69,7 @@ export function MobileLayout({
   const getCategoryColorStyles = (theme) => {
     switch (theme) {
       case 'primary':
-        return { bg: 'bg-[#0b57d0]/10', text: 'text-[#0b57d0]' };
+        return { bg: 'bg-[#00535b]/10', text: 'text-[#00535b]' };
       case 'error':
         return { bg: 'bg-red-50', text: 'text-red-600' };
       case 'secondary':
@@ -79,7 +79,7 @@ export function MobileLayout({
       case 'surface-highest':
         return { bg: 'bg-purple-50', text: 'text-purple-600' };
       case 'surface-dim':
-        return { bg: 'bg-blue-50', text: 'text-blue-600' };
+        return { bg: 'bg-[#edf6f9]', text: 'text-[#00535b]' };
       default:
         return { bg: 'bg-slate-50', text: 'text-slate-600' };
     }
@@ -89,7 +89,7 @@ export function MobileLayout({
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] pb-24 relative select-none" style={{ fontFamily: 'Inter, sans-serif' }}>
       
       {/* ── HERO BANNER ── */}
-      <section className="px-4 pt-6 pb-8 bg-gradient-to-b from-[#eff4ff] to-[#f8f9ff] text-left">
+      <section className="px-4 pt-6 pb-8 bg-gradient-to-b from-[#edf6f9] to-[#f8f9ff] text-left">
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-black tracking-tight leading-snug font-headline">
             Compare Health Checkup Packages Across Top Labs
@@ -102,14 +102,14 @@ export function MobileLayout({
               placeholder="Search tests or health concerns..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-[#c3c6d6] focus:border-[#0b57d0] focus:ring-2 focus:ring-[#0b57d0]/20 bg-white transition-all outline-none text-xs font-semibold text-[#0b1c30]"
+              className="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-[#c3c6d6] focus:border-[#00535b] focus:ring-2 focus:ring-[#00535b]/20 bg-white transition-all outline-none text-xs font-semibold text-[#0b1c30]"
             />
           </form>
 
           <div className="flex flex-col gap-2.5 mt-2">
             <button 
               onClick={() => handleCategoryClick("Full Body")}
-              className="w-full bg-[#0b57d0] text-white py-4 rounded-xl text-xs font-black uppercase tracking-wider font-headline active:scale-[0.98] transition-all shadow-sm"
+              className="w-full bg-[#00535b] text-white py-4 rounded-xl text-xs font-black uppercase tracking-wider font-headline active:scale-[0.98] transition-all shadow-sm"
             >
               Explore All Packages
             </button>
@@ -167,7 +167,7 @@ export function MobileLayout({
           <h2 className="text-base font-black font-headline uppercase tracking-wider text-[#737785]">Popular Packages</h2>
           <button 
             onClick={() => setPage("package-listing")}
-            className="text-[#0b57d0] font-black text-xs uppercase tracking-wider font-headline"
+            className="text-[#00535b] font-black text-xs uppercase tracking-wider font-headline"
           >
             View All
           </button>
@@ -194,7 +194,7 @@ export function MobileLayout({
                 </div>
 
                 <div className="p-4 flex flex-col gap-2.5">
-                  <div className="flex items-center gap-1.5 text-[#0b57d0] text-[10px] font-black uppercase tracking-wider font-headline">
+                  <div className="flex items-center gap-1.5 text-[#00535b] text-[10px] font-black uppercase tracking-wider font-headline">
                     <span className="material-symbols-outlined text-xs">lab_research</span> 
                     {pkg.lab_name || 'Metropolis Labs'}
                   </div>
@@ -216,7 +216,7 @@ export function MobileLayout({
                         setPage("package-listing");
                       }
                     }}
-                    className="w-full mt-2 py-2.5 border border-[#0b57d0]/30 text-[#0b57d0] hover:bg-[#0b57d0]/5 rounded-xl text-xs font-black uppercase tracking-wider font-headline active:scale-95 transition-all"
+                    className="w-full mt-2 py-2.5 border border-[#00535b]/30 text-[#00535b] hover:bg-[#00535b]/5 rounded-xl text-xs font-black uppercase tracking-wider font-headline active:scale-95 transition-all"
                   >
                     Compare Now
                   </button>
@@ -239,7 +239,7 @@ export function MobileLayout({
             { num: 3, title: 'Get Results', body: 'Access digital reports on WhatsApp or ChooseMyLab dashboard in 24 hours.' }
           ].map((step) => (
             <div key={step.num} className="relative flex gap-4 text-left">
-              <div className="absolute -left-8 z-10 w-8 h-8 rounded-full bg-[#0b57d0] text-white font-black text-sm flex items-center justify-center border-2 border-white shadow-sm leading-none pt-0.5">
+              <div className="absolute -left-8 z-10 w-8 h-8 rounded-full bg-[#00535b] text-white font-black text-sm flex items-center justify-center border-2 border-white shadow-sm leading-none pt-0.5">
                 {step.num}
               </div>
               <div className="flex flex-col gap-0.5">
@@ -267,7 +267,7 @@ export function MobileLayout({
                   className="w-full flex justify-between items-center p-4 text-left outline-none font-headline font-bold text-xs text-[#0b1c30]"
                 >
                   <span className="pr-4 leading-tight">{faq.question}</span>
-                  <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                  <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                     expand_more
                   </span>
                 </button>
@@ -291,7 +291,7 @@ export function MobileLayout({
       >
         <button 
           onClick={() => handleCategoryClick("Full Body")}
-          className="w-full bg-[#0b57d0] hover:bg-[#0041a2] text-white py-4 rounded-full font-black text-xs uppercase tracking-wider font-headline shadow-lg flex items-center justify-center gap-1.5 active:scale-95 duration-100"
+          className="w-full bg-[#00535b] hover:bg-[#00393f] text-white py-4 rounded-full font-black text-xs uppercase tracking-wider font-headline shadow-lg flex items-center justify-center gap-1.5 active:scale-95 duration-100"
         >
           <span className="material-symbols-outlined text-base">explore</span>
           Explore Packages

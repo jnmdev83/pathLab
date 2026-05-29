@@ -71,7 +71,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
         <div className="flex items-center justify-between px-5 py-3 border-b border-[#f1f3f4]">
           <span className="font-bold text-sm text-[#1f2937]">Filters</span>
           <div className="flex items-center gap-3">
-            <button onClick={onReset} className="text-[12px] font-bold text-[#0b57d0]">Reset All</button>
+            <button onClick={onReset} className="text-[12px] font-bold text-[#00535b]">Reset All</button>
             <button
               onClick={onClose}
               className="w-7 h-7 rounded-full bg-[#f1f3f4] flex items-center justify-center"
@@ -105,7 +105,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
                           });
                         }}
                         className="w-4 h-4 rounded"
-                        style={{ accentColor: '#0b57d0' }}
+                        style={{ accentColor: '#00535b' }}
                       />
                       <span className="text-sm text-[#374151] font-semibold">{catName}</span>
                     </div>
@@ -132,7 +132,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
                     checked={filters.type === opt.value}
                     onChange={() => toggleType(opt.value)}
                     className="w-4 h-4 rounded"
-                    style={{ accentColor: '#0b57d0' }}
+                    style={{ accentColor: '#00535b' }}
                   />
                   <span className="text-sm text-[#374151] font-medium">{opt.label}</span>
                 </label>
@@ -144,7 +144,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
           <div className="px-5 py-4">
             <div className="flex justify-between mb-3">
               <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af]">Max Price</p>
-              <span className="text-[11px] font-bold text-[#0b57d0]">
+              <span className="text-[11px] font-bold text-[#00535b]">
                 ₹{filters.maxPrice >= 15000 ? '15,000+' : filters.maxPrice.toLocaleString('en-IN')}
               </span>
             </div>
@@ -157,8 +157,8 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
               onChange={e => setFilters(prev => ({ ...prev, maxPrice: parseInt(e.target.value, 10) }))}
               className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
               style={{
-                accentColor: '#0b57d0',
-                background: `linear-gradient(to right, #0b57d0 ${(filters.maxPrice / 15000) * 100}%, #e9ecef ${(filters.maxPrice / 15000) * 100}%)`
+                accentColor: '#00535b',
+                background: `linear-gradient(to right, #00535b ${(filters.maxPrice / 15000) * 100}%, #e9ecef ${(filters.maxPrice / 15000) * 100}%)`
               }}
             />
             <div className="flex justify-between mt-1.5 text-[10px] text-[#9ca3af] font-semibold">
@@ -180,7 +180,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
                     checked={filters.turnaround === opt.value}
                     onChange={() => toggleTurnaround(opt.value)}
                     className="w-4 h-4 rounded"
-                    style={{ accentColor: '#0b57d0' }}
+                    style={{ accentColor: '#00535b' }}
                   />
                   <span className="text-sm text-[#374151] font-medium">{opt.label}</span>
                 </label>
@@ -197,7 +197,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
                 checked={filters.preparation === 'fasting'}
                 onChange={() => togglePrep('fasting')}
                 className="w-4 h-4 rounded"
-                style={{ accentColor: '#0b57d0' }}
+                style={{ accentColor: '#00535b' }}
               />
               <span className="text-sm text-[#374151] font-medium">Fasting Required</span>
             </label>
@@ -207,7 +207,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
           <div className="px-5 py-4">
             <button
               onClick={onClose}
-              className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#0b57d0] hover:bg-[#0842a0] transition-colors"
+              className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#00535b] hover:bg-[#0842a0] transition-colors"
             >
               Apply Filters
             </button>
@@ -245,11 +245,11 @@ function SortSheet({ currentSort, setSort, onClose }) {
               className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-colors"
               style={{ background: currentSort === opt.value ? '#e8f0fe' : 'transparent' }}
             >
-              <span className={`text-sm font-semibold ${currentSort === opt.value ? 'text-[#0b57d0]' : 'text-[#374151]'}`}>
+              <span className={`text-sm font-semibold ${currentSort === opt.value ? 'text-[#00535b]' : 'text-[#374151]'}`}>
                 {opt.label}
               </span>
               {currentSort === opt.value && (
-                <span className="material-symbols-outlined text-[#0b57d0] text-lg">check</span>
+                <span className="material-symbols-outlined text-[#00535b] text-lg">check</span>
               )}
             </button>
           ))}
@@ -272,7 +272,7 @@ function MobileTestCard({ item, onDetails, index }) {
         <div className="flex items-start gap-3 mb-2.5">
           <div className="w-10 h-10 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
             <span
-              className="material-symbols-outlined text-[#0b57d0] text-xl"
+              className="material-symbols-outlined text-[#00535b] text-xl"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               {iconName}
@@ -283,7 +283,7 @@ function MobileTestCard({ item, onDetails, index }) {
               <h3 className="text-sm font-bold text-[#1f2937] leading-snug">{item.name}</h3>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[9px] font-black text-[#0b57d0] bg-[#e8f0fe] border border-[#0b57d0]/20 px-1.5 py-0.5 rounded uppercase tracking-wide">NABL</span>
+              <span className="text-[9px] font-black text-[#00535b] bg-[#e8f0fe] border border-[#00535b]/20 px-1.5 py-0.5 rounded uppercase tracking-wide">NABL</span>
               {item.is_pkg && (
                 <span className="text-[9px] font-black text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded uppercase tracking-wide">Package</span>
               )}
@@ -299,11 +299,11 @@ function MobileTestCard({ item, onDetails, index }) {
         {/* Meta pills */}
         <div className="flex items-center gap-2.5 text-[11px] text-[#6b7280] mb-3">
           <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-[13px] text-[#0b57d0]">schedule</span>
+            <span className="material-symbols-outlined text-[13px] text-[#00535b]">schedule</span>
             {item.rep || '24 hrs'}
           </span>
           <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-[13px] text-[#0b57d0]">home</span>
+            <span className="material-symbols-outlined text-[13px] text-[#00535b]">home</span>
             Home
           </span>
           <span className="flex items-center gap-1">
@@ -315,7 +315,7 @@ function MobileTestCard({ item, onDetails, index }) {
         {/* View Details toggle */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-0.5 text-[12px] font-bold text-[#0b57d0] mb-3"
+          className="flex items-center gap-0.5 text-[12px] font-bold text-[#00535b] mb-3"
         >
           View Details
           <span
@@ -348,7 +348,7 @@ function MobileTestCard({ item, onDetails, index }) {
           <div>
             <button
               onClick={() => onDetails(item)}
-              className="px-3.5 py-2 rounded-full text-[11px] font-bold bg-[#0b57d0] text-white transition-colors"
+              className="px-3.5 py-2 rounded-full text-[11px] font-bold bg-[#00535b] text-white transition-colors"
             >
               Labs &amp; Prices
             </button>
@@ -436,7 +436,7 @@ export function MobileLayout({
 
         <div className="flex items-center gap-1.5">
           <div className="w-6 h-6 rounded-lg bg-[#e8f0fe] flex items-center justify-center">
-            <span className="material-symbols-outlined text-[#0b57d0] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span className="material-symbols-outlined text-[#00535b] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
               {meta.icon}
             </span>
           </div>
@@ -454,12 +454,12 @@ export function MobileLayout({
         {/* Location & Reviewed Badge */}
         <div className="flex items-center justify-between mb-3.5 flex-wrap gap-2">
           <div className="flex items-center gap-1 text-[11px] text-[#6b7280]">
-            <span className="material-symbols-outlined text-sm text-[#0b57d0]">location_on</span>
+            <span className="material-symbols-outlined text-sm text-[#00535b]">location_on</span>
             <span className="font-semibold">{locationText}</span>
           </div>
           {(categoryMeta?.medically_reviewed ?? true) && (
-            <span className="flex items-center gap-1 text-[9px] font-bold text-[#00722f] bg-[#e8f8ed] px-2 py-0.5 rounded-full border border-[#00722f]/20">
-              <span className="material-symbols-outlined text-xs text-[#00722f]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+            <span className="flex items-center gap-1 text-[9px] font-bold text-[#286d67] bg-[#e8f8ed] px-2 py-0.5 rounded-full border border-[#286d67]/20">
+              <span className="material-symbols-outlined text-xs text-[#286d67]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
               Medically Reviewed
             </span>
           )}
@@ -468,7 +468,7 @@ export function MobileLayout({
         {/* Title */}
         <div className="flex items-center gap-2 mb-2">
           <div className="w-8 h-8 rounded-lg bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-[#0b57d0] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span className="material-symbols-outlined text-[#00535b] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
               {categoryMeta?.icon || meta.icon}
             </span>
           </div>
@@ -486,7 +486,7 @@ export function MobileLayout({
           {(categoryMeta?.long_description) && (
             <button
               onClick={() => setDescriptionExpanded(!descriptionExpanded)}
-              className="inline-flex items-center gap-0.5 ml-1.5 text-[10px] font-bold text-[#0b57d0] hover:underline whitespace-nowrap focus:outline-none"
+              className="inline-flex items-center gap-0.5 ml-1.5 text-[10px] font-bold text-[#00535b] hover:underline whitespace-nowrap focus:outline-none"
             >
               {descriptionExpanded ? 'Less' : 'More'}
               <span 
@@ -507,7 +507,7 @@ export function MobileLayout({
             { icon: 'star', label: categoryMeta?.stats_patients ? categoryMeta.stats_patients.split(' ')[2] + ' patients' : '56k+ patients', fill: true },
           ].map((s, i) => (
             <div key={i} className="flex flex-col items-center p-2 bg-white border border-[#e8eaed] rounded-xl shadow-[0_2px_6px_rgba(0,0,0,0.01)] text-center">
-              <span className="material-symbols-outlined text-sm text-[#0b57d0] mb-0.5" style={{ fontVariationSettings: s.fill ? "'FILL' 1" : "'FILL' 0" }}>{s.icon}</span>
+              <span className="material-symbols-outlined text-sm text-[#00535b] mb-0.5" style={{ fontVariationSettings: s.fill ? "'FILL' 1" : "'FILL' 0" }}>{s.icon}</span>
               <span className="font-extrabold text-[#374151] leading-tight text-[9px]">{s.label}</span>
             </div>
           ))}
@@ -540,9 +540,9 @@ export function MobileLayout({
                 }}
                 className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold border transition-all"
                 style={{
-                  background: active ? '#0b57d0' : '#f8f9fa',
+                  background: active ? '#00535b' : '#f8f9fa',
                   color: active ? '#ffffff' : '#374151',
-                  borderColor: active ? '#0b57d0' : '#d1d5db',
+                  borderColor: active ? '#00535b' : '#d1d5db',
                 }}
               >
                 {pill.label}
@@ -554,7 +554,7 @@ export function MobileLayout({
 
       {/* ── SEARCH BAR ───────────────────────────────────────────────────── */}
       <div className="px-4 pt-4 pb-2">
-        <div className="flex items-center gap-2 bg-white border border-[#e8eaed] rounded-xl px-3 py-2.5 focus-within:border-[#0b57d0] transition-all">
+        <div className="flex items-center gap-2 bg-white border border-[#e8eaed] rounded-xl px-3 py-2.5 focus-within:border-[#00535b] transition-all">
           <span className="material-symbols-outlined text-[#9ca3af] text-lg">search</span>
           <input
             type="text"
@@ -577,8 +577,8 @@ export function MobileLayout({
           onClick={() => setFilterOpen(true)}
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-[12px] font-semibold transition-all"
           style={{
-            background: activeFilterCount > 0 ? '#0b57d0' : '#ffffff',
-            borderColor: activeFilterCount > 0 ? '#0b57d0' : '#d1d5db',
+            background: activeFilterCount > 0 ? '#00535b' : '#ffffff',
+            borderColor: activeFilterCount > 0 ? '#00535b' : '#d1d5db',
             color: activeFilterCount > 0 ? '#ffffff' : '#374151',
           }}
         >
@@ -606,15 +606,15 @@ export function MobileLayout({
               return (
                 <div
                   key={`featured-mobile-${item.id}-${idx}`}
-                  className="w-[260px] flex-shrink-0 snap-start bg-white border border-[#0b57d0]/25 rounded-2xl p-4 shadow-sm"
+                  className="w-[260px] flex-shrink-0 snap-start bg-white border border-[#00535b]/25 rounded-2xl p-4 shadow-sm"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="w-8 h-8 rounded-lg bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
-                      <span className="material-symbols-outlined text-[#0b57d0] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
+                      <span className="material-symbols-outlined text-[#00535b] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
                         {iconName}
                       </span>
                     </div>
-                    <span className="text-[8px] font-black text-[#0b57d0] bg-[#e8f0fe] border border-[#0b57d0]/20 px-1.5 py-0.5 rounded uppercase tracking-wide">
+                    <span className="text-[8px] font-black text-[#00535b] bg-[#e8f0fe] border border-[#00535b]/20 px-1.5 py-0.5 rounded uppercase tracking-wide">
                       NABL
                     </span>
                   </div>
@@ -626,11 +626,11 @@ export function MobileLayout({
                   
                   <div className="flex items-center gap-2 text-[10px] text-[#6b7280] mb-3">
                     <span className="flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs text-[#0b57d0]">schedule</span>
+                      <span className="material-symbols-outlined text-xs text-[#00535b]">schedule</span>
                       {item.rep || '24 hrs'}
                     </span>
                     <span className="flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs text-[#0b57d0]">home</span>
+                      <span className="material-symbols-outlined text-xs text-[#00535b]">home</span>
                       Home
                     </span>
                     <span className="flex items-center gap-0.5">
@@ -651,7 +651,7 @@ export function MobileLayout({
                     
                     <button
                       onClick={() => handleDetails(item)}
-                      className="px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-[#0b57d0] text-white shadow-sm"
+                      className="px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-[#00535b] text-white shadow-sm"
                     >
                       Labs &amp; Prices
                     </button>
@@ -703,7 +703,7 @@ export function MobileLayout({
             <p className="text-[12px] text-[#6b7280] mb-4">Try adjusting your filter settings</p>
             <button
               onClick={resetFilters}
-              className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#0b57d0] text-white"
+              className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#00535b] text-white"
             >
               Reset Filters
             </button>
@@ -725,8 +725,8 @@ export function MobileLayout({
         <div className="pb-6 text-center">
           {visibleCount < displayTests.length ? (
             <div className="flex flex-col items-center gap-2" ref={sentinelRef}>
-              <div className="flex items-center gap-2 text-[12px] font-semibold text-[#0b57d0]">
-                <span className="w-4 h-4 rounded-full border-2 border-[#0b57d0] border-t-transparent animate-spin" />
+              <div className="flex items-center gap-2 text-[12px] font-semibold text-[#00535b]">
+                <span className="w-4 h-4 rounded-full border-2 border-[#00535b] border-t-transparent animate-spin" />
                 Loading more tests...
               </div>
             </div>

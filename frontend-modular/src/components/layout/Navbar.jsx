@@ -195,7 +195,7 @@ export function Navbar({
           <div className="flex items-center flex-shrink-0">
             <a 
               onClick={() => { setPage("home"); if (setActiveCategoryFilter) setActiveCategoryFilter("Home"); }} 
-              className="text-2xl font-black text-[#0c4ca6] cursor-pointer hover:opacity-85 transition-opacity tracking-tight"
+              className="text-2xl font-black text-[#006d77] cursor-pointer hover:opacity-85 transition-opacity tracking-tight"
             >
               ChooseMyLab
             </a>
@@ -209,8 +209,8 @@ export function Navbar({
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'tests' ? null : 'tests')}
                 onMouseEnter={() => setActiveDropdown('tests')}
-                className={`flex items-center gap-1 hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer ${
-                  activeDropdown === 'tests' ? 'text-[#0c4ca6]' : ''
+                className={`flex items-center gap-1 hover:text-[#006d77] transition-colors py-2 outline-none select-none cursor-pointer ${
+                  activeDropdown === 'tests' ? 'text-[#006d77]' : ''
                 }`}
               >
                 <span>Tests</span>
@@ -228,7 +228,7 @@ export function Navbar({
                     <button
                       key={idx}
                       onClick={() => handleItemNavigation(item)}
-                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#0c4ca6] transition-colors"
+                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#006d77] transition-colors"
                     >
                       {item.name}
                     </button>
@@ -242,8 +242,8 @@ export function Navbar({
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'packages' ? null : 'packages')}
                 onMouseEnter={() => setActiveDropdown('packages')}
-                className={`flex items-center gap-1 hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer ${
-                  activeDropdown === 'packages' ? 'text-[#0c4ca6]' : ''
+                className={`flex items-center gap-1 hover:text-[#006d77] transition-colors py-2 outline-none select-none cursor-pointer ${
+                  activeDropdown === 'packages' ? 'text-[#006d77]' : ''
                 }`}
               >
                 <span>Packages</span>
@@ -261,7 +261,7 @@ export function Navbar({
                     <button
                       key={idx}
                       onClick={() => handleItemNavigation(item)}
-                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#0c4ca6] transition-colors"
+                      className="w-full px-4 py-2 hover:bg-slate-50 text-left font-bold text-xs text-[#202124] hover:text-[#006d77] transition-colors"
                     >
                       {item.name}
                     </button>
@@ -273,7 +273,7 @@ export function Navbar({
             {/* Labs Direct Link */}
             <button
               onClick={() => setPage("lab-listing")}
-              className="hover:text-[#0c4ca6] transition-colors py-2 outline-none select-none cursor-pointer"
+              className="hover:text-[#006d77] transition-colors py-2 outline-none select-none cursor-pointer"
             >
               Labs
             </button>
@@ -281,7 +281,7 @@ export function Navbar({
             {/* Cyan Compare Pill */}
             <button
               onClick={() => setPage("package-compare")}
-              className="flex items-center gap-1 px-4 py-2 bg-[#d1f8ff] text-[#006073] rounded-full hover:shadow-md transition-all active:scale-95 text-[11px] font-black uppercase tracking-wider outline-none select-none cursor-pointer"
+              className="flex items-center gap-1 px-4 py-2 bg-[#e7eeff] text-[#00535b] rounded-full hover:shadow-md transition-all active:scale-95 text-[11px] font-black uppercase tracking-wider outline-none select-none cursor-pointer"
             >
               <span className="material-symbols-outlined text-[14px] leading-none">swap_horiz</span>
               <span>Compare</span>
@@ -304,7 +304,7 @@ export function Navbar({
                     className="w-48 bg-transparent text-xs font-bold text-[#202124] outline-none placeholder:text-slate-400"
                     autoFocus
                   />
-                  <button type="submit" className="text-slate-500 hover:text-[#0c4ca6] leading-none">
+                  <button type="submit" className="text-slate-500 hover:text-[#006d77] leading-none">
                     <span className="material-symbols-outlined text-[16px]">search</span>
                   </button>
                   <button type="button" onClick={() => { setSearchBarOpen(false); setSearchText(""); }} className="text-slate-400 hover:text-red-500 leading-none">
@@ -314,7 +314,7 @@ export function Navbar({
               ) : (
                 <button 
                   onClick={() => setSearchBarOpen(true)}
-                  className="w-10 h-10 rounded-full hover:bg-slate-50 text-[#4d515a] hover:text-[#0c4ca6] flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-full hover:bg-slate-50 text-[#4d515a] hover:text-[#006d77] flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[20px] font-bold">search</span>
                 </button>
@@ -327,7 +327,7 @@ export function Navbar({
                 onClick={() => setShowLocMenu(!showLocMenu)}
                 className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 border border-slate-100 hover:bg-slate-100 text-[#4d515a] rounded-xl transition-all cursor-pointer font-extrabold text-[12px] uppercase select-none"
               >
-                <span className="material-symbols-outlined text-[#0c4ca6] text-[16px] leading-none">location_on</span>
+                <span className="material-symbols-outlined text-[#006d77] text-[16px] leading-none">location_on</span>
                 <span className="max-w-[100px] truncate leading-none">
                   {userLocation ? userLocation.label.split("(")[0].trim() : "Location"}
                 </span>
@@ -338,7 +338,7 @@ export function Navbar({
                 <div className="absolute top-[44px] right-0 w-64 bg-white border border-slate-200/60 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 font-body text-left">
                   <button 
                     onClick={handleLocationClick}
-                    className="w-full px-4 py-2.5 hover:bg-slate-50 text-left font-bold text-xs text-[#0c4ca6] flex items-center gap-2 outline-none"
+                    className="w-full px-4 py-2.5 hover:bg-slate-50 text-left font-bold text-xs text-[#006d77] flex items-center gap-2 outline-none"
                   >
                     <span className="material-symbols-outlined text-sm">my_location</span>
                     GPS Detect
@@ -361,12 +361,12 @@ export function Navbar({
                             setPincodeInput(e.target.value.replace(/\D/g, ""));
                             if (pincodeError) setPincodeError("");
                           }}
-                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#0c4ca6]/50 focus:bg-white rounded-lg text-xs font-bold text-slate-800 outline-none transition-all placeholder:text-slate-400"
+                          className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#006d77]/50 focus:bg-white rounded-lg text-xs font-bold text-slate-800 outline-none transition-all placeholder:text-slate-400"
                         />
                       </div>
                       <button
                         type="submit"
-                        className="h-7 w-7 rounded-lg bg-[#0c4ca6]/10 hover:bg-[#0c4ca6] text-[#0c4ca6] hover:text-white flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0"
+                        className="h-7 w-7 rounded-lg bg-[#006d77]/10 hover:bg-[#006d77] text-[#006d77] hover:text-white flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0"
                       >
                         <span className="material-symbols-outlined text-xs">arrow_forward</span>
                       </button>
@@ -401,7 +401,7 @@ export function Navbar({
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setPage("profile-page")}
-                  className="flex items-center gap-1 px-3.5 py-2 bg-[#0c4ca6]/5 hover:bg-[#0c4ca6]/10 text-[#0c4ca6] rounded-xl transition-all active:scale-95 font-extrabold text-xs"
+                  className="flex items-center gap-1 px-3.5 py-2 bg-[#006d77]/5 hover:bg-[#006d77]/10 text-[#006d77] rounded-xl transition-all active:scale-95 font-extrabold text-xs"
                 >
                   <span className="material-symbols-outlined text-base leading-none">account_circle</span>
                   <span className="max-w-[70px] truncate">{user.name.split(" ")[0]}</span>
@@ -411,7 +411,7 @@ export function Navbar({
             ) : (
               <button 
                 onClick={() => setPage("signup")}
-                className="px-4 py-2 font-black text-[#0c4ca6] hover:text-[#0a3e87] hover:underline transition-all text-xs uppercase tracking-wide cursor-pointer"
+                className="px-4 py-2 font-black text-[#006d77] hover:text-[#0a3e87] hover:underline transition-all text-xs uppercase tracking-wide cursor-pointer"
               >
                 Login/Signup
               </button>
@@ -434,7 +434,7 @@ export function Navbar({
           </button>
           <a 
             onClick={() => { setPage("home"); if (setActiveCategoryFilter) setActiveCategoryFilter("Home"); }} 
-            className="text-lg font-black text-[#0c4ca6] cursor-pointer hover:opacity-85 tracking-tight pt-0.5"
+            className="text-lg font-black text-[#006d77] cursor-pointer hover:opacity-85 tracking-tight pt-0.5"
           >
             ChooseMyLab
           </a>
@@ -446,7 +446,7 @@ export function Navbar({
           {/* Location button */}
           <button 
             onClick={() => setShowLocMenu(!showLocMenu)}
-            className="w-9 h-9 flex items-center justify-center text-[#0c4ca6] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+            className="w-9 h-9 flex items-center justify-center text-[#006d77] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">location_on</span>
           </button>
@@ -471,12 +471,12 @@ export function Navbar({
               placeholder="Search tests or checkup packages..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold outline-none text-[#202124] placeholder:text-slate-400 focus:bg-white focus:border-[#0c4ca6]/40 transition-all"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold outline-none text-[#202124] placeholder:text-slate-400 focus:bg-white focus:border-[#006d77]/40 transition-all"
               autoFocus
             />
             <button 
               type="submit" 
-              className="bg-[#0c4ca6] text-white px-4 rounded-xl flex items-center justify-center active:scale-95 transition-all text-xs font-bold uppercase cursor-pointer"
+              className="bg-[#006d77] text-white px-4 rounded-xl flex items-center justify-center active:scale-95 transition-all text-xs font-bold uppercase cursor-pointer"
             >
               Search
             </button>
@@ -495,7 +495,7 @@ export function Navbar({
           </div>
           <button 
             onClick={handleLocationClick}
-            className="w-full px-3 py-2 bg-[#0c4ca6]/5 hover:bg-[#0c4ca6]/10 text-[#0c4ca6] font-bold text-xs rounded-xl flex items-center justify-center gap-2 mb-3 transition-all"
+            className="w-full px-3 py-2 bg-[#006d77]/5 hover:bg-[#006d77]/10 text-[#006d77] font-bold text-xs rounded-xl flex items-center justify-center gap-2 mb-3 transition-all"
           >
             <span className="material-symbols-outlined text-base">my_location</span>
             Detect GPS Location
@@ -510,11 +510,11 @@ export function Navbar({
                 setPincodeInput(e.target.value.replace(/\D/g, ""));
                 if (pincodeError) setPincodeError("");
               }}
-              className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#0c4ca6]/50 focus:bg-white rounded-xl text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+              className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#006d77]/50 focus:bg-white rounded-xl text-xs font-bold outline-none transition-all placeholder:text-slate-400"
             />
             <button
               type="submit"
-              className="bg-[#0c4ca6] text-white px-3.5 py-2 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0 font-bold text-xs"
+              className="bg-[#006d77] text-white px-3.5 py-2 rounded-xl flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer flex-shrink-0 font-bold text-xs"
             >
               Set PIN
             </button>
@@ -559,7 +559,7 @@ export function Navbar({
             <div>
               {/* Drawer Header */}
               <div className="flex justify-between items-center p-4 border-b border-slate-100">
-                <span className="text-[#0c4ca6] font-black text-lg tracking-tight">ChooseMyLab</span>
+                <span className="text-[#006d77] font-black text-lg tracking-tight">ChooseMyLab</span>
                 <button 
                   onClick={() => setMobileDrawerOpen(false)}
                   className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 active:scale-95 transition-all outline-none"
@@ -601,7 +601,7 @@ export function Navbar({
                         <button
                           key={idx}
                           onClick={() => handleItemNavigation(item)}
-                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#0c4ca6] block"
+                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#006d77] block"
                         >
                           {item.name}
                         </button>
@@ -631,7 +631,7 @@ export function Navbar({
                         <button
                           key={idx}
                           onClick={() => handleItemNavigation(item)}
-                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#0c4ca6] block"
+                          className="w-full py-2 text-left text-xs font-bold text-slate-600 hover:text-[#006d77] block"
                         >
                           {item.name}
                         </button>
@@ -652,13 +652,13 @@ export function Navbar({
                 {/* Compare Link */}
                 <button
                   onClick={() => { setPage("package-compare"); setMobileDrawerOpen(false); }}
-                  className="w-full flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all text-[#006073]"
+                  className="w-full flex items-center justify-between py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all text-[#00535b]"
                 >
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base">swap_horiz</span>
                     <span>Compare Diagnostics</span>
                   </div>
-                  <span className="bg-[#d1f8ff] text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Compare</span>
+                  <span className="bg-[#e7eeff] text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Compare</span>
                 </button>
 
               </div>
@@ -682,7 +682,7 @@ export function Navbar({
               ) : (
                 <button
                   onClick={() => { setPage("signup"); setMobileDrawerOpen(false); }}
-                  className="w-full py-2.5 bg-white border border-slate-200 text-[#0c4ca6] font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
+                  className="w-full py-2.5 bg-white border border-slate-200 text-[#006d77] font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
                 >
                   Login / Register
                 </button>
@@ -690,7 +690,7 @@ export function Navbar({
 
               <button
                 onClick={() => { setPage("package-listing"); if (setActiveCategoryFilter) setActiveCategoryFilter("Full Body Checkup"); setMobileDrawerOpen(false); }}
-                className="w-full py-3 bg-[#0c4ca6] hover:bg-[#0a3e87] text-white font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
+                className="w-full py-3 bg-[#006d77] hover:bg-[#0a3e87] text-white font-bold text-xs rounded-xl text-center active:scale-95 transition-all cursor-pointer uppercase tracking-wider block"
               >
                 Book checkup Now
               </button>

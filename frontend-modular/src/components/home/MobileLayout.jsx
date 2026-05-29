@@ -69,7 +69,7 @@ export function MobileLayout({
       {
         key: "health",
         icon: "health_metrics",
-        iconColor: "text-blue-500 bg-blue-50/80 border-blue-100",
+        iconColor: "text-[#00535b] bg-[#edf6f9]/80 border-[#a9ece5]",
         bulletPoints: ["85 Parameters Included", "CBC, LFT, KFT Profile", "Lipid & Thyroid Profile"],
         fallback: { name: "Full Body Checkup", price: 899, originalPrice: 1299 }
       },
@@ -219,13 +219,13 @@ export function MobileLayout({
       textColor: "text-[#1e40af]",
       titleColor: "text-[#1e3a8a]",
       taglineColor: "text-[#1d4ed8]",
-      badgeStyle: "bg-blue-100 border border-blue-300 text-blue-800",
-      line1Color: "border-l-blue-600",
-      line1Text: "text-blue-700",
+      badgeStyle: "bg-[#a9ece5] border border-[#236863]/30 text-[#286d67]",
+      line1Color: "border-l-[#00535b]",
+      line1Text: "text-[#236863]",
       line2Color: "border-l-indigo-600",
       line2Text: "text-indigo-700",
-      btnClass: "bg-blue-600 text-white hover:bg-blue-700 shadow-md",
-      glowOverlay: "bg-blue-500/10"
+      btnClass: "bg-[#00535b] text-white hover:bg-[#236863] shadow-md",
+      glowOverlay: "bg-[#edf6f9]0/10"
     },
     {
       badge: "👴 CARING GERIATRIC CARE",
@@ -528,7 +528,7 @@ export function MobileLayout({
 
         {/* Compact Advisor Callback Widget (Tuned sizing) */}
         <section className="mb-8">
-          <div className="bg-[#00722f] text-white p-4 rounded-2xl border border-white/10 shadow-[0_12px_30px_rgba(0,114,47,0.1)] space-y-3">
+          <div className="bg-[#286d67] text-white p-4 rounded-2xl border border-white/10 shadow-[0_12px_30px_rgba(0,114,47,0.1)] space-y-3">
             <div className="flex items-center gap-2.5">
               <span className="text-xl animate-bounce">📞</span>
               <div className="text-left">
@@ -724,7 +724,7 @@ export function MobileLayout({
                 className="bg-white border border-slate-100 rounded-xl p-3.5 flex items-center justify-between shadow-sm active:scale-[0.98] transition-all cursor-pointer group animate-in fade-in slide-in-from-right-3"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 bg-blue-50 text-primary border border-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="h-9 w-9 bg-[#edf6f9] text-primary border border-[#a9ece5] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                     <span className="material-symbols-outlined text-base leading-none">biotech</span>
                   </div>
                   <div className="text-left">
@@ -761,10 +761,10 @@ export function MobileLayout({
 
         {/* Small & Compact Can't Decide Banner (Doctor Chat Button Hidden for now) */}
         <section className="mb-6">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-3xl p-4 relative overflow-hidden shadow-md text-left flex flex-row items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-[#00535b] to-[#236863] text-white rounded-3xl p-4 relative overflow-hidden shadow-md text-left flex flex-row items-center justify-between gap-4">
             {/* Glowing blobs inside card */}
             <div className="absolute top-0 left-0 w-36 h-36 bg-white/5 rounded-full blur-2xl" />
-            <div className="absolute bottom-0 right-0 w-36 h-36 bg-blue-900/40 rounded-full blur-2xl" />
+            <div className="absolute bottom-0 right-0 w-36 h-36 bg-[#00535b]/20 rounded-full blur-2xl" />
 
             <div className="w-3/5 relative z-10 space-y-1.5">
               <h3 className="font-headline text-[11.5px] font-black leading-tight text-white tracking-tight">
@@ -777,7 +777,7 @@ export function MobileLayout({
               <div className="pt-0.5">
                 <a 
                   href="tel:1800123456"
-                  className="bg-white hover:bg-slate-100 text-blue-700 text-[9px] font-black px-3 py-1.5 rounded-xl transition-all shadow-sm active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block text-center"
+                  className="bg-white hover:bg-slate-100 text-[#236863] text-[9px] font-black px-3 py-1.5 rounded-xl transition-all shadow-sm active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block text-center"
                 >
                   Free Consult
                 </a>

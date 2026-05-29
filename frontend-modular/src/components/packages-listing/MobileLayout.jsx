@@ -143,7 +143,7 @@ export function MobileLayout({
         {/* Dynamic Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-[#edeeef]/50 p-3.5 rounded-2xl flex flex-col items-center text-center gap-1 shadow-sm border border-[#c3c6d6]/20">
-            <div className="w-8 h-8 bg-[#0b57d0]/10 rounded-full flex items-center justify-center text-[#0b57d0]">
+            <div className="w-8 h-8 bg-[#00535b]/10 rounded-full flex items-center justify-center text-[#00535b]">
               <span className="material-symbols-outlined text-base">clinical_notes</span>
             </div>
             <span className="text-[10px] font-black text-[#191c1d]">{metadata?.stats?.availablePackages} Packages</span>
@@ -162,7 +162,7 @@ export function MobileLayout({
         <section className="mb-6 text-left">
           <div className="px-5 flex justify-between items-center mb-3">
             <h2 className="font-headline text-sm font-extrabold text-[#191c1d]">Standardized Tiers</h2>
-            <span className="text-[10px] font-black text-[#0b57d0] uppercase tracking-wider">Select to Filter</span>
+            <span className="text-[10px] font-black text-[#00535b] uppercase tracking-wider">Select to Filter</span>
           </div>
 
           <div className="flex overflow-x-auto hide-scrollbar gap-4 px-5 snap-x">
@@ -174,7 +174,7 @@ export function MobileLayout({
                   onClick={() => handleTierToggle(tier.tier_name)}
                   className={`min-w-[220px] max-w-[220px] snap-center bg-white p-5 rounded-2xl border transition-all flex flex-col justify-between h-[140px] ${
                     isSelected 
-                      ? 'border-[#0b57d0] ring-4 ring-[#0b57d0]/10 bg-[#0b57d0]/5 shadow-md' 
+                      ? 'border-[#00535b] ring-4 ring-[#00535b]/10 bg-[#00535b]/5 shadow-md' 
                       : 'border-[#c3c6d6]/20 shadow-[0px_4px_20px_rgba(11,87,208,0.03)]'
                   }`}
                 >
@@ -183,7 +183,7 @@ export function MobileLayout({
                       <span className="bg-[#edeeef] text-[#737785] text-[9px] font-extrabold px-2 py-0.5 rounded-full leading-none">
                         {tier.tier_name}
                       </span>
-                      <span className="material-symbols-outlined text-[#0b57d0] text-lg leading-none">{tier.icon}</span>
+                      <span className="material-symbols-outlined text-[#00535b] text-lg leading-none">{tier.icon}</span>
                     </div>
                     <p className="text-[9px] text-[#737785] mt-2 font-semibold line-clamp-2 leading-snug">{tier.subtitle}</p>
                   </div>
@@ -191,11 +191,11 @@ export function MobileLayout({
                   <div className="flex justify-between items-end border-t border-slate-50 pt-2">
                     <div className="flex items-baseline gap-0.5">
                       <span className="text-[8px] text-[#737785]">Starts</span>
-                      <span className="text-xs font-black text-[#0b57d0]">₹{tier.price}</span>
+                      <span className="text-xs font-black text-[#00535b]">₹{tier.price}</span>
                     </div>
                     <button 
                       className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded ${
-                        isSelected ? 'bg-[#0b57d0] text-white' : 'text-[#0b57d0] bg-[#0b57d0]/5'
+                        isSelected ? 'bg-[#00535b] text-white' : 'text-[#00535b] bg-[#00535b]/5'
                       }`}
                     >
                       {isSelected ? 'Active' : 'Pick'}
@@ -227,7 +227,7 @@ export function MobileLayout({
               onClick={() => handleCategorySwitch(cat.name)}
               className={`px-4 py-2 rounded-full text-[11px] font-black whitespace-nowrap shrink-0 transition-all ${
                 isActive 
-                  ? 'bg-[#0b57d0] text-white shadow-sm shadow-[#0b57d0]/25' 
+                  ? 'bg-[#00535b] text-white shadow-sm shadow-[#00535b]/25' 
                   : 'bg-[#edeeef] text-[#424654] font-semibold hover:bg-slate-200'
               }`}
             >
@@ -261,7 +261,7 @@ export function MobileLayout({
             <p className="text-[10px] text-[#737785] mt-0.5 max-w-xs mx-auto font-semibold">Try opening your filters to clear price checks or accreditations.</p>
             <button 
               onClick={resetFilters}
-              className="mt-4 bg-[#0b57d0] text-white text-[10px] font-black px-4 py-2 rounded-xl active:scale-95 transition-all shadow-sm"
+              className="mt-4 bg-[#00535b] text-white text-[10px] font-black px-4 py-2 rounded-xl active:scale-95 transition-all shadow-sm"
             >
               Reset Filters
             </button>
@@ -298,7 +298,7 @@ export function MobileLayout({
                       type="checkbox"
                       checked={isCompareSelected}
                       onChange={() => handleCompareCheckbox(offer)}
-                      className="w-5 h-5 rounded-lg border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer"
+                      className="w-5 h-5 rounded-lg border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b] cursor-pointer"
                     />
                   </label>
                 </div>
@@ -315,7 +315,7 @@ export function MobileLayout({
                     </span>
                   ))}
                   {offer.tests?.length > 3 && (
-                    <span className="bg-[#0b57d0]/5 text-[#0b57d0] text-[9px] font-black px-2 py-0.5 rounded leading-none">
+                    <span className="bg-[#00535b]/5 text-[#00535b] text-[9px] font-black px-2 py-0.5 rounded leading-none">
                       +{offer.tests.length - 3} More
                     </span>
                   )}
@@ -338,7 +338,7 @@ export function MobileLayout({
                     </div>
                     <button 
                       onClick={() => handleViewDetail(offer)}
-                      className="px-5 py-2.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wide font-headline"
+                      className="px-5 py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wide font-headline"
                     >
                       View Detail
                     </button>
@@ -347,7 +347,7 @@ export function MobileLayout({
                   <div className="grid grid-cols-2 gap-2">
                     <button 
                       onClick={() => handleBookNow(offer)}
-                      className="w-full py-2.5 border border-[#0b57d0] text-[#0b57d0] font-black text-xs rounded-xl text-center active:bg-[#0b57d0]/5 transition-all uppercase font-headline"
+                      className="w-full py-2.5 border border-[#00535b] text-[#00535b] font-black text-xs rounded-xl text-center active:bg-[#00535b]/5 transition-all uppercase font-headline"
                     >
                       Book Now
                     </button>
@@ -377,7 +377,7 @@ export function MobileLayout({
         <div className="mt-6 px-5">
           <button 
             onClick={() => setPageNum(prev => prev + 1)}
-            className="w-full py-3.5 border-2 border-[#0b57d0] text-[#0b57d0] font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline"
+            className="w-full py-3.5 border-2 border-[#00535b] text-[#00535b] font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline"
           >
             Load More Packages
           </button>
@@ -387,7 +387,7 @@ export function MobileLayout({
       {/* ── 5. COMPARE INSIGHTS MOBILE GUIDE ── */}
       {metadata?.guides && metadata.guides.length > 0 && (
         <section className="mt-8 px-5 text-left">
-          <div className="bg-[#86f898]/5 rounded-2xl p-5 border border-[#86f898]/10 shadow-sm">
+          <div className="bg-[#a9ece5]/5 rounded-2xl p-5 border border-[#a9ece5]/10 shadow-sm">
             <h3 className="font-headline text-xs font-black mb-4 flex items-center gap-1.5 text-[#006e2c]">
               <span className="material-symbols-outlined text-base">info</span>
               <span>Comparison Guide</span>
@@ -425,7 +425,7 @@ export function MobileLayout({
                 >
                   <summary className="flex justify-between items-center p-4 cursor-pointer list-none outline-none">
                     <span className="text-xs font-bold text-[#191c1d] pr-4">{faq.question}</span>
-                    <span className={`material-symbols-outlined text-[#737785] text-base transition-transform ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                    <span className={`material-symbols-outlined text-[#737785] text-base transition-transform ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                       expand_more
                     </span>
                   </summary>
@@ -459,7 +459,7 @@ export function MobileLayout({
             
             <button 
               onClick={executeCompare}
-              className="flex-1 py-3.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white rounded-xl font-headline font-black text-xs shadow-md flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+              className="flex-1 py-3.5 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl font-headline font-black text-xs shadow-md flex items-center justify-center gap-1.5 active:scale-95 transition-all"
             >
               <span className="material-symbols-outlined text-sm">compare_arrows</span>
               <span>Compare Selected ({selectedCompare.length})</span>
@@ -482,7 +482,7 @@ export function MobileLayout({
               <h3 className="font-headline text-lg font-black">Filter & Sort</h3>
               <button 
                 onClick={() => { resetFilters(); setFilterDrawerOpen(false); }}
-                className="text-xs font-black text-[#0b57d0] uppercase tracking-wider"
+                className="text-xs font-black text-[#00535b] uppercase tracking-wider"
               >
                 Reset
               </button>
@@ -506,7 +506,7 @@ export function MobileLayout({
                         onClick={() => handlePriceRangeSelect(btn.val)}
                         className={`flex-1 py-3 text-[10px] font-black rounded-xl border transition-all text-center ${
                           isPicked 
-                            ? 'bg-[#0b57d0] text-white border-transparent shadow-sm' 
+                            ? 'bg-[#00535b] text-white border-transparent shadow-sm' 
                             : 'border-[#c3c6d6] text-[#424654] hover:bg-slate-50'
                         }`}
                       >
@@ -529,7 +529,7 @@ export function MobileLayout({
                         onClick={() => handleAccreditationChange(type)}
                         className={`py-3 text-[10px] font-black rounded-xl border transition-all text-center ${
                           checked 
-                            ? 'bg-[#0b57d0]/10 text-[#0b57d0] border-[#0b57d0]' 
+                            ? 'bg-[#00535b]/10 text-[#00535b] border-[#00535b]' 
                             : 'border-[#c3c6d6]/60 text-[#424654] hover:bg-slate-50'
                         }`}
                       >
@@ -550,7 +550,7 @@ export function MobileLayout({
                     type="checkbox"
                     checked={filters.homeCollection}
                     onChange={handleHomeCollectionToggle}
-                    className="w-5 h-5 rounded-lg border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer"
+                    className="w-5 h-5 rounded-lg border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b] cursor-pointer"
                   />
                   <span className="text-[11px] font-bold text-[#424654]">Include Free Home Sample Collection</span>
                 </label>
@@ -559,7 +559,7 @@ export function MobileLayout({
 
             <button 
               onClick={() => setFilterDrawerOpen(false)}
-              className="w-full mt-8 py-4 bg-[#0b57d0] hover:bg-[#0041a2] text-white rounded-2xl font-headline font-black text-sm uppercase tracking-wider shadow-md active:scale-[0.98] transition-transform"
+              className="w-full mt-8 py-4 bg-[#00535b] hover:bg-[#00393f] text-white rounded-2xl font-headline font-black text-sm uppercase tracking-wider shadow-md active:scale-[0.98] transition-transform"
             >
               Apply Filter Adjustments
             </button>

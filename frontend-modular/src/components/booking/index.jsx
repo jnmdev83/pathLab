@@ -243,9 +243,9 @@ export function Booking({ test, user, setPage, userLocation }) {
   return (
     <div className="max-w-4xl mx-auto py-10 px-4 font-body">
       {/* Booking Header Card */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row md:justify-between md:items-center relative overflow-hidden shadow-lg mb-6">
+      <div className="bg-gradient-to-r from-[#00535b] to-[#236863] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row md:justify-between md:items-center relative overflow-hidden shadow-lg mb-6">
         <div className="absolute top-0 left-0 w-36 h-36 bg-white/5 rounded-full blur-2xl" />
-        <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-900/30 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 right-0 w-48 h-48 bg-[#00535b]/15 rounded-full blur-2xl" />
 
         <div className="relative z-10 space-y-1">
           <span className="text-[10px] uppercase font-bold tracking-wider text-white/70 font-headline block">
@@ -393,7 +393,7 @@ export function Booking({ test, user, setPage, userLocation }) {
                         Collection Slots
                       </h4>
                       {date && (
-                        <span className="text-[10px] font-black uppercase text-[#0c4ca6] leading-none bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md font-headline">
+                        <span className="text-[10px] font-black uppercase text-[#006d77] leading-none bg-[#edf6f9] border border-[#a9ece5] px-2 py-0.5 rounded-md font-headline">
                           {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </span>
                       )}
@@ -415,7 +415,7 @@ export function Booking({ test, user, setPage, userLocation }) {
                           if (disabled) {
                             cardStyle = "bg-slate-50 text-slate-300 border-slate-100 cursor-not-allowed opacity-50";
                           } else if (isSlotSelected) {
-                            cardStyle = "bg-[#0c4ca6] hover:bg-[#0c4ca6] border-[#0c4ca6] text-white shadow-md shadow-blue-500/10 scale-[1.02]";
+                            cardStyle = "bg-[#006d77] hover:bg-[#006d77] border-[#006d77] text-white shadow-md shadow-[#00535b]/10 scale-[1.02]";
                           }
 
                           return (

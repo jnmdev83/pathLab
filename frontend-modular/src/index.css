@@ -18,16 +18,16 @@ body {
 }
 
 .mesh-gradient {
-  background-color: #f8f9fa;
+  background-color: #f9f9ff;
   background-image: 
-      radial-gradient(at 0% 0%, hsla(216, 100%, 95%, 1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(180, 100%, 95%, 1) 0, transparent 50%), 
-      radial-gradient(at 100% 100%, hsla(216, 100%, 92%, 1) 0, transparent 50%), 
-      radial-gradient(at 0% 100%, hsla(180, 100%, 92%, 1) 0, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(185, 100%, 96%, 1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(172, 100%, 96%, 1) 0, transparent 50%), 
+      radial-gradient(at 100% 100%, hsla(185, 100%, 94%, 1) 0, transparent 50%), 
+      radial-gradient(at 0% 100%, hsla(172, 100%, 94%, 1) 0, transparent 50%);
 }
 
 .hero-gradient {
-  background: radial-gradient(circle at 70% 30%, rgba(11, 87, 208, 0.08) 0%, transparent 50%);
+  background: radial-gradient(circle at 70% 30%, rgba(0, 83, 91, 0.08) 0%, transparent 50%);
 }
 
 .glass {
@@ -38,10 +38,10 @@ body {
 }
 
 .glass-dark {
-  background: rgba(0, 65, 162, 0.03);
+  background: rgba(0, 83, 91, 0.03);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 65, 162, 0.1);
+  border: 1px solid rgba(0, 83, 91, 0.1);
 }
 
 .bento-card {
@@ -53,7 +53,7 @@ body {
 }
 
 .glow-soft {
-  box-shadow: 0 0 20px rgba(11, 87, 208, 0.08);
+  box-shadow: 0 0 20px rgba(0, 83, 91, 0.08);
 }
 
 @keyframes pulse {

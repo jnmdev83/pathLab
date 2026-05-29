@@ -178,8 +178,8 @@ export function PackagesListing({
     return (
       <div className="min-h-screen bg-[#f8f9fa] flex flex-col items-center justify-center p-8">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-4 border-[#0b57d0]/20 border-t-[#0b57d0] animate-spin" />
-          <p className="text-sm font-bold text-[#0b57d0] font-headline animate-pulse">Loading medical screening directory...</p>
+          <div className="w-12 h-12 rounded-full border-4 border-[#00535b]/20 border-t-[#00535b] animate-spin" />
+          <p className="text-sm font-bold text-[#00535b] font-headline animate-pulse">Loading medical screening directory...</p>
         </div>
       </div>
     );

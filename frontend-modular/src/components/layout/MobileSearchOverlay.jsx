@@ -76,8 +76,8 @@ export function MobileSearchOverlay({
       {/* ─── HEADER ROW ─── */}
       <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100/60 bg-white sticky top-0 z-10">
         <div className="flex items-center gap-1">
-          <span className="material-symbols-outlined text-[#0c4ca6] text-xl font-bold">search</span>
-          <span className="text-[#0c4ca6] font-black text-lg tracking-tight font-headline">Search Diagnostics</span>
+          <span className="material-symbols-outlined text-[#006d77] text-xl font-bold">search</span>
+          <span className="text-[#006d77] font-black text-lg tracking-tight font-headline">Search Diagnostics</span>
         </div>
         <button 
           onClick={onClose}
@@ -97,7 +97,7 @@ export function MobileSearchOverlay({
             placeholder="Search Packages, Scans or Blood Tests..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200/80 focus:border-[#0c4ca6] focus:bg-white rounded-2xl pl-11 pr-11 py-3.5 text-xs font-bold outline-none text-[#202124] placeholder:text-slate-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)] transition-all duration-200"
+            className="w-full bg-slate-50 border border-slate-200/80 focus:border-[#006d77] focus:bg-white rounded-2xl pl-11 pr-11 py-3.5 text-xs font-bold outline-none text-[#202124] placeholder:text-slate-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)] transition-all duration-200"
           />
           {query.trim() && (
             <button
@@ -125,7 +125,7 @@ export function MobileSearchOverlay({
               <button
                 key={index}
                 onClick={() => handleSuggestionClick(test.search)}
-                className="bg-slate-50 hover:bg-[#0c4ca6]/5 text-slate-700 hover:text-[#0c4ca6] border border-slate-100 hover:border-[#0c4ca6]/20 px-3.5 py-2 rounded-xl text-[11px] font-extrabold transition-all active:scale-95 text-left flex items-center gap-1.5"
+                className="bg-slate-50 hover:bg-[#006d77]/5 text-slate-700 hover:text-[#006d77] border border-slate-100 hover:border-[#006d77]/20 px-3.5 py-2 rounded-xl text-[11px] font-extrabold transition-all active:scale-95 text-left flex items-center gap-1.5"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400/60" />
                 {test.name}
@@ -148,15 +148,15 @@ export function MobileSearchOverlay({
                 className="bg-white hover:bg-slate-50 border border-slate-100 hover:border-slate-200/80 p-3.5 rounded-2xl transition-all active:scale-[0.98] text-left flex justify-between items-center group shadow-[0_2px_8px_rgba(0,0,0,0.01)]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0c4ca6] border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="w-8 h-8 rounded-xl bg-[#edf6f9] text-[#006d77] border border-[#a9ece5] flex items-center justify-center group-hover:scale-105 transition-transform">
                     <span className="material-symbols-outlined text-sm">package_2</span>
                   </div>
                   <div>
-                    <span className="text-xs font-black text-slate-700 group-hover:text-[#0c4ca6] transition-colors">{pkg.name}</span>
+                    <span className="text-xs font-black text-slate-700 group-hover:text-[#006d77] transition-colors">{pkg.name}</span>
                     <p className="text-[9px] text-slate-400 mt-0.5 font-bold uppercase tracking-wider">{pkg.category} Category</p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-slate-300 text-sm group-hover:text-[#0c4ca6] group-hover:translate-x-0.5 transition-all">chevron_right</span>
+                <span className="material-symbols-outlined text-slate-300 text-sm group-hover:text-[#006d77] group-hover:translate-x-0.5 transition-all">chevron_right</span>
               </button>
             ))}
           </div>

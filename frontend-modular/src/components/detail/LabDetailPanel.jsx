@@ -383,7 +383,7 @@ export function LabDetailPanel({ labId, labName, onClose, onBook, testName, test
               <div className="text-center py-12">
                 <span className="material-symbols-outlined text-4xl text-[#d1d5db] block mb-3">error</span>
                 <p className="text-sm text-[#6b7280]">{error}</p>
-                <button onClick={handleClose} className="mt-4 text-xs font-bold text-[#0b57d0] underline">Close</button>
+                <button onClick={handleClose} className="mt-4 text-xs font-bold text-[#00535b] underline">Close</button>
               </div>
             ) : (
               <>
@@ -416,16 +416,16 @@ export function LabDetailPanel({ labId, labName, onClose, onBook, testName, test
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {profile.established_year && (
                     <span className="flex items-center gap-1 text-[10px] font-bold text-[#374151] bg-[#f8f9fa] border border-[#e8eaed] px-2 py-0.5 rounded-full">
-                      <span className="material-symbols-outlined text-[10px] text-[#0b57d0]">calendar_today</span>
+                      <span className="material-symbols-outlined text-[10px] text-[#00535b]">calendar_today</span>
                       Est. {profile.established_year}
                     </span>
                   )}
                   <span className="flex items-center gap-1 text-[10px] font-bold text-[#374151] bg-[#f8f9fa] border border-[#e8eaed] px-2 py-0.5 rounded-full">
-                    <span className="material-symbols-outlined text-[10px] text-[#0b57d0]">{labTypeInfo.icon}</span>
+                    <span className="material-symbols-outlined text-[10px] text-[#00535b]">{labTypeInfo.icon}</span>
                     {labTypeInfo.label}
                   </span>
                   {profile.is_verified && (
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-[#00722f] bg-[#e8f8ed] border border-[#00722f]/20 px-2 py-0.5 rounded-full">
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-[#286d67] bg-[#e8f8ed] border border-[#286d67]/20 px-2 py-0.5 rounded-full">
                       <span className="material-symbols-outlined text-[10px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                       Verified
                     </span>
@@ -461,7 +461,7 @@ export function LabDetailPanel({ labId, labName, onClose, onBook, testName, test
                     { icon: 'schedule',       label: `${profile.report_time_hours}h`,                        sub: 'Avg Reports' },
                   ].map((s, i) => (
                     <div key={i} className="bg-[#f8f9fa] border border-[#e8eaed] rounded-xl p-2.5 text-center">
-                      <span className="material-symbols-outlined text-[#0b57d0] text-base mb-0.5 block" style={{ fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
+                      <span className="material-symbols-outlined text-[#00535b] text-base mb-0.5 block" style={{ fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
                       <div className="text-xs font-black text-[#1f2937] leading-none">{s.label}</div>
                       <div className="text-[9px] text-[#9ca3af] font-semibold mt-0.5">{s.sub}</div>
                     </div>
@@ -470,10 +470,10 @@ export function LabDetailPanel({ labId, labName, onClose, onBook, testName, test
 
                 {/* Home collection badge */}
                 {profile.home_collection && (
-                  <div className="flex items-center gap-2 bg-[#e8f0fe] border border-[#0b57d0]/15 rounded-xl px-3 py-2 mb-4">
-                    <span className="material-symbols-outlined text-[#0b57d0] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
+                  <div className="flex items-center gap-2 bg-[#e8f0fe] border border-[#00535b]/15 rounded-xl px-3 py-2 mb-4">
+                    <span className="material-symbols-outlined text-[#00535b] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
                     <div>
-                      <div className="text-[11px] font-black text-[#0b57d0]">Free Home Collection</div>
+                      <div className="text-[11px] font-black text-[#00535b]">Free Home Collection</div>
                       <div className="text-[10px] text-[#4b5563]">Certified phlebotomist visits your home</div>
                     </div>
                   </div>
@@ -503,7 +503,7 @@ export function LabDetailPanel({ labId, labName, onClose, onBook, testName, test
                 {onBook && (
                   <button
                     onClick={() => { onBook(); handleClose(); }}
-                    className="w-full py-2.5 rounded-xl text-xs font-black bg-[#0b57d0] hover:bg-[#0842a0] text-white transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                    className="w-full py-2.5 rounded-xl text-xs font-black bg-[#00535b] hover:bg-[#0842a0] text-white transition-colors shadow-sm flex items-center justify-center gap-1.5"
                   >
                     <span className="material-symbols-outlined text-base">calendar_add_on</span>
                     Book {testName ? `${testName} at this lab` : 'Test at This Lab'}

@@ -176,8 +176,8 @@ export function PackageDetail({
     return (
       <div className="min-h-screen bg-[#f8f9fa] flex flex-col items-center justify-center p-8">
         <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div className="w-12 h-12 rounded-full border-4 border-[#0b57d0]/20 border-t-[#0b57d0] animate-spin" />
-          <p className="text-sm font-bold text-[#0b57d0] font-headline">Fetching premium clinical profile...</p>
+          <div className="w-12 h-12 rounded-full border-4 border-[#00535b]/20 border-t-[#00535b] animate-spin" />
+          <p className="text-sm font-bold text-[#00535b] font-headline">Fetching premium clinical profile...</p>
         </div>
       </div>
     );
@@ -189,7 +189,7 @@ export function PackageDetail({
         <span className="material-symbols-outlined text-4xl text-[#ba1a1a] mb-2">error</span>
         <h4 className="text-base font-extrabold text-[#191c1d]">{error || 'Package details not found'}</h4>
         <p className="text-xs text-[#737785] mt-1">There was a problem loading this package detail. Please try again.</p>
-        <button onClick={() => setPage('package-listing')} className="mt-5 px-6 py-2 bg-[#0b57d0] text-white text-xs font-bold rounded-xl shadow-sm">
+        <button onClick={() => setPage('package-listing')} className="mt-5 px-6 py-2 bg-[#00535b] text-white text-xs font-bold rounded-xl shadow-sm">
           Back to Listings
         </button>
       </div>
@@ -225,11 +225,11 @@ export function PackageDetail({
         {/* 1. BREADCRUMBS NAVIGATION */}
         <div className="max-w-[1280px] mx-auto px-8 py-5">
           <nav className="flex items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
-            <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+            <button onClick={() => setPage('home')} className="hover:text-[#00535b] transition-colors">Home</button>
             <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-            <button onClick={() => setPage('package-listing')} className="hover:text-[#0b57d0] transition-colors">Packages</button>
+            <button onClick={() => setPage('package-listing')} className="hover:text-[#00535b] transition-colors">Packages</button>
             <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-            <span className="text-[#0b57d0] font-black truncate max-w-[250px]">{details.package_name}</span>
+            <span className="text-[#00535b] font-black truncate max-w-[250px]">{details.package_name}</span>
           </nav>
         </div>
 
@@ -237,16 +237,16 @@ export function PackageDetail({
         <section className="max-w-[1280px] mx-auto px-8 mb-16">
           <div className="bg-white rounded-[2rem] overflow-hidden shadow-[0px_4px_20px_rgba(11,87,208,0.04)] border border-[#c3c6d6]/20 grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
             {/* Glowing Brand Accents */}
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#0b57d0]/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#00535b]/5 rounded-full blur-3xl pointer-events-none" />
             
             {/* Left Content Block */}
             <div className="lg:col-span-7 p-10 lg:p-12 space-y-6 flex flex-col justify-center relative z-10">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="bg-[#86f898]/30 text-[#00722f] px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider font-headline flex items-center gap-1">
+                <span className="bg-[#a9ece5]/30 text-[#286d67] px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider font-headline flex items-center gap-1">
                   <span className="material-symbols-outlined text-sm font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                   Certified Lab
                 </span>
-                <span className="bg-[#0b57d0]/5 text-[#0b57d0] border border-[#0b57d0]/10 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider font-headline flex items-center gap-1">
+                <span className="bg-[#00535b]/5 text-[#00535b] border border-[#00535b]/10 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider font-headline flex items-center gap-1">
                   <span className="material-symbols-outlined text-sm font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>sell</span>
                   Best Price
                 </span>
@@ -276,14 +276,14 @@ export function PackageDetail({
               {/* Param & time widgets */}
               <div className="grid grid-cols-2 gap-4 max-w-md">
                 <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#e1e3e4]/30 rounded-2xl p-4">
-                  <span className="material-symbols-outlined text-[#0b57d0] text-3xl">biotech</span>
+                  <span className="material-symbols-outlined text-[#00535b] text-3xl">biotech</span>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-wider text-[#737785] leading-none mb-1">Parameters</p>
                     <p className="font-extrabold text-sm text-[#191c1d] leading-none">{includedTests.length} Markers Mapped</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#e1e3e4]/30 rounded-2xl p-4">
-                  <span className="material-symbols-outlined text-[#0b57d0] text-3xl">schedule</span>
+                  <span className="material-symbols-outlined text-[#00535b] text-3xl">schedule</span>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-wider text-[#737785] leading-none mb-1">Reports in</p>
                     <p className="font-extrabold text-sm text-[#191c1d] leading-none">{details.reporting_time}</p>
@@ -295,7 +295,7 @@ export function PackageDetail({
               <div className="pt-2 flex items-baseline gap-3.5">
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-[10px] uppercase font-black text-[#737785] mr-1.5 self-center font-headline">Rate:</span>
-                  <span className="text-3xl font-black text-[#0b57d0] font-headline">₹{details.price.toLocaleString('en-IN')}</span>
+                  <span className="text-3xl font-black text-[#00535b] font-headline">₹{details.price.toLocaleString('en-IN')}</span>
                   {details.original_price && (
                     <span className="text-sm line-through text-[#737785]">₹{details.original_price.toLocaleString('en-IN')}</span>
                   )}
@@ -310,7 +310,7 @@ export function PackageDetail({
               {/* Booking CTA */}
               <button 
                 onClick={() => handleBooking(details)}
-                className="bg-[#0b57d0] hover:bg-[#0041a2] text-white text-sm font-bold py-4 px-10 rounded-2xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 group w-full md:w-fit uppercase font-headline"
+                className="bg-[#00535b] hover:bg-[#00393f] text-white text-sm font-bold py-4 px-10 rounded-2xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 group w-full md:w-fit uppercase font-headline"
               >
                 <span>Book Appointment Now</span>
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
@@ -335,7 +335,7 @@ export function PackageDetail({
           <div className="flex-1 space-y-8 text-left">
             <div>
               <h2 className="text-xl md:text-2xl font-black text-[#191c1d] mb-4 font-headline flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#0b57d0]">analytics</span>
+                <span className="material-symbols-outlined text-[#00535b]">analytics</span>
                 Why this health screening is essential
               </h2>
               <p className="text-sm md:text-base text-[#424654] leading-relaxed mb-6 font-medium">
@@ -358,14 +358,14 @@ export function PackageDetail({
             {/* Specimen and logistics split cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
               <div className="flex items-center gap-4 bg-white border border-[#c3c6d6]/30 p-5 rounded-2xl shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-[#0b57d0] rounded-xl flex items-center justify-center text-xl shrink-0">🧪</div>
+                <div className="w-12 h-12 bg-[#edf6f9] text-[#00535b] rounded-xl flex items-center justify-center text-xl shrink-0">🧪</div>
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#737785] block font-headline">Specimen Type</span>
                   <span className="text-xs font-black text-[#191c1d] mt-1 block">{details.samples_required || 'Blood & Urine Sample'}</span>
                 </div>
               </div>
               <div className="flex items-center gap-4 bg-white border border-[#c3c6d6]/30 p-5 rounded-2xl shadow-sm">
-                <div className="w-12 h-12 bg-blue-50 text-[#0b57d0] rounded-xl flex items-center justify-center text-xl shrink-0">🏠</div>
+                <div className="w-12 h-12 bg-[#edf6f9] text-[#00535b] rounded-xl flex items-center justify-center text-xl shrink-0">🏠</div>
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#737785] block font-headline">Logistics</span>
                   <span className="text-xs font-black text-[#191c1d] mt-1 block">Free Home Sample Visit</span>
@@ -389,7 +389,7 @@ export function PackageDetail({
         {/* 4. PARAMETER DETAIL INTERACTIVE MATRIX */}
         <section className="max-w-[1280px] mx-auto px-8 mb-20">
           <h2 className="text-xl md:text-2xl font-black text-[#191c1d] mb-6 font-headline text-left flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#0b57d0]">biotech</span>
+            <span className="material-symbols-outlined text-[#00535b]">biotech</span>
             Included Dynamic Diagnostics ({includedTests.length} parameters)
           </h2>
 
@@ -399,7 +399,7 @@ export function PackageDetail({
               {includedTests.map((t, idx) => {
                 const isActive = activeParamIndex === idx;
                 let badge = "🧪 Diagnostic";
-                let badgeStyle = "bg-blue-50 text-[#0b57d0] border-blue-100";
+                let badgeStyle = "bg-[#edf6f9] text-[#00535b] border-[#a9ece5]";
                 
                 const cat = (t.cat || '').toLowerCase();
                 if (cat.includes('blood')) {
@@ -417,18 +417,18 @@ export function PackageDetail({
                     onClick={() => setActiveParamIndex(idx)}
                     className={`border rounded-2xl p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 ${
                       isActive 
-                        ? 'border-[#0b57d0] bg-[#0b57d0]/[0.03] shadow-sm translate-x-1' 
+                        ? 'border-[#00535b] bg-[#00535b]/[0.03] shadow-sm translate-x-1' 
                         : 'border-[#c3c6d6]/40 bg-white hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <span className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] transition-colors ${
-                        isActive ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-slate-500'
+                        isActive ? 'bg-[#00535b] text-white' : 'bg-slate-100 text-slate-500'
                       }`}>
                         {idx + 1}
                       </span>
                       <div>
-                        <h4 className={`font-headline font-bold text-xs transition-colors ${isActive ? 'text-[#0b57d0]' : 'text-[#191c1d]'}`}>
+                        <h4 className={`font-headline font-bold text-xs transition-colors ${isActive ? 'text-[#00535b]' : 'text-[#191c1d]'}`}>
                           {t.name}
                         </h4>
                         <span className={`inline-block border text-[8px] font-black px-1.5 py-0.5 rounded-md mt-1 font-headline uppercase ${badgeStyle}`}>
@@ -436,7 +436,7 @@ export function PackageDetail({
                         </span>
                       </div>
                     </div>
-                    <span className={`material-symbols-outlined text-sm font-bold transition-transform ${isActive ? 'text-[#0b57d0] translate-x-1' : 'text-slate-400'}`}>
+                    <span className={`material-symbols-outlined text-sm font-bold transition-transform ${isActive ? 'text-[#00535b] translate-x-1' : 'text-slate-400'}`}>
                       chevron_right
                     </span>
                   </div>
@@ -445,8 +445,8 @@ export function PackageDetail({
             </div>
 
             {/* Right Significance panel */}
-            <div className="lg:col-span-5 bg-gradient-to-br from-white to-slate-50/50 border border-[#0b57d0]/20 rounded-3xl p-6 shadow-md min-h-[300px] flex flex-col justify-between overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-[#0b57d0]/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="lg:col-span-5 bg-gradient-to-br from-white to-slate-50/50 border border-[#00535b]/20 rounded-3xl p-6 shadow-md min-h-[300px] flex flex-col justify-between overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[#00535b]/5 rounded-full blur-3xl pointer-events-none" />
               
               {(() => {
                 const activeTest = includedTests[activeParamIndex] || includedTests[0];
@@ -456,7 +456,7 @@ export function PackageDetail({
                   <div className="relative z-10 flex flex-col justify-between h-full">
                     <div>
                       <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-1.5 text-[10px] font-black text-[#0b57d0] uppercase tracking-wider font-headline leading-none">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black text-[#00535b] uppercase tracking-wider font-headline leading-none">
                           <span className="material-symbols-outlined text-base">analytics</span>
                           Parameter Bio-Insight
                         </div>
@@ -515,14 +515,14 @@ export function PackageDetail({
                     <div className="flex justify-between items-end border-t border-slate-50 pt-3">
                       <div>
                         <span className="text-[8px] text-[#737785] uppercase font-bold leading-none block mb-0.5">Price</span>
-                        <span className="font-headline font-black text-sm text-[#0b57d0]">₹{pkg.price.toLocaleString('en-IN')}</span>
+                        <span className="font-headline font-black text-sm text-[#00535b]">₹{pkg.price.toLocaleString('en-IN')}</span>
                       </div>
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCompetitorNavigate(pkg);
                         }}
-                        className="text-[10px] font-black text-[#0b57d0] border border-[#0b57d0]/20 hover:bg-[#0b57d0]/5 px-3 py-1.5 rounded-lg active:scale-95 transition-all"
+                        className="text-[10px] font-black text-[#00535b] border border-[#00535b]/20 hover:bg-[#00535b]/5 px-3 py-1.5 rounded-lg active:scale-95 transition-all"
                       >
                         View Offer
                       </button>
@@ -573,15 +573,15 @@ export function PackageDetail({
                       <h4 className="font-headline font-black text-xs text-[#191c1d] leading-snug mb-3">{comp.package_name}</h4>
                       
                       <div className="flex flex-col gap-1.5 text-[10px] text-[#424654] font-bold pt-2 border-t border-slate-50">
-                        <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs text-[#0b57d0]">analytics</span> {comp.test_count} Markers Mapped</span>
-                        <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs text-[#0b57d0]">schedule</span> Turnaround: {comp.reporting_time}</span>
+                        <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs text-[#00535b]">analytics</span> {comp.test_count} Markers Mapped</span>
+                        <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs text-[#00535b]">schedule</span> Turnaround: {comp.reporting_time}</span>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-end border-t border-slate-50 pt-4 mt-4">
                       <div>
                         <span className="text-[8px] text-[#737785] block font-bold leading-none mb-0.5">Clinical Rate</span>
-                        <span className="font-headline font-black text-base text-[#0b57d0]">₹{comp.price.toLocaleString('en-IN')}</span>
+                        <span className="font-headline font-black text-base text-[#00535b]">₹{comp.price.toLocaleString('en-IN')}</span>
                       </div>
                       <div className="flex gap-1.5">
                         <button
@@ -595,7 +595,7 @@ export function PackageDetail({
                         </button>
                         <button 
                           onClick={() => handleBooking(comp)}
-                          className="px-3.5 py-1.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white text-[10px] font-black rounded-lg active:scale-95 transition-all uppercase tracking-wide font-headline"
+                          className="px-3.5 py-1.5 bg-[#00535b] hover:bg-[#00393f] text-white text-[10px] font-black rounded-lg active:scale-95 transition-all uppercase tracking-wide font-headline"
                         >
                           Book Competitor
                         </button>
@@ -624,7 +624,7 @@ export function PackageDetail({
                     className="w-full flex justify-between items-center p-5 text-left outline-none font-headline font-bold text-xs text-[#191c1d] hover:bg-slate-50 transition-colors"
                   >
                     <span>{faq.q}</span>
-                    <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                    <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                       expand_more
                     </span>
                   </button>
@@ -669,11 +669,11 @@ export function PackageDetail({
         {/* 2. HERO BLOCK */}
         <section className="px-5 pt-6 pb-6 bg-white border-b border-[#c3c6d6]/10">
           <div className="flex flex-wrap gap-1.5 mb-3.5 select-none">
-            <span className="bg-[#86f898]/30 text-[#00722f] px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider font-headline flex items-center gap-0.5">
+            <span className="bg-[#a9ece5]/30 text-[#286d67] px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider font-headline flex items-center gap-0.5">
               <span className="material-symbols-outlined text-[12px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
               Certified Lab
             </span>
-            <span className="bg-[#0b57d0]/5 text-[#0b57d0] border border-[#0b57d0]/10 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider font-headline flex items-center gap-0.5">
+            <span className="bg-[#00535b]/5 text-[#00535b] border border-[#00535b]/10 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider font-headline flex items-center gap-0.5">
               <span className="material-symbols-outlined text-[12px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>sell</span>
               Best Price
             </span>
@@ -688,7 +688,7 @@ export function PackageDetail({
           </p>
 
           <div className="flex items-baseline gap-2.5 mb-6">
-            <span className="text-xl font-black text-[#0b57d0] font-headline">₹{details.price.toLocaleString('en-IN')}</span>
+            <span className="text-xl font-black text-[#00535b] font-headline">₹{details.price.toLocaleString('en-IN')}</span>
             {details.original_price && (
               <span className="text-xs line-through text-slate-400">₹{details.original_price.toLocaleString('en-IN')}</span>
             )}
@@ -752,7 +752,7 @@ export function PackageDetail({
         <section className="px-5 mt-6">
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-headline text-sm font-black">Health Parameters</h3>
-            <span className="text-[10px] font-black text-primary bg-[#0b57d0]/5 px-2.5 py-1 rounded border border-[#0b57d0]/10 font-headline leading-none">
+            <span className="text-[10px] font-black text-primary bg-[#00535b]/5 px-2.5 py-1 rounded border border-[#00535b]/10 font-headline leading-none">
               {includedTests.length} Tests Mapped
             </span>
           </div>
@@ -772,7 +772,7 @@ export function PackageDetail({
                     className="w-full p-4 flex items-center justify-between text-left"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-blue-50 text-[#0b57d0] flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#edf6f9] text-[#00535b] flex items-center justify-center shrink-0">
                         <span className="material-symbols-outlined text-base">analytics</span>
                       </div>
                       <div>
@@ -782,7 +782,7 @@ export function PackageDetail({
                         </span>
                       </div>
                     </div>
-                    <span className={`material-symbols-outlined text-[#737785] transition-transform duration-150 ${isExpanded ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                    <span className={`material-symbols-outlined text-[#737785] transition-transform duration-150 ${isExpanded ? 'rotate-180 text-[#00535b]' : ''}`}>
                       keyboard_arrow_down
                     </span>
                   </button>
@@ -800,7 +800,7 @@ export function PackageDetail({
 
         {/* 5. CLINICAL STANDARDS */}
         <section className="px-5 mt-6">
-          <div className="bg-[#0b57d0]/5 rounded-2xl p-5 border border-[#0b57d0]/10 flex flex-col items-center text-center shadow-sm">
+          <div className="bg-[#00535b]/5 rounded-2xl p-5 border border-[#00535b]/10 flex flex-col items-center text-center shadow-sm">
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3">
               <span className="material-symbols-outlined text-primary text-2xl">verified_user</span>
             </div>
@@ -840,7 +840,7 @@ export function PackageDetail({
                         e.stopPropagation();
                         handleCompetitorNavigate(pkg);
                       }}
-                      className="text-[8px] font-black text-[#0b57d0] border border-[#0b57d0]/25 px-2 py-1 rounded active:scale-95 transition-all"
+                      className="text-[8px] font-black text-[#00535b] border border-[#00535b]/25 px-2 py-1 rounded active:scale-95 transition-all"
                     >
                       View details
                     </button>
@@ -886,7 +886,7 @@ export function PackageDetail({
                     <div className="flex items-center justify-between border-t border-slate-50 pt-3 mt-3">
                       <div>
                         <span className="text-[8px] text-[#737785] block font-bold leading-none mb-0.5">Rate Offered</span>
-                        <span className="font-black text-xs text-[#0b57d0]">₹{comp.price.toLocaleString('en-IN')}</span>
+                        <span className="font-black text-xs text-[#00535b]">₹{comp.price.toLocaleString('en-IN')}</span>
                       </div>
                       <div className="flex gap-1">
                         <button
@@ -900,7 +900,7 @@ export function PackageDetail({
                         </button>
                         <button 
                           onClick={() => handleBooking(comp)}
-                          className="px-2 py-1.5 bg-[#0b57d0] text-white text-[8px] font-black rounded active:scale-95 transition-all uppercase tracking-wide font-headline"
+                          className="px-2 py-1.5 bg-[#00535b] text-white text-[8px] font-black rounded active:scale-95 transition-all uppercase tracking-wide font-headline"
                         >
                           Book Now
                         </button>
@@ -920,12 +920,12 @@ export function PackageDetail({
           <p className="text-[9px] font-black uppercase tracking-wider text-[#737785] leading-none mb-1 font-headline">Clinical Price</p>
           <div className="flex items-center gap-1.5">
             <span className="text-lg font-black text-primary leading-none">₹{details.price.toLocaleString('en-IN')}</span>
-            <span className="text-[9px] text-[#006e2c] font-black bg-[#86f898]/10 px-1.5 py-0.5 rounded leading-none">Free Home Sample</span>
+            <span className="text-[9px] text-[#006e2c] font-black bg-[#a9ece5]/10 px-1.5 py-0.5 rounded leading-none">Free Home Sample</span>
           </div>
         </div>
         <button 
           onClick={() => handleBooking(details)}
-          className="bg-primary text-white px-10 h-12 rounded-full font-headline font-black text-xs shadow-md shadow-[#0b57d0]/25 active:scale-95 transition-transform uppercase tracking-wider"
+          className="bg-primary text-white px-10 h-12 rounded-full font-headline font-black text-xs shadow-md shadow-[#00535b]/25 active:scale-95 transition-transform uppercase tracking-wider"
         >
           Book Now
         </button>

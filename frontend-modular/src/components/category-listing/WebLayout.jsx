@@ -92,7 +92,7 @@ function TestCard({ item, onDetails, index }) {
 
   return (
     <div
-      className="bg-white rounded-2xl border border-[#e8eaed] hover:border-[#0b57d0]/30 hover:shadow-md transition-all duration-200"
+      className="bg-white rounded-2xl border border-[#e8eaed] hover:border-[#00535b]/30 hover:shadow-md transition-all duration-200"
       style={{ animationDelay: `${index * 40}ms` }}
     >
       <div className="p-5">
@@ -100,7 +100,7 @@ function TestCard({ item, onDetails, index }) {
           {/* Icon */}
           <div className="w-10 h-10 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 mt-0.5">
             <span
-              className="material-symbols-outlined text-[#0b57d0] text-xl"
+              className="material-symbols-outlined text-[#00535b] text-xl"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               {iconName}
@@ -112,7 +112,7 @@ function TestCard({ item, onDetails, index }) {
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-bold text-[#1f2937] text-sm leading-snug">{item.name}</h3>
               {/* NABL badge */}
-              <span className="text-[9px] font-black text-[#0b57d0] border border-[#0b57d0]/30 bg-[#e8f0fe] px-1.5 py-0.5 rounded tracking-wide uppercase">
+              <span className="text-[9px] font-black text-[#00535b] border border-[#00535b]/30 bg-[#e8f0fe] px-1.5 py-0.5 rounded tracking-wide uppercase">
                 NABL
               </span>
               {item.is_pkg && (
@@ -129,11 +129,11 @@ function TestCard({ item, onDetails, index }) {
             {/* Meta row */}
             <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#6b7280]">
               <span className="flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px] text-[#0b57d0]">schedule</span>
+                <span className="material-symbols-outlined text-[14px] text-[#00535b]">schedule</span>
                 {item.rep || '24 hrs'}
               </span>
               <span className="flex items-center gap-1">
-                <span className="material-symbols-outlined text-[14px] text-[#0b57d0]">home</span>
+                <span className="material-symbols-outlined text-[14px] text-[#00535b]">home</span>
                 Home
               </span>
               <span className="flex items-center gap-1">
@@ -145,7 +145,7 @@ function TestCard({ item, onDetails, index }) {
             {/* Expandable view details */}
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-0.5 mt-2 text-[11px] font-bold text-[#0b57d0] hover:underline"
+              className="flex items-center gap-0.5 mt-2 text-[11px] font-bold text-[#00535b] hover:underline"
             >
               View Details
               <span className="material-symbols-outlined text-sm transition-transform duration-200" style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}>
@@ -176,7 +176,7 @@ function TestCard({ item, onDetails, index }) {
             <div>
               <button
                 onClick={() => onDetails(item)}
-                className="px-4 py-2 rounded-full text-[11px] font-bold bg-[#0b57d0] hover:bg-[#0842a0] text-white transition-colors shadow-sm"
+                className="px-4 py-2 rounded-full text-[11px] font-bold bg-[#00535b] hover:bg-[#0842a0] text-white transition-colors shadow-sm"
               >
                 Labs &amp; Prices
               </button>
@@ -277,7 +277,7 @@ export function WebLayout({
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-1.5 text-xs text-[#6b7280] mb-5 font-medium">
-            <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+            <button onClick={() => setPage('home')} className="hover:text-[#00535b] transition-colors">Home</button>
             <span className="material-symbols-outlined text-sm text-[#d1d5db]">chevron_right</span>
             <span className="text-[#1f2937] font-semibold">{categoryName} Care</span>
           </nav>
@@ -290,7 +290,7 @@ export function WebLayout({
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
                   <span
-                    className="material-symbols-outlined text-[#0b57d0] text-2xl"
+                    className="material-symbols-outlined text-[#00535b] text-2xl"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     {categoryMeta?.icon || meta.icon}
@@ -302,8 +302,8 @@ export function WebLayout({
                       {categoryName} Care
                     </h1>
                     {(categoryMeta?.medically_reviewed ?? true) && (
-                      <span className="flex items-center gap-1 text-[11px] font-bold text-[#00722f] bg-[#e8f8ed] px-2.5 py-0.5 rounded-full border border-[#00722f]/20">
-                        <span className="material-symbols-outlined text-sm text-[#00722f]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                      <span className="flex items-center gap-1 text-[11px] font-bold text-[#286d67] bg-[#e8f8ed] px-2.5 py-0.5 rounded-full border border-[#286d67]/20">
+                        <span className="material-symbols-outlined text-sm text-[#286d67]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                         Medically Reviewed
                       </span>
                     )}
@@ -323,7 +323,7 @@ export function WebLayout({
                 {(categoryMeta?.long_description) && (
                   <button
                     onClick={() => setDescriptionExpanded(!descriptionExpanded)}
-                    className="inline-flex items-center gap-0.5 ml-2 text-[11px] font-bold text-[#0b57d0] hover:underline whitespace-nowrap focus:outline-none"
+                    className="inline-flex items-center gap-0.5 ml-2 text-[11px] font-bold text-[#00535b] hover:underline whitespace-nowrap focus:outline-none"
                   >
                     {descriptionExpanded ? 'Read Less' : 'Read More'}
                     <span 
@@ -342,8 +342,8 @@ export function WebLayout({
               <span className="text-[10px] font-black uppercase tracking-widest text-[#9ca3af] block">Reliability Stats</span>
               <div className="grid grid-cols-1 gap-2.5">
                 {[
-                  { icon: 'biotech', label: categoryMeta?.stats_labs || '128+ certified labs', bg: 'bg-[#e8f0fe]', color: 'text-[#0b57d0]' },
-                  { icon: 'group', label: categoryMeta?.stats_bookings || '10k+ monthly bookings', bg: 'bg-[#e8f0fe]', color: 'text-[#0b57d0]' },
+                  { icon: 'biotech', label: categoryMeta?.stats_labs || '128+ certified labs', bg: 'bg-[#e8f0fe]', color: 'text-[#00535b]' },
+                  { icon: 'group', label: categoryMeta?.stats_bookings || '10k+ monthly bookings', bg: 'bg-[#e8f0fe]', color: 'text-[#00535b]' },
                   { icon: 'star', label: categoryMeta?.stats_patients || 'Trusted by 56k+ patients', bg: 'bg-[#fff4e5]', color: 'text-[#b45309]', fill: true },
                 ].map((s, i) => (
                   <div key={i} className="flex items-center gap-2.5 p-2 bg-[#f8f9fa] rounded-xl border border-[#f1f3f4]">
@@ -394,9 +394,9 @@ export function WebLayout({
                   }}
                   className="flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-semibold border transition-all"
                   style={{
-                    background: active ? '#0b57d0' : '#f8f9fa',
+                    background: active ? '#00535b' : '#f8f9fa',
                     color: active ? '#ffffff' : '#374151',
-                    borderColor: active ? '#0b57d0' : '#d1d5db',
+                    borderColor: active ? '#00535b' : '#d1d5db',
                   }}
                 >
                   {pill.label}
@@ -419,7 +419,7 @@ export function WebLayout({
                 <span className="font-bold text-sm text-[#1f2937]">Filters</span>
                 <button
                   onClick={resetFilters}
-                  className="text-[12px] font-bold text-[#0b57d0] hover:underline"
+                  className="text-[12px] font-bold text-[#00535b] hover:underline"
                 >
                   Reset All
                 </button>
@@ -429,7 +429,7 @@ export function WebLayout({
                 {/* Search Name Input */}
                 <div className="px-5 py-4">
                   <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-2.5">Search Name</p>
-                  <div className="flex items-center gap-2 bg-[#f8f9fa] border border-[#e8eaed] rounded-xl px-3 py-2.5 focus-within:border-[#0b57d0] focus-within:bg-white transition-all">
+                  <div className="flex items-center gap-2 bg-[#f8f9fa] border border-[#e8eaed] rounded-xl px-3 py-2.5 focus-within:border-[#00535b] focus-within:bg-white transition-all">
                     <span className="material-symbols-outlined text-[#9ca3af] text-sm">search</span>
                     <input
                       type="text"
@@ -471,10 +471,10 @@ export function WebLayout({
                                   return { ...prev, categories: updated };
                                 });
                               }}
-                              className="w-4 h-4 rounded border-[#d1d5db] text-[#0b57d0] cursor-pointer"
-                              style={{ accentColor: '#0b57d0' }}
+                              className="w-4 h-4 rounded border-[#d1d5db] text-[#00535b] cursor-pointer"
+                              style={{ accentColor: '#00535b' }}
                             />
-                            <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors">
+                            <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors">
                               {catName}
                             </span>
                           </div>
@@ -500,10 +500,10 @@ export function WebLayout({
                           type="checkbox"
                           checked={filters.type === opt.value}
                           onChange={() => toggleType(opt.value)}
-                          className="w-4 h-4 rounded border-[#d1d5db] text-[#0b57d0] cursor-pointer"
-                          style={{ accentColor: '#0b57d0' }}
+                          className="w-4 h-4 rounded border-[#d1d5db] text-[#00535b] cursor-pointer"
+                          style={{ accentColor: '#00535b' }}
                         />
-                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors">
+                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors">
                           {opt.label}
                         </span>
                       </label>
@@ -515,7 +515,7 @@ export function WebLayout({
                 <div className="px-5 py-4">
                   <div className="flex justify-between mb-3">
                     <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af]">Price Range</p>
-                    <span className="text-[11px] font-bold text-[#0b57d0]">
+                    <span className="text-[11px] font-bold text-[#00535b]">
                       ₹{filters.maxPrice >= 15000 ? '15,000+' : filters.maxPrice.toLocaleString('en-IN')}
                     </span>
                   </div>
@@ -528,8 +528,8 @@ export function WebLayout({
                     onChange={e => setFilters(prev => ({ ...prev, maxPrice: parseInt(e.target.value, 10) }))}
                     className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                     style={{
-                      accentColor: '#0b57d0',
-                      background: `linear-gradient(to right, #0b57d0 ${(filters.maxPrice / 15000) * 100}%, #e9ecef ${(filters.maxPrice / 15000) * 100}%)`
+                      accentColor: '#00535b',
+                      background: `linear-gradient(to right, #00535b ${(filters.maxPrice / 15000) * 100}%, #e9ecef ${(filters.maxPrice / 15000) * 100}%)`
                     }}
                   />
                   <div className="flex justify-between mt-1.5 text-[10px] text-[#9ca3af] font-semibold">
@@ -549,9 +549,9 @@ export function WebLayout({
                         <input
                           type="checkbox"
                           className="w-4 h-4 rounded border-[#d1d5db] cursor-pointer"
-                          style={{ accentColor: '#0b57d0' }}
+                          style={{ accentColor: '#00535b' }}
                         />
-                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors flex items-center gap-1.5">
+                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors flex items-center gap-1.5">
                           <span className="material-symbols-outlined text-sm text-[#9ca3af]">{opt.icon}</span>
                           {opt.label}
                         </span>
@@ -574,9 +574,9 @@ export function WebLayout({
                           checked={filters.turnaround === opt.value}
                           onChange={() => toggleTurnaround(opt.value)}
                           className="w-4 h-4 rounded border-[#d1d5db] cursor-pointer"
-                          style={{ accentColor: '#0b57d0' }}
+                          style={{ accentColor: '#00535b' }}
                         />
-                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors">
+                        <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors">
                           {opt.label}
                         </span>
                       </label>
@@ -594,9 +594,9 @@ export function WebLayout({
                         checked={filters.preparation === 'fasting'}
                         onChange={() => togglePrep('fasting')}
                         className="w-4 h-4 rounded border-[#d1d5db] cursor-pointer"
-                        style={{ accentColor: '#0b57d0' }}
+                        style={{ accentColor: '#00535b' }}
                       />
-                      <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors">
+                      <span className="text-sm text-[#374151] font-medium group-hover:text-[#00535b] transition-colors">
                         Fasting Required
                       </span>
                     </label>
@@ -620,16 +620,16 @@ export function WebLayout({
                     return (
                       <div
                         key={`featured-${item.id}-${idx}`}
-                        className="bg-white border-2 border-[#0b57d0]/20 rounded-2xl p-5 hover:border-[#0b57d0]/50 hover:shadow-md transition-all duration-200 relative"
+                        className="bg-white border-2 border-[#00535b]/20 rounded-2xl p-5 hover:border-[#00535b]/50 hover:shadow-md transition-all duration-200 relative"
                       >
                         {/* Featured label */}
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center">
-                              <span className="material-symbols-outlined text-[#0b57d0] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
+                              <span className="material-symbols-outlined text-[#00535b] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
                             </div>
                           </div>
-                          <span className="text-[9px] font-black text-[#0b57d0] border border-[#0b57d0]/30 bg-[#e8f0fe] px-1.5 py-0.5 rounded tracking-wide uppercase">NABL</span>
+                          <span className="text-[9px] font-black text-[#00535b] border border-[#00535b]/30 bg-[#e8f0fe] px-1.5 py-0.5 rounded tracking-wide uppercase">NABL</span>
                         </div>
                         <h3 className="font-bold text-[#1f2937] text-sm mb-1 leading-snug">{item.name}</h3>
                         <p className="text-xs text-[#6b7280] mb-3 line-clamp-2 leading-relaxed">
@@ -637,11 +637,11 @@ export function WebLayout({
                         </p>
                         <div className="flex items-center gap-3 text-[11px] text-[#6b7280] mb-4">
                           <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[13px] text-[#0b57d0]">schedule</span>
+                            <span className="material-symbols-outlined text-[13px] text-[#00535b]">schedule</span>
                             {item.rep || '24 hrs'}
                           </span>
                           <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[13px] text-[#0b57d0]">home</span>
+                            <span className="material-symbols-outlined text-[13px] text-[#00535b]">home</span>
                             Home
                           </span>
                           <span className="flex items-center gap-1">
@@ -656,7 +656,7 @@ export function WebLayout({
                           </div>
                           <button
                             onClick={() => handleDetails(item)}
-                            className="px-4 py-2 rounded-full text-[11px] font-bold bg-[#0b57d0] hover:bg-[#0842a0] text-white transition-colors shadow-sm"
+                            className="px-4 py-2 rounded-full text-[11px] font-bold bg-[#00535b] hover:bg-[#0842a0] text-white transition-colors shadow-sm"
                           >
                             Labs &amp; Prices
                           </button>
@@ -687,7 +687,7 @@ export function WebLayout({
                   <select
                     value={sort}
                     onChange={e => setSort(e.target.value)}
-                    className="text-[12px] font-bold text-[#1f2937] border border-[#e8eaed] rounded-lg px-3 py-1.5 bg-white outline-none focus:border-[#0b57d0] cursor-pointer"
+                    className="text-[12px] font-bold text-[#1f2937] border border-[#e8eaed] rounded-lg px-3 py-1.5 bg-white outline-none focus:border-[#00535b] cursor-pointer"
                   >
                     <option value="popularity">Recommended</option>
                     <option value="price_asc">Price: Low to High</option>
@@ -708,7 +708,7 @@ export function WebLayout({
                   <p className="text-sm text-[#6b7280] mb-5">Try adjusting your filter settings or clearing all filters.</p>
                   <button
                     onClick={resetFilters}
-                    className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#0b57d0] text-white hover:bg-[#0842a0] transition-colors"
+                    className="px-6 py-2.5 rounded-full text-sm font-bold bg-[#00535b] text-white hover:bg-[#0842a0] transition-colors"
                   >
                     Reset Filters
                   </button>
@@ -729,7 +729,7 @@ export function WebLayout({
                     <div className="pt-2">
                       <button
                         onClick={() => setVisibleCount(prev => prev + 8)}
-                        className="w-full py-3.5 rounded-xl text-sm font-bold border-2 border-[#0b57d0]/30 text-[#0b57d0] hover:bg-[#e8f0fe] hover:border-[#0b57d0] transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3.5 rounded-xl text-sm font-bold border-2 border-[#00535b]/30 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b] transition-all flex items-center justify-center gap-2"
                       >
                         <span className="material-symbols-outlined text-lg">expand_more</span>
                         Load more tests ({remaining} remaining)
@@ -772,18 +772,18 @@ export function WebLayout({
                   <button
                     key={i}
                     onClick={() => setPage('home')}
-                    className="bg-white border border-[#e8eaed] hover:border-[#0b57d0]/30 hover:shadow-sm rounded-xl p-3.5 flex items-center gap-3 text-left transition-all duration-200 group"
+                    className="bg-white border border-[#e8eaed] hover:border-[#00535b]/30 hover:shadow-sm rounded-xl p-3.5 flex items-center gap-3 text-left transition-all duration-200 group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 group-hover:bg-[#0b57d0] transition-colors">
+                    <div className="w-9 h-9 rounded-xl bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 group-hover:bg-[#00535b] transition-colors">
                       <span
-                        className="material-symbols-outlined text-lg text-[#0b57d0] group-hover:text-white transition-colors"
+                        className="material-symbols-outlined text-lg text-[#00535b] group-hover:text-white transition-colors"
                         style={{ fontVariationSettings: "'FILL' 1" }}
                       >
                         {cat.icon}
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-sm font-bold text-[#1f2937] leading-snug truncate group-hover:text-[#0b57d0] transition-colors">
+                      <div className="text-sm font-bold text-[#1f2937] leading-snug truncate group-hover:text-[#00535b] transition-colors">
                         {cat.name}
                       </div>
                       <div className="text-[11px] text-[#9ca3af] truncate">{cat.tag}</div>

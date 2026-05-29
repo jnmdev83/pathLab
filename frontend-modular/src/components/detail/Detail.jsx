@@ -150,11 +150,11 @@ export function Detail({ test, setPage, setTest, user }) {
       {/* ── BREADCRUMB ────────────────────────────────────────────────────── */}
       <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5">
         <nav className="flex flex-wrap items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
-          <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+          <button onClick={() => setPage('home')} className="hover:text-[#00535b] transition-colors">Home</button>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
           <span className="text-[#191c1d]">{testDetails?.cat || test.cat || 'Diagnostics'}</span>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-          <span className="text-[#0b57d0] font-black truncate max-w-[200px]">{testDetails?.name || test.name}</span>
+          <span className="text-[#00535b] font-black truncate max-w-[200px]">{testDetails?.name || test.name}</span>
         </nav>
       </section>
 
@@ -164,7 +164,7 @@ export function Detail({ test, setPage, setTest, user }) {
           
           {/* Left Details Block */}
           <div className="flex-1 space-y-5 text-left">
-            <div className="inline-flex items-center px-3 py-1 bg-[#86f898] text-[#00722f] rounded-full text-xs font-black uppercase tracking-wider font-headline">
+            <div className="inline-flex items-center px-3 py-1 bg-[#a9ece5] text-[#286d67] rounded-full text-xs font-black uppercase tracking-wider font-headline">
               <span className="material-symbols-outlined text-[16px] mr-1" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
               Top Recommended Screen
             </div>
@@ -179,13 +179,13 @@ export function Detail({ test, setPage, setTest, user }) {
             
             <div className="flex flex-wrap gap-2.5 pt-1">
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">schedule</span> Reports in {testDetails?.rep || test.rep || '12 Hours'}
+                <span className="material-symbols-outlined text-[#00535b] text-sm">schedule</span> Reports in {testDetails?.rep || test.rep || '12 Hours'}
               </span>
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">restaurant_menu</span> {testDetails?.preparations?.toLowerCase().includes('fasting') ? 'Fasting Required' : 'No Fasting Needed'}
+                <span className="material-symbols-outlined text-[#00535b] text-sm">restaurant_menu</span> {testDetails?.preparations?.toLowerCase().includes('fasting') ? 'Fasting Required' : 'No Fasting Needed'}
               </span>
               <span className="px-3.5 py-1.5 bg-white border border-[#c3c6d6] rounded-full text-xs font-bold text-[#424654] flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[#0b57d0] text-sm">home</span> Home Collection Available
+                <span className="material-symbols-outlined text-[#00535b] text-sm">home</span> Home Collection Available
               </span>
             </div>
             
@@ -193,7 +193,7 @@ export function Detail({ test, setPage, setTest, user }) {
               <div>
                 <span className="text-[10px] uppercase font-black tracking-widest text-[#737785] block mb-1">Starting from</span>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl md:text-4xl font-black text-[#0b57d0] font-headline">₹{startPrice.toLocaleString('en-IN')}</span>
+                  <span className="text-3xl md:text-4xl font-black text-[#00535b] font-headline">₹{startPrice.toLocaleString('en-IN')}</span>
                   <span className="text-sm line-through text-[#737785]">₹{originalPrice.toLocaleString('en-IN')}</span>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export function Detail({ test, setPage, setTest, user }) {
             </div>
 
             <div className="flex flex-wrap gap-3.5 pt-2">
-              <a href="#compare-labs-section" className="bg-[#0b57d0] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-[#0041a2] transition-colors text-sm shadow-md shadow-[#0b57d0]/25 text-center">
+              <a href="#compare-labs-section" className="bg-[#00535b] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-[#00393f] transition-colors text-sm shadow-md shadow-[#00535b]/25 text-center">
                 Compare Labs &amp; Rates
               </a>
             </div>
@@ -218,7 +218,7 @@ export function Detail({ test, setPage, setTest, user }) {
             />
             <div className="absolute -bottom-4 -left-4 bg-white p-5 rounded-2xl shadow-lg border border-[#e1e3e4] max-w-[250px] text-left">
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="w-8 h-8 bg-blue-50 text-[#0b57d0] rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="w-8 h-8 bg-[#edf6f9] text-[#00535b] rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="material-symbols-outlined text-base">verified_user</span>
                 </span>
                 <span className="font-extrabold text-sm text-[#191c1d] leading-none">NABL Certified Labs</span>
@@ -239,7 +239,7 @@ export function Detail({ test, setPage, setTest, user }) {
             <div className="bg-white border border-[#e1e3e4] p-5 rounded-2xl shadow-sm">
               <div className="flex justify-between items-center mb-5 pb-2.5 border-b border-[#e1e3e4]/60">
                 <h3 className="font-extrabold text-base text-[#191c1d]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Filters</h3>
-                <button onClick={resetFilters} className="text-xs font-bold text-[#0b57d0] hover:underline">Clear All</button>
+                <button onClick={resetFilters} className="text-xs font-bold text-[#00535b] hover:underline">Clear All</button>
               </div>
 
               <div className="space-y-5">
@@ -247,7 +247,7 @@ export function Detail({ test, setPage, setTest, user }) {
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <h4 className="font-bold text-xs text-[#424654]">Price Range</h4>
-                    <span className="text-xs font-bold text-[#0b57d0]">₹{filters.maxPrice >= 5000 ? '5000+' : filters.maxPrice}</span>
+                    <span className="text-xs font-bold text-[#00535b]">₹{filters.maxPrice >= 5000 ? '5000+' : filters.maxPrice}</span>
                   </div>
                   <input 
                     type="range"
@@ -256,7 +256,7 @@ export function Detail({ test, setPage, setTest, user }) {
                     step={100}
                     value={filters.maxPrice}
                     onChange={e => setFilters(prev => ({ ...prev, maxPrice: parseInt(e.target.value, 10) }))}
-                    className="w-full h-1.5 bg-[#c3c6d6] rounded-lg appearance-none cursor-pointer accent-[#0b57d0]"
+                    className="w-full h-1.5 bg-[#c3c6d6] rounded-lg appearance-none cursor-pointer accent-[#00535b]"
                   />
                   <div className="flex justify-between mt-1 text-[10px] text-[#737785]">
                     <span>₹500</span>
@@ -273,7 +273,7 @@ export function Detail({ test, setPage, setTest, user }) {
                         type="checkbox"
                         checked={filters.nabl}
                         onChange={() => setFilters(prev => ({ ...prev, nabl: !prev[nabl] }))}
-                        className="rounded border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0]" 
+                        className="rounded border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b]" 
                       />
                       <span className="text-xs font-semibold text-[#424654]">NABL Certified</span>
                     </label>
@@ -288,7 +288,7 @@ export function Detail({ test, setPage, setTest, user }) {
                       type="checkbox"
                       checked={filters.homeCollection}
                       onChange={() => setFilters(prev => ({ ...prev, homeCollection: !prev.homeCollection }))}
-                      className="rounded border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0]" 
+                      className="rounded border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b]" 
                     />
                     <span className="text-xs font-semibold text-[#424654]">Available</span>
                   </label>
@@ -304,7 +304,7 @@ export function Detail({ test, setPage, setTest, user }) {
                         name="turnaround"
                         checked={filters.turnaround === 'any'}
                         onChange={() => setFilters(prev => ({ ...prev, turnaround: 'any' }))}
-                        className="text-[#0b57d0] focus:ring-[#0b57d0]" 
+                        className="text-[#00535b] focus:ring-[#00535b]" 
                       />
                       <span className="font-semibold">Anytime</span>
                     </label>
@@ -314,7 +314,7 @@ export function Detail({ test, setPage, setTest, user }) {
                         name="turnaround"
                         checked={filters.turnaround === '12'}
                         onChange={() => setFilters(prev => ({ ...prev, turnaround: '12' }))}
-                        className="text-[#0b57d0] focus:ring-[#0b57d0]" 
+                        className="text-[#00535b] focus:ring-[#00535b]" 
                       />
                       <span className="font-semibold">Within 12 Hours</span>
                     </label>
@@ -324,7 +324,7 @@ export function Detail({ test, setPage, setTest, user }) {
                         name="turnaround"
                         checked={filters.turnaround === '6'}
                         onChange={() => setFilters(prev => ({ ...prev, turnaround: '6' }))}
-                        className="text-[#0b57d0] focus:ring-[#0b57d0]" 
+                        className="text-[#00535b] focus:ring-[#00535b]" 
                       />
                       <span className="font-semibold">Within 6 Hours</span>
                     </label>
@@ -335,10 +335,10 @@ export function Detail({ test, setPage, setTest, user }) {
             </div>
 
             {/* Assistance card */}
-            <div className="bg-[#0b57d0] text-white p-5 rounded-2xl shadow-sm text-left">
+            <div className="bg-[#00535b] text-white p-5 rounded-2xl shadow-sm text-left">
               <h4 className="font-black text-sm mb-1.5 uppercase font-headline">Need Assistance?</h4>
               <p className="text-xs opacity-90 leading-relaxed mb-4">Talk to our medical advisor for diagnostic guidance.</p>
-              <a href="tel:1800-CHOICE" className="w-full py-2.5 bg-white text-[#0b57d0] rounded-xl font-bold flex items-center justify-center gap-1.5 text-xs hover:bg-[#f3f4f5] transition-colors shadow-sm">
+              <a href="tel:1800-CHOICE" className="w-full py-2.5 bg-white text-[#00535b] rounded-xl font-bold flex items-center justify-center gap-1.5 text-xs hover:bg-[#f3f4f5] transition-colors shadow-sm">
                 <span className="material-symbols-outlined text-sm">phone</span> Call 1800-CHOICE
               </a>
             </div>
@@ -350,7 +350,7 @@ export function Detail({ test, setPage, setTest, user }) {
             {/* Card 1: What this test measures */}
             <div className="bg-white border border-[#e1e3e4] p-6 md:p-8 rounded-3xl shadow-sm">
               <h2 className="text-xl md:text-2xl font-black text-[#191c1d] mb-6 font-headline flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#0b57d0]">analytics</span>
+                <span className="material-symbols-outlined text-[#00535b]">analytics</span>
                 What does this test measure?
               </h2>
               
@@ -362,7 +362,7 @@ export function Detail({ test, setPage, setTest, user }) {
                 ) : (
                   whatItMeasures.map((item, idx) => (
                     <div key={idx} className="p-4 bg-[#f8f9fa] border border-[#e1e3e4]/30 rounded-xl">
-                      <span className="font-bold text-[#0b57d0] text-sm block mb-1">{item.name}</span>
+                      <span className="font-bold text-[#00535b] text-sm block mb-1">{item.name}</span>
                       <p className="text-xs text-[#424654] leading-relaxed opacity-95">{item.desc}</p>
                     </div>
                   ))
@@ -374,7 +374,7 @@ export function Detail({ test, setPage, setTest, user }) {
                 <div className="mt-8 pt-8 border-t border-[#e1e3e4] grid md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-extrabold text-sm text-[#191c1d] mb-3 flex items-center gap-2 font-headline">
-                      <span className="material-symbols-outlined text-[#0b57d0] text-lg">info</span>
+                      <span className="material-symbols-outlined text-[#00535b] text-lg">info</span>
                       Clinical Importance
                     </h3>
                     <p className="text-xs md:text-sm text-[#424654] leading-relaxed">
@@ -383,7 +383,7 @@ export function Detail({ test, setPage, setTest, user }) {
                   </div>
                   <div>
                     <h3 className="font-extrabold text-sm text-[#191c1d] mb-3 flex items-center gap-2 font-headline">
-                      <span className="material-symbols-outlined text-[#0b57d0] text-lg">warning</span>
+                      <span className="material-symbols-outlined text-[#00535b] text-lg">warning</span>
                       Preparation Guidelines
                     </h3>
                     <p className="text-xs md:text-sm text-[#424654] leading-relaxed font-bold bg-amber-50 text-amber-900 border border-amber-100 p-3 rounded-xl">
@@ -411,19 +411,19 @@ export function Detail({ test, setPage, setTest, user }) {
                 <div className="flex bg-[#edeeef] rounded-lg p-0.5 self-start md:self-end">
                   <button 
                     onClick={() => setSort('popularity')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'popularity' ? 'bg-white text-[#0b57d0] shadow-sm' : 'text-[#424654] hover:text-[#0b57d0]'}`}
+                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'popularity' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
                   >
                     Recommended
                   </button>
                   <button 
                     onClick={() => setSort('price_asc')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'price_asc' ? 'bg-white text-[#0b57d0] shadow-sm' : 'text-[#424654] hover:text-[#0b57d0]'}`}
+                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'price_asc' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
                   >
                     Lowest Price
                   </button>
                   <button 
                     onClick={() => setSort('fastest')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'fastest' ? 'bg-white text-[#0b57d0] shadow-sm' : 'text-[#424654] hover:text-[#0b57d0]'}`}
+                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'fastest' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
                   >
                     Fastest
                   </button>
@@ -435,19 +435,19 @@ export function Detail({ test, setPage, setTest, user }) {
                 <div className="flex gap-2 overflow-x-auto pb-4 hide-scrollbar">
                   <button 
                     onClick={() => setSort(sort === 'price_asc' ? 'popularity' : 'price_asc')}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'price_asc' ? 'bg-[#0b57d0] text-white border-[#0b57d0]' : 'bg-white text-[#424654]'}`}
+                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'price_asc' ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
                   >
                     ₹ Lowest Price
                   </button>
                   <button 
                     onClick={() => setFilters(prev => ({ ...prev, nabl: !prev.nabl }))}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${filters.nabl ? 'bg-[#0b57d0] text-white border-[#0b57d0]' : 'bg-white text-[#424654]'}`}
+                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${filters.nabl ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
                   >
                     Accredited (NABL)
                   </button>
                   <button 
                     onClick={() => setSort(sort === 'fastest' ? 'popularity' : 'fastest')}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'fastest' ? 'bg-[#0b57d0] text-white border-[#0b57d0]' : 'bg-white text-[#424654]'}`}
+                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'fastest' ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
                   >
                     ⏱ Fastest Turnaround
                   </button>
@@ -465,7 +465,7 @@ export function Detail({ test, setPage, setTest, user }) {
                     <span className="material-symbols-outlined text-4xl text-[#737785]">search_off</span>
                     <h4 className="font-extrabold text-sm text-[#191c1d]">No partner labs found</h4>
                     <p className="text-xs text-[#424654]">Try clearing or shifting your filters to see more results.</p>
-                    <button onClick={resetFilters} className="text-xs font-bold text-[#0b57d0] underline">Reset Filters</button>
+                    <button onClick={resetFilters} className="text-xs font-bold text-[#00535b] underline">Reset Filters</button>
                   </div>
                 ) : (
                   labs.map((lab, idx) => {
@@ -476,7 +476,7 @@ export function Detail({ test, setPage, setTest, user }) {
                     return (
                       <div 
                         key={`${lab.branch_id}-${idx}`}
-                        className="bg-white border-2 border-transparent hover:border-[#0b57d0]/40 rounded-3xl p-5 md:p-6 transition-all shadow-sm flex flex-col md:flex-row gap-5 items-start justify-between"
+                        className="bg-white border-2 border-transparent hover:border-[#00535b]/40 rounded-3xl p-5 md:p-6 transition-all shadow-sm flex flex-col md:flex-row gap-5 items-start justify-between"
                         style={{ boxShadow: '0px 4px 20px rgba(11, 87, 208, 0.04)' }}
                       >
                         {/* Left block - Lab Logo and details */}
@@ -500,7 +500,7 @@ export function Detail({ test, setPage, setTest, user }) {
                               <h4 className="font-black text-[#191c1d] text-sm md:text-base leading-tight font-headline">
                                 {lab.lab_name}
                               </h4>
-                              <span className="bg-[#86f898]/30 text-[#00722f] px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase">
+                              <span className="bg-[#a9ece5]/30 text-[#286d67] px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase">
                                 {lab.is_verified ? 'CAP • NABL' : 'NABL'}
                               </span>
                             </div>
@@ -515,15 +515,15 @@ export function Detail({ test, setPage, setTest, user }) {
                             {/* Icons details list */}
                             <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-2 text-xs text-[#424654] font-medium">
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#0b57d0] text-[16px]">schedule</span>
+                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">schedule</span>
                                 Reports: {lab.reporting_time}
                               </span>
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#0b57d0] text-[16px]">home</span>
+                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">home</span>
                                 {lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}
                               </span>
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#0b57d0] text-[16px]">location_on</span>
+                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">location_on</span>
                                 {lab.branch_name}, Gurgaon
                               </span>
                             </div>
@@ -544,14 +544,14 @@ export function Detail({ test, setPage, setTest, user }) {
                           <div className="flex flex-col gap-2 w-full md:w-auto">
                             <button
                               onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => handleBooking(lab) })}
-                              className="flex items-center justify-center gap-1.5 px-5 py-2 rounded-xl font-bold text-xs border-2 border-[#0b57d0]/25 text-[#0b57d0] hover:bg-[#e8f0fe] hover:border-[#0b57d0]/50 transition-all w-full"
+                              className="flex items-center justify-center gap-1.5 px-5 py-2 rounded-xl font-bold text-xs border-2 border-[#00535b]/25 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/50 transition-all w-full"
                             >
                               <span className="material-symbols-outlined text-sm">biotech</span>
                               View Lab
                             </button>
                             <button 
                               onClick={() => handleBooking(lab)}
-                              className="bg-[#0b57d0] hover:bg-[#0041a2] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider font-headline transition-all active:scale-95 shadow-sm text-center w-full"
+                              className="bg-[#00535b] hover:bg-[#00393f] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider font-headline transition-all active:scale-95 shadow-sm text-center w-full"
                             >
                               Book Test
                             </button>
@@ -583,7 +583,7 @@ export function Detail({ test, setPage, setTest, user }) {
                           className="w-full px-5 py-4 flex justify-between items-center text-left outline-none font-headline font-bold text-sm text-[#191c1d]"
                         >
                           <span>{faq.q}</span>
-                          <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                          <span className={`material-symbols-outlined text-[#737785] text-lg transition-transform ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                             expand_more
                           </span>
                         </button>

@@ -70,7 +70,7 @@ export function WebLayout({
       {
         key: "health",
         icon: "health_metrics",
-        iconColor: "text-blue-500 bg-blue-50/80 border-blue-100",
+        iconColor: "text-[#00535b] bg-[#edf6f9]/80 border-[#a9ece5]",
         bulletPoints: ["85 Parameters Included", "CBC, LFT, KFT Profile", "Lipid & Thyroid Profile"],
         fallback: { name: "Full Body Checkup", price: 899, originalPrice: 1299 }
       },
@@ -224,13 +224,13 @@ export function WebLayout({
       taglineColor: "text-[#1d4ed8]",
       titleColor: "text-[#1e3a8a]",
       titleGradient: "from-[#1e3a8a] via-[#1d4ed8] to-[#0f172a]",
-      badgeStyle: "bg-blue-100 border border-blue-300 text-blue-800",
-      line1Color: "border-l-blue-600",
-      line1Text: "text-blue-700",
+      badgeStyle: "bg-[#a9ece5] border border-[#236863]/30 text-[#286d67]",
+      line1Color: "border-l-[#00535b]",
+      line1Text: "text-[#236863]",
       line2Color: "border-l-indigo-600",
       line2Text: "text-indigo-700",
-      btnClass: "bg-blue-600 text-white hover:bg-blue-700 shadow-md",
-      glowOverlay: "bg-blue-500/10"
+      btnClass: "bg-[#00535b] text-white hover:bg-[#236863] shadow-md",
+      glowOverlay: "bg-[#edf6f9]0/10"
     },
     {
       badge: "👴 CARING GERIATRIC EXCELLENCE",
@@ -557,7 +557,7 @@ export function WebLayout({
         {/* Floating Callback Advisor Widget relocated after How ChooseMyLab Works */}
         <section className="pt-4 pb-4 px-8 relative overflow-hidden">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-[#00722f] hover:bg-[#006027] text-white px-8 py-5 rounded-3xl border border-white/10 shadow-[0_15px_40px_rgba(0,114,47,0.12)] flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300">
+            <div className="bg-[#286d67] hover:bg-[#006027] text-white px-8 py-5 rounded-3xl border border-white/10 shadow-[0_15px_40px_rgba(0,114,47,0.12)] flex flex-col md:flex-row items-center justify-between gap-6 transition-all duration-300">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white text-2xl flex-shrink-0 animate-bounce">📞</div>
                 <div className="text-left">
@@ -894,7 +894,7 @@ export function WebLayout({
                 className="bg-white border border-slate-100 hover:border-primary/20 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="h-10 w-10 bg-blue-50 text-primary border border-blue-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                  <div className="h-10 w-10 bg-[#edf6f9] text-primary border border-[#a9ece5] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
                     <span className="material-symbols-outlined text-lg leading-none">biotech</span>
                   </div>
                   <div className="text-left">
@@ -931,10 +931,10 @@ export function WebLayout({
 
         {/* Small & Compact Can't Decide Banner (Doctor Chat Button Hidden for now) */}
         <section className="py-2.5 px-8 max-w-4xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl p-4 md:py-3.5 md:px-5 relative overflow-hidden shadow-lg text-left gap-6 min-h-[90px] md:min-h-[110px]">
+          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-[#00535b] to-[#236863] text-white rounded-2xl p-4 md:py-3.5 md:px-5 relative overflow-hidden shadow-lg text-left gap-6 min-h-[90px] md:min-h-[110px]">
             {/* Glowing blobs inside card */}
             <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
-            <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-900/40 rounded-full blur-2xl" />
+            <div className="absolute bottom-0 right-0 w-48 h-48 bg-[#00535b]/20 rounded-full blur-2xl" />
 
             <div className="w-full md:w-3/5 relative z-10 space-y-2">
               <h3 className="font-headline text-sm md:text-base font-black leading-tight text-white tracking-tight">
@@ -947,7 +947,7 @@ export function WebLayout({
               <div className="flex flex-wrap gap-3 pt-0.5">
                 <a 
                   href="tel:1800123456"
-                  className="bg-white hover:bg-slate-100 text-blue-700 text-[9px] font-black px-3.5 py-2 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block"
+                  className="bg-white hover:bg-slate-100 text-[#236863] text-[9px] font-black px-3.5 py-2 rounded-xl transition-all shadow-md active:scale-95 duration-150 cursor-pointer uppercase tracking-wider font-headline inline-block"
                 >
                   Free Expert Consult
                 </a>

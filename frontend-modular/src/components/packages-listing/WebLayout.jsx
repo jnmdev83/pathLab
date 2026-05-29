@@ -135,9 +135,9 @@ export function WebLayout({
       {/* ── 1. BREADCRUMBS & NAVIGATION HEADER ── */}
       <div className="max-w-7xl mx-auto px-8 py-6">
         <nav className="flex items-center gap-2 text-xs font-bold text-[#737785]">
-          <span className="cursor-pointer hover:text-[#0b57d0]" onClick={() => setPage('home')}>Home</span>
+          <span className="cursor-pointer hover:text-[#00535b]" onClick={() => setPage('home')}>Home</span>
           <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-          <span className="cursor-pointer hover:text-[#0b57d0]" onClick={() => setPage('package')}>Packages</span>
+          <span className="cursor-pointer hover:text-[#00535b]" onClick={() => setPage('package')}>Packages</span>
           <span className="material-symbols-outlined text-[14px]">chevron_right</span>
           <span className="text-[#191c1d] font-black">{metadata?.hero?.title || `${activeCategory} Packages`}</span>
         </nav>
@@ -147,10 +147,10 @@ export function WebLayout({
       <section className="max-w-7xl mx-auto px-8 mb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#edeeef]/60 border border-[#c3c6d6]/30 p-8 lg:p-12 rounded-3xl relative overflow-hidden">
           {/* Glowing brand accents */}
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#0b57d0]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#00535b]/5 rounded-full blur-3xl pointer-events-none" />
           
           <div className="lg:col-span-7 space-y-6 text-left relative z-10">
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-[#0b57d0] tracking-tight font-headline leading-tight">
+            <h1 className="text-3xl lg:text-4xl font-extrabold text-[#00535b] tracking-tight font-headline leading-tight">
               {metadata?.hero?.title}
             </h1>
             <p className="text-base text-[#424654] leading-relaxed max-w-xl">
@@ -169,15 +169,15 @@ export function WebLayout({
             {/* Dyn Stats Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 py-6 border-t border-b border-[#c3c6d6]/20">
               <div>
-                <p className="text-2xl font-black text-[#0b57d0] leading-none mb-1">{metadata?.stats?.availablePackages}</p>
+                <p className="text-2xl font-black text-[#00535b] leading-none mb-1">{metadata?.stats?.availablePackages}</p>
                 <p className="text-[10px] uppercase font-bold text-[#737785]">Packages Available</p>
               </div>
               <div>
-                <p className="text-2xl font-black text-[#0b57d0] leading-none mb-1">{metadata?.stats?.trustedLabs}</p>
+                <p className="text-2xl font-black text-[#00535b] leading-none mb-1">{metadata?.stats?.trustedLabs}</p>
                 <p className="text-[10px] uppercase font-bold text-[#737785]">Trusted Labs</p>
               </div>
               <div>
-                <p className="text-2xl font-black text-[#0b57d0] leading-none mb-1">₹{metadata?.stats?.startingPrice}</p>
+                <p className="text-2xl font-black text-[#00535b] leading-none mb-1">₹{metadata?.stats?.startingPrice}</p>
                 <p className="text-[10px] uppercase font-bold text-[#737785]">Starting Price</p>
               </div>
               <div>
@@ -191,7 +191,7 @@ export function WebLayout({
               <div className="space-y-3">
                 <button 
                   onClick={() => setReadMoreOpen(!readMoreOpen)}
-                  className="flex items-center gap-1.5 text-xs font-black text-[#0b57d0] hover:underline"
+                  className="flex items-center gap-1.5 text-xs font-black text-[#00535b] hover:underline"
                 >
                   <span>{readMoreOpen ? 'Hide Clinical Insights' : 'Read More About Diagnostics'}</span>
                   <span className={`material-symbols-outlined text-[16px] transition-transform ${readMoreOpen ? 'rotate-180' : ''}`}>expand_more</span>
@@ -244,12 +244,12 @@ export function WebLayout({
                       onClick={() => handleCategorySwitch(cat.name)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
                         isActive 
-                          ? 'bg-[#0b57d0]/10 text-[#0b57d0] font-black shadow-sm' 
+                          ? 'bg-[#00535b]/10 text-[#00535b] font-black shadow-sm' 
                           : 'hover:bg-[#f3f4f5] text-[#424654] font-semibold'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 text-xs">
-                        <span className={`material-symbols-outlined text-base ${isActive ? 'text-[#0b57d0]' : 'text-[#737785]'}`}>{cat.icon}</span>
+                        <span className={`material-symbols-outlined text-base ${isActive ? 'text-[#00535b]' : 'text-[#737785]'}`}>{cat.icon}</span>
                         <span>{cat.label}</span>
                       </div>
                       <span className="material-symbols-outlined text-sm font-bold opacity-60">chevron_right</span>
@@ -263,7 +263,7 @@ export function WebLayout({
             <div>
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-[11px] font-black uppercase tracking-wider text-[#737785]">Price Budget</h3>
-                <span className="text-xs font-black text-[#0b57d0]">Max: {formatPrice(filters.maxPrice)}</span>
+                <span className="text-xs font-black text-[#00535b]">Max: {formatPrice(filters.maxPrice)}</span>
               </div>
               <input 
                 type="range"
@@ -272,7 +272,7 @@ export function WebLayout({
                 step="200"
                 value={filters.maxPrice}
                 onChange={handlePriceChange}
-                className="w-full h-2 bg-[#e1e3e4] rounded-lg appearance-none cursor-pointer accent-[#0b57d0]"
+                className="w-full h-2 bg-[#e1e3e4] rounded-lg appearance-none cursor-pointer accent-[#00535b]"
               />
               <div className="flex justify-between mt-2 text-[10px] font-extrabold text-[#737785]">
                 <span>₹300</span>
@@ -290,7 +290,7 @@ export function WebLayout({
                       type="checkbox"
                       checked={filters.accreditations[type]}
                       onChange={() => handleAccreditationChange(type)}
-                      className="w-5 h-5 rounded border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer"
+                      className="w-5 h-5 rounded border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b] cursor-pointer"
                     />
                     <div className="text-xs font-bold text-[#424654]">
                       {type === 'NABL' && 'NABL Certified (Standard)'}
@@ -310,7 +310,7 @@ export function WebLayout({
                   type="checkbox"
                   checked={filters.homeCollection}
                   onChange={handleHomeCollectionToggle}
-                  className="w-5 h-5 rounded border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer"
+                  className="w-5 h-5 rounded border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b] cursor-pointer"
                 />
                 <span className="text-xs font-bold text-[#424654]">Free Home Sample Collection</span>
               </label>
@@ -343,21 +343,21 @@ export function WebLayout({
                       onClick={() => handleTierToggle(tier.tier_name)}
                       className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer select-none text-left flex flex-col justify-between h-[155px] ${
                         isSelected 
-                          ? 'border-[#0b57d0] ring-4 ring-[#0b57d0]/10 bg-[#0b57d0]/5 shadow-md' 
-                          : 'border-[#c3c6d6]/40 bg-white hover:border-[#0b57d0]/50 hover:shadow-sm'
+                          ? 'border-[#00535b] ring-4 ring-[#00535b]/10 bg-[#00535b]/5 shadow-md' 
+                          : 'border-[#c3c6d6]/40 bg-white hover:border-[#00535b]/50 hover:shadow-sm'
                       }`}
                     >
                       <div>
-                        <span className="material-symbols-outlined text-[#0b57d0] text-2xl mb-2">{tier.icon}</span>
+                        <span className="material-symbols-outlined text-[#00535b] text-2xl mb-2">{tier.icon}</span>
                         <h4 className="font-extrabold text-xs text-[#191c1d]">{tier.tier_name}</h4>
                         <p className="text-[10px] text-[#737785] mt-0.5 line-clamp-2 leading-tight font-semibold">{tier.subtitle}</p>
                       </div>
                       <div className="flex justify-between items-end mt-2">
                         <div>
                           <span className="text-[8px] uppercase font-bold text-[#737785] block leading-none">Starts at</span>
-                          <span className="font-black text-sm text-[#0b57d0]">₹{tier.price}</span>
+                          <span className="font-black text-sm text-[#00535b]">₹{tier.price}</span>
                         </div>
-                        <span className="text-[9px] font-black text-[#0b57d0] uppercase tracking-wider underline">
+                        <span className="text-[9px] font-black text-[#00535b] uppercase tracking-wider underline">
                           {isSelected ? 'Selected' : 'Filter'}
                         </span>
                       </div>
@@ -382,7 +382,7 @@ export function WebLayout({
               <select 
                 value={sort} 
                 onChange={(e) => { setSort(e.target.value); setPageNum(1); }}
-                className="text-xs font-bold border-[#c3c6d6] rounded-xl focus:ring-[#0b57d0] focus:border-[#0b57d0] py-2 px-3 bg-[#f8f9fa] cursor-pointer"
+                className="text-xs font-bold border-[#c3c6d6] rounded-xl focus:ring-[#00535b] focus:border-[#00535b] py-2 px-3 bg-[#f8f9fa] cursor-pointer"
               >
                 <option value="recommended">Popularity & Rating</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -419,7 +419,7 @@ export function WebLayout({
                 </p>
                 <button 
                   onClick={resetFilters}
-                  className="mt-6 px-6 py-2.5 bg-[#0b57d0] text-white font-bold text-xs rounded-xl active:scale-95 transition-all shadow-sm"
+                  className="mt-6 px-6 py-2.5 bg-[#00535b] text-white font-bold text-xs rounded-xl active:scale-95 transition-all shadow-sm"
                 >
                   Clear All Filters
                 </button>
@@ -437,12 +437,12 @@ export function WebLayout({
                     {/* Compare Box */}
                     <div className="absolute top-6 right-6">
                       <label className="flex items-center gap-2 cursor-pointer group select-none">
-                        <span className="text-[10px] font-bold text-[#737785] group-hover:text-[#0b57d0]">Compare</span>
+                        <span className="text-[10px] font-bold text-[#737785] group-hover:text-[#00535b]">Compare</span>
                         <input 
                           type="checkbox"
                           checked={isSelectedForCompare}
                           onChange={() => handleCompareCheckbox(offer)}
-                          className="w-5 h-5 rounded border-[#c3c6d6] text-[#0b57d0] focus:ring-[#0b57d0] cursor-pointer"
+                          className="w-5 h-5 rounded border-[#c3c6d6] text-[#00535b] focus:ring-[#00535b] cursor-pointer"
                         />
                       </label>
                     </div>
@@ -491,7 +491,7 @@ export function WebLayout({
                               </span>
                             ))}
                             {offer.tests?.length > 5 && (
-                              <span className="px-2.5 py-1 text-[10px] font-black text-[#0b57d0] bg-[#0b57d0]/5 rounded-md">
+                              <span className="px-2.5 py-1 text-[10px] font-black text-[#00535b] bg-[#00535b]/5 rounded-md">
                                 + {offer.tests.length - 5} More Parameters
                               </span>
                             )}
@@ -509,7 +509,7 @@ export function WebLayout({
                             <span>Home Collection</span>
                           </div>
                           <div className="flex items-center gap-1.5 text-xs text-[#737785] font-semibold">
-                            <span className="material-symbols-outlined text-base text-[#0b57d0]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                            <span className="material-symbols-outlined text-base text-[#00535b]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
                             <span>
                               {offer.accreditations?.includes('CAP') ? 'CAP Accredited' : 'NABL Certified'}
                             </span>
@@ -521,14 +521,14 @@ export function WebLayout({
                       <div className="xl:w-48 flex flex-col justify-between border-t xl:border-t-0 xl:border-l border-[#c3c6d6]/20 pt-6 xl:pt-0 xl:pl-6">
                         <div className="mb-4">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-xl font-extrabold text-[#0b57d0]">₹{offer.price}</span>
+                            <span className="text-xl font-extrabold text-[#00535b]">₹{offer.price}</span>
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <button 
                             onClick={() => handleViewDetail(offer)}
-                            className="w-full py-2.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-extrabold text-xs rounded-xl shadow-sm hover:shadow active:scale-95 transition-all uppercase tracking-wider font-headline"
+                            className="w-full py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white font-extrabold text-xs rounded-xl shadow-sm hover:shadow active:scale-95 transition-all uppercase tracking-wider font-headline"
                           >
                             View Detail
                           </button>
@@ -536,7 +536,7 @@ export function WebLayout({
                           <div className="flex gap-2 w-full">
                             <button 
                               onClick={() => handleBookNow(offer)}
-                              className="flex-1 py-2.5 border border-[#0b57d0] text-[#0b57d0] hover:bg-[#0b57d0]/5 font-extrabold text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider"
+                              className="flex-1 py-2.5 border border-[#00535b] text-[#00535b] hover:bg-[#00535b]/5 font-extrabold text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider"
                             >
                               Book Now
                             </button>
@@ -569,7 +569,7 @@ export function WebLayout({
             <div className="pt-4 flex justify-center">
               <button 
                 onClick={() => setPageNum(prev => prev + 1)}
-                className="px-8 py-4 border-2 border-[#0b57d0] text-[#0b57d0] font-black text-xs rounded-full hover:bg-[#0b57d0]/5 transition-all uppercase tracking-wider active:scale-95 font-headline"
+                className="px-8 py-4 border-2 border-[#00535b] text-[#00535b] font-black text-xs rounded-full hover:bg-[#00535b]/5 transition-all uppercase tracking-wider active:scale-95 font-headline"
               >
                 Load More Dynamic Packages
               </button>
@@ -589,7 +589,7 @@ export function WebLayout({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {metadata.guides.map((guide) => (
                 <div key={guide.id} className="bg-white p-6 rounded-2xl border border-[#c3c6d6]/20 shadow-sm flex flex-col justify-start text-left">
-                  <div className="w-12 h-12 bg-[#0b57d0]/5 rounded-xl flex items-center justify-center text-[#0b57d0] mb-5">
+                  <div className="w-12 h-12 bg-[#00535b]/5 rounded-xl flex items-center justify-center text-[#00535b] mb-5">
                     <span className="material-symbols-outlined text-2xl font-bold">{guide.icon}</span>
                   </div>
                   <h4 className="font-extrabold text-sm mb-2 text-[#191c1d]">{guide.title}</h4>
@@ -618,7 +618,7 @@ export function WebLayout({
                     className="w-full flex justify-between items-center p-5 text-left outline-none font-headline font-bold text-sm text-[#191c1d] hover:bg-slate-50 transition-colors"
                   >
                     <span>{faq.question}</span>
-                    <span className={`material-symbols-outlined text-[#737785] text-xl transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#0b57d0]' : ''}`}>
+                    <span className={`material-symbols-outlined text-[#737785] text-xl transition-transform duration-150 ${isOpen ? 'rotate-180 text-[#00535b]' : ''}`}>
                       expand_more
                     </span>
                   </button>
@@ -637,7 +637,7 @@ export function WebLayout({
       {/* ── 6. FLOATING COMPARE SYSTEM TRAY ── */}
       {selectedCompare.length >= 2 && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up select-none">
-          <div className="bg-[#0b57d0] shadow-2xl rounded-full py-4 px-6 md:px-8 flex items-center gap-6 md:gap-8 text-white border border-white/10">
+          <div className="bg-[#00535b] shadow-2xl rounded-full py-4 px-6 md:px-8 flex items-center gap-6 md:gap-8 text-white border border-white/10">
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
                 {selectedCompare.map((item) => {
@@ -645,7 +645,7 @@ export function WebLayout({
                   return (
                     <div 
                       key={item.id} 
-                      className={`w-8 h-8 rounded-full bg-white border-2 border-[#0b57d0] flex items-center justify-center ${logo.text} text-[10px] font-black`}
+                      className={`w-8 h-8 rounded-full bg-white border-2 border-[#00535b] flex items-center justify-center ${logo.text} text-[10px] font-black`}
                     >
                       {logo.char}
                     </div>
@@ -660,7 +660,7 @@ export function WebLayout({
             <div className="flex items-center gap-3">
               <button 
                 onClick={executeCompare}
-                className="bg-white text-[#0b57d0] hover:bg-[#edeeef] px-6 py-2 rounded-full font-black text-xs uppercase tracking-wider transition-colors active:scale-95 duration-100 shadow-sm"
+                className="bg-white text-[#00535b] hover:bg-[#edeeef] px-6 py-2 rounded-full font-black text-xs uppercase tracking-wider transition-colors active:scale-95 duration-100 shadow-sm"
               >
                 Compare Now
               </button>
