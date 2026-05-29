@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 // ─── Category-specific metadata (icons & quick tags only, all use site blue) ─
 const CATEGORY_META = {
@@ -233,6 +233,23 @@ export function WebLayout({
   visibleCount,
   setVisibleCount,
 }) {
+  const sentinelRef = useRef(null);
+
+  // Infinite scroll
+  useEffect(() => {
+    if (loadingItems || visibleCount >= displayTests.length) return;
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setTimeout(() => setVisibleCount(prev => prev + 8), 200);
+        }
+      },
+      { threshold: 0.1, rootMargin: '150px' }
+    );
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+    return () => { if (el) observer.unobserve(el); };
+  }, [loadingItems, visibleCount, displayTests.length, setVisibleCount]);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const meta = getCategoryMeta(categoryName);
   const faqs = getFAQs(categoryName);
@@ -724,23 +741,20 @@ export function WebLayout({
                     />
                   ))}
 
-                  {/* Load more */}
-                  {remaining > 0 && (
-                    <div className="pt-2">
-                      <button
-                        onClick={() => setVisibleCount(prev => prev + 8)}
-                        className="w-full py-3.5 rounded-xl text-sm font-bold border-2 border-[#00535b]/30 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b] transition-all flex items-center justify-center gap-2"
-                      >
-                        <span className="material-symbols-outlined text-lg">expand_more</span>
-                        Load more tests ({remaining} remaining)
-                      </button>
+                  {/* Infinite Scroll Sentinel */}
+                  {visibleCount < displayTests.length ? (
+                    <div ref={sentinelRef} className="py-6 text-center">
+                      <div className="flex items-center justify-center gap-2 text-sm font-semibold text-[#00535b]">
+                        <span className="w-4 h-4 rounded-full border-2 border-[#00535b] border-t-transparent animate-spin" />
+                        Loading more tests...
+                      </div>
                     </div>
-                  )}
-
-                  {remaining === 0 && displayTests.length > 0 && (
-                    <div className="text-center py-4 text-[11px] font-semibold text-[#9ca3af]">
-                      ✓ All {displayTests.length} tests shown
-                    </div>
+                  ) : (
+                    displayTests.length > 0 && (
+                      <div className="text-center py-4 text-[11px] font-semibold text-[#9ca3af] bg-white border border-[#e8eaed] rounded-full mt-4">
+                        ✓ All {displayTests.length} tests shown
+                      </div>
+                    )
                   )}
                 </div>
               )}
