@@ -129,18 +129,7 @@ export function PackageDetail({
   };
 
   const handleBooking = (targetOffer) => {
-    const mockTest = {
-      id: `pkg-${targetOffer.offer_id || targetOffer.id}`,
-      name: targetOffer.package_name || details?.package_name,
-      price: targetOffer.price,
-      lab: targetOffer.lab_name || details?.lab_name,
-      loc: `${targetOffer.branch_name || details?.branch_name}, ${targetOffer.city || details?.city}`,
-      lab_branch_id: targetOffer.branch_id || targetOffer.lab_branch_id || details?.branch_id,
-      cat: 'package',
-      ok: true
-    };
-    setTest(mockTest);
-    user ? setPage("booking") : setPage("signup");
+    // Disabled booking flow as requested
   };
 
   const handleCompetitorNavigate = (comp) => {
@@ -307,14 +296,7 @@ export function PackageDetail({
                 )}
               </div>
 
-              {/* Booking CTA */}
-              <button 
-                onClick={() => handleBooking(details)}
-                className="bg-[#00535b] hover:bg-[#00393f] text-white text-sm font-bold py-4 px-10 rounded-2xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 group w-full md:w-fit uppercase font-headline"
-              >
-                <span>Book Appointment Now</span>
-                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </button>
+
             </div>
 
             {/* Right Graphic */}
@@ -589,15 +571,9 @@ export function PackageDetail({
                             e.stopPropagation();
                             handleCompetitorNavigate(comp);
                           }}
-                          className="px-3.5 py-1.5 border border-[#c3c6d6] hover:bg-slate-50 text-[10px] font-black rounded-lg active:scale-95 transition-all text-[#424654]"
+                          className="px-5 py-2 border border-[#c3c6d6] hover:bg-slate-50 text-[11px] font-black rounded-lg active:scale-95 transition-all text-[#424654]"
                         >
                           View Details
-                        </button>
-                        <button 
-                          onClick={() => handleBooking(comp)}
-                          className="px-3.5 py-1.5 bg-[#00535b] hover:bg-[#00393f] text-white text-[10px] font-black rounded-lg active:scale-95 transition-all uppercase tracking-wide font-headline"
-                        >
-                          Book Competitor
                         </button>
                       </div>
                     </div>
@@ -894,15 +870,9 @@ export function PackageDetail({
                             e.stopPropagation();
                             handleCompetitorNavigate(comp);
                           }}
-                          className="px-2 py-1.5 border border-[#c3c6d6] text-[8px] font-black rounded active:scale-95 transition-all text-[#424654]"
+                          className="px-4.5 py-2 border border-[#c3c6d6] text-[10px] font-black rounded active:scale-95 transition-all text-[#424654]"
                         >
                           Details
-                        </button>
-                        <button 
-                          onClick={() => handleBooking(comp)}
-                          className="px-2 py-1.5 bg-[#00535b] text-white text-[8px] font-black rounded active:scale-95 transition-all uppercase tracking-wide font-headline"
-                        >
-                          Book Now
                         </button>
                       </div>
                     </div>
@@ -923,12 +893,6 @@ export function PackageDetail({
             <span className="text-[9px] text-[#006e2c] font-black bg-[#a9ece5]/10 px-1.5 py-0.5 rounded leading-none">Free Home Sample</span>
           </div>
         </div>
-        <button 
-          onClick={() => handleBooking(details)}
-          className="bg-primary text-white px-10 h-12 rounded-full font-headline font-black text-xs shadow-md shadow-[#00535b]/25 active:scale-95 transition-transform uppercase tracking-wider"
-        >
-          Book Now
-        </button>
       </footer>
 
     </div>

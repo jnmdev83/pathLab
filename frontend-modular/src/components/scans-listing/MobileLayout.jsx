@@ -26,7 +26,8 @@ export function MobileLayout({
   setTest,
   setTestName,
   loading,
-  error
+  error,
+  setSelectedLab
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const categoriesList = ['Imaging', 'Endoscopy & Screening', 'Cardiac Diagnostics'];
@@ -211,19 +212,8 @@ export function MobileLayout({
                             <span>({reviews})</span>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Compare Checkbox */}
-                      <label className="flex items-center gap-1 cursor-pointer select-none mt-0.5">
-                        <span className="text-[9px] font-black text-[#6f797a] uppercase tracking-wider">Compare</span>
-                        <input 
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleCompareToggle(test)}
-                          className="w-4 h-4 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/15"
-                        />
-                      </label>
                     </div>
+                  </div>
 
                     {/* Scan test name */}
                     <h3 className="text-sm font-black text-[#121c2c] mt-3 leading-tight text-left">{test.name}</h3>
@@ -249,52 +239,27 @@ export function MobileLayout({
                         <span>NABL Accredited</span>
                       </div>
                     </div>
-
                   </div>
 
                   {/* Pricing and split Actions */}
-                  <div className="border-t border-slate-100/60 pt-3 mt-1">
-                    <div className="flex items-center justify-between mb-3.5">
-                      <div>
-                        <span className="block text-[8px] font-bold text-[#6f797a] uppercase tracking-wider">Starting From</span>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-base font-black text-[#00535b]">₹{test.price}</span>
-                          {hasDiscount && (
-                            <span className="text-[10px] line-through text-[#6f797a]">₹{test.original_price}</span>
-                          )}
+                  <div className="border-t border-slate-100/60 pt-3 mt-1 flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                      <div className="text-left">
+                        <span className="block text-[8px] font-bold text-[#6f797a] uppercase tracking-wider leading-none mb-1">Starting From</span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-base font-black text-[#00535b] leading-none">₹{test.price}</span>
                         </div>
                       </div>
-                      {hasDiscount && (
-                        <span className="text-[8px] font-black text-[#286d67] bg-[#a9ece5]/30 px-1.5 py-0.5 rounded uppercase tracking-wider">
-                          {test.discount_percent}% OFF
-                        </span>
-                      )}
                     </div>
 
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="w-full">
                       <button 
                         onClick={() => handleViewDetails(test)}
-                        className="h-9.5 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm"
+                        className="w-full h-10 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm flex items-center justify-center font-headline"
                       >
-                        View Detail
+                        Compare Labs
                       </button>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button 
-                          onClick={() => handleBookNow(test)}
-                          className="h-9 border border-[#00535b] text-[#00535b] rounded-xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95"
-                        >
-                          Book Now
-                        </button>
-                        <button 
-                          onClick={() => handleBookNow(test)}
-                          className="h-9 border border-[#bec8ca] text-[#3e494a] rounded-xl text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-0.5"
-                        >
-                          <span className="material-symbols-outlined text-[14px]">labs</span>
-                          <span>View Lab</span>
-                        </button>
-                      </div>
                     </div>
-
                   </div>
                 </div>
               );
@@ -509,39 +474,7 @@ export function MobileLayout({
         </>
       )}
 
-      {/* ── Mobile Floating Comparison Bar ── */}
-      {selectedCompare.length > 0 && (
-        <div className="fixed bottom-24 left-4 right-4 z-40 bg-[#00535b] text-white py-3.5 px-4 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-5 duration-200">
-          <div className="flex items-center gap-2">
-            <span className="bg-white text-[#00535b] text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
-              {selectedCompare.length}
-            </span>
-            <span className="text-[10px] font-bold truncate max-w-[130px] text-left">
-              {selectedCompare.map(p => p.name).join(", ")}
-            </span>
-          </div>
 
-          <div className="flex gap-2 items-center">
-            <button 
-              onClick={() => setSelectedCompare([])}
-              className="text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors px-1"
-            >
-              Clear
-            </button>
-            <button 
-              onClick={handleCompareClick}
-              disabled={selectedCompare.length < 2}
-              className={`px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors duration-150 ${
-                selectedCompare.length >= 2 
-                  ? 'bg-white text-[#00535b] active:scale-95' 
-                  : 'bg-white/25 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              Compare
-            </button>
-          </div>
-        </div>
-      )}
 
     </div>
   );

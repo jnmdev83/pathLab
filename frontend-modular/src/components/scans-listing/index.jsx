@@ -3,6 +3,7 @@ import { useIsMobile } from '../../utils/useIsMobile';
 import { API_BASE_URL } from '../../config';
 import { WebLayout } from './WebLayout';
 import { MobileLayout } from './MobileLayout';
+import { LabDetailPanel } from '../detail/LabDetailPanel';
 
 export function ScansListing({
   categoryName,
@@ -102,6 +103,8 @@ export function ScansListing({
     setCurrentPage(1);
   };
 
+  const [selectedLab, setSelectedLab] = useState(null);
+
   const props = {
     category,
     search,
@@ -126,12 +129,23 @@ export function ScansListing({
     setPage,
     setTest,
     setTestName,
-    user
+    user,
+    setSelectedLab
   };
 
-  if (isMobile) {
-    return <MobileLayout {...props} />;
-  }
-
-  return <WebLayout {...props} />;
+  return (
+    <>
+      {isMobile ? <MobileLayout {...props} /> : <WebLayout {...props} />}
+      {selectedLab && (
+        <LabDetailPanel
+          labId={selectedLab.lab_id}
+          labName={selectedLab.lab_name}
+          testName={selectedLab.packageName}
+          testPrice={selectedLab.price}
+          onClose={() => setSelectedLab(null)}
+          onBook={selectedLab.bookFn}
+        />
+      )}
+    </>
+  );
 }

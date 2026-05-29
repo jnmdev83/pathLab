@@ -354,7 +354,7 @@ export default function App() {
         );
 
       case "detail":
-        return <Detail test={test} setPage={setPage} user={user} />;
+        return <Detail test={test} setPage={setPage} setTest={setTest} user={user} />;
       case "package-detail":
         return (
           <PackageDetail
@@ -377,6 +377,8 @@ export default function App() {
             user={user}
             userLocation={userLocation}
             setActiveCategoryFilter={setActiveCategoryFilter}
+            setSelectedBranch={setSelectedBranch}
+            setBranchTests={setBranchTests}
           />
         );
 
@@ -549,7 +551,7 @@ export default function App() {
           {renderPage()}
         </main>
       </div>
-      <Footer page={page} setPage={setPage} />
+      <Footer page={page} setPage={setPage} setTestName={setTestName} />
 
       {/* Mobile Search Overlay */}
       <MobileSearchOverlay 

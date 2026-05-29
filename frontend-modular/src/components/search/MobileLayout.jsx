@@ -77,6 +77,11 @@ function MobileLabCard({ lab, index, onBook, onDetails }) {
               {lab.discount_percent}% OFF
             </span>
           )}
+          {!lab.test_id && (
+            <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block mb-0.5 leading-none">
+              Starting at
+            </span>
+          )}
           <span className="text-primary font-headline font-bold text-xl leading-none">
             ₹{(lab.price || 0).toLocaleString('en-IN')}
           </span>

@@ -3,6 +3,7 @@ import { useIsMobile } from '../../utils/useIsMobile';
 import { API_BASE_URL } from '../../config';
 import { MapLink } from '../../utils/reusables';
 import { LabDetailPanel } from './LabDetailPanel';
+import { LabCompareModal } from './LabCompareModal';
 
 // Helper to safely parse JSONB database columns
 const parseJsonColumn = (col, fallback) => {
@@ -42,6 +43,21 @@ export function Detail({ test, setPage, setTest, user }) {
   const [loadingLabs, setLoadingLabs] = useState(true);
   const [sort, setSort] = useState('popularity');
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
+  const [selectedCompare, setSelectedCompare] = useState([]);
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
+
+  const handleCompareToggle = (lab) => {
+    if (selectedCompare.some(l => l.branch_id === lab.branch_id)) {
+      setSelectedCompare(selectedCompare.filter(l => l.branch_id !== lab.branch_id));
+    } else {
+      if (selectedCompare.length >= 3) {
+        alert("You can compare up to 3 labs at a time.");
+        return;
+      }
+      setSelectedCompare([...selectedCompare, lab]);
+    }
+  };
+
   const [selectedLab, setSelectedLab] = useState(null); // { lab_id, lab_name, price, book }
 
   const [filters, setFilters] = useState({
@@ -534,14 +550,22 @@ export function Detail({ test, setPage, setTest, user }) {
                         <div className="w-full md:w-52 flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 border-t md:border-t-0 md:border-l border-[#e1e3e4]/60 pt-4 md:pt-0 md:pl-5 flex-shrink-0">
                           <div className="text-left md:text-right">
                             <span className="text-[10px] uppercase font-black tracking-widest text-[#737785] block mb-0.5">Rate Offered</span>
-                            <div className="flex items-baseline gap-1">
+                            <div className="flex items-baseline gap-1 md:justify-end">
                               <span className="text-xl md:text-2xl font-black text-[#191c1d] font-headline">₹{lab.price}</span>
-                              <span className="text-xs line-through text-[#737785]">₹{originalPrice}</span>
                             </div>
-                            <span className="text-xs text-[#006e2c] font-black block mt-0.5">Save {savePct}%</span>
                           </div>
 
-                          <div className="flex flex-col gap-2 w-full md:w-auto">
+                          <div className="flex flex-col gap-2 w-full md:w-auto mt-2">
+                            <label className="flex items-center gap-1.5 cursor-pointer select-none group md:justify-end mb-1">
+                              <span className="text-[10px] font-black text-[#737785] group-hover:text-[#00535b] uppercase tracking-wider transition-colors">Compare</span>
+                              <input 
+                                type="checkbox"
+                                checked={selectedCompare.some(item => item.branch_id === lab.branch_id)}
+                                onChange={() => handleCompareToggle(lab)}
+                                className="w-4 h-4 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
+                              />
+                            </label>
+
                             <button
                               onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => handleBooking(lab) })}
                               className="flex items-center justify-center gap-1.5 px-5 py-2 rounded-xl font-bold text-xs border-2 border-[#00535b]/25 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/50 transition-all w-full"
@@ -614,6 +638,51 @@ export function Detail({ test, setPage, setTest, user }) {
           onClose={() => setSelectedLab(null)}
           onBook={selectedLab.bookFn}
         />
+      )}
+      {/* ── LAB COMPARE MODAL ──────────────────────────────────────────────── */}
+      {compareModalOpen && (
+        <LabCompareModal 
+          labs={selectedCompare}
+          onClose={() => setCompareModalOpen(false)}
+          onBook={(lab) => {
+            setCompareModalOpen(false);
+            handleBooking(lab);
+          }}
+        />
+      )}
+
+      {/* ── Bottom Floating Comparison Tray ── */}
+      {selectedCompare.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#00535b] text-white py-4 px-6 md:px-8 rounded-full shadow-2xl flex items-center gap-6 border border-white/10 max-w-lg w-full justify-between animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-center gap-3">
+            <span className="bg-white text-[#00535b] text-xs font-black w-6 h-6 rounded-full flex items-center justify-center animate-pulse">
+              {selectedCompare.length}
+            </span>
+            <span className="text-xs font-bold truncate max-w-[180px] md:max-w-xs text-left text-white">
+              {selectedCompare.map(l => l.lab_name).join(", ")}
+            </span>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <button 
+              onClick={() => setSelectedCompare([])}
+              className="text-white/70 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors px-2 py-1"
+            >
+              Clear
+            </button>
+            <button 
+              onClick={() => setCompareModalOpen(true)}
+              disabled={selectedCompare.length < 2}
+              className={`px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-wider transition-colors duration-150 shadow-sm ${
+                selectedCompare.length >= 2 
+                  ? 'bg-white text-[#00535b] hover:bg-slate-100 active:scale-95' 
+                  : 'bg-white/20 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
       )}
 
     </div>

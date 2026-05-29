@@ -519,7 +519,8 @@ export function WebLayout({
 
                       {/* Right: pricing & book controls */}
                       <div className="xl:w-48 flex flex-col justify-between border-t xl:border-t-0 xl:border-l border-[#c3c6d6]/20 pt-6 xl:pt-0 xl:pl-6">
-                        <div className="mb-4">
+                        <div className="mb-4 text-left">
+                          <span className="block text-[9px] font-black text-[#737785] uppercase tracking-wider mb-0.5">Starting From</span>
                           <div className="flex items-baseline gap-2">
                             <span className="text-xl font-extrabold text-[#00535b]">₹{offer.price}</span>
                           </div>
@@ -527,33 +528,25 @@ export function WebLayout({
 
                         <div className="space-y-2">
                           <button 
+                            onClick={() => setSelectedLab({
+                              lab_id: offer.lab_id,
+                              lab_name: offer.lab_name,
+                              packageName: offer.package_name,
+                              price: offer.price,
+                              bookFn: null
+                            })}
+                            className="w-full py-2.5 border border-slate-200 text-[#424654] hover:bg-slate-50 font-extrabold text-[10px] rounded-xl flex items-center justify-center gap-1 active:scale-95 transition-all uppercase"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">biotech</span>
+                            <span>View Lab</span>
+                          </button>
+
+                          <button 
                             onClick={() => handleViewDetail(offer)}
                             className="w-full py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white font-extrabold text-xs rounded-xl shadow-sm hover:shadow active:scale-95 transition-all uppercase tracking-wider font-headline"
                           >
-                            View Detail
+                            Compare Labs
                           </button>
-                          
-                          <div className="flex gap-2 w-full">
-                            <button 
-                              onClick={() => handleBookNow(offer)}
-                              className="flex-1 py-2.5 border border-[#00535b] text-[#00535b] hover:bg-[#00535b]/5 font-extrabold text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider"
-                            >
-                              Book Now
-                            </button>
-                            <button 
-                              onClick={() => setSelectedLab({
-                                lab_id: offer.lab_id,
-                                lab_name: offer.lab_name,
-                                packageName: offer.package_name,
-                                price: offer.price,
-                                bookFn: () => handleBookNow(offer)
-                              })}
-                              className="flex-1 py-2.5 border border-slate-200 text-[#424654] hover:bg-slate-50 font-extrabold text-[10px] rounded-xl flex items-center justify-center gap-1 active:scale-95 transition-all uppercase"
-                            >
-                              <span className="material-symbols-outlined text-[14px]">biotech</span>
-                              <span>View Lab</span>
-                            </button>
-                          </div>
                         </div>
                       </div>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Footer({ page, setPage }) {
+export function Footer({ page, setPage, setTestName }) {
   // Don't show large footer on signup pages to keep auth clean
   const isAuthPage = page === "signup";
   if (isAuthPage) return null;
@@ -17,19 +17,19 @@ export function Footer({ page, setPage }) {
             </h5>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[11px] md:text-xs">
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">About Us</a>
-              <a onClick={() => setPage("blood")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Our Labs</a>
+              <a onClick={() => { if (setTestName) setTestName(null); setPage("lab-listing"); }} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Our Labs</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Media</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Contact Us</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Career</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Blog</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Editorial Policy</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Health Q&A</a>
-              <a onClick={() => setPage("blood")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Lab Tests</a>
-              <a onClick={() => setPage("blood")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Lab Test Price</a>
+              <a onClick={() => { if (setTestName) setTestName(null); setPage("lab-listing"); }} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Lab Tests</a>
+              <a onClick={() => { if (setTestName) setTestName(null); setPage("lab-listing"); }} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Lab Test Price</a>
               <a onClick={() => setPage("package")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Money Back Policy</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Investors</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Query/Complaints</a>
-              <a onClick={() => setPage("blood")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Scan Lab</a>
+              <a onClick={() => { if (setTestName) setTestName(null); setPage("lab-listing"); }} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Scan Lab</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Our Corporate Clients</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">FAQ</a>
               <a onClick={() => setPage("home")} className="text-slate-500 font-semibold hover:text-[#00828a] transition-colors cursor-pointer">Rating & Reviews</a>

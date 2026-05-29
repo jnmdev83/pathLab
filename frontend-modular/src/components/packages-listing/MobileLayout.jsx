@@ -334,35 +334,30 @@ export function MobileLayout({
                 <div className="mt-4 pt-3 border-t border-slate-50 flex flex-col gap-3">
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col text-left">
+                      <span className="block text-[8px] font-black text-[#737785] uppercase tracking-wider mb-0.5 leading-none">Starting From</span>
                       <span className="text-base font-extrabold text-[#191c1d] leading-none">₹{offer.price}</span>
                     </div>
-                    <button 
-                      onClick={() => handleViewDetail(offer)}
-                      className="px-5 py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wide font-headline"
-                    >
-                      View Detail
-                    </button>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    <button 
-                      onClick={() => handleBookNow(offer)}
-                      className="w-full py-2.5 border border-[#00535b] text-[#00535b] font-black text-xs rounded-xl text-center active:bg-[#00535b]/5 transition-all uppercase font-headline"
-                    >
-                      Book Now
-                    </button>
                     <button 
                       onClick={() => setSelectedLab({
                         lab_id: offer.lab_id,
                         lab_name: offer.lab_name,
                         packageName: offer.package_name,
                         price: offer.price,
-                        bookFn: () => handleBookNow(offer)
+                        bookFn: null
                       })}
-                      className="w-full py-2.5 border border-slate-200 text-[#424654] font-black text-xs rounded-xl flex items-center justify-center gap-1 active:bg-slate-50 transition-all uppercase"
+                      className="px-4 py-2 border border-slate-200 text-[#424654] font-black text-[10px] rounded-xl flex items-center justify-center gap-1 active:bg-slate-50 transition-all uppercase"
                     >
                       <span className="material-symbols-outlined text-[14px]">biotech</span>
                       <span>View Lab</span>
+                    </button>
+                  </div>
+                  
+                  <div className="w-full">
+                    <button 
+                      onClick={() => handleViewDetail(offer)}
+                      className="w-full py-2.5 bg-[#00535b] hover:bg-[#00393f] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wide font-headline"
+                    >
+                      Compare Labs
                     </button>
                   </div>
                 </div>

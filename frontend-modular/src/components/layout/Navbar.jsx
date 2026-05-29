@@ -218,7 +218,7 @@ export function Navbar({
                   activeDropdown === 'tests' ? 'text-[#006d77]' : ''
                 }`}
               >
-                <span>Tests</span>
+                <span onClick={(e) => { e.stopPropagation(); setPage("home"); setActiveDropdown(null); }} className="hover:underline">Tests</span>
                 <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
                   activeDropdown === 'tests' ? 'rotate-180' : ''
                 }`}>keyboard_arrow_down</span>
@@ -290,7 +290,7 @@ export function Navbar({
                   activeDropdown === 'packages' ? 'text-[#006d77]' : ''
                 }`}
               >
-                <span>Packages</span>
+                <span onClick={(e) => { e.stopPropagation(); setPage("package"); setActiveDropdown(null); }} className="hover:underline">Packages</span>
                 <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
                   activeDropdown === 'packages' ? 'rotate-180' : ''
                 }`}>keyboard_arrow_down</span>
@@ -316,7 +316,10 @@ export function Navbar({
 
             {/* Labs Direct Link */}
             <button
-              onClick={() => setPage("lab-listing")}
+              onClick={() => {
+                if (setTestName) setTestName(null);
+                setPage("lab-listing");
+              }}
               className="hover:text-[#006d77] transition-colors py-2 outline-none select-none cursor-pointer"
             >
               Labs
@@ -641,6 +644,12 @@ export function Navbar({
 
                   {mobileActiveAccordion === 'tests' && (
                     <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
+                      <button
+                        onClick={() => { setPage("home"); setMobileDrawerOpen(false); }}
+                        className="w-full py-2 text-left text-xs font-extrabold text-[#00535b] hover:text-[#006d77] block border-b border-slate-50 mb-1"
+                      >
+                        All Diagnostic Tests
+                      </button>
                       {navMenu.tests.map((item, idx) => (
                         <button
                           key={idx}
@@ -707,6 +716,12 @@ export function Navbar({
 
                   {mobileActiveAccordion === 'packages' && (
                     <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
+                      <button
+                        onClick={() => { setPage("package"); setMobileDrawerOpen(false); }}
+                        className="w-full py-2 text-left text-xs font-extrabold text-[#00535b] hover:text-[#006d77] block border-b border-slate-50 mb-1"
+                      >
+                        All Checkup Packages
+                      </button>
                       {navMenu.packages.map((item, idx) => (
                         <button
                           key={idx}
@@ -722,7 +737,11 @@ export function Navbar({
 
                 {/* Labs Direct link */}
                 <button
-                  onClick={() => { setPage("lab-listing"); setMobileDrawerOpen(false); }}
+                  onClick={() => {
+                    if (setTestName) setTestName(null);
+                    setPage("lab-listing");
+                    setMobileDrawerOpen(false);
+                  }}
                   className="w-full flex items-center gap-2 py-2.5 px-3 hover:bg-slate-50 rounded-xl transition-all"
                 >
                   <span className="material-symbols-outlined text-base text-slate-400">labs</span>

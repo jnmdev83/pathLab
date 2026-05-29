@@ -114,6 +114,11 @@ function LabCard({ lab, index, onBook, onDetails }) {
               {lab.discount_percent}% OFF
             </span>
           )}
+          {!lab.test_id && (
+            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">
+              Starting at
+            </span>
+          )}
           <span className="font-headline text-[26px] font-bold text-primary leading-none">
             ₹ {(lab.price || 0).toLocaleString('en-IN')}
           </span>

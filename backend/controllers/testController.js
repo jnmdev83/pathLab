@@ -208,7 +208,10 @@ exports.get_api_tests_testId_prices = async (req, res) => {
 // ─── GET /api/tests/search?q=<name> ──────────────────────────────────────────
 // Resolves a test name string → { id, name, cat, description, total_labs }.
 exports.get_api_tests_search = async (req, res) => {
-  const q = (req.query.q || '').trim();
+  let q = (req.query.q || '').trim();
+  if (q.toLowerCase().includes(' vs ')) {
+    q = q.split(/\s+vs\s+/i)[0].trim();
+  }
   if (!q) return res.status(400).json({ error: 'Query parameter q is required' });
 
   try {
@@ -717,6 +720,8 @@ exports.get_api_scans_listing = async (req, res) => {
         t.procedure_prep, 
         t.anesthesia_required, 
         t.is_trending,
+        COALESCE((SELECT name FROM labs WHERE id = MIN(ltb.lab_id)), t.lab, 'Certified Partner Lab') AS lab,
+        COALESCE(MIN(ltb.lab_id), (SELECT id FROM labs WHERE name = t.lab LIMIT 1), 1) AS lab_id,
         COALESCE(MIN(ltb.price), t.price, 450) AS price,
         COALESCE(MIN(ltb.original_price), CEIL(COALESCE(MIN(ltb.price), t.price, 450) / 0.8)) AS original_price,
         COALESCE(MIN(ltb.discount_percent), 20) AS discount_percent,
@@ -729,7 +734,7 @@ exports.get_api_scans_listing = async (req, res) => {
       FROM tests t
       LEFT JOIN lab_test_branches ltb ON t.id = ltb.test_id AND ltb.is_available = true
       WHERE t.cat = 'scanning' AND t.sub_category = $1 ${queryExtra}
-      GROUP BY t.id, t.name, t.description, t.short_description, t.rep, t.cat, t.sub_category, t.body_part, t.equipment_type, t.procedure_prep, t.anesthesia_required, t.is_trending
+      GROUP BY t.id, t.name, t.description, t.short_description, t.rep, t.cat, t.sub_category, t.body_part, t.equipment_type, t.procedure_prep, t.anesthesia_required, t.is_trending, t.lab
     `;
 
     // Fetch total count before pagination

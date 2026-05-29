@@ -26,7 +26,8 @@ export function WebLayout({
   setTest,
   setTestName,
   loading,
-  error
+  error,
+  setSelectedLab
 }) {
   const categoriesList = ['Imaging', 'Endoscopy & Screening', 'Cardiac Diagnostics'];
 
@@ -366,57 +367,18 @@ export function WebLayout({
                             <span className="block text-[9px] font-black text-[#6f797a] uppercase tracking-wider mb-0.5">Starting From</span>
                             <div className="flex items-baseline gap-1.5">
                               <span className="text-2xl font-black text-[#00535b]">₹{test.price}</span>
-                              {hasDiscount && (
-                                <span className="text-xs line-through text-[#6f797a]">₹{test.original_price}</span>
-                              )}
                             </div>
                           </div>
-
-                          {/* Compare checkbox */}
-                          <label className="flex items-center gap-1.5 cursor-pointer group select-none mt-1">
-                            <span className="text-[10px] font-black text-[#6f797a] group-hover:text-[#00535b] uppercase tracking-wider transition-colors">Compare</span>
-                            <input 
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => handleCompareToggle(test)}
-                              className="w-4.5 h-4.5 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
-                            />
-                          </label>
                         </div>
 
-                        {/* Dynamic Discount Tag */}
-                        {hasDiscount && (
-                          <div className="hidden lg:block text-left">
-                            <span className="text-[9px] font-black text-[#286d67] bg-[#a9ece5]/30 px-2 py-0.5 rounded uppercase tracking-wider inline-block">
-                              {test.discount_percent}% OFF
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Action buttons (View Detail, Book Now, View Lab) */}
+                        {/* Action buttons */}
                         <div className="flex flex-col gap-2 w-full mt-auto">
                           <button 
                             onClick={() => handleViewDetails(test)}
-                            className="h-9.5 bg-[#00535b] hover:bg-[#00393f] text-white rounded-full text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm shadow-[#00535b]/10"
+                            className="h-10 bg-[#00535b] hover:bg-[#00393f] text-white rounded-full text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm shadow-[#00535b]/10 flex items-center justify-center w-full"
                           >
-                            View Detail
+                            Compare Labs
                           </button>
-                          
-                          <div className="grid grid-cols-2 gap-2">
-                            <button 
-                              onClick={() => handleBookNow(test)}
-                              className="h-9 border border-[#00535b] text-[#00535b] hover:bg-[#edf6f9] rounded-full text-[9px] font-black uppercase tracking-wider transition-all active:scale-95"
-                            >
-                              Book Now
-                            </button>
-                            <button 
-                              onClick={() => handleBookNow(test)}
-                              className="h-9 border border-[#bec8ca] text-[#3e494a] hover:bg-slate-50 rounded-full text-[9px] font-black uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-0.5"
-                            >
-                              <span className="material-symbols-outlined text-xs">labs</span>
-                              <span>View Lab</span>
-                            </button>
-                          </div>
                         </div>
 
                       </div>
@@ -464,39 +426,7 @@ export function WebLayout({
         </div>
       </div>
 
-      {/* ── Bottom Floating Comparison Tray ── */}
-      {selectedCompare.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#00535b] text-white py-4 px-6 md:px-8 rounded-full shadow-2xl flex items-center gap-6 border border-white/10 max-w-lg w-full justify-between animate-in slide-in-from-bottom-5 duration-200">
-          <div className="flex items-center gap-3">
-            <span className="bg-white text-[#00535b] text-xs font-black w-6 h-6 rounded-full flex items-center justify-center animate-pulse">
-              {selectedCompare.length}
-            </span>
-            <span className="text-xs font-bold truncate max-w-[180px] md:max-w-xs text-left">
-              {selectedCompare.map(p => p.name).join(", ")}
-            </span>
-          </div>
 
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setSelectedCompare([])}
-              className="text-white/70 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors px-2 py-1"
-            >
-              Clear
-            </button>
-            <button 
-              onClick={handleCompareClick}
-              disabled={selectedCompare.length < 2}
-              className={`px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-wider transition-colors duration-150 shadow-sm ${
-                selectedCompare.length >= 2 
-                  ? 'bg-white text-[#00535b] hover:bg-slate-100 active:scale-95' 
-                  : 'bg-white/20 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              Compare
-            </button>
-          </div>
-        </div>
-      )}
 
     </div>
   );
