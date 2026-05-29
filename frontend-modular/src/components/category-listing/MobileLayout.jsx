@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MobileSearchOverlay } from '../layout/MobileSearchOverlay';
 
 // ─── Category-specific metadata ───────────────────────────────────────────────
 const CATEGORY_META = {
@@ -41,7 +40,7 @@ function getTestIcon(name = '') {
 }
 
 // ─── Mobile Filter Bottom Sheet ───────────────────────────────────────────────
-function FilterSheet({ filters, setFilters, onClose, onReset }) {
+function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
   const toggleType = (val) => {
     setFilters(prev => ({ ...prev, type: prev.type === val ? 'all' : val }));
   };
@@ -83,6 +82,42 @@ function FilterSheet({ filters, setFilters, onClose, onReset }) {
         </div>
 
         <div className="overflow-y-auto divide-y divide-[#f1f3f4]" style={{ maxHeight: 'calc(85vh - 100px)' }}>
+          {/* Health Categories */}
+          <div className="px-5 py-4">
+            <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Health Categories</p>
+            <div className="space-y-3 max-h-40 overflow-y-auto pr-1">
+              {Array.from(new Set(items.map(x => x.category_name))).filter(Boolean).sort().map(catName => {
+                const count = items.filter(x => (x.category_name || '') === catName).length;
+                const isChecked = (filters.categories || []).includes(catName);
+                return (
+                  <label key={catName} className="flex items-center justify-between cursor-pointer">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {
+                          setFilters(prev => {
+                            const current = prev.categories || [];
+                            const updated = current.includes(catName)
+                              ? current.filter(c => c !== catName)
+                              : [...current, catName];
+                            return { ...prev, categories: updated };
+                          });
+                        }}
+                        className="w-4 h-4 rounded"
+                        style={{ accentColor: '#0b57d0' }}
+                      />
+                      <span className="text-sm text-[#374151] font-semibold">{catName}</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-[#9ca3af] bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                      {count}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Test Type */}
           <div className="px-5 py-4">
             <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Test Type</p>
@@ -348,7 +383,6 @@ export function MobileLayout({
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const sentinelRef = useRef(null);
   const meta = getCategoryMeta(categoryName);
 
@@ -710,6 +744,7 @@ export function MobileLayout({
         <FilterSheet
           filters={filters}
           setFilters={setFilters}
+          items={items}
           onReset={() => { resetFilters(); setFilterOpen(false); }}
           onClose={() => setFilterOpen(false)}
         />
@@ -722,41 +757,6 @@ export function MobileLayout({
         />
       )}
 
-      {/* Redesigned Premium Mobile Capsule Bottom Navbar */}
-      <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white/90 backdrop-blur-xl border border-slate-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-full px-4 py-2.5 flex justify-between items-center max-w-md mx-auto">
-        <button 
-          onClick={() => setSearchOpen(true)} 
-          className="flex flex-col items-center justify-center bg-[#0c4ca6] text-white rounded-2xl w-[88px] h-[58px] transition-all shadow-lg shadow-blue-600/15 active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined text-[20px] font-bold">search</span>
-          <span className="font-headline font-black text-[9px] uppercase tracking-wider mt-0.5">Search</span>
-        </button>
-        
-        <button 
-          onClick={() => setPage("package")} 
-          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
-        >
-          <span className="material-symbols-outlined text-[22px]">swap_horiz</span>
-          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Compare</span>
-        </button>
-        
-        <button 
-          onClick={() => setPage("profile-page")} 
-          className="flex flex-col items-center justify-center text-slate-500/80 hover:text-[#0c4ca6] transition-all w-[72px] h-[58px] rounded-2xl active:scale-90"
-        >
-          <span className="material-symbols-outlined text-[22px]">account_circle</span>
-          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Profile</span>
-        </button>
-      </nav>
-
-      {/* WORKABLE SEARCH OVERLAY DRAWER */}
-      <MobileSearchOverlay 
-        isOpen={searchOpen} 
-        onClose={() => setSearchOpen(false)} 
-        setPage={setPage} 
-        setTestName={setTestName} 
-        setActiveCategoryFilter={setActiveCategoryFilter} 
-      />
     </div>
   );
 }

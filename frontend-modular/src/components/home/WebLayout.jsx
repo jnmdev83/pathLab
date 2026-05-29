@@ -930,8 +930,8 @@ export function WebLayout({
         </section>
 
         {/* Small & Compact Can't Decide Banner (Doctor Chat Button Hidden for now) */}
-        <section className="py-5 px-8 max-w-4xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl p-5 md:p-6 relative overflow-hidden shadow-lg text-left gap-6 min-h-[130px] md:min-h-[150px]">
+        <section className="py-2.5 px-8 max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-2xl p-4 md:py-3.5 md:px-5 relative overflow-hidden shadow-lg text-left gap-6 min-h-[90px] md:min-h-[110px]">
             {/* Glowing blobs inside card */}
             <div className="absolute top-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
             <div className="absolute bottom-0 right-0 w-48 h-48 bg-blue-900/40 rounded-full blur-2xl" />

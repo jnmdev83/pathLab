@@ -426,6 +426,67 @@ export function WebLayout({
               </div>
 
               <div className="divide-y divide-[#f1f3f4]">
+                {/* Search Name Input */}
+                <div className="px-5 py-4">
+                  <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-2.5">Search Name</p>
+                  <div className="flex items-center gap-2 bg-[#f8f9fa] border border-[#e8eaed] rounded-xl px-3 py-2.5 focus-within:border-[#0b57d0] focus-within:bg-white transition-all">
+                    <span className="material-symbols-outlined text-[#9ca3af] text-sm">search</span>
+                    <input
+                      type="text"
+                      placeholder="Type test name/keyword..."
+                      value={filters.searchQuery}
+                      onChange={e => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
+                      className="bg-transparent border-none outline-none text-xs font-semibold text-[#1f2937] placeholder:text-[#9ca3af] w-full"
+                    />
+                    {filters.searchQuery && (
+                      <button 
+                        onClick={() => setFilters(prev => ({ ...prev, searchQuery: '' }))}
+                        className="text-[#9ca3af] hover:text-red-500 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">close</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Health Categories Checklist */}
+                <div className="px-5 py-4">
+                  <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Health Categories</p>
+                  <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+                    {Array.from(new Set(items.map(x => x.category_name))).filter(Boolean).sort().map(catName => {
+                      const count = items.filter(x => (x.category_name || '') === catName).length;
+                      const isChecked = (filters.categories || []).includes(catName);
+                      return (
+                        <label key={catName} className="flex items-center justify-between cursor-pointer group">
+                          <div className="flex items-center gap-2.5">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {
+                                setFilters(prev => {
+                                  const current = prev.categories || [];
+                                  const updated = current.includes(catName)
+                                    ? current.filter(c => c !== catName)
+                                    : [...current, catName];
+                                  return { ...prev, categories: updated };
+                                });
+                              }}
+                              className="w-4 h-4 rounded border-[#d1d5db] text-[#0b57d0] cursor-pointer"
+                              style={{ accentColor: '#0b57d0' }}
+                            />
+                            <span className="text-sm text-[#374151] font-medium group-hover:text-[#0b57d0] transition-colors">
+                              {catName}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">
+                            {count}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* Test Type */}
                 <div className="px-5 py-4">
                   <p className="text-[11px] font-black uppercase tracking-wider text-[#9ca3af] mb-3">Test Type</p>

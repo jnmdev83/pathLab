@@ -33,13 +33,19 @@ function getLabLogoStyle(labName = "") {
 
 export function PackageCompare({ 
   selectedPackage, 
+  setSelectedPackage, 
   setPage, 
   setTest, 
   user 
 }) {
-  if (!selectedPackage) return null;
-
   const isMobile = useIsMobile();
+  
+  // Local state for selecting packages
+  const [allPackagesList, setAllPackagesList] = useState([]);
+  const [loadingAllPackages, setLoadingAllPackages] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategoryTab, setSelectedCategoryTab] = useState("All");
+
   const [pkgDetails, setPkgDetails] = useState(null);
   const [labs, setLabs] = useState([]);
   const [includedTests, setIncludedTests] = useState([]);
@@ -52,9 +58,30 @@ export function PackageCompare({
   const [expandedTests, setExpandedTests] = useState({});
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
 
+  // Fetch seeded packages if selectedPackage?.id is missing
+  useEffect(() => {
+    if (selectedPackage?.id) return;
+    setLoadingAllPackages(true);
+    fetch(`${API_BASE_URL}/api/packages`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAllPackagesList(data);
+        }
+        setLoadingAllPackages(false);
+      })
+      .catch(err => {
+        console.error("Error fetching packages:", err);
+        setLoadingAllPackages(false);
+      });
+  }, [selectedPackage?.id]);
+
   // 1. Fetch complete package metadata on mount
   useEffect(() => {
-    if (!selectedPackage?.id) return;
+    if (!selectedPackage?.id) {
+      setPkgDetails(null);
+      return;
+    }
     setLoadingDetails(true);
     fetch(`${API_BASE_URL}/api/packages/${selectedPackage.id}`)
       .then(res => res.json())
@@ -70,7 +97,10 @@ export function PackageCompare({
 
   // 2. Fetch lab comparison rates
   useEffect(() => {
-    if (!selectedPackage?.id) return;
+    if (!selectedPackage?.id) {
+      setLabs([]);
+      return;
+    }
     setLoadingLabs(true);
     fetch(`${API_BASE_URL}/api/packages/${selectedPackage.id}/comparison`)
       .then(res => res.json())
@@ -86,7 +116,10 @@ export function PackageCompare({
 
   // 3. Fetch subtests included in this package
   useEffect(() => {
-    if (!selectedPackage?.id) return;
+    if (!selectedPackage?.id) {
+      setIncludedTests([]);
+      return;
+    }
     setLoadingTests(true);
     fetch(`${API_BASE_URL}/api/packages/${selectedPackage.id}/tests`)
       .then(res => res.json())
@@ -154,18 +187,220 @@ export function PackageCompare({
   const startPrice = labs.length > 0 ? Math.min(...labs.map(l => l.price)) : 899;
   const originalPrice = Math.round(startPrice * 1.45);
 
+  if (!selectedPackage?.id) {
+    const filteredPackages = allPackagesList.filter(pkg => {
+      const matchesSearch = pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (pkg.category || "").toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const pkgCat = (pkg.category || "").toLowerCase();
+      let matchesCategory = false;
+      if (selectedCategoryTab === "All") {
+        matchesCategory = true;
+      } else if (selectedCategoryTab === "Women Health") {
+        matchesCategory = pkgCat.includes("women") || pkgCat.includes("female") || pkgCat.includes("pregnancy");
+      } else {
+        matchesCategory = pkgCat.includes(selectedCategoryTab.toLowerCase());
+      }
+      return matchesSearch && matchesCategory;
+    });
+
+    const categories = ["All", "Full Body Checkup", "Diabetes", "Heart", "Thyroid", "Women Health"];
+
+    return (
+      <div className="min-h-screen bg-[#f8f9fa] pb-16 text-left" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
+        {/* Breadcrumbs */}
+        <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5">
+          <nav className="flex items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
+            <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
+            <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
+            <span className="text-[#0b57d0] font-black">Compare Packages</span>
+          </nav>
+        </section>
+
+        {/* Hero Card Banner */}
+        <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-4">
+          <div className="bg-gradient-to-br from-[#0c4ca6] to-[#082f6b] rounded-3xl p-6 md:p-10 text-white relative overflow-hidden shadow-lg mb-8">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 max-w-2xl space-y-3">
+              <span className="inline-flex items-center px-3 py-1 bg-[#86f898]/20 text-[#86f898] border border-[#86f898]/30 rounded-full text-xs font-black uppercase tracking-wider font-headline">
+                <span className="material-symbols-outlined text-[14px] mr-1">compare_arrows</span>
+                Side-by-Side Lab Rates
+              </span>
+              <h1 className="text-2xl md:text-4xl font-black font-headline tracking-tight leading-tight">
+                Select a Package to Compare Rates
+              </h1>
+              <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-xl">
+                Choose a diagnostic screening package below. We will retrieve active pathologists rates, parameters coverages, and turnarounds side-by-side across all NABL-certified labs in your region.
+              </p>
+            </div>
+          </div>
+
+          {/* Filters & Search Row */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white border border-[#e1e3e4] p-4 rounded-2xl shadow-sm">
+            {/* Category Tabs */}
+            <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+              {categories.map((tab) => {
+                const isActive = selectedCategoryTab === tab;
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setSelectedCategoryTab(tab)}
+                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap outline-none ${
+                      isActive 
+                        ? "bg-[#0b57d0] text-white shadow-sm shadow-[#0b57d0]/15" 
+                        : "bg-slate-50 border border-[#e1e3e4] text-[#424654] hover:bg-slate-100"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search Input */}
+            <div className="relative max-w-md w-full flex-shrink-0">
+              <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <span className="material-symbols-outlined text-[20px]">search</span>
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search packages by name or category..."
+                className="w-full pl-10 pr-4 py-2 border border-[#c3c6d6] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#0b57d0] bg-slate-50 focus:bg-white transition-colors"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Package Bento Grid */}
+          {loadingAllPackages ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map(n => (
+                <div key={n} className="bg-white rounded-3xl p-6 h-48 border border-slate-100 animate-pulse space-y-4">
+                  <div className="h-4 bg-slate-100 rounded w-1/3" />
+                  <div className="h-6 bg-slate-100 rounded w-3/4" />
+                  <div className="h-4 bg-slate-100 rounded w-1/2" />
+                  <div className="h-10 bg-slate-100 rounded-xl w-full" />
+                </div>
+              ))}
+            </div>
+          ) : filteredPackages.length === 0 ? (
+            <div className="bg-white border border-[#e1e3e4] rounded-[2rem] p-12 text-center flex flex-col items-center justify-center gap-4 max-w-lg mx-auto shadow-sm">
+              <span className="text-5xl">🔬</span>
+              <h3 className="font-headline font-black text-lg text-[#191c1d]">No packages found</h3>
+              <p className="text-xs text-[#424654] leading-relaxed">
+                We couldn't find any medical packages matching your search criteria. Try clearing filters or typing a different query.
+              </p>
+              <button 
+                onClick={() => { setSearchQuery(""); setSelectedCategoryTab("All"); }}
+                className="px-6 py-2.5 bg-[#0b57d0] hover:bg-[#0041a2] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm font-headline"
+              >
+                Clear Search & Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredPackages.map((pkg) => {
+                const startPriceVal = pkg.min_price || 899;
+                const originalPriceVal = Math.round(startPriceVal * 1.45);
+                
+                return (
+                  <div 
+                    key={pkg.id} 
+                    className="bg-white border border-[#e1e3e4]/80 hover:border-[#0b57d0]/40 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group relative overflow-hidden text-left"
+                  >
+                    <div className="space-y-4">
+                      {/* Top Row: Category & Badges */}
+                      <div className="flex justify-between items-center gap-2">
+                        <span className="text-[10px] font-black uppercase text-[#0b57d0] bg-[#0b57d0]/5 px-2.5 py-1 rounded-full leading-none border border-[#0b57d0]/10">
+                          {pkg.category || 'General Health'}
+                        </span>
+                        <span className="text-[10px] font-bold text-[#737785] flex items-center gap-1">
+                          <span className="material-symbols-outlined text-xs text-[#0b57d0]">science</span>
+                          {pkg.test_count || 0} Parameters
+                        </span>
+                      </div>
+
+                      {/* Package Name & Desc */}
+                      <div className="space-y-1">
+                        <h3 className="font-headline font-black text-base text-[#191c1d] group-hover:text-[#0b57d0] transition-colors leading-tight">
+                          {pkg.name}
+                        </h3>
+                        <p className="text-xs text-[#424654] leading-relaxed line-clamp-2 opacity-90">
+                          {pkg.description || "Comprehensive pathology assessment, certified by qualified pathologists, utilizing home collections."}
+                        </p>
+                      </div>
+
+                      {/* Info Pills */}
+                      <div className="flex flex-wrap gap-2 pt-1 border-t border-slate-100 mt-2">
+                        <span className="text-[10px] font-semibold text-[#424654] bg-slate-50 px-2 py-0.5 rounded border border-[#e1e3e4]/30">
+                          🏠 Free Collection
+                        </span>
+                        <span className="text-[10px] font-semibold text-[#006e2c] bg-[#86f898]/10 px-2 py-0.5 rounded border border-[#86f898]/20">
+                          🏥 {pkg.lab_count || 0} Labs Offered
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bottom Pricing & CTA */}
+                    <div className="mt-6 pt-4 border-t border-[#e1e3e4]/60 flex items-center justify-between">
+                      <div>
+                        <span className="text-[9px] uppercase font-black text-[#737785] tracking-wider block mb-0.5">Rates From</span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-lg font-black text-[#191c1d] font-headline">₹{startPriceVal.toLocaleString('en-IN')}</span>
+                          <span className="text-xs line-through text-[#737785]">₹{originalPriceVal.toLocaleString('en-IN')}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          setSelectedPackage({ id: pkg.id, name: pkg.name });
+                        }}
+                        className="px-4 py-2 bg-[#0b57d0] hover:bg-[#0041a2] group-hover:bg-[#0041a2] text-white text-xs font-bold rounded-xl active:scale-95 transition-all shadow-sm shadow-[#0b57d0]/10 flex items-center gap-1.5 uppercase font-headline"
+                      >
+                        Compare Rates
+                        <span className="material-symbols-outlined text-xs leading-none">arrow_forward</span>
+                      </button>
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f8f9fa] pb-16" style={{ fontFamily: 'Atkinson Hyperlegible Next, sans-serif' }}>
       
       {/* ── BREADCRUMB ────────────────────────────────────────────────────── */}
-      <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5">
+      <section className="max-w-[1280px] mx-auto px-4 md:px-8 py-5 flex justify-between items-center flex-wrap gap-3">
         <nav className="flex flex-wrap items-center gap-1.5 text-xs font-bold text-[#737785] tracking-wider uppercase font-headline">
           <button onClick={() => setPage('home')} className="hover:text-[#0b57d0] transition-colors">Home</button>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
-          <span className="text-[#191c1d]">{pkgDetails?.category || selectedPackage.category || 'Packages'}</span>
+          <button onClick={() => setSelectedPackage(null)} className="hover:text-[#0b57d0] transition-colors">Compare</button>
           <span className="material-symbols-outlined text-[16px] text-[#c3c6d6]">chevron_right</span>
           <span className="text-[#0b57d0] font-black truncate max-w-[200px]">{pkgDetails?.name || selectedPackage.name}</span>
         </nav>
+
+        <button
+          onClick={() => setSelectedPackage(null)}
+          className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 border border-[#c3c6d6] text-[#424654] text-xs font-bold rounded-xl shadow-sm transition-all"
+        >
+          <span className="material-symbols-outlined text-[16px]">swap_horiz</span>
+          <span>Select Different Package</span>
+        </button>
       </section>
 
       {/* ── HERO BANNER SECTION ───────────────────────────────────────────── */}
@@ -245,7 +480,7 @@ export function PackageCompare({
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
           
           {/* ================= LEFT COLUMN: CLINICAL PORTFOLIO ================= */}
-          <div className="xl:col-span-8 space-y-6 text-left">
+          <div className="xl:col-span-8 space-y-6 text-left order-2 xl:order-1">
             
             {/* Specimen Type & Fasting Guidelines */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -543,7 +778,7 @@ export function PackageCompare({
           </div>
 
           {/* ================= RIGHT COLUMN: AVAILABLE LABORATORIES ================= */}
-          <div id="available-labs-section" className="xl:col-span-4 space-y-4 text-left scroll-mt-20">
+          <div id="available-labs-section" className="xl:col-span-4 space-y-4 text-left scroll-mt-20 order-1 xl:order-2">
             <div className="flex items-end justify-between px-1">
               <h3 className="font-headline text-lg font-black text-[#191c1d]">Partner Laboratories</h3>
               <span className="text-xs text-[#737785] font-bold">

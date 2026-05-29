@@ -30,7 +30,8 @@ export function CategoryListing({
     type: 'all',
     searchQuery: '',
     turnaround: 'all', // 'all' | '12' | '24'
-    preparation: 'all' // 'all' | 'fasting' | 'no-fasting'
+    preparation: 'all', // 'all' | 'fasting' | 'no-fasting'
+    categories: []
   });
 
   const [visibleCount, setVisibleCount] = useState(8);
@@ -60,9 +61,11 @@ export function CategoryListing({
           let matched = data;
           
           if (!isAll) {
-            matched = data.filter(
-              (x) => x.category_name.toLowerCase().trim() === categoryName.toLowerCase().trim()
-            );
+            matched = data.filter((x) => {
+              const dbCat = x.category_name.toLowerCase().trim();
+              const reqCat = categoryName.toLowerCase().trim();
+              return dbCat.includes(reqCat) || reqCat.includes(dbCat);
+            });
           } else {
             // Remove duplicates if showing all
             const unique = new Map();
@@ -118,7 +121,11 @@ export function CategoryListing({
     // Filter by search query
     if (filters.searchQuery.trim()) {
       const q = filters.searchQuery.toLowerCase().trim();
-      result = result.filter(x => x.name.toLowerCase().includes(q));
+      result = result.filter(x => 
+        x.name.toLowerCase().includes(q) || 
+        (x.description || '').toLowerCase().includes(q) ||
+        (x.category_name || '').toLowerCase().includes(q)
+      );
     }
 
     // Filter by turnaround
@@ -143,6 +150,17 @@ export function CategoryListing({
         const nameStr = (x.name || '').toLowerCase();
         const isFasting = prepStr.includes('fasting') || descStr.includes('fasting') || nameStr.includes('fasting');
         return filters.preparation === 'fasting' ? isFasting : !isFasting;
+      });
+    }
+
+    // Filter by selected categories
+    if (filters.categories && filters.categories.length > 0) {
+      result = result.filter(x => {
+        const itemCat = (x.category_name || '').toLowerCase().trim();
+        return filters.categories.some(cat => {
+          const c = cat.toLowerCase().trim();
+          return itemCat.includes(c) || c.includes(itemCat);
+        });
       });
     }
 
@@ -178,7 +196,8 @@ export function CategoryListing({
       type: 'all',
       searchQuery: '',
       turnaround: 'all',
-      preparation: 'all'
+      preparation: 'all',
+      categories: []
     });
     setSort('popularity');
     setVisibleCount(8);

@@ -48,9 +48,9 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
         </div>
 
         {/* Scrollable Comparison Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 hide-scrollbar">
           
-          <div className="w-full overflow-x-auto">
+          <div className="w-full overflow-x-auto hide-scrollbar">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -62,7 +62,7 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
                       <span className="text-[10px] font-black uppercase text-[#0b57d0] bg-[#0b57d0]/5 px-2 py-0.5 rounded-full block mb-2 w-max mx-auto leading-none">
                         Option {idx + 1}
                       </span>
-                      <h4 className="font-extrabold text-sm text-[#191c1d] font-headline line-clamp-1 leading-snug">
+                      <h4 className="font-extrabold text-[13px] md:text-sm text-[#191c1d] font-headline line-clamp-2 leading-tight">
                         {pkg.package_name}
                       </h4>
                       <p className="text-[11px] font-bold text-[#737785] mt-1 leading-none">{pkg.lab_name}</p>
@@ -168,10 +168,10 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
         </div>
 
         {/* Modal Footer (Action CTAs) */}
-        <div className="p-6 border-t border-slate-100 flex justify-end gap-3 flex-shrink-0 bg-slate-50">
+        <div className="p-4 md:p-6 border-t border-slate-100 flex items-center justify-end gap-3 flex-shrink-0 bg-slate-50">
           <button 
             onClick={onClose}
-            className="px-6 py-3 border border-[#c3c6d6] text-[#191c1d] hover:bg-slate-100 font-bold text-xs rounded-xl active:scale-95 transition-all"
+            className="px-5 py-2.5 md:px-6 md:py-3 border border-[#c3c6d6] text-[#191c1d] hover:bg-slate-100 font-bold text-xs rounded-xl active:scale-95 transition-all flex-shrink-0"
           >
             Close Comparison
           </button>
@@ -182,9 +182,12 @@ export function MultiCompareModal({ packages, onClose, onBook }) {
               onBook(packages[0]);
               onClose();
             }}
-            className="px-8 py-3 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline"
+            className="px-5 py-2.5 md:px-8 md:py-3 bg-[#0b57d0] hover:bg-[#0041a2] text-white font-black text-xs rounded-xl active:scale-95 transition-all uppercase tracking-wider font-headline truncate flex-shrink-0 max-w-[180px] md:max-w-none text-center"
           >
-            Book {packages[0]?.package_name}
+            <span className="hidden sm:inline">Book {packages[0]?.package_name}</span>
+            <span className="sm:hidden">
+              {packages[0]?.package_name?.length > 15 ? 'Book Option 1' : `Book ${packages[0]?.package_name}`}
+            </span>
           </button>
         </div>
 
