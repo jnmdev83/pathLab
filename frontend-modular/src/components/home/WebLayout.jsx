@@ -606,7 +606,10 @@ export function WebLayout({
               <p className="text-base text-on-surface-variant">Recommended pathology partners based on your active location parameters.</p>
             </div>
             <button 
-              onClick={() => setPage("blood")} 
+              onClick={() => {
+                if (setTestName) setTestName(null);
+                setPage("lab-listing");
+              }} 
               className="text-primary hover:text-primary-container font-bold flex items-center gap-2 group cursor-pointer text-sm font-headline bg-primary/5 px-5 py-3 rounded-2xl border border-primary/10 transition-all hover:bg-primary hover:text-on-primary"
             >
               <span>View all labs</span>
