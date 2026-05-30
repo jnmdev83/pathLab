@@ -346,6 +346,11 @@ export default function App() {
     }
   }, [page, test?.id, testName, selectedPackage?.id, selectedBranch?.id, activeCategoryFilter]);
 
+  // Centralized scroll-to-top handler on page or detail view changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page, test?.id, selectedPackage?.id]);
+
   useEffect(() => {
     const handlePopState = (e) => {
       const parsed = parseStateFromUrl();
