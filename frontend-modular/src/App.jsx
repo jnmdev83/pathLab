@@ -26,7 +26,7 @@ const PAGE_TO_PATH = {
   "detail": "/test-detail",
   "package-detail": "/package-detail",
   "category-listing": "/category-listing",
-  "branch-tests": "/branch-tests",
+  "branch-tests": "/lab-detail",
   "booking": "/booking",
   "signup": "/auth",
   "bookings-page": "/bookings",
@@ -39,6 +39,7 @@ const PATH_TO_PAGE = Object.entries(PAGE_TO_PATH).reduce((acc, [pg, path]) => {
   acc[path] = pg;
   return acc;
 }, {});
+PATH_TO_PAGE["/branch-tests"] = "branch-tests";
 
 const categoryToSlug = (cat) => {
   if (!cat) return "";
@@ -119,6 +120,16 @@ const parseStateFromUrl = () => {
       }
       if (branchId) {
         state.selectedBranch = { id: parseInt(branchId, 10) };
+      }
+    } else if (matchedPage === "branch-tests") {
+      const branchId = searchParams.get("branchId");
+      const labId = searchParams.get("labId");
+      if (branchId) {
+        state.selectedBranch = {
+          id: parseInt(branchId, 10),
+          branch_id: parseInt(branchId, 10),
+          lab_id: labId ? parseInt(labId, 10) : undefined
+        };
       }
     } else if (matchedPage === "category-listing" || matchedPage === "scans-listing" || matchedPage === "package-listing") {
       const category = searchParams.get("category");
@@ -321,6 +332,10 @@ export default function App() {
     } else if (page === "package-detail" && selectedPackage?.id) {
       params.set("id", selectedPackage.id);
       if (selectedBranch?.id) params.set("branchId", selectedBranch.id);
+    } else if (page === "branch-tests" && selectedBranch) {
+      const branchId = selectedBranch.branch_id || selectedBranch.id || selectedBranch.lab_branch_id;
+      if (branchId) params.set("branchId", branchId);
+      if (selectedBranch.lab_id) params.set("labId", selectedBranch.lab_id);
     } else if ((page === "category-listing" || page === "scans-listing" || page === "package-listing") && activeCategoryFilter) {
       params.set("category", categoryToSlug(activeCategoryFilter));
     }
@@ -582,6 +597,7 @@ export default function App() {
           <BranchTests
             selectedBranch={selectedBranch}
             branchTests={branchTests}
+            setBranchTests={setBranchTests}
             setPage={setPage}
             setTest={setTest}
             user={user}

@@ -1,9 +1,12 @@
 import React from 'react';
 import { useIsMobile } from '../../utils/useIsMobile';
 import { S, MapLink } from '../../utils/reusables';
+import { API_BASE_URL } from '../../config';
 
-export function BranchTests({ selectedBranch, branchTests, setPage, setTest, user }) {
+export function BranchTests({ selectedBranch, branchTests, setBranchTests, setPage, setTest, user }) {
   const isMobile = useIsMobile();
+  const [loadingTests, setLoadingTests] = React.useState(false);
+  const branchId = selectedBranch?.branch_id || selectedBranch?.id || selectedBranch?.lab_branch_id;
 
   React.useEffect(() => {
     if (!selectedBranch) {
@@ -11,9 +14,36 @@ export function BranchTests({ selectedBranch, branchTests, setPage, setTest, use
     }
   }, [selectedBranch, setPage]);
 
+  React.useEffect(() => {
+    if (!branchId || branchTests.length > 0 || !setBranchTests) return;
+
+    setLoadingTests(true);
+    fetch(`${API_BASE_URL}/api/branches/${branchId}/tests`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBranchTests(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => console.error("Could not fetch tests for this branch:", err))
+      .finally(() => setLoadingTests(false));
+  }, [branchId, branchTests.length, setBranchTests]);
+
   if (!selectedBranch) {
     return null;
   }
+
+  const firstTest = branchTests[0] || {};
+  const branchProfile = {
+    ...selectedBranch,
+    lab_name: selectedBranch.lab_name || firstTest.lab_name || "Laboratory",
+    branch_name: selectedBranch.branch_name || firstTest.branch_name || "Branch",
+    address: selectedBranch.address || firstTest.address || "",
+    city: selectedBranch.city || firstTest.city || "",
+    phone: selectedBranch.phone || firstTest.branch_phone || selectedBranch.branch_phone,
+    lab_id: selectedBranch.lab_id || firstTest.lab_id,
+    branch_id: branchId,
+    id: branchId,
+    home_collection: selectedBranch.home_collection ?? firstTest.home_collection,
+  };
 
   const grouped = branchTests.reduce((acc, row) => {
     const cat = row.category || "other";
@@ -56,19 +86,23 @@ export function BranchTests({ selectedBranch, branchTests, setPage, setTest, use
             <span className="text-primary">Laboratory Details</span>
           </div>
           <h1 className="font-headline text-[32px] text-on-surface font-extrabold tracking-tight leading-tight mb-2">
-            {selectedBranch.lab_name}
+            {branchProfile.lab_name}
           </h1>
           <div className="text-sm text-on-surface-variant/80 flex flex-col gap-1.5">
-            <div className="font-semibold">{selectedBranch.branch_name} Branch - {selectedBranch.address}</div>
-            <div className="opacity-75">{selectedBranch.phone || "Phone unavailable"}</div>
+            <div className="font-semibold">{branchProfile.branch_name} Branch{branchProfile.address ? ` - ${branchProfile.address}` : ""}</div>
+            <div className="opacity-75">{branchProfile.phone || "Phone unavailable"}</div>
           </div>
         </div>
         <div>
-          <MapLink item={selectedBranch} style={{ fontSize: "13px" }} />
+          <MapLink item={branchProfile} style={{ fontSize: "13px" }} />
         </div>
       </div>
 
-      {branchTests.length === 0 ? (
+      {loadingTests ? (
+        <div className="text-center py-20 text-on-surface-variant/80 glass rounded-3xl">
+          Loading lab details...
+        </div>
+      ) : branchTests.length === 0 ? (
         <div className="text-center py-20 text-on-surface-variant/80 glass rounded-3xl">
           No available tests at this branch yet.
         </div>

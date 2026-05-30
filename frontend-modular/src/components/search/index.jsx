@@ -245,7 +245,14 @@ export function Search({
 
   const handleDetails = (labRow) => {
     if (!testName || !labRow.test_id) {
-      handleBook(labRow);
+      fetch(`${API_BASE_URL}/api/branches/${labRow.branch_id || labRow.id}/tests`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (setSelectedBranch) setSelectedBranch(labRow);
+          if (setBranchTests) setBranchTests(Array.isArray(data) ? data : []);
+          setPage("branch-tests");
+        })
+        .catch(err => console.error("Could not fetch tests for this branch:", err));
       return;
     }
 
