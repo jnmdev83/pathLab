@@ -33,7 +33,7 @@ function TopPickStrip({ lab, badge, badgeClass, icon, onBook }) {
 }
 
 // ─── Mobile Lab Card ──────────────────────────────────────────────────────────
-function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare }) {
+function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare, setSelectedLab, testMeta }) {
   const icon = LAB_ICONS[index % LAB_ICONS.length];
   const isChecked = selectedCompare.some(item => item.branch_id === lab.branch_id);
   const onCompareToggle = () => {
@@ -97,38 +97,50 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-outline-variant/10">
-        <div>
-          {lab.discount_percent > 0 && (
-            <span className="bg-error-container text-on-error-container px-1.5 py-0.5 rounded text-[9px] font-bold block mb-0.5">
-              {lab.discount_percent}% OFF
+      <div className="border-t border-outline-variant/10 pt-3.5 mt-2 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <div>
+            {lab.discount_percent > 0 && (
+              <span className="bg-error-container text-on-error-container px-1.5 py-0.5 rounded text-[9px] font-bold block mb-0.5">
+                {lab.discount_percent}% OFF
+              </span>
+            )}
+            {!lab.test_id && (
+              <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block mb-0.5 leading-none">
+                Starting at
+              </span>
+            )}
+            <span className="text-primary font-headline font-bold text-xl leading-none">
+              ₹{(lab.price || 0).toLocaleString('en-IN')}
             </span>
-          )}
-          {!lab.test_id && (
-            <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block mb-0.5 leading-none">
-              Starting at
-            </span>
-          )}
-          <span className="text-primary font-headline font-bold text-xl leading-none">
-            ₹{(lab.price || 0).toLocaleString('en-IN')}
-          </span>
-          {lab.original_price && (
-            <span className="text-[11px] text-outline line-through block">
-              ₹{lab.original_price.toLocaleString('en-IN')}
-            </span>
-          )}
+            {lab.original_price && (
+              <span className="text-[11px] text-outline line-through block">
+                ₹{lab.original_price.toLocaleString('en-IN')}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex gap-2">
+
+        <div className="flex flex-col gap-2 w-full">
           <button
             onClick={() => onDetails(lab)}
-            className="px-3 py-2 border border-outline-variant rounded-lg text-[11px] font-bold hover:bg-surface-container-low active:scale-95 transition-all"
+            className="w-full py-2 border border-outline-variant rounded-lg text-[11px] font-bold hover:bg-surface-container-low active:scale-95 transition-all text-center"
           >
-            Details
+            View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
           </button>
+          
+          <button
+            onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
+            className="w-full py-2 border border-primary/25 text-primary hover:bg-[#e8f0fe] rounded-lg text-[11px] font-bold active:scale-95 transition-all flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-sm">biotech</span>
+            View Lab
+          </button>
+          
           {lab.test_id && (
             <button
               onClick={() => onBook(lab)}
-              className="px-4 py-2 bg-primary text-on-primary rounded-lg text-[11px] font-bold hover:shadow-md active:scale-95 transition-all"
+              className="w-full py-2 bg-primary text-on-primary rounded-lg text-[11px] font-bold hover:shadow-md active:scale-95 transition-all text-center"
             >
               Book Now
             </button>
@@ -283,7 +295,8 @@ export function MobileLayout({
   setTestName,
   setActiveCategoryFilter,
   selectedCompare, setSelectedCompare,
-  compareOpen, setCompareOpen
+  compareOpen, setCompareOpen,
+  setSelectedLab
 }) {
   const [filterOpen, setFilterOpen] = useState(false);
   const sentinelRef = useRef(null);
@@ -404,6 +417,8 @@ export function MobileLayout({
               onDetails={handleDetails}
               selectedCompare={selectedCompare}
               setSelectedCompare={setSelectedCompare}
+              setSelectedLab={setSelectedLab}
+              testMeta={testMeta}
             />
           ))
         )}

@@ -3,6 +3,7 @@ import { useIsMobile } from '../../utils/useIsMobile';
 import { WebLayout } from './WebLayout';
 import { MobileLayout } from './MobileLayout';
 import { API_BASE_URL } from '../../config';
+import { LabDetailPanel } from '../detail/LabDetailPanel';
 
 const PAGE_LIMIT = 8;
 
@@ -27,6 +28,7 @@ export function Search({
   const [hasMore,  setHasMore]      = useState(false);
   const [selectedCompare, setSelectedCompare] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [selectedLab, setSelectedLab] = useState(null);
 
   const [loading,     setLoading]     = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -317,9 +319,27 @@ export function Search({
     selectedCompare,
     setSelectedCompare,
     compareOpen,
-    setCompareOpen
+    setCompareOpen,
+    setSelectedLab
   };
 
-  if (isMobile) return <MobileLayout {...viewProps} />;
-  return <WebLayout {...viewProps} />;
+  return (
+    <>
+      {isMobile ? (
+        <MobileLayout {...viewProps} />
+      ) : (
+        <WebLayout {...viewProps} />
+      )}
+      {selectedLab && (
+        <LabDetailPanel
+          labId={selectedLab.lab_id}
+          labName={selectedLab.lab_name}
+          testName={selectedLab.testName || testMeta?.name || testName || 'Lab Test'}
+          testPrice={selectedLab.price}
+          onClose={() => setSelectedLab(null)}
+          onBook={selectedLab.bookFn}
+        />
+      )}
+    </>
+  );
 }

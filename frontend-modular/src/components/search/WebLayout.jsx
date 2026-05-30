@@ -56,7 +56,7 @@ function TopPickCard({ lab, badge, badgeClass, highlight, isFastest, onBook }) {
 }
 
 // ─── Single lab result row card ───────────────────────────────────────────────
-function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare }) {
+function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare, setSelectedLab, testMeta }) {
   const icon = LAB_ICONS[index % LAB_ICONS.length];
   const bookingStr = lab.booking_count >= 1000
     ? `${(lab.booking_count / 1000).toFixed(1)}k`
@@ -160,7 +160,14 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
             onClick={() => onDetails(lab)}
             className="flex-1 md:flex-none md:px-4 py-2 border border-outline-variant rounded-lg text-[12px] font-bold hover:bg-surface-container-low active:scale-95 transition-all"
           >
-            Details
+            View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
+          </button>
+          <button
+            onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
+            className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg font-bold text-[12px] border border-primary/25 text-primary hover:bg-[#e8f0fe] hover:border-primary/50 transition-all cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-sm">biotech</span>
+            View Lab
           </button>
           {lab.test_id && (
             <button
@@ -326,7 +333,8 @@ export function WebLayout({
   loadMore, handleBook, handleDetails, resetFilters,
   setPage,
   selectedCompare, setSelectedCompare,
-  compareOpen, setCompareOpen
+  compareOpen, setCompareOpen,
+  setSelectedLab
 }) {
   const sentinelRef = useRef(null);
 
@@ -444,6 +452,8 @@ export function WebLayout({
                       onDetails={handleDetails}
                       selectedCompare={selectedCompare}
                       setSelectedCompare={setSelectedCompare}
+                      setSelectedLab={setSelectedLab}
+                      testMeta={testMeta}
                     />
                   ))
               }
