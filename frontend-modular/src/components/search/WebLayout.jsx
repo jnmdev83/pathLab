@@ -76,7 +76,10 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-[#00535b]/20 hover:shadow-lg transition-all duration-300 relative group cursor-default">
+    <div 
+      onClick={() => onDetails(lab)} 
+      className="bg-white p-6 rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-[#00535b]/30 hover:bg-slate-50/10 hover:shadow-lg transition-all duration-300 relative group cursor-pointer"
+    >
 
       {/* Lab icon */}
       <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center shrink-0">
@@ -144,7 +147,10 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
         </div>
 
         {lab.test_id && (
-          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none">
+          <label 
+            onClick={(e) => e.stopPropagation()} 
+            className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none"
+          >
             <input
               type="checkbox"
               checked={isChecked}
@@ -157,13 +163,16 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
 
         <div className="flex gap-2 w-full md:w-auto">
           <button
-            onClick={() => onDetails(lab)}
+            onClick={(e) => { e.stopPropagation(); onDetails(lab); }}
             className="flex-1 md:flex-none px-4 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-[#00535b] rounded-xl text-[11px] font-bold text-slate-700 transition-all duration-150 active:scale-95"
           >
             View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
           </button>
           <button
-            onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) });
+            }}
             className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl font-bold text-[11px] border border-[#00535b]/20 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/40 transition-all duration-150 active:scale-95 cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">biotech</span>
@@ -171,7 +180,10 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
           </button>
           {lab.test_id && (
             <button
-              onClick={() => onBook(lab)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBook(lab);
+              }}
               className="flex-1 md:flex-none px-5 py-2 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-150 active:scale-95 shadow-sm shadow-[#00535b]/10"
             >
               Book Now

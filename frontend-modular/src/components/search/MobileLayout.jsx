@@ -49,7 +49,10 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
   };
 
   return (
-    <div className="bg-white p-5 rounded-2xl shadow-[0px_2px_15px_rgba(0,0,0,0.02)] border border-slate-100/80">
+    <div 
+      onClick={() => onDetails(lab)} 
+      className="bg-white p-5 rounded-2xl shadow-[0px_2px_15px_rgba(0,0,0,0.02)] border border-slate-100/80 cursor-pointer active:bg-slate-50 transition-colors"
+    >
       <div className="flex gap-3 items-start mb-4">
         <div className="w-11 h-11 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center shrink-0">
           <span className="material-symbols-outlined text-[#00535b] text-xl">{icon}</span>
@@ -107,7 +110,10 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
           </div>
 
           {lab.test_id && (
-            <label className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none">
+            <label 
+              onClick={(e) => e.stopPropagation()} 
+              className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none"
+            >
               <input
                 type="checkbox"
                 checked={isChecked}
@@ -121,14 +127,17 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
 
         <div className="flex flex-col gap-2 w-full">
           <button
-            onClick={() => onDetails(lab)}
+            onClick={(e) => { e.stopPropagation(); onDetails(lab); }}
             className="w-full py-2 border border-slate-200 hover:bg-slate-100 rounded-xl text-[11px] font-bold text-slate-700 transition-all active:scale-95 text-center"
           >
             View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
           </button>
           
           <button
-            onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) });
+            }}
             className="w-full py-2 border border-[#00535b]/20 text-[#00535b] hover:bg-[#e8f0fe] rounded-xl text-[11px] font-bold active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">biotech</span>
@@ -137,7 +146,10 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
           
           {lab.test_id && (
             <button
-              onClick={() => onBook(lab)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBook(lab);
+              }}
               className="w-full py-2 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[11px] font-black uppercase tracking-wider active:scale-95 transition-all text-center"
             >
               Book Now
