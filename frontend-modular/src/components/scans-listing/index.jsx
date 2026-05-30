@@ -24,6 +24,7 @@ export function ScansListing({
   const [anesthesia, setAnesthesia] = useState(false);
   const [sort, setSort] = useState("Popularity");
   const [currentPage, setCurrentPage] = useState(1);
+  const [rating, setRating] = useState("all");
 
   const [data, setData] = useState({
     tests: [],
@@ -49,7 +50,7 @@ export function ScansListing({
   // Reset page to 1 when any filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [category, search, maxPrice, bodyPart, equipmentType, anesthesia, sort]);
+  }, [category, search, maxPrice, bodyPart, equipmentType, anesthesia, sort, rating]);
 
   // Fetch scans listing data
   useEffect(() => {
@@ -104,6 +105,7 @@ export function ScansListing({
     setBodyPart("All Body Parts");
     setEquipmentType("");
     setAnesthesia(false);
+    setRating("all");
     setCurrentPage(1);
   };
 
@@ -114,10 +116,19 @@ export function ScansListing({
     setEquipmentType("");
     setAnesthesia(false);
     setSort("Popularity");
+    setRating("all");
     setCurrentPage(1);
   };
 
   const [selectedLab, setSelectedLab] = useState(null);
+
+  const getTestRating = (test) => {
+    return (4.2 + (test.id % 8) * 0.1).toFixed(1);
+  };
+
+  const filteredTests = rating === "all"
+    ? (data.tests || [])
+    : (data.tests || []).filter(test => parseFloat(getTestRating(test)) >= parseFloat(rating));
 
   const props = {
     category,
@@ -138,6 +149,9 @@ export function ScansListing({
     loading,
     error,
     ...data,
+    tests: filteredTests,
+    rating,
+    setRating,
     handleCategorySwitch,
     handleResetFilters,
     setPage,

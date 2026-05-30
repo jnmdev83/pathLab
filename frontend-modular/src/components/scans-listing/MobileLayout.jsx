@@ -22,12 +22,13 @@ export function MobileLayout({
   filters,
   handleCategorySwitch,
   handleResetFilters,
-  setPage,
   setTest,
   setTestName,
   loading,
   error,
-  setSelectedLab
+  setSelectedLab,
+  rating,
+  setRating,
 }) {
   const sentinelRef = useRef(null);
 
@@ -104,13 +105,13 @@ export function MobileLayout({
     setPage("detail");
   };
 
-  // Count active filters for badge
   const activeFiltersCount = 
     (search ? 1 : 0) + 
     (maxPrice < 5000 ? 1 : 0) + 
     (bodyPart !== "All Body Parts" ? 1 : 0) + 
     (equipmentType ? 1 : 0) + 
-    (anesthesia ? 1 : 0);
+    (anesthesia ? 1 : 0) +
+    (rating !== "all" ? 1 : 0);
 
   return (
     <div className="min-h-screen bg-[#f9f9ff] text-[#121c2c] font-headline pb-24 text-left">
@@ -386,6 +387,30 @@ export function MobileLayout({
                 <div className="flex justify-between text-[10px] font-bold text-[#6f797a] uppercase tracking-wider">
                   <span>₹0</span>
                   <span className="text-[#00535b]">Max: ₹{maxPrice}</span>
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-[#121c2c] uppercase tracking-wider block">Rating Threshold</label>
+                <div className="space-y-2">
+                  {[
+                    { value: 'all', label: 'All Ratings' },
+                    { value: '4.5', label: '4.5+ ★ Stars' },
+                    { value: '4.0', label: '4.0+ ★ Stars' },
+                    { value: '3.5', label: '3.5+ ★ Stars' }
+                  ].map(opt => (
+                    <label key={opt.value} className="flex items-center gap-3 cursor-pointer text-xs font-bold text-[#3e494a] hover:text-[#00535b] transition-colors select-none">
+                      <input
+                        type="radio"
+                        name="scansMobileRatingFilter"
+                        checked={rating === opt.value}
+                        onChange={() => { setRating(opt.value); setCurrentPage(1); }}
+                        className="w-4 h-4 rounded-full border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20"
+                      />
+                      <span>{opt.label}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 

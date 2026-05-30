@@ -28,6 +28,8 @@ export function WebLayout({
   setSelectedLab,
   loading,
   error,
+  rating,
+  setRating,
 }) {
   const sentinelRef = useRef(null);
 
@@ -184,6 +186,30 @@ export function WebLayout({
                 <div className="flex justify-between text-[10px] font-bold text-[#6f797a] uppercase tracking-wider">
                   <span>₹0</span>
                   <span className="text-[#00535b]">Max: ₹{maxPrice}</span>
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="space-y-2 border-t border-slate-100 pt-4">
+                <label className="text-xs font-black text-[#121c2c] uppercase tracking-wider block">Rating</label>
+                <div className="space-y-2">
+                  {[
+                    { value: 'all', label: 'All Ratings' },
+                    { value: '4.5', label: '4.5+ ★ Stars' },
+                    { value: '4.0', label: '4.0+ ★ Stars' },
+                    { value: '3.5', label: '3.5+ ★ Stars' }
+                  ].map(opt => (
+                    <label key={opt.value} className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#3e494a] hover:text-[#00535b] transition-colors select-none">
+                      <input
+                        type="radio"
+                        name="scansRatingFilter"
+                        checked={rating === opt.value}
+                        onChange={() => { setRating(opt.value); setCurrentPage(1); }}
+                        className="w-4 h-4 rounded-full border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20"
+                      />
+                      {opt.label}
+                    </label>
+                  ))}
                 </div>
               </div>
 
