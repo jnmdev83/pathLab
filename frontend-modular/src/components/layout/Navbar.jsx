@@ -288,12 +288,6 @@ export function Navbar({
                   className="absolute top-[42px] left-0 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-left"
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <button
-                    onClick={() => { setPage("scans-landing"); setActiveDropdown(null); }}
-                    className="w-full px-4 py-2 hover:bg-[#00535b]/5 text-left font-extrabold text-xs text-[#00535b] hover:text-[#006d77] transition-colors border-b border-slate-100/50 mb-1"
-                  >
-                    All Scans &amp; Procedures
-                  </button>
                   {(navMenu.scans || []).map((item, idx) => (
                     <button
                       key={idx}
@@ -700,12 +694,6 @@ export function Navbar({
 
                   {mobileActiveAccordion === 'scans' && (
                     <div className="bg-white pl-8 pr-3 py-1.5 space-y-1 border-t border-slate-50 animate-in fade-in duration-200">
-                      <button
-                        onClick={() => { setPage("scans-landing"); setMobileDrawerOpen(false); }}
-                        className="w-full py-2 text-left text-xs font-extrabold text-[#00535b] hover:text-[#006d77] block border-b border-slate-50"
-                      >
-                        All Scans &amp; Procedures
-                      </button>
                       {(navMenu.scans || []).map((item, idx) => (
                         <button
                           key={idx}
