@@ -244,6 +244,30 @@ function FilterSidebar({ filters, setFilters, resetFilters }) {
         </div>
       </div>
 
+      {/* Rating */}
+      <div className="mb-8">
+        <label className="text-[11px] font-bold text-on-surface-variant block mb-4 uppercase tracking-wider">Rating</label>
+        <div className="space-y-3">
+          {[
+            { value: 'all', label: 'All Ratings' },
+            { value: '4.5', label: '4.5+ ★ Stars' },
+            { value: '4.0', label: '4.0+ ★ Stars' },
+            { value: '3.5', label: '3.5+ ★ Stars' }
+          ].map(opt => (
+            <label key={opt.value} className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="radio"
+                name="ratingFilter"
+                checked={filters.rating === opt.value || (opt.value === 'all' && !filters.rating)}
+                onChange={() => setFilters(prev => ({ ...prev, rating: opt.value }))}
+                className="w-5 h-5 text-primary accent-primary focus:ring-primary border-outline-variant"
+              />
+              <span className="text-sm text-on-surface group-hover:text-primary transition-colors">{opt.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
       {/* Certification */}
       <div>
         <label className="text-[11px] font-bold text-on-surface-variant block mb-4 uppercase tracking-wider">Certification</label>

@@ -36,6 +36,7 @@ export function Search({
     turnaround: [],
     collection: null,
     nabl:       false,
+    rating:     'all',
   });
 
   // ── Resolve test name → meta ──────────────────────────────────────────────
@@ -76,6 +77,7 @@ export function Search({
     if (filters.collection)              p.set('collection', filters.collection);
     if (filters.nabl)                    p.set('nabl',       'true');
     if (filters.turnaround.length > 0)   p.set('turnaround', filters.turnaround[0]);
+    if (filters.rating && filters.rating !== 'all') p.set('rating', filters.rating);
     return p.toString();
   }, [sort, filters, userLocation]);
 
@@ -254,7 +256,7 @@ export function Search({
   };
 
   const resetFilters = () => {
-    setFilters({ maxPrice: null, turnaround: [], collection: null, nabl: false });
+    setFilters({ maxPrice: null, turnaround: [], collection: null, nabl: false, rating: 'all' });
     setSort('popularity');
   };
 
@@ -271,11 +273,22 @@ export function Search({
     );
   }
 
+  const filteredResults = !testMeta?.id
+    ? results.filter(item => {
+        if (filters.maxPrice && item.price > filters.maxPrice) return false;
+        if (filters.collection === 'home' && !item.home_collection) return false;
+        if (filters.collection === 'lab' && item.home_collection) return false;
+        if (filters.nabl && !item.is_verified) return false;
+        if (filters.rating && filters.rating !== 'all' && item.rating < parseFloat(filters.rating)) return false;
+        return true;
+      })
+    : results;
+
   const viewProps = {
     testMeta: testMeta || { name: testName || 'Lab Tests', total_labs: 0, description: '' },
     topPicks,
-    results,
-    total,
+    results: filteredResults,
+    total: !testMeta?.id ? filteredResults.length : total,
     hasMore,
     loading,
     loadingMore,

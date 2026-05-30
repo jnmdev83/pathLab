@@ -81,6 +81,7 @@ exports.get_api_tests_testId_prices = async (req, res) => {
   const nablOnly   = req.query.nabl === 'true';
   const turnaround = req.query.turnaround || null; // '6' | 'same_day' | 'next_day'
   const sortParam  = req.query.sort || 'popularity';
+  const minRating  = parseFloat(req.query.rating) || null;
 
   try {
     const testRow = await db.query('SELECT id, name FROM tests WHERE id = $1', [req.params.testId]);
@@ -93,6 +94,10 @@ exports.get_api_tests_testId_prices = async (req, res) => {
     if (maxPrice) {
       countParams.push(maxPrice);
       whereExtra += ` AND ltb.price <= $${countParams.length}`;
+    }
+    if (minRating) {
+      countParams.push(minRating);
+      whereExtra += ` AND COALESCE(l.rating, 4.0) >= $${countParams.length}`;
     }
     if (collection === 'home') whereExtra += ` AND lb.home_collection = true`;
     if (collection === 'lab')  whereExtra += ` AND lb.home_collection = false`;
