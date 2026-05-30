@@ -13,7 +13,6 @@ export function MobileLayout({
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
-  const [selectedProcs, setSelectedProcs] = useState([]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
@@ -41,29 +40,6 @@ export function MobileLayout({
 
   const toggleFaq = (index) => {
     setExpandedFaqIndex(expandedFaqIndex === index ? null : index);
-  };
-
-  const handleCompareToggle = (proc) => {
-    if (selectedProcs.some(p => p.id === proc.id)) {
-      setSelectedProcs(selectedProcs.filter(p => p.id !== proc.id));
-    } else {
-      if (selectedProcs.length >= 3) {
-        alert("You can compare up to 3 procedures at a time.");
-        return;
-      }
-      setSelectedProcs([...selectedProcs, proc]);
-    }
-  };
-
-  const handleCompareClick = () => {
-    if (selectedProcs.length < 2) {
-      alert("Please select at least 2 procedures to compare.");
-      return;
-    }
-    if (setTestName) {
-      setTestName(selectedProcs.map(p => p.name).join(" vs "));
-    }
-    setPage("lab-listing");
   };
 
   return (
@@ -152,15 +128,12 @@ export function MobileLayout({
 
         <div className="space-y-4">
           {popular.map((proc, idx) => {
-            const isChecked = selectedProcs.some(p => p.id === proc.id);
             return (
               <div 
                 key={proc.id || idx}
-                className={`bg-white rounded-2xl p-5 shadow-sm border relative overflow-hidden transition-all duration-200 ${
-                  isChecked ? 'border-[#00535b] ring-2 ring-[#00535b]/10' : 'border-[#bec8ca]/30'
-                }`}
+                className="bg-white rounded-2xl p-5 shadow-sm border border-[#bec8ca]/30 relative overflow-hidden transition-all duration-200"
               >
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#00535b] opacity-0 isChecked:opacity-100 transition-opacity" />
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#00535b] opacity-0 transition-opacity" />
                 
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -169,16 +142,6 @@ export function MobileLayout({
                       {proc.sub_category || 'Imaging'}
                     </span>
                   </div>
-                  
-                  <label className="flex items-center gap-1 cursor-pointer">
-                    <span className="text-[9px] font-black text-[#6f797a] uppercase tracking-wider">Compare</span>
-                    <input 
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => handleCompareToggle(proc)}
-                      className="w-5 h-5 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/15"
-                    />
-                  </label>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-[10px] text-[#6f797a] font-semibold mb-4">
@@ -257,41 +220,6 @@ export function MobileLayout({
           })}
         </div>
       </section>
-
-      {/* ── Mobile Floating Comparison Bar ── */}
-      {selectedProcs.length > 0 && (
-        <div className="fixed bottom-24 left-4 right-4 z-50 bg-[#00535b] text-white py-3.5 px-4 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-5 duration-200">
-          <div className="flex items-center gap-2">
-            <span className="bg-white text-[#00535b] text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
-              {selectedProcs.length}
-            </span>
-            <span className="text-[10px] font-bold truncate max-w-[130px]">
-              {selectedProcs.map(p => p.name).join(", ")}
-            </span>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <button 
-              onClick={() => setSelectedProcs([])}
-              className="text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors px-1"
-            >
-              Clear
-            </button>
-            <button 
-              onClick={handleCompareClick}
-              disabled={selectedProcs.length < 2}
-              className={`px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors duration-150 ${
-                selectedProcs.length >= 2 
-                  ? 'bg-white text-[#00535b] active:scale-95' 
-                  : 'bg-white/25 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              Compare
-            </button>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }

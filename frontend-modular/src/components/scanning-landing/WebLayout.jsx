@@ -14,7 +14,6 @@ export function WebLayout({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
-  const [selectedProcs, setSelectedProcs] = useState([]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
@@ -42,30 +41,6 @@ export function WebLayout({
 
   const toggleFaq = (index) => {
     setExpandedFaqIndex(expandedFaqIndex === index ? null : index);
-  };
-
-  const handleCompareToggle = (proc) => {
-    if (selectedProcs.some(p => p.id === proc.id)) {
-      setSelectedProcs(selectedProcs.filter(p => p.id !== proc.id));
-    } else {
-      if (selectedProcs.length >= 3) {
-        alert("You can compare up to 3 procedures at a time.");
-        return;
-      }
-      setSelectedProcs([...selectedProcs, proc]);
-    }
-  };
-
-  const handleCompareClick = () => {
-    if (selectedProcs.length < 2) {
-      alert("Please select at least 2 procedures to compare.");
-      return;
-    }
-    // Redirect to comparison using search name filter
-    if (setTestName) {
-      setTestName(selectedProcs.map(p => p.name).join(" vs "));
-    }
-    setPage("lab-listing");
   };
 
   return (
@@ -233,24 +208,12 @@ export function WebLayout({
               return (
                 <div 
                   key={proc.id || idx} 
-                  className={`bg-white border rounded-2xl p-6 flex flex-col hover:shadow-xl transition-all duration-300 h-full relative text-left ${
-                    isChecked ? 'border-[#00535b] ring-2 ring-[#00535b]/20 shadow-md' : 'border-[#bec8ca]/40'
-                  }`}
+                  className="bg-white border border-[#bec8ca]/40 rounded-2xl p-6 flex flex-col hover:shadow-xl transition-all duration-300 h-full relative text-left"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <span className="text-[10px] font-black text-[#286d67] bg-[#a9ece5]/40 border border-[#a9ece5] px-2.5 py-1 rounded-md uppercase tracking-wider">
                       {proc.sub_category || 'Imaging'}
                     </span>
-                    
-                    <label className="flex items-center gap-1.5 cursor-pointer">
-                      <span className="text-[10px] font-black text-[#6f797a] uppercase tracking-wider">Compare</span>
-                      <input 
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => handleCompareToggle(proc)}
-                        className="w-5 h-5 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
-                      />
-                    </label>
                   </div>
 
                   <h3 className="text-base font-black text-[#121c2c] mb-2 leading-snug">{proc.name}</h3>
@@ -342,40 +305,6 @@ export function WebLayout({
           </div>
         </div>
       </section>
-
-      {/* ── Bottom Floating Comparison Tray ── */}
-      {selectedProcs.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#00535b] text-white py-4 px-6 md:px-8 rounded-full shadow-2xl flex items-center gap-6 border border-white/10 max-w-lg w-full justify-between animate-in slide-in-from-bottom-5 duration-200">
-          <div className="flex items-center gap-3">
-            <span className="bg-white text-[#00535b] text-xs font-black w-6 h-6 rounded-full flex items-center justify-center">
-              {selectedProcs.length}
-            </span>
-            <span className="text-xs font-bold truncate max-w-[180px] md:max-w-xs">
-              {selectedProcs.map(p => p.name).join(", ")}
-            </span>
-          </div>
-
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setSelectedProcs([])}
-              className="text-white/70 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors px-2 py-1"
-            >
-              Clear
-            </button>
-            <button 
-              onClick={handleCompareClick}
-              disabled={selectedProcs.length < 2}
-              className={`px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-wider transition-colors duration-150 shadow-sm ${
-                selectedProcs.length >= 2 
-                  ? 'bg-white text-[#00535b] hover:bg-slate-100 active:scale-95' 
-                  : 'bg-white/20 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              Compare
-            </button>
-          </div>
-        </div>
-      )}
 
     </div>
   );
