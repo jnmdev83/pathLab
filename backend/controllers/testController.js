@@ -159,7 +159,7 @@ exports.get_api_tests_testId_prices = async (req, res) => {
     `;
 
     const baseWhere = `
-      WHERE ltb.test_id = $1
+      WHERE lower(t.name) = (SELECT lower(name) FROM tests WHERE id = $1 LIMIT 1)
         AND ltb.is_available = true
         AND l.is_active  = true
         AND lb.is_active = true
@@ -294,7 +294,7 @@ exports.get_api_tests_testId_top_picks = async (req, res) => {
       JOIN tests        t  ON t.id  = ltb.test_id
       JOIN labs         l  ON l.id  = ltb.lab_id
       JOIN lab_branches lb ON lb.id = ltb.lab_branch_id
-      WHERE ltb.test_id    = $1
+      WHERE lower(t.name) = (SELECT lower(name) FROM tests WHERE id = $1 LIMIT 1)
         AND ltb.is_available = true
         AND l.is_active     = true
         AND lb.is_active    = true
