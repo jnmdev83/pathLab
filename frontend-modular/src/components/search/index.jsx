@@ -25,6 +25,8 @@ export function Search({
   const [curPage,  setCurPage]      = useState(1);
   const [total,    setTotal]        = useState(0);
   const [hasMore,  setHasMore]      = useState(false);
+  const [selectedCompare, setSelectedCompare] = useState([]);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   const [loading,     setLoading]     = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -258,6 +260,8 @@ export function Search({
   const resetFilters = () => {
     setFilters({ maxPrice: null, turnaround: [], collection: null, nabl: false, rating: 'all' });
     setSort('popularity');
+    setSelectedCompare([]);
+    setCompareOpen(false);
   };
 
   // ── Loading / error states ────────────────────────────────────────────────
@@ -303,7 +307,11 @@ export function Search({
     setPage,
     user,
     setTestName,
-    setActiveCategoryFilter
+    setActiveCategoryFilter,
+    selectedCompare,
+    setSelectedCompare,
+    compareOpen,
+    setCompareOpen
   };
 
   if (isMobile) return <MobileLayout {...viewProps} />;

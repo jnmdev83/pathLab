@@ -33,23 +33,48 @@ function TopPickStrip({ lab, badge, badgeClass, icon, onBook }) {
 }
 
 // ─── Mobile Lab Card ──────────────────────────────────────────────────────────
-function MobileLabCard({ lab, index, onBook, onDetails }) {
+function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare }) {
   const icon = LAB_ICONS[index % LAB_ICONS.length];
+  const isChecked = selectedCompare.some(item => item.branch_id === lab.branch_id);
+  const onCompareToggle = () => {
+    if (isChecked) {
+      setSelectedCompare(prev => prev.filter(item => item.branch_id !== lab.branch_id));
+    } else {
+      if (selectedCompare.length >= 3) {
+        alert("You can compare up to 3 laboratories at a time.");
+        return;
+      }
+      setSelectedCompare(prev => [...prev, lab]);
+    }
+  };
+
   return (
     <div className="bg-white p-5 rounded-2xl shadow-[0px_2px_12px_rgba(11,87,208,0.06)] border border-outline-variant/20">
       <div className="flex gap-3 items-start mb-4">
         <div className="w-12 h-12 bg-surface-container rounded-xl flex items-center justify-center shrink-0">
           <span className="material-symbols-outlined text-outline text-2xl">{icon}</span>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5 mb-1">
-            <h4 className="font-bold text-sm text-on-surface leading-snug">{lab.lab_name}</h4>
-            {lab.is_verified && (
-              <span className="bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded text-[9px] font-medium">NABL</span>
-            )}
-            {lab.rating >= 4.5 && (
-              <span className="bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded text-[9px] font-bold">Top Rated</span>
-            )}
+        <div className="flex-grow flex-1 min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <h4 className="font-bold text-sm text-on-surface leading-snug">{lab.lab_name}</h4>
+              {lab.is_verified && (
+                <span className="bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded text-[9px] font-medium">NABL</span>
+              )}
+              {lab.rating >= 4.5 && (
+                <span className="bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded text-[9px] font-bold">Top Rated</span>
+              )}
+            </div>
+
+            <label className="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-outline hover:text-primary transition-colors select-none shrink-0 pr-1">
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={onCompareToggle}
+                className="w-3.5 h-3.5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
+              />
+              Compare
+            </label>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-[12px] text-on-surface-variant">
             <span className="flex items-center gap-0.5">
@@ -253,6 +278,8 @@ export function MobileLayout({
   setPage,
   setTestName,
   setActiveCategoryFilter,
+  selectedCompare, setSelectedCompare,
+  compareOpen, setCompareOpen
 }) {
   const [filterOpen, setFilterOpen] = useState(false);
   const sentinelRef = useRef(null);
@@ -371,6 +398,8 @@ export function MobileLayout({
               index={idx}
               onBook={handleBook}
               onDetails={handleDetails}
+              selectedCompare={selectedCompare}
+              setSelectedCompare={setSelectedCompare}
             />
           ))
         )}
@@ -414,6 +443,123 @@ export function MobileLayout({
           onReset={() => { resetFilters(); setFilterOpen(false); }}
           onClose={() => setFilterOpen(false)}
         />
+      )}
+
+      {/* ── Bottom Floating Comparison Bar ── */}
+      {selectedCompare.length > 0 && (
+        <div className="fixed bottom-24 left-4 right-4 z-50 bg-[#006d77] text-white py-3.5 px-4 rounded-xl shadow-2xl flex items-center justify-between animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-center gap-2">
+            <span className="bg-white text-[#006d77] text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+              {selectedCompare.length}
+            </span>
+            <span className="text-[10px] font-bold truncate max-w-[130px]">
+              {selectedCompare.map(c => c.lab_name).join(", ")}
+            </span>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <button 
+              onClick={() => setSelectedCompare([])}
+              className="text-white/70 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors px-1"
+            >
+              Clear
+            </button>
+            <button 
+              onClick={() => setCompareOpen(true)}
+              disabled={selectedCompare.length < 2}
+              className={`px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors duration-150 ${
+                selectedCompare.length >= 2 
+                  ? 'bg-white text-[#006d77] active:scale-95' 
+                  : 'bg-white/25 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Mobile Lab Compare Sheet ── */}
+      {compareOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end">
+          <div className="w-full bg-white rounded-t-[2rem] p-5 pb-10 shadow-2xl max-h-[85vh] overflow-y-auto flex flex-col relative animate-in slide-in-from-bottom duration-200">
+            {/* Handle bar */}
+            <div className="w-12 h-1 bg-outline-variant rounded-full mx-auto mb-4" />
+            
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="font-headline font-bold text-base text-on-surface">Compare Labs</h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">Comparing prices for {testMeta.name}</p>
+              </div>
+              <button 
+                onClick={() => setCompareOpen(false)}
+                className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
+
+            {/* Side-by-Side Horizontal Scroll Container */}
+            <div className="overflow-x-auto pb-4 -mx-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex gap-3 min-w-max">
+                {/* Metric/Title guide column */}
+                <div className="w-28 space-y-6 pt-14 text-left font-headline font-bold text-[9px] uppercase tracking-wider text-slate-400 select-none pr-1 shrink-0">
+                  <div className="h-8 flex items-center">Price</div>
+                  <div className="h-8 flex items-center">Rating</div>
+                  <div className="h-8 flex items-center">Collection</div>
+                  <div className="h-8 flex items-center">Reports</div>
+                  <div className="h-8 flex items-center">Accreditation</div>
+                </div>
+
+                {/* Lab comparative columns */}
+                {selectedCompare.map(lab => (
+                  <div key={lab.branch_id} className="w-36 bg-slate-50 p-3.5 rounded-2xl border border-slate-100 flex flex-col justify-between shrink-0">
+                    <div>
+                      <p className="font-headline font-black text-xs text-on-surface truncate">{lab.lab_name}</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{lab.branch_name}</p>
+                      
+                      <div className="space-y-6 mt-4 text-center">
+                        <div className="h-8 flex items-center justify-center font-headline font-black text-base text-[#006d77]">
+                          ₹{lab.price}
+                        </div>
+                        <div className="h-8 flex items-center justify-center gap-0.5 text-[11px] font-semibold text-slate-700">
+                          <span className="material-symbols-outlined text-yellow-500 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                          {lab.rating}
+                        </div>
+                        <div className="h-8 flex items-center justify-center gap-1 text-[10px] font-semibold text-slate-600">
+                          <span className={`material-symbols-outlined text-sm ${lab.home_collection ? 'text-emerald-600' : 'text-slate-400'}`}>
+                            {lab.home_collection ? 'check_circle' : 'cancel'}
+                          </span>
+                          <span>{lab.home_collection ? 'Home' : 'Lab'}</span>
+                        </div>
+                        <div className="h-8 flex items-center justify-center gap-0.5 text-[10px] font-semibold text-slate-600">
+                          <span className="material-symbols-outlined text-sm text-slate-400">timer</span>
+                          <span className="truncate">{lab.reporting_time}</span>
+                        </div>
+                        <div className="h-8 flex items-center justify-center">
+                          <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider ${lab.is_verified ? 'bg-[#a9ece5]/40 text-[#286d67]' : 'bg-slate-200 text-slate-500'}`}>
+                            {lab.is_verified ? 'NABL' : 'Std'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={() => {
+                        setCompareOpen(false);
+                        handleBook(lab);
+                      }}
+                      className="w-full mt-6 py-2.5 bg-[#006d77] text-white rounded-lg text-[9px] font-black uppercase tracking-wider active:scale-95 transition-all shadow-sm"
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
       )}
 
     </div>

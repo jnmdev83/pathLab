@@ -56,11 +56,24 @@ function TopPickCard({ lab, badge, badgeClass, highlight, isFastest, onBook }) {
 }
 
 // ─── Single lab result row card ───────────────────────────────────────────────
-function LabCard({ lab, index, onBook, onDetails }) {
+function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCompare }) {
   const icon = LAB_ICONS[index % LAB_ICONS.length];
   const bookingStr = lab.booking_count >= 1000
     ? `${(lab.booking_count / 1000).toFixed(1)}k`
     : String(lab.booking_count);
+
+  const isChecked = selectedCompare.some(item => item.branch_id === lab.branch_id);
+  const onCompareToggle = () => {
+    if (isChecked) {
+      setSelectedCompare(prev => prev.filter(item => item.branch_id !== lab.branch_id));
+    } else {
+      if (selectedCompare.length >= 3) {
+        alert("You can compare up to 3 laboratories at a time.");
+        return;
+      }
+      setSelectedCompare(prev => [...prev, lab]);
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/20 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-primary/30 transition-all group cursor-default">
@@ -71,18 +84,30 @@ function LabCard({ lab, index, onBook, onDetails }) {
       </div>
 
       {/* Info block */}
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          <h4 className="font-bold text-sm text-on-surface">{lab.lab_name}</h4>
-          {lab.booking_count > 2500 && (
-            <span className="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Most Booked</span>
-          )}
-          {lab.rating >= 4.5 && lab.booking_count > 800 && (
-            <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</span>
-          )}
-          {lab.is_verified && (
-            <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px] font-medium">NABL</span>
-          )}
+      <div className="flex-grow flex-1 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <h4 className="font-bold text-sm text-on-surface">{lab.lab_name}</h4>
+            {lab.booking_count > 2500 && (
+              <span className="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Most Booked</span>
+            )}
+            {lab.rating >= 4.5 && lab.booking_count > 800 && (
+              <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</span>
+            )}
+            {lab.is_verified && (
+              <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px] font-medium">NABL</span>
+            )}
+          </div>
+
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-outline hover:text-primary transition-colors pr-2">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={onCompareToggle}
+              className="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
+            />
+            Compare
+          </label>
         </div>
         <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant">
           <span className="flex items-center gap-1">
@@ -296,6 +321,8 @@ export function WebLayout({
   filters, setFilters,
   loadMore, handleBook, handleDetails, resetFilters,
   setPage,
+  selectedCompare, setSelectedCompare,
+  compareOpen, setCompareOpen
 }) {
   const sentinelRef = useRef(null);
 
@@ -411,6 +438,8 @@ export function WebLayout({
                       index={idx}
                       onBook={handleBook}
                       onDetails={handleDetails}
+                      selectedCompare={selectedCompare}
+                      setSelectedCompare={setSelectedCompare}
                     />
                   ))
               }
@@ -469,6 +498,126 @@ export function WebLayout({
         </section>
 
       </div>
+
+      {/* ── Bottom Floating Comparison Bar ── */}
+      {selectedCompare.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#006d77] text-white py-4 px-6 md:px-8 rounded-full shadow-2xl flex items-center gap-6 border border-white/10 max-w-lg w-full justify-between animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex items-center gap-3">
+            <span className="bg-white text-[#006d77] text-xs font-black w-6 h-6 rounded-full flex items-center justify-center">
+              {selectedCompare.length}
+            </span>
+            <span className="text-xs font-bold truncate max-w-[180px] md:max-w-xs">
+              {selectedCompare.map(c => c.lab_name).join(", ")}
+            </span>
+          </div>
+
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setSelectedCompare([])}
+              className="text-white/70 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors px-2 py-1"
+            >
+              Clear
+            </button>
+            <button 
+              onClick={() => setCompareOpen(true)}
+              disabled={selectedCompare.length < 2}
+              className={`px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-wider transition-colors duration-150 shadow-sm ${
+                selectedCompare.length >= 2 
+                  ? 'bg-white text-[#006d77] hover:bg-slate-100 active:scale-95' 
+                  : 'bg-white/20 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Lab Compare Side-by-Side Table Modal ── */}
+      {compareOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl relative animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h3 className="font-headline font-bold text-xl text-on-surface">Compare Laboratories</h3>
+                <p className="text-xs text-on-surface-variant mt-1">Comparing prices and features for {testMeta.name}</p>
+              </div>
+              <button 
+                onClick={() => setCompareOpen(false)}
+                className="w-10 h-10 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-500 transition-colors"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            
+            {/* Modal Body (Scrollable Table) */}
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="grid grid-cols-4 gap-4 items-stretch">
+                {/* Metric Column */}
+                <div className="space-y-6 text-left pr-4 pt-16 border-r border-slate-100 font-headline font-bold text-xs uppercase tracking-wider text-slate-400">
+                  <div className="h-10 flex items-center">Price</div>
+                  <div className="h-10 flex items-center">Rating</div>
+                  <div className="h-10 flex items-center">Home Sample Collection</div>
+                  <div className="h-10 flex items-center">Report Delivery Time</div>
+                  <div className="h-10 flex items-center">Location & City</div>
+                  <div className="h-10 flex items-center">Accreditation</div>
+                </div>
+                
+                {/* Selected Labs Columns */}
+                {selectedCompare.map(lab => (
+                  <div key={lab.branch_id} className="bg-[#f8f9fa] p-5 rounded-2xl border border-slate-100 text-center flex flex-col justify-between hover:border-primary/20 transition-all">
+                    <div>
+                      <p className="font-headline font-black text-sm text-on-surface truncate">{lab.lab_name}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{lab.branch_name}</p>
+                      
+                      <div className="space-y-6 mt-6">
+                        <div className="h-10 flex items-center justify-center font-headline font-black text-2xl text-[#006d77]">
+                          ₹{lab.price}
+                        </div>
+                        <div className="h-10 flex items-center justify-center gap-1 text-sm font-semibold text-slate-700">
+                          <span className="material-symbols-outlined text-yellow-500 text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                          {lab.rating} <span className="text-slate-400 text-xs font-normal">({lab.booking_count >= 1000 ? `${(lab.booking_count / 1000).toFixed(1)}k` : lab.booking_count} bookings)</span>
+                        </div>
+                        <div className="h-10 flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-700">
+                          <span className={`material-symbols-outlined text-base ${lab.home_collection ? 'text-emerald-600' : 'text-slate-400'}`}>
+                            {lab.home_collection ? 'check_circle' : 'cancel'}
+                          </span>
+                          {lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}
+                        </div>
+                        <div className="h-10 flex items-center justify-center gap-1 text-xs font-semibold text-slate-700">
+                          <span className="material-symbols-outlined text-base text-slate-400">timer</span>
+                          {lab.reporting_time}
+                        </div>
+                        <div className="h-10 flex flex-col justify-center text-[11px] font-semibold text-slate-500 leading-tight">
+                          <span>{lab.city}</span>
+                          <span className="text-[9px] font-normal truncate mt-0.5" title={lab.address}>{lab.address}</span>
+                        </div>
+                        <div className="h-10 flex items-center justify-center">
+                          <span className={`px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider ${lab.is_verified ? 'bg-[#a9ece5]/40 text-[#286d67] border border-[#a9ece5]' : 'bg-slate-100 text-slate-500'}`}>
+                            {lab.is_verified ? 'NABL Certified' : 'Standard'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={() => {
+                        setCompareOpen(false);
+                        handleBook(lab);
+                      }}
+                      className="w-full mt-8 py-3 bg-[#006d77] hover:bg-[#00535b] text-white rounded-xl text-xs font-black uppercase tracking-wider active:scale-95 transition-all shadow-sm"
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

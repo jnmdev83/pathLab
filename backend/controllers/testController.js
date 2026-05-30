@@ -228,13 +228,14 @@ exports.get_api_tests_search = async (req, res) => {
         t.cat,
         COALESCE(t.description, '') AS description,
         COALESCE(t.short_description, '') AS short_description,
-        COUNT(DISTINCT ltb.lab_branch_id)::int AS total_labs
+        (SELECT COUNT(DISTINCT ltb2.lab_branch_id)::int 
+         FROM lab_test_branches ltb2 
+         JOIN tests t2 ON t2.id = ltb2.test_id 
+         WHERE lower(t2.name) = lower(t.name) AND ltb2.is_available = true)::int AS total_labs
       FROM tests t
-      LEFT JOIN lab_test_branches ltb
-        ON ltb.test_id = t.id AND ltb.is_available = true
       WHERE lower(t.name) = lower($1)
       GROUP BY t.id
-      ORDER BY COUNT(DISTINCT ltb.lab_branch_id) DESC
+      ORDER BY total_labs DESC
       LIMIT 1
     `, [q]);
 
@@ -247,13 +248,14 @@ exports.get_api_tests_search = async (req, res) => {
           t.cat,
           COALESCE(t.description, '') AS description,
           COALESCE(t.short_description, '') AS short_description,
-          COUNT(DISTINCT ltb.lab_branch_id)::int AS total_labs
+          (SELECT COUNT(DISTINCT ltb2.lab_branch_id)::int 
+           FROM lab_test_branches ltb2 
+           JOIN tests t2 ON t2.id = ltb2.test_id 
+           WHERE lower(t2.name) = lower(t.name) AND ltb2.is_available = true)::int AS total_labs
         FROM tests t
-        LEFT JOIN lab_test_branches ltb
-          ON ltb.test_id = t.id AND ltb.is_available = true
         WHERE lower(t.name) LIKE lower($1)
         GROUP BY t.id
-        ORDER BY COUNT(DISTINCT ltb.lab_branch_id) DESC
+        ORDER BY total_labs DESC
         LIMIT 1
       `, [`%${q}%`]));
     }
