@@ -485,104 +485,90 @@ export function Detail({ test, setPage, setTest, user }) {
                   </div>
                 ) : (
                   labs.map((lab, idx) => {
-                    const style = getLabLogoStyle(lab.lab_name);
-                    const originalPrice = lab.original_price || Math.round(lab.price * 1.45);
-                    const savePct = Math.round(((originalPrice - lab.price) / originalPrice) * 100);
-                    
                     return (
-                      <div 
-                        key={`${lab.branch_id}-${idx}`}
-                        className="bg-white border-2 border-transparent hover:border-[#00535b]/40 rounded-3xl p-5 md:p-6 transition-all shadow-sm flex flex-col md:flex-row gap-5 items-start justify-between"
-                        style={{ boxShadow: '0px 4px 20px rgba(11, 87, 208, 0.04)' }}
-                      >
-                        {/* Left block - Lab Logo and details */}
-                        <div className="flex gap-4 items-start w-full md:w-auto">
-                          {/* Square Clinic colored box */}
-                          <div 
-                            className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0 border border-transparent"
-                            style={{ background: style.bg }}
-                          >
-                            <span 
-                              className="material-symbols-outlined text-2xl md:text-3xl"
-                              style={{ color: style.icon, fontVariationSettings: "'FILL' 1" }}
-                            >
-                              science
-                            </span>
+                        <div 
+                          key={`${lab.branch_id}-${idx}`}
+                          className="bg-white p-6 rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-[#00535b]/20 hover:shadow-lg transition-all duration-300 relative group cursor-default"
+                        >
+                          {/* Lab icon */}
+                          <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center shrink-0">
+                            <span className="material-symbols-outlined text-[#00535b] text-2xl">science</span>
                           </div>
 
-                          {/* Info */}
-                          <div className="space-y-1 w-full text-left">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h4 className="font-black text-[#191c1d] text-sm md:text-base leading-tight font-headline">
-                                {lab.lab_name}
-                              </h4>
-                              <span className="bg-[#a9ece5]/30 text-[#286d67] px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase">
+                          {/* Info block */}
+                          <div className="flex-grow flex-1 min-w-0 text-left">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <h4 className="font-extrabold text-[#121c2c] text-[15px] leading-none">{lab.lab_name}</h4>
+                              {lab.booking_count > 2500 && (
+                                <span className="bg-emerald-50 text-emerald-700 border border-emerald-100/50 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">Most Booked</span>
+                              )}
+                              {lab.rating >= 4.5 && (
+                                <span className="bg-sky-50 text-sky-700 border border-sky-100/50 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">Recommended</span>
+                              )}
+                              <span className="bg-[#e7eeff] text-[#00535b] border border-[#e7eeff] px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">
                                 {lab.is_verified ? 'CAP • NABL' : 'NABL'}
                               </span>
                             </div>
                             
-                            {/* Stars rating */}
-                            <div className="flex items-center gap-1.5 text-xs text-[#424654] font-bold">
-                              <span className="material-symbols-outlined text-[15px] text-[#f59e0b]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                              <span>{lab.rating || '4.5'}</span>
-                              <span className="text-[#737785] font-semibold">({lab.booking_count || 1200} reviews)</span>
-                            </div>
-
-                            {/* Icons details list */}
-                            <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-2 text-xs text-[#424654] font-medium">
+                            <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-[#4d515a]">
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">schedule</span>
-                                Reports: {lab.reporting_time}
+                                <span className="material-symbols-outlined text-orange-400 text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                <span className="text-[#121c2c]">{lab.rating || '4.5'}</span>
+                                <span className="text-[#737785] font-normal">({lab.booking_count || 1200})</span>
                               </span>
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">home</span>
-                                {lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}
+                                <span className="material-symbols-outlined text-[#00535b] text-base">home_health</span>
+                                <span>{lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}</span>
                               </span>
                               <span className="flex items-center gap-1">
-                                <span className="material-symbols-outlined text-[#00535b] text-[16px]">location_on</span>
-                                {lab.branch_name}, Gurgaon
+                                <span className="material-symbols-outlined text-[#00535b] text-base">timer</span>
+                                <span>{lab.reporting_time} Delivery</span>
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[#00535b] text-base">location_on</span>
+                                <span>{lab.branch_name}, Gurgaon</span>
                               </span>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Right block - Pricing and Book CTA */}
-                        <div className="w-full md:w-52 flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 border-t md:border-t-0 md:border-l border-[#e1e3e4]/60 pt-4 md:pt-0 md:pl-5 flex-shrink-0">
-                          <div className="text-left md:text-right">
-                            <span className="text-[10px] uppercase font-black tracking-widest text-[#737785] block mb-0.5">Rate Offered</span>
-                            <div className="flex items-baseline gap-1 md:justify-end">
-                              <span className="text-xl md:text-2xl font-black text-[#191c1d] font-headline">₹{lab.price}</span>
+                          {/* Price + action buttons */}
+                          <div className="flex flex-col items-end gap-3 shrink-0 w-full md:w-auto text-right">
+                            <div className="text-right flex flex-col items-end">
+                              <span className="text-slate-400 text-[9px] font-black uppercase tracking-wider block mb-0.5">
+                                Rate Offered
+                              </span>
+                              <span className="font-headline text-2xl font-black text-[#00535b] leading-none">
+                                ₹ {lab.price}
+                              </span>
                             </div>
-                          </div>
 
-                          <div className="flex flex-col gap-2 w-full md:w-auto mt-2">
-                            <label className="flex items-center gap-1.5 cursor-pointer select-none group md:justify-end mb-1">
-                              <span className="text-[10px] font-black text-[#737785] group-hover:text-[#00535b] uppercase tracking-wider transition-colors">Compare</span>
-                              <input 
+                            <label className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none">
+                              <input
                                 type="checkbox"
                                 checked={selectedCompare.some(item => item.branch_id === lab.branch_id)}
                                 onChange={() => handleCompareToggle(lab)}
-                                className="w-4 h-4 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
+                                className="w-4 h-4 rounded border-slate-300 text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer animate-in fade-in"
                               />
+                              Compare
                             </label>
 
-                            <button
-                              onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => handleBooking(lab) })}
-                              className="flex items-center justify-center gap-1.5 px-5 py-2 rounded-xl font-bold text-xs border-2 border-[#00535b]/25 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/50 transition-all w-full"
-                            >
-                              <span className="material-symbols-outlined text-sm">biotech</span>
-                              View Lab
-                            </button>
-                            <button 
-                              onClick={() => handleBooking(lab)}
-                              className="bg-[#00535b] hover:bg-[#00393f] text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider font-headline transition-all active:scale-95 shadow-sm text-center w-full"
-                            >
-                              Book Test
-                            </button>
+                            <div className="flex gap-2 w-full md:w-auto">
+                              <button
+                                onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => handleBooking(lab) })}
+                                className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl font-bold text-[11px] border border-[#00535b]/20 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/40 transition-all duration-150 active:scale-95 cursor-pointer"
+                              >
+                                <span className="material-symbols-outlined text-sm">biotech</span>
+                                View Lab
+                              </button>
+                              <button 
+                                onClick={() => handleBooking(lab)}
+                                className="px-5 py-2 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-150 active:scale-95 shadow-sm shadow-[#00535b]/10"
+                              >
+                                Book Now
+                              </button>
+                            </div>
                           </div>
                         </div>
-
-                      </div>
                     );
                   })
                 )}
