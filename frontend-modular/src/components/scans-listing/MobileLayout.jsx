@@ -237,16 +237,6 @@ export function MobileLayout({
                           </div>
                         </div>
                       </div>
-
-                      <label className="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-outline hover:text-[#00535b] transition-colors select-none shrink-0 pr-1 mt-1">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleCompareToggle(test)}
-                          className="w-3.5 h-3.5 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
-                        />
-                        Compare
-                      </label>
                     </div>
 
                     {/* Scan test name */}
@@ -291,7 +281,7 @@ export function MobileLayout({
                         onClick={() => handleBookNow(test)}
                         className="w-full h-10 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm flex items-center justify-center font-headline"
                       >
-                        Book Now
+                        Compare Labs
                       </button>
                     </div>
                   </div>

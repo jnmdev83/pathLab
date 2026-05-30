@@ -417,16 +417,6 @@ export function WebLayout({
                               <span className="text-2xl font-black text-[#00535b]">₹{test.price}</span>
                             </div>
                           </div>
-
-                          <label className="flex items-center gap-1.5 cursor-pointer text-[10px] font-black text-outline hover:text-[#00535b] transition-colors pr-1 select-none mt-1">
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => handleCompareToggle(test)}
-                              className="w-4 h-4 rounded border-[#bec8ca] text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer"
-                            />
-                            Compare
-                          </label>
                         </div>
 
                         {/* Action buttons */}
@@ -435,7 +425,7 @@ export function WebLayout({
                             onClick={() => handleBookNow(test)}
                             className="h-10 bg-[#00535b] hover:bg-[#00393f] text-white rounded-full text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm shadow-[#00535b]/10 flex items-center justify-center w-full"
                           >
-                            Book Now
+                            Compare Labs
                           </button>
                         </div>
 
