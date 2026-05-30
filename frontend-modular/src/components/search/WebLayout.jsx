@@ -76,95 +76,95 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-[0px_4px_20px_rgba(11,87,208,0.05)] border border-outline-variant/20 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-primary/30 transition-all group cursor-default">
+    <div className="bg-white p-6 rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-[#00535b]/20 hover:shadow-lg transition-all duration-300 relative group cursor-default">
 
       {/* Lab icon */}
-      <div className="w-16 h-16 bg-surface-container rounded-lg flex items-center justify-center shrink-0">
-        <span className="material-symbols-outlined text-outline text-3xl">{icon}</span>
+      <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center shrink-0">
+        <span className="material-symbols-outlined text-[#00535b] text-2xl">{icon}</span>
       </div>
 
       {/* Info block */}
-      <div className="flex-grow flex-1 min-w-0">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <h4 className="font-bold text-sm text-on-surface">{lab.lab_name}</h4>
-            {lab.booking_count > 2500 && (
-              <span className="bg-primary-container text-on-primary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Most Booked</span>
-            )}
-            {lab.rating >= 4.5 && lab.booking_count > 800 && (
-              <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[10px] font-bold uppercase">Recommended</span>
-            )}
-            {lab.is_verified && (
-              <span className="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px] font-medium">NABL</span>
-            )}
-          </div>
-
-          {lab.test_id && (
-            <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-outline hover:text-primary transition-colors pr-2">
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={onCompareToggle}
-                className="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
-              />
-              Compare
-            </label>
+      <div className="flex-grow flex-1 min-w-0 text-left">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <h4 className="font-extrabold text-[#121c2c] text-[15px] leading-none">{lab.lab_name}</h4>
+          {lab.booking_count > 2500 && (
+            <span className="bg-emerald-50 text-emerald-700 border border-emerald-100/50 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">Most Booked</span>
+          )}
+          {lab.rating >= 4.5 && lab.booking_count > 800 && (
+            <span className="bg-sky-50 text-sky-700 border border-sky-100/50 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">Recommended</span>
+          )}
+          {lab.is_verified && (
+            <span className="bg-[#e7eeff] text-[#00535b] border border-[#e7eeff] px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider">NABL</span>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-[#4d515a]">
           <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-yellow-500 text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-            {lab.rating} {lab.booking_count > 0 && <span className="text-xs opacity-70">({bookingStr})</span>}
+            <span className="material-symbols-outlined text-orange-400 text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+            <span className="text-[#121c2c]">{lab.rating}</span>
+            <span className="text-[#737785] font-normal">({bookingStr})</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-primary text-base">home_health</span>
-            {lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}
+            <span className="material-symbols-outlined text-[#00535b] text-base">home_health</span>
+            <span>{lab.home_collection ? 'Free Home Collection' : 'Lab Visit Only'}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-outline text-base">timer</span>
-            {lab.reporting_time} Delivery
+            <span className="material-symbols-outlined text-[#00535b] text-base">timer</span>
+            <span>{lab.reporting_time} Delivery</span>
           </span>
           {lab.city && (
             <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-outline text-base">location_on</span>
-              {lab.city}
+              <span className="material-symbols-outlined text-[#00535b] text-base">location_on</span>
+              <span>{lab.city}</span>
             </span>
           )}
         </div>
       </div>
 
       {/* Price + action buttons */}
-      <div className="flex flex-col items-end gap-3 shrink-0 w-full md:w-auto">
-        <div className="text-right">
+      <div className="flex flex-col items-end gap-3 shrink-0 w-full md:w-auto text-right">
+        <div className="text-right flex flex-col items-end">
           {lab.discount_percent > 0 && (
-            <span className="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold block mb-1">
+            <span className="bg-red-50 text-red-700 border border-red-100 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider block mb-1">
               {lab.discount_percent}% OFF
             </span>
           )}
           {!lab.test_id && (
-            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">
+            <span className="text-slate-400 text-[9px] font-black uppercase tracking-wider block mb-0.5 animate-pulse">
               Starting at
             </span>
           )}
-          <span className="font-headline text-[26px] font-bold text-primary leading-none">
+          <span className="font-headline text-2xl font-black text-[#00535b] leading-none">
             ₹ {(lab.price || 0).toLocaleString('en-IN')}
           </span>
           {lab.original_price && (
-            <span className="text-xs text-outline line-through block">
+            <span className="text-xs text-slate-400 line-through block mt-0.5">
               ₹ {lab.original_price.toLocaleString('en-IN')}
             </span>
           )}
         </div>
+
+        {lab.test_id && (
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={onCompareToggle}
+              className="w-4 h-4 rounded border-slate-300 text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer animate-in fade-in"
+            />
+            Compare
+          </label>
+        )}
+
         <div className="flex gap-2 w-full md:w-auto">
           <button
             onClick={() => onDetails(lab)}
-            className="flex-1 md:flex-none md:px-4 py-2 border border-outline-variant rounded-lg text-[12px] font-bold hover:bg-surface-container-low active:scale-95 transition-all"
+            className="flex-1 md:flex-none px-4 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-[#00535b] rounded-xl text-[11px] font-bold text-slate-700 transition-all duration-150 active:scale-95"
           >
             View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
           </button>
           <button
             onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
-            className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg font-bold text-[12px] border border-primary/25 text-primary hover:bg-[#e8f0fe] hover:border-primary/50 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl font-bold text-[11px] border border-[#00535b]/20 text-[#00535b] hover:bg-[#e8f0fe] hover:border-[#00535b]/40 transition-all duration-150 active:scale-95 cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">biotech</span>
             View Lab
@@ -172,7 +172,7 @@ function LabCard({ lab, index, onBook, onDetails, selectedCompare, setSelectedCo
           {lab.test_id && (
             <button
               onClick={() => onBook(lab)}
-              className="flex-1 md:flex-none md:px-6 py-2 bg-primary text-on-primary rounded-lg text-[12px] font-bold hover:shadow-md active:scale-95 transition-all"
+              className="flex-1 md:flex-none px-5 py-2 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all duration-150 active:scale-95 shadow-sm shadow-[#00535b]/10"
             >
               Book Now
             </button>

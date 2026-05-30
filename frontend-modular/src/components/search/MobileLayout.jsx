@@ -49,49 +49,35 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
   };
 
   return (
-    <div className="bg-white p-5 rounded-2xl shadow-[0px_2px_12px_rgba(11,87,208,0.06)] border border-outline-variant/20">
+    <div className="bg-white p-5 rounded-2xl shadow-[0px_2px_15px_rgba(0,0,0,0.02)] border border-slate-100/80">
       <div className="flex gap-3 items-start mb-4">
-        <div className="w-12 h-12 bg-surface-container rounded-xl flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-outline text-2xl">{icon}</span>
+        <div className="w-11 h-11 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center shrink-0">
+          <span className="material-symbols-outlined text-[#00535b] text-xl">{icon}</span>
         </div>
         <div className="flex-grow flex-1 min-w-0">
-          <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <h4 className="font-bold text-sm text-on-surface leading-snug">{lab.lab_name}</h4>
-              {lab.is_verified && (
-                <span className="bg-surface-variant text-on-surface-variant px-1.5 py-0.5 rounded text-[9px] font-medium">NABL</span>
-              )}
-              {lab.rating >= 4.5 && (
-                <span className="bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded text-[9px] font-bold">Top Rated</span>
-              )}
-            </div>
-
-            {lab.test_id && (
-              <label className="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-outline hover:text-primary transition-colors select-none shrink-0 pr-1">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={onCompareToggle}
-                  className="w-3.5 h-3.5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
-                />
-                Compare
-              </label>
+          <div className="flex flex-wrap items-center gap-1.5 mb-1.5 text-left">
+            <h4 className="font-extrabold text-[14px] text-[#121c2c] leading-snug">{lab.lab_name}</h4>
+            {lab.is_verified && (
+              <span className="bg-[#e7eeff] text-[#00535b] border border-[#e7eeff] px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">NABL</span>
+            )}
+            {lab.rating >= 4.5 && (
+              <span className="bg-sky-50 text-sky-700 border border-sky-100/50 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">Top Rated</span>
             )}
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-[12px] text-on-surface-variant">
+          <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#4d515a] text-left">
             <span className="flex items-center gap-0.5">
-              <span className="material-symbols-outlined text-yellow-500 text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-              {lab.rating}
+              <span className="material-symbols-outlined text-orange-400 text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+              <span className="text-[#121c2c]">{lab.rating}</span>
             </span>
             {lab.home_collection && (
               <span className="flex items-center gap-0.5">
-                <span className="material-symbols-outlined text-primary text-[13px]">home_health</span>
-                Home Collection
+                <span className="material-symbols-outlined text-[#00535b] text-[13px]">home_health</span>
+                <span>Home Collection</span>
               </span>
             )}
             <span className="flex items-center gap-0.5">
-              <span className="material-symbols-outlined text-outline text-[13px]">timer</span>
-              {lab.reporting_time}
+              <span className="material-symbols-outlined text-[#00535b] text-[13px]">timer</span>
+              <span>{lab.reporting_time}</span>
             </span>
           </div>
         </div>
@@ -101,37 +87,49 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
         <div className="flex items-center justify-between">
           <div>
             {lab.discount_percent > 0 && (
-              <span className="bg-error-container text-on-error-container px-1.5 py-0.5 rounded text-[9px] font-bold block mb-0.5">
+              <span className="bg-red-50 text-red-700 border border-red-100/50 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider block mb-1">
                 {lab.discount_percent}% OFF
               </span>
             )}
             {!lab.test_id && (
-              <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block mb-0.5 leading-none">
+              <span className="text-slate-400 text-[8px] font-black uppercase tracking-wider block mb-0.5 leading-none">
                 Starting at
               </span>
             )}
-            <span className="text-primary font-headline font-bold text-xl leading-none">
+            <span className="text-[#00535b] font-headline font-bold text-xl leading-none">
               ₹{(lab.price || 0).toLocaleString('en-IN')}
             </span>
             {lab.original_price && (
-              <span className="text-[11px] text-outline line-through block">
+              <span className="text-[10px] text-slate-400 line-through block mt-0.5">
                 ₹{lab.original_price.toLocaleString('en-IN')}
               </span>
             )}
           </div>
+
+          {lab.test_id && (
+            <label className="flex items-center gap-1.5 cursor-pointer text-xs font-black text-[#4d515a] hover:text-[#00535b] transition-colors pr-1 select-none">
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={onCompareToggle}
+                className="w-4 h-4 rounded border-slate-300 text-[#00535b] focus:ring-[#00535b]/20 cursor-pointer animate-in fade-in"
+              />
+              Compare
+            </label>
+          )}
         </div>
 
         <div className="flex flex-col gap-2 w-full">
           <button
             onClick={() => onDetails(lab)}
-            className="w-full py-2 border border-outline-variant rounded-lg text-[11px] font-bold hover:bg-surface-container-low active:scale-95 transition-all text-center"
+            className="w-full py-2 border border-slate-200 hover:bg-slate-100 rounded-xl text-[11px] font-bold text-slate-700 transition-all active:scale-95 text-center"
           >
             View {testMeta?.name && testMeta.name !== "All Laboratories" ? testMeta.name : "Lab"} Detail
           </button>
           
           <button
             onClick={() => setSelectedLab({ lab_id: lab.lab_id, lab_name: lab.lab_name, price: lab.price, bookFn: () => onBook(lab) })}
-            className="w-full py-2 border border-primary/25 text-primary hover:bg-[#e8f0fe] rounded-lg text-[11px] font-bold active:scale-95 transition-all flex items-center justify-center gap-1 cursor-pointer"
+            className="w-full py-2 border border-[#00535b]/20 text-[#00535b] hover:bg-[#e8f0fe] rounded-xl text-[11px] font-bold active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">biotech</span>
             View Lab
@@ -140,7 +138,7 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
           {lab.test_id && (
             <button
               onClick={() => onBook(lab)}
-              className="w-full py-2 bg-primary text-on-primary rounded-lg text-[11px] font-bold hover:shadow-md active:scale-95 transition-all text-center"
+              className="w-full py-2 bg-[#00535b] hover:bg-[#00393f] text-white rounded-xl text-[11px] font-black uppercase tracking-wider active:scale-95 transition-all text-center"
             >
               Book Now
             </button>
