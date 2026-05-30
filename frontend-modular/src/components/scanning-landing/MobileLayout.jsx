@@ -157,7 +157,7 @@ export function MobileLayout({
                     onClick={() => handleProcedureBook(proc)}
                     className="px-4 py-2 bg-[#a9ece5] text-[#286d67] font-black rounded-lg text-[10px] uppercase tracking-wider"
                   >
-                    Book Now
+                    Compare Labs
                   </button>
                 </div>
               </div>

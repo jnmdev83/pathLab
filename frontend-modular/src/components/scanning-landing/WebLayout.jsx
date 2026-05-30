@@ -232,7 +232,7 @@ export function WebLayout({
                       onClick={() => handleProcedureBook(proc)}
                       className="w-full py-3 bg-[#00535b] hover:bg-[#00393f] text-white font-black rounded-xl text-xs uppercase tracking-wider font-headline transition-colors active:scale-95 duration-100 shadow-sm"
                     >
-                      Book Now
+                      Compare Labs
                     </button>
                   </div>
                 </div>
