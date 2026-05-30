@@ -423,49 +423,49 @@ export function Detail({ test, setPage, setTest, user }) {
                   </p>
                 </div>
                 
-                {/* Desktop Sorting Pills */}
-                <div className="flex bg-[#edeeef] rounded-lg p-0.5 self-start md:self-end">
-                  <button 
-                    onClick={() => setSort('popularity')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'popularity' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
+                {/* Desktop Sorting Dropdown */}
+                <div className="flex items-center gap-1.5 bg-[#edeeef] rounded-xl px-3 py-2 self-start md:self-end">
+                  <span className="material-symbols-outlined text-[#424654] text-base select-none">sort</span>
+                  <select
+                    value={sort}
+                    onChange={e => setSort(e.target.value)}
+                    className="bg-transparent border-none text-xs text-[#00535b] font-bold focus:ring-0 outline-none p-0 pr-6 cursor-pointer select-none"
                   >
-                    Recommended
-                  </button>
-                  <button 
-                    onClick={() => setSort('price_asc')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'price_asc' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
-                  >
-                    Lowest Price
-                  </button>
-                  <button 
-                    onClick={() => setSort('fastest')}
-                    className={`px-3.5 py-1.5 rounded-md font-bold text-xs transition-all ${sort === 'fastest' ? 'bg-white text-[#00535b] shadow-sm' : 'text-[#424654] hover:text-[#00535b]'}`}
-                  >
-                    Fastest
-                  </button>
+                    <option value="popularity">Sort by: Recommended</option>
+                    <option value="rating">Sort by: Rating (High → Low)</option>
+                    <option value="price_asc">Sort by: Price (Low → High)</option>
+                    <option value="price_desc">Sort by: Price (High → Low)</option>
+                  </select>
                 </div>
               </div>
 
               {/* Mobile quick filters */}
               {isMobile && (
-                <div className="flex gap-2 overflow-x-auto pb-4 hide-scrollbar">
-                  <button 
-                    onClick={() => setSort(sort === 'price_asc' ? 'popularity' : 'price_asc')}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'price_asc' ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
-                  >
-                    ₹ Lowest Price
-                  </button>
+                <div className="flex gap-2 overflow-x-auto pb-4 hide-scrollbar select-none">
+                  <div className="flex items-center gap-1 bg-white border border-[#c3c6d6] rounded-full px-3.5 py-2 shrink-0">
+                    <span className="material-symbols-outlined text-[#424654] text-sm">sort</span>
+                    <select
+                      value={sort}
+                      onChange={e => setSort(e.target.value)}
+                      className="bg-transparent border-none text-xs font-bold text-[#00535b] focus:ring-0 outline-none p-0 pr-6 cursor-pointer"
+                    >
+                      <option value="popularity">Recommended</option>
+                      <option value="rating">Rating (High to Low)</option>
+                      <option value="price_asc">Price: Low → High</option>
+                      <option value="price_desc">Price: High → Low</option>
+                    </select>
+                  </div>
                   <button 
                     onClick={() => setFilters(prev => ({ ...prev, nabl: !prev.nabl }))}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${filters.nabl ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
+                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap transition-all duration-150 ${filters.nabl ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654] border-[#c3c6d6]'}`}
                   >
                     Accredited (NABL)
                   </button>
                   <button 
-                    onClick={() => setSort(sort === 'fastest' ? 'popularity' : 'fastest')}
-                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap ${sort === 'fastest' ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654]'}`}
+                    onClick={() => setFilters(prev => ({ ...prev, homeCollection: !prev.homeCollection }))}
+                    className={`px-4 py-2 border rounded-full text-xs font-bold whitespace-nowrap transition-all duration-150 ${filters.homeCollection ? 'bg-[#00535b] text-white border-[#00535b]' : 'bg-white text-[#424654] border-[#c3c6d6]'}`}
                   >
-                    ⏱ Fastest Turnaround
+                    Home Collection
                   </button>
                 </div>
               )}
