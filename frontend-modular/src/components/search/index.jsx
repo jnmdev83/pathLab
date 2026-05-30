@@ -278,14 +278,20 @@ export function Search({
   }
 
   const filteredResults = !testMeta?.id
-    ? results.filter(item => {
-        if (filters.maxPrice && item.price > filters.maxPrice) return false;
-        if (filters.collection === 'home' && !item.home_collection) return false;
-        if (filters.collection === 'lab' && item.home_collection) return false;
-        if (filters.nabl && !item.is_verified) return false;
-        if (filters.rating && filters.rating !== 'all' && item.rating < parseFloat(filters.rating)) return false;
-        return true;
-      })
+    ? (() => {
+        let r = results.filter(item => {
+          if (filters.maxPrice && item.price > filters.maxPrice) return false;
+          if (filters.collection === 'home' && !item.home_collection) return false;
+          if (filters.collection === 'lab' && item.home_collection) return false;
+          if (filters.nabl && !item.is_verified) return false;
+          if (filters.rating && filters.rating !== 'all' && item.rating < parseFloat(filters.rating)) return false;
+          return true;
+        });
+        if (sort === 'rating') r = [...r].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        if (sort === 'price_asc') r = [...r].sort((a, b) => (a.price || 0) - (b.price || 0));
+        if (sort === 'price_desc') r = [...r].sort((a, b) => (b.price || 0) - (a.price || 0));
+        return r;
+      })()
     : results;
 
   const viewProps = {

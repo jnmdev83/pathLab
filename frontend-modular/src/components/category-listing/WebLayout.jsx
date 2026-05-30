@@ -656,6 +656,7 @@ export function WebLayout({
                     className="text-[12px] font-bold text-[#1f2937] border border-[#e8eaed] rounded-lg px-3 py-1.5 bg-white outline-none focus:border-[#00535b] cursor-pointer"
                   >
                     <option value="popularity">Popularity / Recommended</option>
+                    <option value="rating">Rating (High to Low)</option>
                     <option value="price_asc">Price: Low to High</option>
                     <option value="price_desc">Price: High to Low</option>
                     <option value="alphabetical">A-Z (Alphabetical)</option>

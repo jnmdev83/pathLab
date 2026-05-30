@@ -524,13 +524,7 @@ export function Navbar({
             <span className="material-symbols-outlined text-[20px]">location_on</span>
           </button>
 
-          {/* Profile widget */}
-          <button 
-            onClick={() => setPage(user ? "profile-page" : "signup")}
-            className="w-9 h-9 flex items-center justify-center text-[#4d515a] hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[20px]">account_circle</span>
-          </button>
+
 
         </div>
       </div>

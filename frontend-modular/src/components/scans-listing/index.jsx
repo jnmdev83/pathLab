@@ -126,9 +126,16 @@ export function ScansListing({
     return (4.2 + (test.id % 8) * 0.1).toFixed(1);
   };
 
-  const filteredTests = rating === "all"
-    ? (data.tests || [])
-    : (data.tests || []).filter(test => parseFloat(getTestRating(test)) >= parseFloat(rating));
+  const filteredTests = (() => {
+    let result = rating === "all"
+      ? (data.tests || [])
+      : (data.tests || []).filter(test => parseFloat(getTestRating(test)) >= parseFloat(rating));
+    // Client-side rating sort (server handles all other sort keys)
+    if (sort === "Rating") {
+      result = [...result].sort((a, b) => parseFloat(getTestRating(b)) - parseFloat(getTestRating(a)));
+    }
+    return result;
+  })();
 
   const props = {
     category,

@@ -5,13 +5,14 @@ import { S, MapLink } from '../../utils/reusables';
 export function BranchTests({ selectedBranch, branchTests, setPage, setTest, user }) {
   const isMobile = useIsMobile();
 
+  React.useEffect(() => {
+    if (!selectedBranch) {
+      setPage("lab-listing");
+    }
+  }, [selectedBranch, setPage]);
+
   if (!selectedBranch) {
-    return (
-      <div className="max-w-7xl mx-auto px-8 py-20 text-center font-body">
-        <p className="text-on-surface-variant mb-6 text-base font-semibold">Select a laboratory branch first.</p>
-        <button className="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl shadow-md active:scale-95 transition-all" onClick={() => setPage("home")}>Go Home</button>
-      </div>
-    );
+    return null;
   }
 
   const grouped = branchTests.reduce((acc, row) => {

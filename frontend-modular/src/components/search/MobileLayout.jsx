@@ -66,15 +66,17 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
               )}
             </div>
 
-            <label className="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-outline hover:text-primary transition-colors select-none shrink-0 pr-1">
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={onCompareToggle}
-                className="w-3.5 h-3.5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
-              />
-              Compare
-            </label>
+            {lab.test_id && (
+              <label className="flex items-center gap-1 cursor-pointer text-[10px] font-bold text-outline hover:text-primary transition-colors select-none shrink-0 pr-1">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={onCompareToggle}
+                  className="w-3.5 h-3.5 rounded border-outline-variant text-primary focus:ring-primary focus:ring-opacity-20 cursor-pointer"
+                />
+                Compare
+              </label>
+            )}
           </div>
           <div className="flex flex-wrap items-center gap-3 text-[12px] text-on-surface-variant">
             <span className="flex items-center gap-0.5">
@@ -123,12 +125,14 @@ function MobileLabCard({ lab, index, onBook, onDetails, selectedCompare, setSele
           >
             Details
           </button>
-          <button
-            onClick={() => onBook(lab)}
-            className="px-4 py-2 bg-primary text-on-primary rounded-lg text-[11px] font-bold hover:shadow-md active:scale-95 transition-all"
-          >
-            Book Now
-          </button>
+          {lab.test_id && (
+            <button
+              onClick={() => onBook(lab)}
+              className="px-4 py-2 bg-primary text-on-primary rounded-lg text-[11px] font-bold hover:shadow-md active:scale-95 transition-all"
+            >
+              Book Now
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -362,10 +366,10 @@ export function MobileLayout({
           onChange={e => setSort(e.target.value)}
           className="flex-1 bg-white border border-outline-variant/30 rounded-full px-4 py-2 text-[12px] font-bold text-on-surface-variant focus:outline-none focus:border-primary/40"
         >
-          <option value="popularity">Popularity</option>
+          <option value="popularity">Recommended</option>
+          <option value="rating">Rating (High to Low)</option>
           <option value="price_asc">Price: Low → High</option>
           <option value="price_desc">Price: High → Low</option>
-          <option value="rating">Rating</option>
         </select>
       </div>
 

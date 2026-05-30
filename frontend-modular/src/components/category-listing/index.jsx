@@ -182,6 +182,9 @@ export function CategoryListing({
         const distB = ((b.id || 0) % 5) + 1.2;
         return distA - distB;
       });
+    } else if (sort === 'rating') {
+      // Sort by rating descending — highest rated tests first
+      result.sort((a, b) => parseFloat(getItemRating(b)) - parseFloat(getItemRating(a)));
     }
 
     setDisplayTests(result);

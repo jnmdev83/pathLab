@@ -239,6 +239,7 @@ function FilterSheet({ filters, setFilters, onClose, onReset, items = [] }) {
 function SortSheet({ currentSort, setSort, onClose }) {
   const options = [
     { value: 'popularity', label: 'Popularity / Recommended' },
+    { value: 'rating', label: 'Rating (High to Low)' },
     { value: 'price_asc', label: 'Price: Low to High' },
     { value: 'price_desc', label: 'Price: High to Low' },
     { value: 'alphabetical', label: 'A-Z (Alphabetical)' },
@@ -566,7 +567,7 @@ export function MobileLayout({
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-[#d1d5db] text-[12px] font-semibold text-[#374151] bg-white transition-all"
         >
           <span className="material-symbols-outlined text-[16px]">swap_vert</span>
-          {sort === 'popularity' ? 'Recommended' : sort === 'price_asc' ? 'Low Price' : sort === 'price_desc' ? 'High Price' : sort === 'alphabetical' ? 'A-Z' : 'Nearby'}
+          {sort === 'popularity' ? 'Recommended' : sort === 'rating' ? 'Top Rated' : sort === 'price_asc' ? 'Low Price' : sort === 'price_desc' ? 'High Price' : sort === 'alphabetical' ? 'A-Z' : 'Nearby'}
         </button>
       </div>
       
@@ -574,8 +575,8 @@ export function MobileLayout({
       {!loadingItems && displayTests.length > 0 && (
         <div className="mb-4">
           <h2 className="text-[12px] font-bold text-[#1f2937] px-4 mb-2.5 uppercase tracking-wider text-left">Featured Tests</h2>
-          <div className="flex gap-3 overflow-x-auto snap-x hide-scrollbar px-4 pb-2">
-            {displayTests.slice(0, 4).map((item, idx) => {
+          <div className="flex gap-3 overflow-x-auto snap-x scroll-px-4 hide-scrollbar pb-2 px-4">
+            {displayTests.slice(0, 4).map((item, idx, arr) => {
               const iconName = getTestIcon(item.name);
               const originalPrice = Math.round(item.price * 1.45);
               return (

@@ -629,41 +629,50 @@ export default function App() {
     const isProfileActive = page === "profile-page" || page === "bookings-page" || page === "reports-page";
 
     return (
-      <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white/90 backdrop-blur-xl border border-slate-100 shadow-[0_12px_40px_rgba(0,0,0,0.08)] rounded-full px-4 py-2.5 flex justify-between items-center max-w-md mx-auto select-none">
+      <nav className="fixed bottom-6 left-6 right-6 z-50 bg-white/85 backdrop-blur-2xl border border-slate-200/50 shadow-[0_12px_40px_rgba(0,0,0,0.06)] rounded-full px-6 py-2 flex justify-around items-center max-w-sm mx-auto select-none transition-all duration-300">
         <button 
           onClick={() => setSearchOpen(true)} 
-          className={`flex flex-col items-center justify-center transition-all duration-200 ${
+          className={`flex flex-col items-center justify-center transition-all duration-300 relative py-1 outline-none ${
             isSearchActive 
-              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "text-[#006d77] font-black scale-110" 
+              : "text-slate-400 hover:text-[#006d77] scale-100"
           }`}
         >
-          <span className="material-symbols-outlined text-[20px] font-bold">search</span>
-          <span className="font-headline font-black text-[9px] uppercase tracking-wider mt-0.5">Search</span>
+          <span className="material-symbols-outlined text-[22px] font-bold">search</span>
+          <span className="font-headline font-black text-[9px] uppercase tracking-widest mt-0.5">Search</span>
+          {isSearchActive && (
+            <span className="absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-[#006d77] shadow-[0_0_8px_#006d77] animate-pulse" />
+          )}
         </button>
         
         <button 
           onClick={() => setPage("package-compare")} 
-          className={`flex flex-col items-center justify-center transition-all duration-200 ${
+          className={`flex flex-col items-center justify-center transition-all duration-300 relative py-1 outline-none ${
             isCompareActive 
-              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "text-[#006d77] font-black scale-110" 
+              : "text-slate-400 hover:text-[#006d77] scale-100"
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">swap_horiz</span>
-          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Compare</span>
+          <span className="material-symbols-outlined text-[24px]">swap_horiz</span>
+          <span className="font-headline font-black text-[9px] uppercase tracking-widest mt-0.5">Compare</span>
+          {isCompareActive && (
+            <span className="absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-[#006d77] shadow-[0_0_8px_#006d77] animate-pulse" />
+          )}
         </button>
         
         <button 
           onClick={() => setPage("profile-page")} 
-          className={`flex flex-col items-center justify-center transition-all duration-200 ${
+          className={`flex flex-col items-center justify-center transition-all duration-300 relative py-1 outline-none ${
             isProfileActive 
-              ? "bg-[#006d77] text-white rounded-2xl w-[88px] h-[58px] shadow-lg shadow-[#00535b]/15 active:scale-95" 
-              : "text-slate-500/80 hover:text-[#006d77] w-[72px] h-[58px] rounded-2xl active:scale-90"
+              ? "text-[#006d77] font-black scale-110" 
+              : "text-slate-400 hover:text-[#006d77] scale-100"
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">account_circle</span>
-          <span className="font-headline font-extrabold text-[9px] uppercase tracking-wider mt-0.5">Profile</span>
+          <span className="material-symbols-outlined text-[24px]">account_circle</span>
+          <span className="font-headline font-black text-[9px] uppercase tracking-widest mt-0.5">Profile</span>
+          {isProfileActive && (
+            <span className="absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-[#006d77] shadow-[0_0_8px_#006d77] animate-pulse" />
+          )}
         </button>
       </nav>
     );
